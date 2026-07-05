@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Hub Indexes"
+  short_description: "Generate Azurras hub index files"
+  default_prompt: "Use $update-hub-indexes to regenerate Azurras hub Markdown indexes from current docs."

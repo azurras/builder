@@ -8,6 +8,7 @@ Azurras is an AI workflow hub for durable project planning, implementation workf
 .
 ├── AGENTS.md
 ├── .agents/
+│   ├── lib/
 │   └── skills/
 ├── docs/
 │   ├── decisions/
@@ -18,6 +19,7 @@ Azurras is an AI workflow hub for durable project planning, implementation workf
 │   ├── spoke-tasks/
 │   ├── spoke-updates/
 │   ├── spokes/
+│   ├── templates/
 │   ├── work/
 │   └── work-closures/
 └── README.md
@@ -45,8 +47,11 @@ The repository currently includes these workflow skills:
 - `save-decision-record`: saves durable architecture or workflow decisions.
 - `review-spoke-work`: records reviews of spoke repo changes.
 - `close-hub-work`: saves final closure records for hub-and-spoke work.
+- `update-hub-indexes`: regenerates Markdown indexes and `docs/active.md`.
+- `validate-hub-state`: checks hub artifact conventions, links, statuses, templates, and skills.
 
 Each skill contains a `SKILL.md`, optional helper scripts, and `agents/openai.yaml` UI metadata.
+Shared Python helper code for skill scripts lives in `.agents/lib/`.
 
 ## Durable Artifacts
 
@@ -62,6 +67,8 @@ Use Markdown for durable workflow artifacts.
 - Decisions: `docs/decisions/YYYY-MM-DD-title.md`
 - Work closures: `docs/work-closures/YYYY-MM-DD-title.md`
 - Spoke registry and state: `docs/spokes/`
+- Templates: `docs/templates/`
+- Status model: `docs/status-model.md`
 
 Session memory should explain what happened in enough detail for a future agent to understand the project state without rereading the whole conversation.
 
@@ -88,6 +95,8 @@ For work that affects other repositories:
 8. Close the initiative with `close-hub-work`.
 
 The hub keeps the state. Spoke repos hold implementation changes.
+
+After changing durable hub artifacts, run `update-hub-indexes` and `validate-hub-state` before committing when practical.
 
 ## Git Scope
 
