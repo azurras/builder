@@ -1,0 +1,4 @@
+interface:
+  display_name: "Close Hub Work"
+  short_description: "Close cross-repo hub work records"
+  default_prompt: "Use $close-hub-work to record final closure for an Azurras hub-and-spoke work item."

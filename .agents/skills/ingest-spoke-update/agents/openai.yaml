@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ingest Spoke Update"
+  short_description: "Record results from spoke agents"
+  default_prompt: "Use $ingest-spoke-update to record a spoke repository agent update back into the Azurras hub."

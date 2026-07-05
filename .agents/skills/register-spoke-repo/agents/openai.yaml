@@ -1,0 +1,4 @@
+interface:
+  display_name: "Register Spoke Repo"
+  short_description: "Register external spoke repositories"
+  default_prompt: "Use $register-spoke-repo to add or update a spoke repository in the Azurras hub registry."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Save Decision Record"
+  short_description: "Save dated architecture decisions"
+  default_prompt: "Use $save-decision-record to save a durable dated decision record in the Azurras hub."

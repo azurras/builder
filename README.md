@@ -10,9 +10,16 @@ Azurras is an AI workflow hub for durable project planning, implementation workf
 ├── .agents/
 │   └── skills/
 ├── docs/
+│   ├── decisions/
 │   ├── implementation-plans/
 │   ├── session-memory/
-│   └── specs/
+│   ├── specs/
+│   ├── spoke-reviews/
+│   ├── spoke-tasks/
+│   ├── spoke-updates/
+│   ├── spokes/
+│   ├── work/
+│   └── work-closures/
 └── README.md
 ```
 
@@ -30,6 +37,14 @@ The repository currently includes these workflow skills:
 - `save-project-spec`: saves Markdown project specs under `docs/specs/`.
 - `save-implementation-plan`: saves Markdown implementation plans under `docs/implementation-plans/`.
 - `commit-push-azurras-main`: commits and pushes completed Azurras repo changes to `main`, guarded to this repository and origin.
+- `register-spoke-repo`: records external repositories coordinated from the hub.
+- `start-hub-work`: creates a central work ledger for cross-repo initiatives.
+- `dispatch-spoke-task`: writes task briefs for agents working in spoke repos.
+- `ingest-spoke-update`: records returned status and results from spoke agents.
+- `sync-spoke-state`: snapshots Git state for registered spoke repositories.
+- `save-decision-record`: saves durable architecture or workflow decisions.
+- `review-spoke-work`: records reviews of spoke repo changes.
+- `close-hub-work`: saves final closure records for hub-and-spoke work.
 
 Each skill contains a `SKILL.md`, optional helper scripts, and `agents/openai.yaml` UI metadata.
 
@@ -40,6 +55,13 @@ Use Markdown for durable workflow artifacts.
 - Session memory: `docs/session-memory/YYYY-MM-DD-title.md`
 - Project specs: `docs/specs/YYYY-MM-DD-title.md`
 - Implementation plans: `docs/implementation-plans/YYYY-MM-DD-title.md`
+- Central work records: `docs/work/YYYY-MM-DD-title.md`
+- Spoke task briefs: `docs/spoke-tasks/YYYY-MM-DD-title.md`
+- Spoke updates: `docs/spoke-updates/YYYY-MM-DD-title.md`
+- Spoke reviews: `docs/spoke-reviews/YYYY-MM-DD-title.md`
+- Decisions: `docs/decisions/YYYY-MM-DD-title.md`
+- Work closures: `docs/work-closures/YYYY-MM-DD-title.md`
+- Spoke registry and state: `docs/spokes/`
 
 Session memory should explain what happened in enough detail for a future agent to understand the project state without rereading the whole conversation.
 
@@ -51,6 +73,21 @@ For substantive completed requests:
 2. Commit and push the repository with `commit-push-azurras-main`.
 
 When saving a project spec or implementation plan, save the artifact first, then follow the same commit and push workflow.
+
+## Hub-And-Spoke Workflow
+
+For work that affects other repositories:
+
+1. Register the external repo with `register-spoke-repo`.
+2. Start a central work ledger with `start-hub-work`.
+3. Dispatch focused spoke work with `dispatch-spoke-task`.
+4. Ingest returned spoke results with `ingest-spoke-update`.
+5. Refresh repository state with `sync-spoke-state`.
+6. Record durable decisions with `save-decision-record`.
+7. Review spoke changes with `review-spoke-work`.
+8. Close the initiative with `close-hub-work`.
+
+The hub keeps the state. Spoke repos hold implementation changes.
 
 ## Git Scope
 
