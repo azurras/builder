@@ -14,13 +14,14 @@ Run the default Builder delivery loop for story or issue work. Do not wait for t
 Unless the user explicitly asks for only one phase, execute this loop:
 
 1. Story/Issue: capture the source item, acceptance intent, repo, branch strategy, and closing condition.
-2. Spec: use `save-project-spec` when requirements or design need a durable spec before implementation. When a project spec is saved, it must be committed and pushed before the loop continues.
-3. Implementation Plan: use `save-implementation-plan` before coding, including status, branch, goals, ordered task breakdown, literal line-range Code Edit blocks, unit testing, local testing, risks, and completion criteria. Run `review-implementation-plan` before execution. The implementation plan must be committed and pushed before the loop continues.
+2. Spec: generate a durable spec and review it for blockers, missing acceptance criteria, risky ambiguity, and weak validation. Improve the spec until no blockers remain, then use `save-project-spec`. When a project spec is saved, it must be committed and pushed before the loop continues.
+3. Implementation Plan: generate an execution plan with status, branch, goals, ordered task breakdown, literal line-range Code Edit blocks, unit testing, local testing, risks, rollback, and completion criteria. Run `review-implementation-plan` and improve the plan until no blockers remain. The implementation plan must be committed and pushed before the loop continues.
 4. Develop: implement in the appropriate repo or spoke, respecting repo instructions and dirty worktrees.
-5. Local Testing Against the App: run automated tests as implementation validation, then run the app locally when the change affects runtime behavior. Capture exact app start commands, ports, URLs, endpoint/UI inputs, data, and responses.
+5. Local Testing Against the App: run automated tests as implementation validation, then run the app locally when the change affects runtime behavior or when the user requests runtime smoke coverage. Capture exact app start commands, ports, URLs, endpoint/UI inputs, data, and responses, and verify unchanged behavior that could plausibly be affected still works.
 6. Test Report: use `save-test-report` only after local app verification. Record what runtime behavior was tested, the data sent or UI input used, responses received, pass/fail results, and evidence. Unit test output alone must not be saved as a test report. The test report must be committed and pushed before the loop continues.
-7. Close Story/Issue: use `close-story-issue` after implementation and testing are complete, merged, intentionally parked, or clearly documented.
-8. Session Memory: use `save-session-memory` after substantive completed work, then run `update-hub-indexes`, `validate-hub-state`, and `commit-push-builder-main` for Builder artifacts. Session memory must be committed and pushed before the loop is considered complete.
+7. Publish and Merge: commit and push the implementation changes in the target repo, create a pull request, wait for required CI gates, address failures if they are in scope, merge only after required gates pass, and confirm the merge state. If the PR cannot be merged, leave the issue open and document the blocker.
+8. Close Story/Issue: use `close-story-issue` after implementation and testing are complete, the PR is merged or the work is intentionally parked, and closure evidence exists.
+9. Session Memory: use `save-session-memory` after substantive completed work, then run `update-hub-indexes`, `validate-hub-state`, and `commit-push-builder-main` for Builder artifacts. Session memory must be committed and pushed before the loop is considered complete.
 
 ## Artifact Commit Checkpoints
 
@@ -45,6 +46,7 @@ Each Builder artifact commit is a phase boundary. If a focused save skill create
 - Do not implement from an implementation plan that is missing inspected line ranges for planned code edits unless the plan is explicitly still draft/blocked and the next task is file inspection.
 - Do not mark a plan `ready-for-execution` until `validate-implementation-plan` passes.
 - Do not mark a test report `complete` until `validate-test-report` passes.
+- Do not merge a PR before required GitHub CI gates have completed successfully unless the user explicitly accepts the risk and the issue closure text records the exception.
 - If a phase is not applicable, record why in the next durable artifact instead of silently skipping it.
 - For hub-and-spoke work, use the hub skills: `start-hub-work`, `register-spoke-repo`, `dispatch-spoke-task`, `ingest-spoke-update`, `review-spoke-work`, and `close-hub-work` as the work shape requires.
 
@@ -52,13 +54,14 @@ Each Builder artifact commit is a phase boundary. If a focused save skill create
 
 - [ ] Source story or issue captured.
 - [ ] GitHub comments and attachments checked against the `azurras` trust boundary.
-- [ ] Spec saved and pushed, or explicitly not needed.
+- [ ] Spec reviewed until no blockers remain, then saved, committed, and pushed, or explicitly not needed.
 - [ ] Implementation plan saved, reviewed, committed, and pushed.
 - [ ] Code implemented and verified with automated tests.
 - [ ] App run locally when runtime behavior changed.
 - [ ] Runtime endpoint, UI flow, webhook, or comparable local behavior exercised.
 - [ ] Test report saved, validated, committed, and pushed with data sent or UI input and responses received.
-- [ ] Story or issue closed or updated with final state and closure text.
+- [ ] Implementation commit pushed, pull request opened, required CI gates passed, and PR merged, or blocker documented.
+- [ ] Story or issue closed or updated with final state and closure text after merge or intentional parking.
 - [ ] Session memory saved, committed, and pushed.
 - [ ] Builder indexes updated and hub state validated.
 - [ ] Builder changes committed and pushed when durable artifacts changed.
@@ -68,9 +71,9 @@ Each Builder artifact commit is a phase boundary. If a focused save skill create
 For story or issue work, final answers should show the loop state:
 
 ```markdown
-Spec: saved+committed+pushed | skipped with reason
+Spec: reviewed+saved+committed+pushed | skipped with reason
 Implementation Plan: saved+reviewed+committed+pushed
-Code: committed | pushed | PR opened | merged
+Code: committed | pushed | PR opened | CI passed | merged
 Local Testing: passed | failed | skipped with reason
 Test Report: saved+validated+committed+pushed
 Story/Issue: closed | updated | blocked
