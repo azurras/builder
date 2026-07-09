@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Implementation Plan"
   short_description: "Save complete implementation plans"
-  default_prompt: "Use $save-implementation-plan to save this implementation plan as a dated Markdown file under docs/implementation-plans with status, branch, goals, ordered tasks, literal line-range code edit blocks, risks, and testing details."
+  default_prompt: "Use $save-implementation-plan to save this implementation plan as a dated Markdown file under docs/implementation-plans with status, branch, goals, ordered tasks, literal line-range code edit blocks, risks, and testing details, then commit and push it before moving to the next loop step."

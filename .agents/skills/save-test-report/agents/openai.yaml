@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Test Report"
   short_description: "Save local app test reports"
-  default_prompt: "Use $save-test-report to save a dated Markdown test report under docs/test-reports after running the app locally and recording endpoint/UI data sent, responses received, pass/fail results, and evidence. Do not use unit-test output alone."
+  default_prompt: "Use $save-test-report to save a dated Markdown test report under docs/test-reports after running the app locally and recording endpoint/UI data sent, responses received, pass/fail results, and evidence, then commit and push it before moving to the next loop step. Do not use unit-test output alone."

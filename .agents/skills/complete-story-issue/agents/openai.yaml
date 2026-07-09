@@ -1,4 +1,4 @@
 interface:
   display_name: "Complete Story Issue"
   short_description: "Run the full story-to-closure loop"
-  default_prompt: "Use $complete-story-issue to carry this story or issue through spec, implementation plan, development, local app testing, test report, closure, and session memory."
+  default_prompt: "Use $complete-story-issue to carry this story or issue through spec, implementation plan, development, local app testing, test report, closure, and session memory. Commit and push each Builder artifact checkpoint before moving to the next loop step."

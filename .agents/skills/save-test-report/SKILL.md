@@ -51,7 +51,12 @@ Do not write a report whose only evidence is `npm test`, `pytest`, `./gradlew te
 8. If the target file already exists, read it before replacing it. Use `--overwrite` only when the new content is intended to be the complete updated report.
 9. Run `validate-test-report` or rely on the helper's quality checks before treating the report as complete.
 10. After the test report is saved, run `update-hub-indexes`, `validate-hub-state`, then use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
-11. Mention the saved test report path and commit/push result in the response.
+11. The saved test report must be committed and pushed before moving to the next delivery-loop step.
+12. Mention the saved test report path and commit/push result in the response.
+
+## Post-Save Git Rule
+
+Every successful test report save in the builder repo must be committed and pushed with `commit-push-builder-main` before moving to the next delivery-loop step. Commit and push only this builder repo, and do not use that commit/push workflow for other repositories.
 
 ## Helper Script
 

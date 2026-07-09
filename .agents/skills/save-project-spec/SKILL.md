@@ -42,7 +42,8 @@ Adjust sections to the project. Keep enough detail that another agent can implem
 4. Save the spec under `docs/specs/YYYY-MM-DD-title.md`, preferring the helper script below.
 5. If the target file already exists, read it before replacing it. Use `--overwrite` only when the new content is intended to be the complete updated spec.
 6. After the spec is saved, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
-7. Mention the saved spec path and commit/push result in the response.
+7. The saved project spec must be committed and pushed before moving to the next delivery-loop step.
+8. Mention the saved spec path and commit/push result in the response.
 
 ## Helper Script
 
@@ -64,7 +65,7 @@ The script creates `docs/specs/` when needed and writes `YYYY-MM-DD-spec-title.m
 
 ## Post-Save Git Rule
 
-Every successful project spec save in the builder repo should be followed by `commit-push-builder-main`. Commit and push only this builder repo, and do not use that commit/push workflow for other repositories.
+Every successful project spec save in the builder repo must be committed and pushed with `commit-push-builder-main` before moving to the next delivery-loop step. Commit and push only this builder repo, and do not use that commit/push workflow for other repositories.
 
 ## Minimal Spec Template
 

@@ -89,7 +89,8 @@ For additions, use `Lines: after 58` or `Lines: before 42` and omit `Current:` o
 5. If the target file already exists, read it before replacing it. Use `--overwrite` only when the new content is intended to be the complete updated plan.
 6. Run `validate-implementation-plan` or rely on the helper's quality checks before treating the plan as ready.
 7. After the implementation plan is saved, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
-8. Mention the saved implementation plan path and commit/push result in the response.
+8. The saved implementation plan must be committed and pushed before moving to the next delivery-loop step.
+9. Mention the saved implementation plan path and commit/push result in the response.
 
 ## Helper Script
 
@@ -113,7 +114,7 @@ The script exits non-zero when required quality gates fail, including missing re
 
 ## Post-Save Git Rule
 
-Every successful implementation plan save in the builder repo should be followed by `commit-push-builder-main`. Commit and push only this builder repo, and do not use that commit/push workflow for other repositories.
+Every successful implementation plan save in the builder repo must be committed and pushed with `commit-push-builder-main` before moving to the next delivery-loop step. Commit and push only this builder repo, and do not use that commit/push workflow for other repositories.
 
 ## Minimal Plan Template
 

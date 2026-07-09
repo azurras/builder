@@ -33,6 +33,7 @@ This repository is the `builder` AI workflow hub. Treat it as the starting point
 
 - When given a story, issue, ticket, bug, or feature request to complete, use the default delivery loop unless the user explicitly scopes the request to one phase: Story/Issue -> Spec -> Implementation Plan -> Develop -> Local Testing against the app -> Test Report -> Close Story/Issue -> Save Session Memory.
 - Use `complete-story-issue` to orchestrate that loop and call the focused skills at each phase.
+- Any Builder artifact created by a focused save skill that invokes `commit-push-builder-main` is a hard phase checkpoint: commit and push that artifact before moving to the next step in the delivery loop.
 - Use `review-implementation-plan` before executing implementation plans and do not proceed from vague plans that lack literal line-range code edit blocks.
 - Use `save-test-report` after local app testing to record what was tested, what data was sent, what response was received, pass/fail results, and evidence.
 - Use `close-story-issue` before closing or updating the source story/issue to ensure closure text includes commits, validation, test report, known gaps, and session memory.

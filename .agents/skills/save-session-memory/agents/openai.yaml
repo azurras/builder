@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Session Memory"
   short_description: "Record dated Markdown session memory"
-  default_prompt: "Use $save-session-memory to write a detailed dated Markdown memory entry for the completed request."
+  default_prompt: "Use $save-session-memory to write a detailed dated Markdown memory entry for the completed request, then commit and push it before final completion."
