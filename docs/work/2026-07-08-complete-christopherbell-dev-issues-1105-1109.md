@@ -1,6 +1,6 @@
 # Complete christopherbell.dev Issues 1105-1109
 
-- Status: active
+- Status: closed
 - Owner/agent context: Codex in Builder hub
 - Objective: Implement and verify GitHub issues #1105 through #1109 in the `christopherbell.dev` spoke repository.
 - Spoke repo: `christopherbell.dev` at `C:\Users\Christopher\Developer\christopherbell.dev-worktrees\complete-1105-1109`
@@ -20,8 +20,8 @@
 
 ## Current State
 
-Created isolated worktree `C:\Users\Christopher\Developer\christopherbell.dev-worktrees\complete-1105-1109` on branch `codex/complete-1105-1109`. Baseline Java tests pass. Baseline JS tests fail one known CRLF-sensitive assertion in `a11y-markup.test.js`.
+Implementation is complete in spoke commit `12ec8769` on branch `codex/complete-1105-1109`. Pull request https://github.com/azurras/christopherbell.dev/pull/1110 is open with closing keywords for issues #1105 through #1109. Local verification passed, GitHub checks passed, and Builder completion artifacts were saved.
 
 ## Next Steps
 
-Execute the implementation plan, run focused and full verification, update GitHub issues, save test report/session memory, and prepare the spoke branch for review.
+Merge PR #1110 when ready.
