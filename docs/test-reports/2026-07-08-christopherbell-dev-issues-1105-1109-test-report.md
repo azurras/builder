@@ -2,7 +2,7 @@
 
 ## Document Status
 
-complete
+superseded
 
 ## Story/Issue
 
@@ -23,6 +23,7 @@ GitHub issues #1105, #1106, #1107, #1108, and #1109 in `azurras/christopherbell.
 - Gradle cache: `C:\Users\Christopher\Developer\christopherbell.dev-worktrees\.gradle-1105-1109`.
 - Node: bundled Node executable at `C:\Users\Christopher\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe` exposed to Gradle through `NODE_EXE`.
 - No persistent local app server was started; this verification used automated build/test tasks for config, library behavior, entity annotations, and JavaScript test integration.
+- Superseded note: this artifact is retained as automated validation evidence only. It does not meet the current Builder test-report standard because it did not exercise a locally running app through an endpoint, UI flow, or comparable runtime interaction.
 
 ## Local Run Details
 
@@ -60,7 +61,7 @@ No HTTP requests or UI inputs were sent. Test inputs were in-memory unit-test fi
 
 ## Pass / Fail
 
-PASS. Local automated verification passed for the implemented scope. The PR was opened with closing keywords for issues #1105 through #1109.
+NOT A COMPLETE LOCAL APP TEST REPORT. Local automated verification passed for the implemented scope, but no endpoint, UI, webhook, or comparable runtime app interaction was performed. The PR was opened with closing keywords for issues #1105 through #1109.
 
 ## Evidence
 
@@ -73,5 +74,6 @@ PASS. Local automated verification passed for the implemented scope. The PR was 
 
 ## Bugs / Follow-ups
 
-- No defects found in local or PR verification. PR #1110 is merged and issues #1105 through #1109 are closed.
+- No defects found in automated local or PR verification. PR #1110 is merged and issues #1105 through #1109 are closed.
+- No real-world local app test report was captured for this work under the current Builder standard.
 - Mongo index rollout depends on production index creation behavior and may add startup/index-build cost; feature READMEs now call that out.

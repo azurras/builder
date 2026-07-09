@@ -149,6 +149,90 @@ None.
         self.assertTrue(any("Response Received" in error for error in errors), errors)
         self.assertTrue(any("Evidence" in error for error in errors), errors)
 
+    def test_test_report_rejects_unit_test_only_evidence(self) -> None:
+        report = """# Report
+
+## Document Status
+complete
+
+## Story/Issue
+Issue 42
+
+## Branch
+`codex/issue-42`
+
+## App / Environment
+Local checkout.
+
+## Local Run Details
+No app was started.
+
+## Test Cases
+- Ran unit tests.
+
+## Data Sent
+```bash
+./gradlew test
+```
+
+## Response Received
+```text
+BUILD SUCCESSFUL
+```
+
+## Pass / Fail
+- PASS: unit tests passed.
+
+## Evidence
+- `./gradlew test`
+
+## Bugs / Follow-ups
+None.
+"""
+
+        errors = validate_test_report_text(report)
+
+        self.assertTrue(any("local app" in error.lower() for error in errors), errors)
+
+    def test_blocked_test_report_can_record_missing_local_app_testing(self) -> None:
+        report = """# Report
+
+## Document Status
+blocked
+
+## Story/Issue
+Issue 42
+
+## Branch
+`codex/issue-42`
+
+## App / Environment
+Local checkout only.
+
+## Local Run Details
+No app was started because configuration was missing.
+
+## Test Cases
+- Unit tests were run, but local app testing is blocked.
+
+## Data Sent
+No endpoint request or UI input was sent.
+
+## Response Received
+No runtime response was received.
+
+## Pass / Fail
+- BLOCKED: local app testing was not performed.
+
+## Evidence
+- `./gradlew test` passed before the runtime blocker was found.
+
+## Bugs / Follow-ups
+Start the app locally and hit an endpoint before closure.
+"""
+
+        self.assertEqual(validate_test_report_text(report), [])
+
 
 if __name__ == "__main__":
     unittest.main()

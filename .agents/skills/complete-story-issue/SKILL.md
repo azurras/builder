@@ -17,8 +17,8 @@ Unless the user explicitly asks for only one phase, execute this loop:
 2. Spec: use `save-project-spec` when requirements or design need a durable spec before implementation.
 3. Implementation Plan: use `save-implementation-plan` before coding, including status, branch, goals, ordered task breakdown, literal line-range Code Edit blocks, unit testing, local testing, risks, and completion criteria. Run `review-implementation-plan` before execution.
 4. Develop: implement in the appropriate repo or spoke, respecting repo instructions and dirty worktrees.
-5. Local Testing Against the App: run automated tests first, then run the app locally when the change affects runtime behavior. Capture exact commands, ports, URLs, data, and responses.
-6. Test Report: use `save-test-report` after local app verification. Record what was tested, the data sent, responses received, pass/fail results, and evidence.
+5. Local Testing Against the App: run automated tests as implementation validation, then run the app locally when the change affects runtime behavior. Capture exact app start commands, ports, URLs, endpoint/UI inputs, data, and responses.
+6. Test Report: use `save-test-report` only after local app verification. Record what runtime behavior was tested, the data sent or UI input used, responses received, pass/fail results, and evidence. Unit test output alone must not be saved as a test report.
 7. Close Story/Issue: use `close-story-issue` after implementation and testing are complete, merged, intentionally parked, or clearly documented.
 8. Session Memory: use `save-session-memory` after substantive completed work, then run `update-hub-indexes`, `validate-hub-state`, and `commit-push-builder-main` for Builder artifacts.
 
@@ -27,7 +27,8 @@ Unless the user explicitly asks for only one phase, execute this loop:
 - Start the loop from the story or issue the user provides. If the repo or issue details are missing, discover them from local context or available tools before asking.
 - Ask only for blocking decisions that cannot be inferred safely.
 - Keep existing focused skills focused. This skill orchestrates the sequence and calls the right specialized skill at the right phase.
-- Do not close a story or issue before local testing evidence and the test report exist unless the user explicitly scopes the task to planning or investigation only.
+- Do not close a story or issue before local app testing evidence and the test report exist unless the user explicitly scopes the task to planning or investigation only.
+- Do not treat unit tests, lint, or build output as a substitute for the test report. They are supporting implementation validation, not real-world local app testing.
 - Do not implement from an implementation plan that is missing inspected line ranges for planned code edits unless the plan is explicitly still draft/blocked and the next task is file inspection.
 - Do not mark a plan `ready-for-execution` until `validate-implementation-plan` passes.
 - Do not mark a test report `complete` until `validate-test-report` passes.
@@ -41,7 +42,8 @@ Unless the user explicitly asks for only one phase, execute this loop:
 - [ ] Implementation plan saved and reviewed.
 - [ ] Code implemented and verified with automated tests.
 - [ ] App run locally when runtime behavior changed.
-- [ ] Test report saved and validated with data sent and responses received.
+- [ ] Runtime endpoint, UI flow, webhook, or comparable local behavior exercised.
+- [ ] Test report saved and validated with data sent or UI input and responses received.
 - [ ] Story or issue closed or updated with final state and closure text.
 - [ ] Session memory saved.
 - [ ] Builder indexes updated and hub state validated.

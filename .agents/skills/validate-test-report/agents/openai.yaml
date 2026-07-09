@@ -1,4 +1,4 @@
 interface:
   display_name: "Validate Test Report"
   short_description: "Check local test report quality"
-  default_prompt: "Use $validate-test-report to check this local app test report for tested item, data sent, response received, pass/fail result, evidence, and follow-ups."
+  default_prompt: "Use $validate-test-report to check this local app test report for a real runtime interaction, data sent, response received, pass/fail result, evidence, and follow-ups. Reject unit-test-only reports."
