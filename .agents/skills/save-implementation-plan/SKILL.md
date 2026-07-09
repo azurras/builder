@@ -24,22 +24,25 @@ Write implementation plans as execution artifacts, not broad specs or chat trans
 
 Every implementation plan should include:
 
+- Document Status: the plan state, such as draft, ready for execution, in progress, blocked, or complete.
 - Objective: the implementation outcome.
+- Goals: concrete success outcomes or acceptance targets.
 - Inputs: related specs, constraints, user decisions, and repository context.
+- Branch: the branch name to work against or create, including the base branch when known.
 - Non-Goals: work that is explicitly out of scope.
 - Assumptions: facts the plan relies on.
 - Open Questions: unresolved decisions, blockers, or unknowns; write "None" only after checking.
-- Phases or steps: ordered work units with clear completion criteria.
+- Task Breakdown: ordered tasks that divide the work into executable units. Each task should include sequence/dependencies, expected files or modules, implementation notes, and task-level verification.
 - Code Changes: actual code expected to be added, modified, or deleted. Name files, symbols, interfaces, migrations, configs, and deletion targets. Include concise code snippets, pseudo-diffs, or before/after examples when the planned change is concrete enough; otherwise describe the exact shape of the change and why exact code is deferred.
 - Files or modules involved: expected code, docs, config, or test locations when a short file inventory helps scanning.
 - Unit Testing: automated unit or narrow integration tests to add or update, including failing-test expectations when relevant.
 - Local Testing: local commands, manual flows, smoke checks, service restarts, browser checks, or environment-specific verification.
 - Validation: end-to-end acceptance criteria that combine automated and local checks when a separate summary is helpful.
 - Rollback or recovery: how to undo or mitigate risky changes when relevant.
-- Risks and dependencies: sequencing constraints, unknowns, or external blockers.
+- Risks: technical, product, operational, sequencing, or external risks and mitigations.
 - Completion criteria: what must be true before the work is considered done.
 
-Prefer concrete steps over vague intent. Keep enough detail that another agent can execute the plan without needing the original conversation.
+Prefer concrete tasks over vague intent. Keep enough detail that another agent can execute the plan without needing the original conversation.
 
 ## Workflow
 
@@ -78,9 +81,15 @@ Every successful implementation plan save in the builder repo should be followed
 ```markdown
 # Title
 
+## Document Status
+
 ## Objective
 
+## Goals
+
 ## Inputs
+
+## Branch
 
 ## Non-Goals
 
@@ -88,7 +97,7 @@ Every successful implementation plan save in the builder repo should be followed
 
 ## Open Questions
 
-## Steps
+## Task Breakdown
 
 ## Code Changes
 
@@ -102,7 +111,7 @@ Every successful implementation plan save in the builder repo should be followed
 
 ## Rollback or Recovery
 
-## Risks and Dependencies
+## Risks
 
 ## Completion Criteria
 ```
