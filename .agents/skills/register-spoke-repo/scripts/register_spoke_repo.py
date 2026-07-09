@@ -61,7 +61,7 @@ def main() -> int:
         re.DOTALL,
     )
     if pattern.search(content):
-        content = pattern.sub(section, content)
+        content = pattern.sub(lambda _match: section, content)
     else:
         content = content.rstrip() + "\n\n" + section
 
