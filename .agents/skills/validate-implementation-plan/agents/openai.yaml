@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validate Implementation Plan"
+  short_description: "Check implementation plan quality"
+  default_prompt: "Use $validate-implementation-plan to check this implementation plan for required status, branch, ordered tasks, literal line-range code edit blocks, testing, risks, and completion criteria."

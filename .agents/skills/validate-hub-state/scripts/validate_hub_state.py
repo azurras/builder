@@ -11,6 +11,7 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
+from artifact_quality import validate_implementation_plan_text, validate_test_report_text
 from builder_hub import STATUS_VALUES, extract_status, list_markdown, markdown_links, parse_dated_file, read_text
 
 
@@ -127,6 +128,20 @@ def main() -> int:
             errors.append(f"{path}: invalid status {status!r}")
         if not status:
             warnings.append(f"{path}: missing explicit status")
+
+    for path in list_markdown(root, "docs/implementation-plans"):
+        if path.name == "index.md":
+            continue
+        content = read_text(path)
+        if "#### Code Edit" in content:
+            errors.extend(validate_implementation_plan_text(content, path))
+        else:
+            warnings.append(f"{path}: legacy implementation plan missing quality-gated Code Edit blocks")
+
+    for path in list_markdown(root, "docs/test-reports"):
+        if path.name == "index.md":
+            continue
+        errors.extend(validate_test_report_text(read_text(path), path))
 
     validate_skill_frontmatter(root, errors)
 

@@ -33,7 +33,9 @@ This repository is the `builder` AI workflow hub. Treat it as the starting point
 
 - When given a story, issue, ticket, bug, or feature request to complete, use the default delivery loop unless the user explicitly scopes the request to one phase: Story/Issue -> Spec -> Implementation Plan -> Develop -> Local Testing against the app -> Test Report -> Close Story/Issue -> Save Session Memory.
 - Use `complete-story-issue` to orchestrate that loop and call the focused skills at each phase.
+- Use `review-implementation-plan` before executing implementation plans and do not proceed from vague plans that lack literal line-range code edit blocks.
 - Use `save-test-report` after local app testing to record what was tested, what data was sent, what response was received, pass/fail results, and evidence.
+- Use `close-story-issue` before closing or updating the source story/issue to ensure closure text includes commits, validation, test report, known gaps, and session memory.
 - For substantive completed requests, save session memory with `save-session-memory`.
 - After saving session memory, a project spec, or an implementation plan, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
 - For hub-and-spoke work, start with `start-hub-work`, register spoke repos with `register-spoke-repo`, dispatch tasks with `dispatch-spoke-task`, ingest spoke results with `ingest-spoke-update`, review with `review-spoke-work`, and close with `close-hub-work`.

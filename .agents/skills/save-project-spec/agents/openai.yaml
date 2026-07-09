@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Project Spec"
   short_description: "Save Markdown specs under docs/specs"
-  default_prompt: "Use $save-project-spec to save this project spec as a dated Markdown file under docs/specs."
+  default_prompt: "Use $save-project-spec to save this project spec as a dated Markdown file under docs/specs with a Document Status section."

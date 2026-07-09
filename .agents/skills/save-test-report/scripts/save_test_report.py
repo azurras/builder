@@ -4,10 +4,14 @@
 from __future__ import annotations
 
 import argparse
-import datetime as dt
 from pathlib import Path
-import re
 import sys
+
+LIB = Path(__file__).resolve().parents[3] / "lib"
+sys.path.insert(0, str(LIB))
+
+from artifact_io import parse_optional_date, save_dated_markdown
+from artifact_quality import validate_test_report_text
 
 
 def parse_args() -> argparse.Namespace:
@@ -41,25 +45,14 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def slugify(value: str) -> str:
-    normalized = value.lower().encode("ascii", "ignore").decode("ascii")
-    normalized = re.sub(r"[^a-z0-9]+", "-", normalized)
-    normalized = re.sub(r"-{2,}", "-", normalized).strip("-")
-    return normalized[:80].strip("-") or "test-report"
-
-
 def main() -> int:
     args = parse_args()
-    now = dt.datetime.now().astimezone()
 
-    if args.date:
-        try:
-            report_date = dt.date.fromisoformat(args.date)
-        except ValueError:
-            print("--date must use YYYY-MM-DD format", file=sys.stderr)
-            return 2
-    else:
-        report_date = now.date()
+    try:
+        report_date = parse_optional_date(args.date)
+    except ValueError:
+        print("--date must use YYYY-MM-DD format", file=sys.stderr)
+        return 2
 
     title = args.title.strip()
     if not title:
@@ -71,21 +64,30 @@ def main() -> int:
         print("Report body is required on stdin", file=sys.stderr)
         return 2
 
-    root = Path(args.root).expanduser().resolve()
-    report_dir = Path(args.report_dir).expanduser()
-    if not report_dir.is_absolute():
-        report_dir = root / report_dir
-    report_dir.mkdir(parents=True, exist_ok=True)
-
-    report_file = report_dir / f"{report_date.isoformat()}-{slugify(title)}.md"
-    if report_file.exists() and not args.overwrite:
-        print(
-            f"{report_file} already exists; pass --overwrite to replace it",
-            file=sys.stderr,
-        )
+    errors = validate_test_report_text(body)
+    if errors:
+        print("Test report quality checks failed:", file=sys.stderr)
+        for error in errors:
+            print(f"- {error}", file=sys.stderr)
         return 1
 
-    report_file.write_text(body + "\n", encoding="utf-8")
+    try:
+        report_file = save_dated_markdown(
+            root=Path(args.root),
+            directory=args.report_dir,
+            title=title,
+            body=body,
+            fallback_slug="test-report",
+            artifact_date=report_date,
+            overwrite=args.overwrite,
+        )
+    except FileExistsError as error:
+        print(error, file=sys.stderr)
+        return 1
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        return 2
+
     print(report_file)
     return 0
 

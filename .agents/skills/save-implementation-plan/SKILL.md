@@ -17,6 +17,7 @@ Save implementation plans in a predictable place and filename format so executio
 - Keep filenames short, descriptive, and stable enough to reference from memory notes, specs, tasks, or PRs.
 - Write only Markdown files. Do not create `.txt`, `.docx`, `.pdf`, or companion metadata files for implementation plans unless the user explicitly asks.
 - If a matching dated title already exists, update that plan intentionally rather than creating a near-duplicate filename.
+- The helper script runs implementation-plan quality checks before saving. Fix reported validation errors rather than bypassing the helper.
 
 ## Plan Content
 
@@ -86,8 +87,9 @@ For additions, use `Lines: after 58` or `Lines: before 42` and omit `Current:` o
 3. Choose a concise title for the filename. Prefer the plan H1 or the user's project title.
 4. Save the plan under `docs/implementation-plans/YYYY-MM-DD-title.md`, preferring the helper script below.
 5. If the target file already exists, read it before replacing it. Use `--overwrite` only when the new content is intended to be the complete updated plan.
-6. After the implementation plan is saved, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
-7. Mention the saved implementation plan path and commit/push result in the response.
+6. Run `validate-implementation-plan` or rely on the helper's quality checks before treating the plan as ready.
+7. After the implementation plan is saved, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
+8. Mention the saved implementation plan path and commit/push result in the response.
 
 ## Helper Script
 
@@ -106,6 +108,8 @@ PLAN
 ```
 
 The script creates `docs/implementation-plans/` when needed and writes `YYYY-MM-DD-plan-title.md`. It refuses to overwrite an existing plan unless `--overwrite` is provided. Use `--date YYYY-MM-DD` only when the user asks to save a plan for a specific date.
+
+The script exits non-zero when required quality gates fail, including missing required sections, missing task-level Code Edit blocks, missing current/proposed code, or pending line ranges in a ready-for-execution plan.
 
 ## Post-Save Git Rule
 

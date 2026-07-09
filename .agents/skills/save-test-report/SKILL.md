@@ -17,6 +17,7 @@ Save test reports in a predictable place and filename format so local app verifi
 - Keep filenames short, descriptive, and stable enough to reference from session memory, work closures, or issues.
 - Write only Markdown files. Do not create `.txt`, `.docx`, `.pdf`, or companion metadata files for test reports unless the user explicitly asks.
 - If a matching dated title already exists, update that report intentionally rather than creating a near-duplicate filename.
+- The helper script runs test-report quality checks before saving. Fix reported validation errors rather than bypassing the helper.
 
 ## Report Content
 
@@ -44,8 +45,9 @@ Do not require references to specs or implementation plans. Include those links 
 4. Choose a concise title for the filename. Prefer the story or issue title plus "test report".
 5. Save the report under `docs/test-reports/YYYY-MM-DD-title.md`, preferring the helper script below.
 6. If the target file already exists, read it before replacing it. Use `--overwrite` only when the new content is intended to be the complete updated report.
-7. After the test report is saved, run `update-hub-indexes`, `validate-hub-state`, then use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
-8. Mention the saved test report path and commit/push result in the response.
+7. Run `validate-test-report` or rely on the helper's quality checks before treating the report as complete.
+8. After the test report is saved, run `update-hub-indexes`, `validate-hub-state`, then use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
+9. Mention the saved test report path and commit/push result in the response.
 
 ## Helper Script
 
@@ -64,6 +66,8 @@ REPORT
 ```
 
 The script creates `docs/test-reports/` when needed and writes `YYYY-MM-DD-report-title.md`. It refuses to overwrite an existing report unless `--overwrite` is provided. Use `--date YYYY-MM-DD` only when the user asks to save a report for a specific date.
+
+The script exits non-zero when required quality gates fail, including missing data sent, response received, pass/fail result, or evidence.
 
 ## Minimal Test Report Template
 

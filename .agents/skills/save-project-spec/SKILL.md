@@ -23,6 +23,7 @@ Save project specs in a predictable place and filename format so work that start
 Write specs as durable planning artifacts, not chat transcripts. Include sections that fit the work, usually:
 
 - Purpose: what the work is trying to accomplish.
+- Document Status: draft, ready-for-review, ready-for-execution, in-progress, blocked, complete, or superseded.
 - Background: relevant repo, product, user, or system context.
 - Goals and non-goals: boundaries for the work.
 - Requirements: functional and non-functional requirements.
@@ -69,6 +70,10 @@ Every successful project spec save in the builder repo should be followed by `co
 
 ```markdown
 # Title
+
+## Document Status
+
+Draft.
 
 ## Purpose
 

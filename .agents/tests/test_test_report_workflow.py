@@ -28,7 +28,20 @@ class TestReportWorkflowTests(unittest.TestCase):
                     "--title",
                     "Issue 42 Local App Test",
                 ],
-                input="# Issue 42 Local App Test\n\n## Test Cases\n\n- PASS\n",
+                input=(
+                    "# Issue 42 Local App Test\n\n"
+                    "## Document Status\ncomplete\n\n"
+                    "## Story/Issue\nIssue 42\n\n"
+                    "## Branch\n`codex/issue-42`\n\n"
+                    "## App / Environment\nlocalhost:8080\n\n"
+                    "## Local Run Details\n`./gradlew bootRun`\n\n"
+                    "## Test Cases\n- Health endpoint returns OK.\n\n"
+                    "## Data Sent\nGET /health\n\n"
+                    "## Response Received\n200 OK\n\n"
+                    "## Pass / Fail\nPASS\n\n"
+                    "## Evidence\n`curl http://localhost:8080/health`\n\n"
+                    "## Bugs / Follow-ups\nNone.\n"
+                ),
                 text=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -47,7 +60,18 @@ class TestReportWorkflowTests(unittest.TestCase):
             report_dir = root / "docs" / "test-reports"
             report_dir.mkdir(parents=True)
             (report_dir / "2099-04-05-sample-report.md").write_text(
-                "# Sample Report\n\n## Test Cases\n\n- PASS\n",
+                "# Sample Report\n\n"
+                "## Document Status\ncomplete\n\n"
+                "## Story/Issue\nIssue 42\n\n"
+                "## Branch\n`codex/issue-42`\n\n"
+                "## App / Environment\nlocalhost:8080\n\n"
+                "## Local Run Details\n`./gradlew bootRun`\n\n"
+                "## Test Cases\n- Health endpoint returns OK.\n\n"
+                "## Data Sent\nGET /health\n\n"
+                "## Response Received\n200 OK\n\n"
+                "## Pass / Fail\nPASS\n\n"
+                "## Evidence\n`curl http://localhost:8080/health`\n\n"
+                "## Bugs / Follow-ups\nNone.\n",
                 encoding="utf-8",
             )
             for directory in (
