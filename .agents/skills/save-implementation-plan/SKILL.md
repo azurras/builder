@@ -20,14 +20,21 @@ Save implementation plans in a predictable place and filename format so executio
 
 ## Plan Content
 
-Write implementation plans as execution artifacts, not broad specs or chat transcripts. Include sections that fit the work, usually:
+Write implementation plans as execution artifacts, not broad specs or chat transcripts. Include enough concrete detail that an agent can execute the work without rediscovering scope, files, code shape, or verification expectations.
+
+Every implementation plan should include:
 
 - Objective: the implementation outcome.
 - Inputs: related specs, constraints, user decisions, and repository context.
+- Non-Goals: work that is explicitly out of scope.
 - Assumptions: facts the plan relies on.
+- Open Questions: unresolved decisions, blockers, or unknowns; write "None" only after checking.
 - Phases or steps: ordered work units with clear completion criteria.
-- Files or modules involved: expected code, docs, config, or test locations.
-- Validation: commands, test cases, manual checks, and acceptance criteria.
+- Code Changes: actual code expected to be added, modified, or deleted. Name files, symbols, interfaces, migrations, configs, and deletion targets. Include concise code snippets, pseudo-diffs, or before/after examples when the planned change is concrete enough; otherwise describe the exact shape of the change and why exact code is deferred.
+- Files or modules involved: expected code, docs, config, or test locations when a short file inventory helps scanning.
+- Unit Testing: automated unit or narrow integration tests to add or update, including failing-test expectations when relevant.
+- Local Testing: local commands, manual flows, smoke checks, service restarts, browser checks, or environment-specific verification.
+- Validation: end-to-end acceptance criteria that combine automated and local checks when a separate summary is helpful.
 - Rollback or recovery: how to undo or mitigate risky changes when relevant.
 - Risks and dependencies: sequencing constraints, unknowns, or external blockers.
 - Completion criteria: what must be true before the work is considered done.
@@ -75,13 +82,25 @@ Every successful implementation plan save in the builder repo should be followed
 
 ## Inputs
 
+## Non-Goals
+
 ## Assumptions
+
+## Open Questions
 
 ## Steps
 
+## Code Changes
+
 ## Files and Modules
 
+## Unit Testing
+
+## Local Testing
+
 ## Validation
+
+## Rollback or Recovery
 
 ## Risks and Dependencies
 

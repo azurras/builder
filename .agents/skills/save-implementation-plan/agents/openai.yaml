@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Implementation Plan"
-  short_description: "Save Markdown implementation plans"
-  default_prompt: "Use $save-implementation-plan to save this implementation plan as a dated Markdown file under docs/implementation-plans."
+  short_description: "Save complete implementation plans"
+  default_prompt: "Use $save-implementation-plan to save this implementation plan as a dated Markdown file under docs/implementation-plans with scope, code-change, and testing details."
