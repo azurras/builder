@@ -4,7 +4,7 @@
 Implement every open GitHub issue in `azurras/christopherbell.dev` as of 2026-07-09, with one implementation plan and one pull request per issue, then merge verified work, restart the production desktop app on port 8080, and close the issues.
 
 ## Status
-active
+closed
 
 ## Owner / Agent Context
 Codex is coordinating from the Builder hub on Windows at `C:\Users\Christopher\Developer\builder`. The spoke repo is `C:\Users\Christopher\Developer\christopherbell.dev` with remote `https://github.com/azurras/christopherbell.dev.git` and default branch `main`.
@@ -31,10 +31,25 @@ Codex is coordinating from the Builder hub on Windows at `C:\Users\Christopher\D
 Implementation plans will be saved under `docs/implementation-plans/` with one dated Markdown file per issue.
 
 ## Current State
-Planning artifacts and a repo-scoped local verification skill are being created before spoke implementation begins.
+All seven issues were implemented, merged, and verified. The production checkout at `C:\Users\Christopher\Developer\christopherbell.dev` was fast-forwarded to merged main while preserving pre-existing dirty Canes Box Tracker changes, and the app was restarted on port 8080 with the new code.
 
 ## Validation Plan
 - Run targeted Gradle tests for each issue branch before PR creation.
 - Run `./gradlew :website:test` or `./gradlew :website:build` on the fully merged code.
 - Start the app on a non-production port and smoke-test representative endpoints/pages.
 - Stop the old port 8080 process only after alternate-port verification passes, then restart and smoke-test port 8080.
+
+## Final PRs
+- #1097 fixed #1094 generic controller exception fallback.
+- #1098 fixed #1090 production JWT secret fallback.
+- #1099 fixed #1093 password reset token/link logging.
+- #1100 fixed #1091 trusted client IP resolution.
+- #1101 fixed #1092 streamed request size enforcement.
+- #1103 fixed #1095 endpoint-aware configurable global rate limits.
+- #1102 fixed #1096 Bean Validation DTO/controller inputs.
+
+## Final Validation
+- GitHub CI build and CodeQL checks passed for every merged PR.
+- Final production checkout test run passed: `$env:GRADLE_USER_HOME='C:\Users\Christopher\Developer\christopherbell.dev-worktrees\.gradle-final'; .\gradlew.bat --no-daemon :website:test`.
+- Alternate-port verification on `http://localhost:8090` returned: home `200`, invalid VIN `400`, oversized login body `413`, and endpoint-aware login throttling `429` after 20 attempts while spoofing different `X-Forwarded-For` values.
+- Production port `8080` was restarted and smoke-tested: home `200`, invalid VIN `400`.
