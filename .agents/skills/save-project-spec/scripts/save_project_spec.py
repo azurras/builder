@@ -17,7 +17,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--root",
         default=".",
-        help="Azurras repository root where docs/specs should live.",
+        help="Builder repository root where docs/specs should live.",
     )
     parser.add_argument(
         "--spec-dir",

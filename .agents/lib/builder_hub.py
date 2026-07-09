@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shared helpers for Azurras hub workflow scripts."""
+"""Shared helpers for Builder hub workflow scripts."""
 
 from __future__ import annotations
 
@@ -9,7 +9,11 @@ import re
 import subprocess
 
 
-HUB_ROOT = Path("/Users/cbell/Developer/azurras")
+HUB_ROOTS = (
+    Path("C:/Users/Christopher/Developer/builder"),
+    Path("/Users/cbell/Developer/builder"),
+)
+HUB_ROOT = HUB_ROOTS[0]
 
 DATED_FILE_RE = re.compile(r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<slug>.+)\.md$")
 

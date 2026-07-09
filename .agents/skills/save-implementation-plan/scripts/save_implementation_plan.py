@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--root",
         default=".",
-        help="Azurras repository root where docs/implementation-plans should live.",
+        help="Builder repository root where docs/implementation-plans should live.",
     )
     parser.add_argument(
         "--plan-dir",

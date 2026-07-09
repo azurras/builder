@@ -1,4 +1,4 @@
 interface:
   display_name: "Validate Hub State"
-  short_description: "Check Azurras hub state integrity"
-  default_prompt: "Use $validate-hub-state to check Azurras hub Markdown artifacts, links, statuses, and indexes."
+  short_description: "Check Builder hub state integrity"
+  default_prompt: "Use $validate-hub-state to check Builder hub Markdown artifacts, links, statuses, and indexes."

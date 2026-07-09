@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Azurras hub Markdown indexes."""
+"""Generate Builder hub Markdown indexes."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from azurras_hub import extract_status, first_heading, list_markdown, parse_dated_file, read_text, write_text
+from builder_hub import extract_status, first_heading, list_markdown, parse_dated_file, read_text, write_text
 
 
 INDEX_TARGETS = {
@@ -67,7 +67,7 @@ def build_active(root: Path) -> tuple[Path, str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate Azurras hub index files.")
+    parser = argparse.ArgumentParser(description="Generate Builder hub index files.")
     parser.add_argument("--root", default=".")
     parser.add_argument("--check", action="store_true", help="Report stale indexes without writing.")
     args = parser.parse_args()

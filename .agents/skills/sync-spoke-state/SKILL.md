@@ -1,6 +1,6 @@
 ---
 name: sync-spoke-state
-description: Snapshot current Git state for registered spoke repositories into the Azurras hub. Use when checking active cross-repo work, auditing dirty spoke repos, refreshing branch/commit/remote status, or reconciling hub state with external repos.
+description: Snapshot current Git state for registered spoke repositories into the Builder hub. Use when checking active cross-repo work, auditing dirty spoke repos, refreshing branch/commit/remote status, or reconciling hub state with external repos.
 ---
 
 # Sync Spoke State
@@ -19,9 +19,9 @@ Read registered spoke repositories and write a hub-side state snapshot. This ski
 ## Workflow
 
 1. Ensure spoke repos are registered with `register-spoke-repo`.
-2. Run the helper script from the Azurras root.
+2. Run the helper script from the Builder root.
 3. Review any missing paths or non-Git directories.
-4. Save session memory and use `commit-push-azurras-main` when the snapshot changed.
+4. Save session memory and use `commit-push-builder-main` when the snapshot changed.
 
 ## Helper Script
 

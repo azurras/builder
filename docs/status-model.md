@@ -1,6 +1,6 @@
 # Status Model
 
-Azurras uses a small canonical status set for hub work records and related coordination artifacts.
+Builder uses a small canonical status set for hub work records and related coordination artifacts.
 
 ## Statuses
 

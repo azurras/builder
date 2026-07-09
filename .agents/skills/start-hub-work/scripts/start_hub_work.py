@@ -19,7 +19,7 @@ def slugify(value: str) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Save docs/work/YYYY-MM-DD-title.md.")
-    parser.add_argument("--root", default=".", help="Azurras hub root.")
+    parser.add_argument("--root", default=".", help="Builder hub root.")
     parser.add_argument("--title", required=True, help="Work title.")
     parser.add_argument("--date", help="Date in YYYY-MM-DD format.")
     parser.add_argument("--overwrite", action="store_true", help="Replace an existing work record.")

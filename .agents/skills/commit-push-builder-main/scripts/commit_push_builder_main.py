@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Commit and push changes to main for only the local azurras repository."""
+"""Commit and push changes to main for only the local builder repository."""
 
 from __future__ import annotations
 
@@ -9,19 +9,34 @@ import subprocess
 import sys
 
 
-EXPECTED_ROOT = Path("/Users/cbell/Developer/azurras").resolve()
-EXPECTED_REMOTE = "https://github.com/azurras/azurras.git"
+EXPECTED_ROOTS = (
+    "C:/Users/Christopher/Developer/builder",
+    "/Users/cbell/Developer/builder",
+)
+EXPECTED_REMOTE = "https://github.com/azurras/builder.git"
 EXPECTED_BRANCH = "main"
+
+
+def expected_roots_display() -> str:
+    return ", ".join(EXPECTED_ROOTS)
+
+
+def normalize_root(root: Path) -> str:
+    return str(root.resolve()).replace("\\", "/")
+
+
+def is_expected_root(root: Path) -> bool:
+    return normalize_root(root) in EXPECTED_ROOTS
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Commit and push /Users/cbell/Developer/azurras to origin main."
+        description="Commit and push the builder repository to origin main."
     )
     parser.add_argument(
         "--root",
-        default=str(EXPECTED_ROOT),
-        help="Repository root. Must resolve to /Users/cbell/Developer/azurras.",
+        default=".",
+        help=f"Repository root. Must resolve to one of: {expected_roots_display()}.",
     )
     parser.add_argument(
         "--message",
@@ -57,8 +72,8 @@ def main() -> int:
     root = Path(args.root).expanduser().resolve()
     message = args.message.strip()
 
-    if root != EXPECTED_ROOT:
-        return fail(f"Refusing to operate outside {EXPECTED_ROOT}: {root}")
+    if not is_expected_root(root):
+        return fail(f"Refusing to operate outside configured builder roots ({expected_roots_display()}): {root}")
     if not message:
         return fail("--message must not be blank")
 
@@ -69,7 +84,7 @@ def main() -> int:
     except subprocess.CalledProcessError as exc:
         return fail(exc.stderr.strip() or "Git validation failed")
 
-    if top_level != EXPECTED_ROOT:
+    if not is_expected_root(top_level):
         return fail(f"Refusing unexpected Git root: {top_level}")
     if branch != EXPECTED_BRANCH:
         return fail(f"Refusing to commit on branch {branch!r}; expected {EXPECTED_BRANCH!r}")

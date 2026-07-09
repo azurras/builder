@@ -1,6 +1,6 @@
 ---
 name: start-hub-work
-description: Create a central Azurras work ledger record before coordinating work across one or more spoke repositories. Use when starting a new initiative, cross-repo task, project, feature, bugfix, migration, or investigation from the hub.
+description: Create a central Builder work ledger record before coordinating work across one or more spoke repositories. Use when starting a new initiative, cross-repo task, project, feature, bugfix, migration, or investigation from the hub.
 ---
 
 # Start Hub Work
@@ -26,7 +26,7 @@ Include the objective, status, owner/agent context, related specs/plans, spoke r
 2. Link any existing specs or implementation plans.
 3. List involved spoke repos or mark them as TBD.
 4. Save the work ledger file, preferring the helper script.
-5. Save session memory and use `commit-push-azurras-main`.
+5. Save session memory and use `commit-push-builder-main`.
 
 ## Helper Script
 

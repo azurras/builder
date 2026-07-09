@@ -40,7 +40,7 @@ Prefer factual detail over conversation transcript. Mention absolute paths for i
 2. Inspect relevant final state if needed with `git status --short`, focused file reads, or test output summaries.
 3. Draft a detailed Markdown entry using the content checklist above.
 4. Append the entry to the matching `docs/session-memory/` file, preferring the helper script below.
-5. After the memory file is saved, use `commit-push-azurras-main` to commit and push the azurras repo changes to `main`.
+5. After the memory file is saved, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
 6. Briefly mention the memory file path and commit/push result in the final response if the memory update was part of the user's request.
 
 ## Helper Script
@@ -64,7 +64,7 @@ The script creates `docs/session-memory/YYYY-MM-DD-short-completed-request-title
 
 ## Post-Save Git Rule
 
-Every successful session memory save in the azurras repo should be followed by `commit-push-azurras-main`. Commit and push only this azurras repo, and do not use that commit/push workflow for other repositories.
+Every successful session memory save in the builder repo should be followed by `commit-push-builder-main`. Commit and push only this builder repo, and do not use that commit/push workflow for other repositories.
 
 ## Entry Template
 

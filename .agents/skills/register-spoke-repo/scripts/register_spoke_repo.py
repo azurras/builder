@@ -9,8 +9,8 @@ import re
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Register an Azurras spoke repository.")
-    parser.add_argument("--root", default=".", help="Azurras hub root.")
+    parser = argparse.ArgumentParser(description="Register an Builder spoke repository.")
+    parser.add_argument("--root", default=".", help="Builder hub root.")
     parser.add_argument("--name", required=True, help="Human-readable repository name.")
     parser.add_argument("--path", required=True, help="Local filesystem path for the spoke repo.")
     parser.add_argument("--remote", required=True, help="Git remote URL for the spoke repo.")

@@ -1,6 +1,6 @@
 ---
 name: save-decision-record
-description: Save durable Azurras decision records as Markdown under docs/decisions with dated filenames. Use when recording architecture decisions, workflow choices, cross-repo coordination decisions, tradeoffs, accepted constraints, or why a path was chosen.
+description: Save durable Builder decision records as Markdown under docs/decisions with dated filenames. Use when recording architecture decisions, workflow choices, cross-repo coordination decisions, tradeoffs, accepted constraints, or why a path was chosen.
 ---
 
 # Save Decision Record
@@ -25,7 +25,7 @@ Include context, decision, options considered, consequences, status, related wor
 1. Identify the decision title.
 2. Write a durable Markdown decision record.
 3. Save it with the helper script.
-4. Save session memory and use `commit-push-azurras-main`.
+4. Save session memory and use `commit-push-builder-main`.
 
 ## Helper Script
 

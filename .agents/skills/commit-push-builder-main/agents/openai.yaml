@@ -1,0 +1,4 @@
+interface:
+  display_name: "Commit Push Builder Main"
+  short_description: "Commit and push builder main"
+  default_prompt: "Use $commit-push-builder-main to commit and push the completed builder repo changes to main."

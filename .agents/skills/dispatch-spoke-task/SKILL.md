@@ -1,13 +1,13 @@
 ---
 name: dispatch-spoke-task
-description: Create a precise task brief for an agent working in a spoke repository while keeping the controlling state in Azurras. Use when assigning implementation, investigation, review, migration, or validation work to another repo.
+description: Create a precise task brief for an agent working in a spoke repository while keeping the controlling state in Builder. Use when assigning implementation, investigation, review, migration, or validation work to another repo.
 ---
 
 # Dispatch Spoke Task
 
 ## Overview
 
-Write the handoff brief that tells a spoke agent exactly what to do in another repo and how to report back to the Azurras hub.
+Write the handoff brief that tells a spoke agent exactly what to do in another repo and how to report back to the Builder hub.
 
 ## Storage Rules
 
@@ -26,7 +26,7 @@ Include target repo, local path, branch policy, objective, strict scope, files l
 2. Draft a task brief that can be pasted directly to another agent.
 3. Include instructions for the spoke agent to return commit/PR/status/test details.
 4. Save the task brief, preferring the helper script.
-5. Save session memory and use `commit-push-azurras-main`.
+5. Save session memory and use `commit-push-builder-main`.
 
 ## Helper Script
 

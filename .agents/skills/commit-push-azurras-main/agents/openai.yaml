@@ -1,4 +1,0 @@
-interface:
-  display_name: "Commit Push Azurras Main"
-  short_description: "Commit and push azurras main"
-  default_prompt: "Use $commit-push-azurras-main to commit and push the completed azurras repo changes to main."

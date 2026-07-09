@@ -1,4 +1,4 @@
 interface:
   display_name: "Review Spoke Work"
   short_description: "Record reviews of spoke repo work"
-  default_prompt: "Use $review-spoke-work to save an Azurras review record for changes made in a spoke repository."
+  default_prompt: "Use $review-spoke-work to save an Builder review record for changes made in a spoke repository."

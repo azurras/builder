@@ -1,6 +1,6 @@
-# Azurras
+# Builder
 
-Azurras is an AI workflow hub for durable project planning, implementation workflow artifacts, and session continuity. The repository is designed to be opened as the starting point for work so agents can use the checked-in guidance, skills, and documentation conventions consistently.
+Builder is an AI workflow hub for durable project planning, implementation workflow artifacts, and session continuity. The repository is designed to be opened as the starting point for work so agents can use the checked-in guidance, skills, and documentation conventions consistently.
 
 ## Repository Layout
 
@@ -38,7 +38,7 @@ The repository currently includes these workflow skills:
 - `save-session-memory`: writes detailed dated session memory under `docs/session-memory/`.
 - `save-project-spec`: saves Markdown project specs under `docs/specs/`.
 - `save-implementation-plan`: saves Markdown implementation plans under `docs/implementation-plans/`.
-- `commit-push-azurras-main`: commits and pushes completed Azurras repo changes to `main`, guarded to this repository and origin.
+- `commit-push-builder-main`: commits and pushes completed Builder repo changes to `main`, guarded to this repository and origin.
 - `register-spoke-repo`: records external repositories coordinated from the hub.
 - `start-hub-work`: creates a central work ledger for cross-repo initiatives.
 - `dispatch-spoke-task`: writes task briefs for agents working in spoke repos.
@@ -77,7 +77,7 @@ Session memory should explain what happened in enough detail for a future agent 
 For substantive completed requests:
 
 1. Save session memory with `save-session-memory`.
-2. Commit and push the repository with `commit-push-azurras-main`.
+2. Commit and push the repository with `commit-push-builder-main`.
 
 When saving a project spec or implementation plan, save the artifact first, then follow the same commit and push workflow.
 
@@ -102,8 +102,9 @@ After changing durable hub artifacts, run `update-hub-indexes` and `validate-hub
 
 The commit/push skill is intentionally scoped to:
 
-- Repository: `/Users/cbell/Developer/azurras`
+- Windows repository: `C:\Users\Christopher\Developer\builder`
+- macOS repository: `/Users/cbell/Developer/builder`
 - Branch: `main`
-- Origin: `https://github.com/azurras/azurras.git`
+- Origin: `https://github.com/azurras/builder.git`
 
 Do not use that skill for other repositories.

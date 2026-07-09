@@ -1,6 +1,6 @@
 ---
 name: review-spoke-work
-description: Save a review record for work completed in a spoke repository. Use when reviewing a spoke repo diff, branch, pull request, CI result, implementation, validation evidence, or readiness to merge while preserving the review in Azurras.
+description: Save a review record for work completed in a spoke repository. Use when reviewing a spoke repo diff, branch, pull request, CI result, implementation, validation evidence, or readiness to merge while preserving the review in Builder.
 ---
 
 # Review Spoke Work
@@ -25,7 +25,7 @@ Lead with findings ordered by severity. Include reviewed repo, branch/commit/PR,
 1. Inspect the spoke update or repo diff.
 2. Write findings-first Markdown review.
 3. Save the review, preferring the helper script.
-4. Save session memory and use `commit-push-azurras-main`.
+4. Save session memory and use `commit-push-builder-main`.
 
 ## Helper Script
 

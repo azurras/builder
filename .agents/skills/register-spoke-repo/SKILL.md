@@ -1,13 +1,13 @@
 ---
 name: register-spoke-repo
-description: Register or update an external spoke repository in the Azurras hub. Use when adding a repo that agents may work in from the hub, recording its local path, remote URL, default branch, purpose, active status, guardrails, or notes.
+description: Register or update an external spoke repository in the Builder hub. Use when adding a repo that agents may work in from the hub, recording its local path, remote URL, default branch, purpose, active status, guardrails, or notes.
 ---
 
 # Register Spoke Repo
 
 ## Overview
 
-Maintain the canonical spoke repository registry for the Azurras hub-and-spoke workflow. This skill records which external repos are controlled or coordinated from the hub.
+Maintain the canonical spoke repository registry for the Builder hub-and-spoke workflow. This skill records which external repos are controlled or coordinated from the hub.
 
 ## Storage Rules
 
@@ -18,11 +18,11 @@ Maintain the canonical spoke repository registry for the Azurras hub-and-spoke w
 
 ## Workflow
 
-1. Confirm the active hub root is `/Users/cbell/Developer/azurras`.
+1. Confirm the active hub root is `/Users/cbell/Developer/builder`.
 2. Collect the spoke repo name, local path, remote URL, default branch, and purpose.
 3. Record guardrails such as branch policy, test expectations, ownership, and whether direct pushes are allowed.
 4. Update `docs/spokes/repos.md`, preferring the helper script.
-5. Save session memory and use `commit-push-azurras-main`.
+5. Save session memory and use `commit-push-builder-main`.
 
 ## Helper Script
 

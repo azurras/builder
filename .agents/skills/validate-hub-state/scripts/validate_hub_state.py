@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Azurras hub state conventions."""
+"""Validate Builder hub state conventions."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from azurras_hub import STATUS_VALUES, extract_status, list_markdown, markdown_links, parse_dated_file, read_text
+from builder_hub import STATUS_VALUES, extract_status, list_markdown, markdown_links, parse_dated_file, read_text
 
 
 ARTIFACT_DIRS = (
@@ -89,7 +89,7 @@ def validate_links(path: Path, root: Path, errors: list[str]) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate Azurras hub state.")
+    parser = argparse.ArgumentParser(description="Validate Builder hub state.")
     parser.add_argument("--root", default=".")
     args = parser.parse_args()
     root = Path(args.root).expanduser().resolve()

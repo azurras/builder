@@ -1,6 +1,6 @@
 ---
 name: update-hub-indexes
-description: Generate and refresh Azurras hub Markdown index files from docs artifacts. Use when work records, spoke registries, decisions, specs, implementation plans, task briefs, updates, reviews, closures, or session memory change and the hub needs current index pages or docs/active.md.
+description: Generate and refresh Builder hub Markdown index files from docs artifacts. Use when work records, spoke registries, decisions, specs, implementation plans, task briefs, updates, reviews, closures, or session memory change and the hub needs current index pages or docs/active.md.
 ---
 
 # Update Hub Indexes
@@ -25,10 +25,10 @@ Regenerate navigational Markdown indexes so the hub can answer what exists and w
 
 ## Workflow
 
-1. Run the helper script from the Azurras root.
+1. Run the helper script from the Builder root.
 2. Review generated index changes.
 3. Run `validate-hub-state`.
-4. Save session memory and use `commit-push-azurras-main`.
+4. Save session memory and use `commit-push-builder-main`.
 
 ## Helper Script
 

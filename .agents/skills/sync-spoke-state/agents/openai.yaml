@@ -1,4 +1,4 @@
 interface:
   display_name: "Sync Spoke State"
   short_description: "Snapshot Git state for spoke repos"
-  default_prompt: "Use $sync-spoke-state to snapshot registered spoke repository state into the Azurras hub."
+  default_prompt: "Use $sync-spoke-state to snapshot registered spoke repository state into the Builder hub."

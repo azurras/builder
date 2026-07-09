@@ -1,17 +1,17 @@
 ---
 name: save-project-spec
-description: Save project specifications as Markdown files under docs/specs with dated filenames. Use when Codex creates, drafts, updates, or preserves a project spec, requirements document, implementation plan, technical design, product brief, or work specification in the azurras workflow hub.
+description: Save project specifications as Markdown files under docs/specs with dated filenames. Use when Codex creates, drafts, updates, or preserves a project spec, requirements document, implementation plan, technical design, product brief, or work specification in the builder workflow hub.
 ---
 
 # Save Project Spec
 
 ## Overview
 
-Save project specs in a predictable place and filename format so work that starts from the azurras repo keeps its planning artifacts together. Specs must be Markdown files under `docs/specs/`.
+Save project specs in a predictable place and filename format so work that starts from the builder repo keeps its planning artifacts together. Specs must be Markdown files under `docs/specs/`.
 
 ## Storage Rules
 
-- Write specs under `docs/specs/` at the active azurras repository root unless the user explicitly chooses another root.
+- Write specs under `docs/specs/` at the active builder repository root unless the user explicitly chooses another root.
 - Name every spec file `YYYY-MM-DD-title.md`, where the date is the local date and `title` is a short slug derived from the spec title.
 - Slug titles with lowercase ASCII words separated by hyphens. Remove punctuation and collapse repeated hyphens.
 - Keep spec filenames short, descriptive, and stable enough to reference later.
@@ -35,12 +35,12 @@ Adjust sections to the project. Keep enough detail that another agent can implem
 
 ## Workflow
 
-1. Determine the active azurras repo root before writing.
+1. Determine the active builder repo root before writing.
 2. Draft the spec as Markdown with a clear H1 title.
 3. Choose a concise title for the filename. Prefer the spec H1 or the user's project title.
 4. Save the spec under `docs/specs/YYYY-MM-DD-title.md`, preferring the helper script below.
 5. If the target file already exists, read it before replacing it. Use `--overwrite` only when the new content is intended to be the complete updated spec.
-6. After the spec is saved, use `commit-push-azurras-main` to commit and push the azurras repo changes to `main`.
+6. After the spec is saved, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
 7. Mention the saved spec path and commit/push result in the response.
 
 ## Helper Script
@@ -49,7 +49,7 @@ Use `scripts/save_project_spec.py` to save a complete Markdown spec from stdin:
 
 ```bash
 python3 /path/to/save-project-spec/scripts/save_project_spec.py \
-  --root /path/to/azurras \
+  --root /path/to/builder \
   --title "Spec Title" \
   <<'SPEC'
 # Spec Title
@@ -63,7 +63,7 @@ The script creates `docs/specs/` when needed and writes `YYYY-MM-DD-spec-title.m
 
 ## Post-Save Git Rule
 
-Every successful project spec save in the azurras repo should be followed by `commit-push-azurras-main`. Commit and push only this azurras repo, and do not use that commit/push workflow for other repositories.
+Every successful project spec save in the builder repo should be followed by `commit-push-builder-main`. Commit and push only this builder repo, and do not use that commit/push workflow for other repositories.
 
 ## Minimal Spec Template
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Start Hub Work"
   short_description: "Create a central hub work record"
-  default_prompt: "Use $start-hub-work to create a central Azurras work ledger entry before dispatching spoke repo tasks."
+  default_prompt: "Use $start-hub-work to create a central Builder work ledger entry before dispatching spoke repo tasks."

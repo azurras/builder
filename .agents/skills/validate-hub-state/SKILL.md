@@ -1,6 +1,6 @@
 ---
 name: validate-hub-state
-description: Validate Azurras hub state for Markdown artifact conventions, canonical statuses, links, indexes, templates, and repo-scoped skills. Use after creating or updating hub records, specs, plans, spoke tasks, updates, reviews, decisions, closures, templates, or indexes.
+description: Validate Builder hub state for Markdown artifact conventions, canonical statuses, links, indexes, templates, and repo-scoped skills. Use after creating or updating hub records, specs, plans, spoke tasks, updates, reviews, decisions, closures, templates, or indexes.
 ---
 
 # Validate Hub State
@@ -23,7 +23,7 @@ Check that the hub remains navigable and consistent as artifacts accumulate.
 1. Run `update-hub-indexes` first when records changed.
 2. Run the helper script.
 3. Fix reported errors.
-4. Save session memory and use `commit-push-azurras-main` after fixes.
+4. Save session memory and use `commit-push-builder-main` after fixes.
 
 ## Helper Script
 

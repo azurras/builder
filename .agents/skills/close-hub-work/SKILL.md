@@ -1,6 +1,6 @@
 ---
 name: close-hub-work
-description: Save a final closure record for Azurras hub-and-spoke work. Use when a cross-repo initiative, spoke task set, feature, migration, investigation, or project is complete and the hub needs final status, links, validation, and residual follow-ups.
+description: Save a final closure record for Builder hub-and-spoke work. Use when a cross-repo initiative, spoke task set, feature, migration, investigation, or project is complete and the hub needs final status, links, validation, and residual follow-ups.
 ---
 
 # Close Hub Work
@@ -25,7 +25,7 @@ Include final status, completed scope, spoke repos changed, commits/PRs, validat
 1. Confirm related work records, updates, reviews, specs, and plans are current.
 2. Verify spoke work is merged, pushed, intentionally parked, or clearly documented.
 3. Save the closure record with the helper script.
-4. Save session memory and use `commit-push-azurras-main`.
+4. Save session memory and use `commit-push-builder-main`.
 
 ## Helper Script
 
