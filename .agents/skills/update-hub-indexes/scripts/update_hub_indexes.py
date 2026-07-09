@@ -19,6 +19,7 @@ INDEX_TARGETS = {
     "docs/decisions": "Decision Records",
     "docs/specs": "Project Specs",
     "docs/implementation-plans": "Implementation Plans",
+    "docs/test-reports": "Test Reports",
     "docs/spoke-tasks": "Spoke Task Briefs",
     "docs/spoke-updates": "Spoke Updates",
     "docs/spoke-reviews": "Spoke Reviews",

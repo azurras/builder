@@ -18,6 +18,7 @@ ARTIFACT_DIRS = (
     "docs/session-memory",
     "docs/specs",
     "docs/implementation-plans",
+    "docs/test-reports",
     "docs/spokes",
     "docs/work",
     "docs/spoke-tasks",
@@ -34,6 +35,7 @@ INDEX_FILES = (
     "docs/decisions/index.md",
     "docs/specs/index.md",
     "docs/implementation-plans/index.md",
+    "docs/test-reports/index.md",
     "docs/spoke-tasks/index.md",
     "docs/spoke-updates/index.md",
     "docs/spoke-reviews/index.md",
@@ -48,6 +50,7 @@ TEMPLATE_FILES = (
     "docs/templates/spoke-review.md",
     "docs/templates/decision-record.md",
     "docs/templates/work-closure.md",
+    "docs/templates/test-report.md",
 )
 
 SPECIAL_DOC_NAMES = {"index.md", "state.md", "repos.md", "active.md", "status-model.md"}

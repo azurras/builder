@@ -17,6 +17,7 @@ Regenerate navigational Markdown indexes so the hub can answer what exists and w
 - `docs/decisions/index.md`
 - `docs/specs/index.md`
 - `docs/implementation-plans/index.md`
+- `docs/test-reports/index.md`
 - `docs/spoke-tasks/index.md`
 - `docs/spoke-updates/index.md`
 - `docs/spoke-reviews/index.md`
