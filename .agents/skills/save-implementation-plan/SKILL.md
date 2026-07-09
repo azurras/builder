@@ -32,8 +32,9 @@ Every implementation plan should include:
 - Non-Goals: work that is explicitly out of scope.
 - Assumptions: facts the plan relies on.
 - Open Questions: unresolved decisions, blockers, or unknowns; write "None" only after checking.
-- Task Breakdown: ordered tasks that divide the work into executable units. Each task should include sequence/dependencies, expected files or modules, implementation notes, and task-level verification.
-- Code Changes: actual code expected to be added, modified, or deleted. Name files, symbols, interfaces, migrations, configs, and deletion targets. Include concise code snippets, pseudo-diffs, or before/after examples when the planned change is concrete enough; otherwise describe the exact shape of the change and why exact code is deferred.
+- Task Breakdown: ordered tasks that divide the work into executable units. Each task must include sequence/dependencies, expected files or modules, implementation notes, task-level verification, and one or more Code Edit blocks when code changes are planned.
+- Code Edit blocks: literal edit instructions inside the relevant task. Each block must name the file path, current line range, action, current code for replace/delete, proposed code for add/replace, and task-level verification. Use real fenced code blocks, not prose summaries, when the code can be known from file inspection.
+- Code Changes: an index of the task-level Code Edit blocks, grouped by file and action. Do not put the only code examples here; the literal code belongs in the task where it will be executed.
 - Files or modules involved: expected code, docs, config, or test locations when a short file inventory helps scanning.
 - Unit Testing: automated unit or narrow integration tests to add or update, including failing-test expectations when relevant.
 - Local Testing: local commands, manual flows, smoke checks, service restarts, browser checks, or environment-specific verification.
@@ -42,7 +43,41 @@ Every implementation plan should include:
 - Risks: technical, product, operational, sequencing, or external risks and mitigations.
 - Completion criteria: what must be true before the work is considered done.
 
-Prefer concrete tasks over vague intent. Keep enough detail that another agent can execute the plan without needing the original conversation.
+Prefer concrete tasks over vague intent. Keep enough detail that another agent can execute the plan without needing the original conversation. If the plan modifies existing code, inspect the file first and use exact line ranges. If a line range is genuinely not knowable yet, write `line range pending file inspection` and keep the document status as draft or blocked; do not mark the plan ready for execution.
+
+## Task Code Edit Format
+
+Use this format inside each task that changes code:
+
+````markdown
+### Task N - Short task title
+
+Sequence / dependencies:
+- Runs after Task N-1 because ...
+
+Implementation notes:
+- ...
+
+#### Code Edit N.1
+- File: `path/to/file.ext`
+- Lines: 42-58
+- Action: replace
+
+Current:
+```language
+existing code from lines 42-58
+```
+
+Proposed:
+```language
+replacement code
+```
+
+Verification:
+- `command that proves this task-level edit works`
+````
+
+For additions, use `Lines: after 58` or `Lines: before 42` and omit `Current:` only when no existing code is being replaced. For deletions, include `Current:` and write `Proposed: delete block`.
 
 ## Workflow
 
@@ -78,7 +113,7 @@ Every successful implementation plan save in the builder repo should be followed
 
 ## Minimal Plan Template
 
-```markdown
+````markdown
 # Title
 
 ## Document Status
@@ -99,6 +134,29 @@ Every successful implementation plan save in the builder repo should be followed
 
 ## Task Breakdown
 
+### Task 1 - Short task title
+
+Sequence / dependencies:
+
+Implementation notes:
+
+#### Code Edit 1.1
+- File: `path/to/file.ext`
+- Lines: line range pending file inspection
+- Action: add | replace | delete | move
+
+Current:
+```text
+existing code for replace/delete
+```
+
+Proposed:
+```text
+new code for add/replace, or delete block
+```
+
+Verification:
+
 ## Code Changes
 
 ## Files and Modules
@@ -114,4 +172,4 @@ Every successful implementation plan save in the builder repo should be followed
 ## Risks
 
 ## Completion Criteria
-```
+````
