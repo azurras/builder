@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Local Spring App"
+  short_description: "Run, test, and restart local Spring apps"
+  default_prompt: "Use $verify-local-spring-app to test a local Spring Boot website on a non-production port, then restart the production port after validation."
