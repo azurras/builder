@@ -14,6 +14,7 @@ GitHub issues #1105, #1106, #1107, #1108, and #1109 in `azurras/christopherbell.
 - Branch: `codex/complete-1105-1109`
 - Commit: `12ec8769 Complete maintenance stories 1105-1109`
 - Pull request: https://github.com/azurras/christopherbell.dev/pull/1110
+- Merge commit: `e7da615a`
 
 ## App / Environment
 
@@ -63,13 +64,14 @@ PASS. Local automated verification passed for the implemented scope. The PR was 
 
 ## Evidence
 
-- PR: https://github.com/azurras/christopherbell.dev/pull/1110
+- PR: https://github.com/azurras/christopherbell.dev/pull/1110 merged on July 9, 2026.
 - Spoke commit: `12ec8769`
+- Merge commit: `e7da615a`
 - Local full build command completed with `BUILD SUCCESSFUL in 24s`.
 - JS suite reported `tests 93`, `pass 93`, `fail 0`.
 - GitHub checks passed for CodeQL, analysis jobs, and Java 25 builds on Ubuntu, macOS, and Windows.
 
 ## Bugs / Follow-ups
 
-- No defects found in local or PR verification. PR #1110 is ready to merge.
+- No defects found in local or PR verification. PR #1110 is merged and issues #1105 through #1109 are closed.
 - Mongo index rollout depends on production index creation behavior and may add startup/index-build cost; feature READMEs now call that out.

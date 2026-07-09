@@ -12,7 +12,7 @@ Builder is the hub repository for durable workflow artifacts. The spoke reposito
 
 ### Work Completed
 
-Created PR https://github.com/azurras/christopherbell.dev/pull/1110 from spoke commit `12ec8769 Complete maintenance stories 1105-1109`.
+Created and merged PR https://github.com/azurras/christopherbell.dev/pull/1110 from spoke commit `12ec8769 Complete maintenance stories 1105-1109`; GitHub created merge commit `e7da615a`.
 
 Implemented #1105 by aligning root Gradle Java source/target/toolchain and docs to Java 25, making the GitHub Actions OS matrix real, adding platform-aware Gradle commands, and setting up Node 24 for CI.
 
@@ -38,12 +38,12 @@ Local verification passed in the spoke worktree with isolated Gradle cache and b
 - root `.\gradlew.bat --no-daemon build`: build successful, including Java and JS tests.
 - `node.exe --check website\src\test\js\a11y-markup.test.js`: passed with no output.
 
-Saved Builder test report at `docs/test-reports/2026-07-08-christopherbell-dev-issues-1105-1109-test-report.md`. PR checks later passed for CodeQL, analysis jobs, and Java 25 builds on Ubuntu, macOS, and Windows.
+Saved Builder test report at `docs/test-reports/2026-07-08-christopherbell-dev-issues-1105-1109-test-report.md`. PR checks later passed for CodeQL, analysis jobs, and Java 25 builds on Ubuntu, macOS, and Windows. PR #1110 was merged on July 9, 2026 and closed issues #1105 through #1109.
 
 ### Current State
 
-Spoke branch `codex/complete-1105-1109` is pushed to origin and PR #1110 is open with all checks passing. Builder had unrelated modified `.agents/skills/save-implementation-plan/scripts/save_implementation_plan.py`, `.agents/skills/save-project-spec/scripts/save_project_spec.py`, `.agents/skills/save-test-report/scripts/save_test_report.py`, `.agents/tests/test_test_report_workflow.py` plus untracked `.agents/lib/artifact_io.py`, `.agents/lib/artifact_quality.py`, `.agents/skills/close-story-issue/`, `.agents/skills/review-implementation-plan/`, `.agents/skills/validate-implementation-plan/`, `.agents/skills/validate-test-report/`, `.agents/tests/test_artifact_io.py`, and `.agents/tests/test_artifact_quality.py` files outside this story batch; leave them untouched unless the user asks.
+PR #1110 is merged and the remote branch `codex/complete-1105-1109` was deleted. The local worktree `C:\Users\Christopher\Developer\christopherbell.dev-worktrees\complete-1105-1109` remains on the now-merged local branch. Builder had unrelated modified `.agents/skills/save-implementation-plan/scripts/save_implementation_plan.py`, `.agents/skills/save-project-spec/scripts/save_project_spec.py`, `.agents/skills/save-test-report/scripts/save_test_report.py`, `.agents/tests/test_test_report_workflow.py` plus untracked `.agents/lib/artifact_io.py`, `.agents/lib/artifact_quality.py`, `.agents/skills/close-story-issue/`, `.agents/skills/review-implementation-plan/`, `.agents/skills/validate-implementation-plan/`, `.agents/skills/validate-test-report/`, `.agents/tests/test_artifact_io.py`, and `.agents/tests/test_artifact_quality.py` files outside this story batch; leave them untouched unless the user asks.
 
 ### Follow-ups
 
-PR #1110 is ready to merge and will close issues #1105 through #1109 automatically.
+No follow-up required for this story batch. PR #1110 is merged and issues #1105 through #1109 are closed.

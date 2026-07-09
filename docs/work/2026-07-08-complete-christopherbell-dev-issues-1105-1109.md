@@ -20,8 +20,8 @@
 
 ## Current State
 
-Implementation is complete in spoke commit `12ec8769` on branch `codex/complete-1105-1109`. Pull request https://github.com/azurras/christopherbell.dev/pull/1110 is open with closing keywords for issues #1105 through #1109. Local verification passed, GitHub checks passed, and Builder completion artifacts were saved.
+Implementation is complete in spoke commit `12ec8769` on branch `codex/complete-1105-1109`. Pull request https://github.com/azurras/christopherbell.dev/pull/1110 merged as `e7da615a` on July 9, 2026 and closed issues #1105 through #1109. Local verification passed, GitHub checks passed, and Builder completion artifacts were saved.
 
 ## Next Steps
 
-Merge PR #1110 when ready.
+No follow-up required for this story batch.

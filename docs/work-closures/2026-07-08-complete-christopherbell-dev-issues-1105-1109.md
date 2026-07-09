@@ -19,6 +19,7 @@ Implemented GitHub issues #1105, #1106, #1107, #1108, and #1109 in the `christop
 - Branch: `codex/complete-1105-1109`
 - Commit: `12ec8769 Complete maintenance stories 1105-1109`
 - Pull request: https://github.com/azurras/christopherbell.dev/pull/1110
+- Merge commit: `e7da615a`
 
 ## Validation
 
@@ -38,4 +39,4 @@ Implemented GitHub issues #1105, #1106, #1107, #1108, and #1109 in the `christop
 ## Known Gaps / Follow-ups
 
 - GitHub Actions checks passed for CodeQL, analysis jobs, and Java 25 builds on Ubuntu, macOS, and Windows.
-- PR #1110 is ready to merge and will close issues #1105 through #1109 on merge.
+- PR #1110 was merged on July 9, 2026 and issues #1105 through #1109 are closed.
