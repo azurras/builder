@@ -16,6 +16,7 @@ Replace the WSL-dependent `christopherbell.dev` production runtime with native W
 - Keep production on port 8080 until a native candidate passes port-8081 smoke checks.
 - Provide `prod install|migrate|deploy|status|logs|restart|releases|rollback|backup|uninstall`.
 - Deploy exact `origin/main` commits from disposable clean Windows worktrees.
+- Detect and deploy new `origin/main` commits automatically within approximately one minute.
 - Use versioned releases, atomic junction switching, bounded health checks, and automatic rollback.
 - Keep WSL data and existing BSON/JSON backups intact until reboot acceptance and soak closure.
 - Document the complete installation, migration, deployment, rollback, recovery, and removal workflow.
@@ -29,6 +30,7 @@ Replace the WSL-dependent `christopherbell.dev` production runtime with native W
 - Verified backups under `A:\Projects\christopherbell.dev-backups`.
 - Java 25, Gradle Wrapper, native Git, PowerShell, Node for `:website:jsTest`, and MongoDB Database Tools.
 - WinSW v2.12.0 x64 official release URL with SHA-256 `05B82D46AD331CC16BDC00DE5C6332C1EF818DF8CEEFCD49C726553209B3A0DA`.
+- No self-hosted GitHub Actions runner or inbound deployment webhook; automatic deployment uses outbound `git ls-remote` polling.
 
 ## Branch
 
@@ -40,8 +42,8 @@ Replace the WSL-dependent `christopherbell.dev` production runtime with native W
 ## Non-Goals
 
 - Deleting or unregistering WSL during this project.
-- Automatically deploying on GitHub push.
 - Deploying PR branches or arbitrary local commits.
+- Installing a self-hosted GitHub Actions runner or exposing an inbound deployment webhook on the production computer.
 - Moving production to a remote server, VM, Docker, or Kubernetes.
 - Rewriting application features unrelated to deployment safety.
 - Deleting old WSL MongoDB files or backups during the initial soak period.
@@ -319,9 +321,9 @@ Verification:
 
 Proposed:
 ```makefile
-.PHONY: prod-install prod-migrate prod-deploy prod-status prod-logs prod-restart prod-releases prod-rollback prod-backup prod-uninstall
+.PHONY: prod-install prod-migrate prod-deploy prod-status prod-logs prod-restart prod-releases prod-rollback prod-backup prod-uninstall prod-auto-install prod-auto-deploy prod-auto-status prod-auto-remove
 
-prod-install prod-migrate prod-deploy prod-status prod-logs prod-restart prod-releases prod-rollback prod-backup prod-uninstall:
+prod-install prod-migrate prod-deploy prod-status prod-logs prod-restart prod-releases prod-rollback prod-backup prod-uninstall prod-auto-install prod-auto-deploy prod-auto-status prod-auto-remove:
 	@cmd.exe /d /c prod.cmd $(@:prod-%=%)
 ```
 
@@ -338,7 +340,7 @@ Proposed:
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('help','install','migrate','deploy','status','logs','restart','releases','rollback','backup','uninstall')]
+    [ValidateSet('help','install','migrate','deploy','status','logs','restart','releases','rollback','backup','uninstall','auto-install','auto-deploy','auto-status','auto-remove')]
     [string]$Command = 'help',
     [switch]$WhatIf
 )
@@ -350,6 +352,7 @@ Import-Module (Join-Path $moduleRoot 'Production.Deploy.psm1') -Force
 Import-Module (Join-Path $moduleRoot 'Production.Install.psm1') -Force
 Import-Module (Join-Path $moduleRoot 'Production.Migrate.psm1') -Force
 Import-Module (Join-Path $moduleRoot 'Production.Operations.psm1') -Force
+Import-Module (Join-Path $moduleRoot 'Production.AutoDeploy.psm1') -Force
 
 $handlers = @{
     help = { Show-ProductionHelp }
@@ -363,6 +366,10 @@ $handlers = @{
     rollback = { Invoke-ProductionRollback -WhatIf:$WhatIf }
     backup = { New-ProductionBackup }
     uninstall = { Uninstall-ProductionRuntime -WhatIf:$WhatIf }
+    'auto-install' = { Install-AutoDeployTask -WhatIf:$WhatIf }
+    'auto-deploy' = { Start-AutoDeployLoop }
+    'auto-status' = { Get-AutoDeployStatus }
+    'auto-remove' = { Remove-AutoDeployTask -WhatIf:$WhatIf }
 }
 
 & $handlers[$Command]
@@ -389,7 +396,9 @@ Proposed:
   "candidatePort": 8081,
   "productionPort": 8080,
   "smokeAccountEmail": "operator@example.com",
-  "releaseRetention": 5
+  "releaseRetention": 5,
+  "autoDeployPollSeconds": 60,
+  "autoDeployFailureBackoffSeconds": 900
 }
 ```
 
@@ -943,7 +952,181 @@ Verification:
 - `Invoke-Pester ops/production/windows/tests/Production.Operations.Tests.ps1`
 - Manually verify `prod status`, `prod releases`, `prod backup`, `prod rollback -WhatIf`, and `prod logs`.
 
-### Task 8 - Replace WSL-oriented production documentation with native Windows operations
+### Task 8 - Add one-minute automatic origin/main deployment polling
+
+Sequence / dependencies:
+- Runs after Tasks 3, 4, and 7 because the poller reuses configuration, locking, deployment, status, and rollback primitives.
+
+Implementation notes:
+- Use outbound `git ls-remote origin refs/heads/main`; do not install a self-hosted GitHub Actions runner and do not open an inbound webhook port.
+- The unchanged-SHA path performs no fetch, build, or service operation.
+- A boot-started Scheduled Task runs one supervised PowerShell loop under LocalSystem with no interactive login. Task settings restart the loop after unexpected exit.
+- Poll every 60 seconds by default; persist state atomically under ProgramData.
+- A failed SHA observes a configurable backoff, while a different newer SHA is eligible immediately.
+- The existing deployment lock serializes automatic and manual deployments.
+- Install copies the versioned operations scripts to `C:\ProgramData\christopherbell.dev\tools` so the Scheduled Task does not depend on a mutable repository checkout for its poller entry point.
+
+#### Code Edit 8.1
+- File: `ops/production/windows/modules/Production.AutoDeploy.psm1`
+- Lines: after 0
+- Action: add
+
+Proposed:
+```powershell
+Set-StrictMode -Version Latest
+
+function Read-AutoDeployState {
+    param($Config)
+    $path = Join-Path $Config.programDataRoot 'state\auto-deploy.json'
+    if (-not (Test-Path -LiteralPath $path)) {
+        return [pscustomobject]@{ lastCheckedAt=$null; remoteSha=$null; attemptedSha=$null;
+            successfulSha=$null; failedSha=$null; failedAt=$null; error=$null }
+    }
+    return Get-Content -LiteralPath $path -Raw | ConvertFrom-Json
+}
+
+function Write-AutoDeployState {
+    param($Config, $State)
+    $path = Join-Path $Config.programDataRoot 'state\auto-deploy.json'
+    New-Item -ItemType Directory -Force (Split-Path $path) | Out-Null
+    $temporary = "$path.tmp"
+    $State | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $temporary -Encoding utf8
+    Move-Item -LiteralPath $temporary -Destination $path -Force
+}
+
+function Get-RemoteMainSha {
+    param($Config)
+    $result = & git -C $Config.repositoryPath ls-remote $Config.remote "refs/heads/$($Config.branch)"
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($result)) {
+        throw 'Unable to resolve remote main SHA.'
+    }
+    $sha = ($result -split '\s+')[0]
+    if ($sha -notmatch '^[0-9a-f]{40}$') { throw 'Remote main returned an invalid SHA.' }
+    return $sha
+}
+
+function Get-ActiveReleaseSha {
+    param($Config)
+    $metadata = Join-Path $Config.programDataRoot 'current\release.json'
+    if (-not (Test-Path -LiteralPath $metadata)) { return $null }
+    return (Get-Content -LiteralPath $metadata -Raw | ConvertFrom-Json).sha
+}
+
+function Invoke-AutoDeployOnce {
+    param($Config = (Read-ProductionConfig))
+    $state = Read-AutoDeployState $Config
+    $remote = Get-RemoteMainSha $Config
+    $now = (Get-Date).ToUniversalTime()
+    $state.lastCheckedAt = $now
+    $state.remoteSha = $remote
+    if ($remote -eq (Get-ActiveReleaseSha $Config)) {
+        Write-AutoDeployState $Config $state
+        return
+    }
+    if ($state.failedSha -eq $remote -and $state.failedAt) {
+        $retryAt = ([datetime]$state.failedAt).AddSeconds([int]$Config.autoDeployFailureBackoffSeconds)
+        if ($now -lt $retryAt) { Write-AutoDeployState $Config $state; return }
+    }
+    $state.attemptedSha = $remote
+    Write-AutoDeployState $Config $state
+    try {
+        Invoke-ProductionDeploy
+        $state.successfulSha = $remote
+        $state.failedSha = $null
+        $state.failedAt = $null
+        $state.error = $null
+    } catch {
+        $state.failedSha = $remote
+        $state.failedAt = (Get-Date).ToUniversalTime()
+        $state.error = $_.Exception.Message
+    } finally {
+        Write-AutoDeployState $Config $state
+    }
+}
+
+function Start-AutoDeployLoop {
+    $config = Read-ProductionConfig
+    while ($true) {
+        try { Invoke-AutoDeployOnce $config } catch { Write-EventLog -LogName Application -Source ChristopherBellDeploy -EntryType Error -EventId 1001 -Message $_.Exception.Message }
+        Start-Sleep -Seconds ([int]$config.autoDeployPollSeconds)
+    }
+}
+
+function Install-AutoDeployTask {
+    param([switch]$WhatIf)
+    Assert-Administrator
+    $config = Read-ProductionConfig
+    if ($WhatIf) { Write-Host 'Would register the ChristopherBellAutoDeploy startup task.'; return }
+    $tools = Join-Path $config.programDataRoot 'tools'
+    Copy-Item (Join-Path $PSScriptRoot '..\*') $tools -Recurse -Force
+    $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoLogo -NoProfile -ExecutionPolicy Bypass -File `"$tools\prod.ps1`" auto-deploy"
+    $trigger = New-ScheduledTaskTrigger -AtStartup
+    $settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([timespan]::Zero) -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1) -MultipleInstances IgnoreNew
+    $principal = New-ScheduledTaskPrincipal -UserId 'SYSTEM' -LogonType ServiceAccount -RunLevel Highest
+    Register-ScheduledTask -TaskName 'ChristopherBellAutoDeploy' -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force | Out-Null
+    Start-ScheduledTask -TaskName 'ChristopherBellAutoDeploy'
+}
+
+function Remove-AutoDeployTask {
+    param([switch]$WhatIf)
+    Assert-Administrator
+    if ($WhatIf) { Write-Host 'Would remove the ChristopherBellAutoDeploy task.'; return }
+    Stop-ScheduledTask -TaskName 'ChristopherBellAutoDeploy' -ErrorAction SilentlyContinue
+    Unregister-ScheduledTask -TaskName 'ChristopherBellAutoDeploy' -Confirm:$false -ErrorAction SilentlyContinue
+}
+
+function Get-AutoDeployStatus {
+    $config = Read-ProductionConfig
+    [pscustomobject]@{
+        Task = Get-ScheduledTask -TaskName 'ChristopherBellAutoDeploy' -ErrorAction SilentlyContinue
+        State = Read-AutoDeployState $config
+    }
+}
+
+Export-ModuleMember -Function Invoke-AutoDeployOnce,Start-AutoDeployLoop,Install-AutoDeployTask,Remove-AutoDeployTask,Get-AutoDeployStatus,Get-RemoteMainSha
+```
+
+Verification:
+- `Invoke-Pester ops/production/windows/tests/Production.AutoDeploy.Tests.ps1`
+- `prod.cmd auto-install -WhatIf` changes no task or files.
+- `prod.cmd auto-status` reports task and state metadata without secrets.
+
+#### Code Edit 8.2
+- File: `ops/production/windows/tests/Production.AutoDeploy.Tests.ps1`
+- Lines: after 0
+- Action: add
+
+Proposed:
+```powershell
+BeforeAll {
+    Import-Module "$PSScriptRoot\..\modules\Production.AutoDeploy.psm1" -Force
+}
+
+Describe 'automatic origin/main deployment' {
+    It 'does not fetch or deploy when the remote SHA is already active' {
+        Mock Get-RemoteMainSha { '0123456789012345678901234567890123456789' }
+        Mock Get-ActiveReleaseSha { '0123456789012345678901234567890123456789' }
+        Mock Invoke-ProductionDeploy {}
+        Mock Write-AutoDeployState {}
+        Invoke-AutoDeployOnce ([pscustomobject]@{ programDataRoot=$TestDrive; autoDeployFailureBackoffSeconds=900 })
+        Should -Invoke Invoke-ProductionDeploy -Times 0
+    }
+
+    It 'deploys exactly once when remote main changes' {
+        Mock Get-RemoteMainSha { 'abcdefabcdefabcdefabcdefabcdefabcdefabcd' }
+        Mock Get-ActiveReleaseSha { '0123456789012345678901234567890123456789' }
+        Mock Invoke-ProductionDeploy {}
+        Mock Write-AutoDeployState {}
+        Invoke-AutoDeployOnce ([pscustomobject]@{ programDataRoot=$TestDrive; autoDeployFailureBackoffSeconds=900 })
+        Should -Invoke Invoke-ProductionDeploy -Times 1
+    }
+}
+```
+
+Verification:
+- Pester also covers failed-SHA backoff, newer-SHA immediate eligibility, atomic state replacement, invalid remote output, task registration, task removal, and secret-safe failure state.
+
+### Task 9 - Replace WSL-oriented production documentation with native Windows operations
 
 Sequence / dependencies:
 - Runs after command behavior stabilizes so documentation reflects tested commands exactly.
@@ -953,7 +1136,7 @@ Implementation notes:
 - Rewrite the MongoDB runbook with native Windows commands while preserving WSL migration fallback instructions.
 - Document WinSW version/hash, ProgramData ACLs, native prerequisites, service recovery, migration gates, reboot test, soak period, and uninstall.
 
-#### Code Edit 8.1
+#### Code Edit 9.1
 - File: `README.md`
 - Lines: 350-398
 - Action: replace
@@ -1023,6 +1206,7 @@ From an elevated PowerShell prompt, install or update the runtime with:
 
 ```powershell
 .\prod.cmd install
+.\prod.cmd auto-install
 .\prod.cmd deploy
 ```
 
@@ -1030,6 +1214,11 @@ From an elevated PowerShell prompt, install or update the runtime with:
 a clean detached Windows worktree. It builds and tests the candidate, validates
 it on port 8081, atomically switches the active release, restarts port 8080, and
 rolls back automatically when verification fails.
+
+`auto-install` creates a boot-started Windows Scheduled Task that checks the
+SHA of `origin/main` once per minute. When the SHA changes, it invokes the same
+locked, tested, rollback-capable deployment path. Unchanged checks do not fetch,
+build, or restart the site, and no inbound webhook or GitHub runner is required.
 
 Common operations:
 
@@ -1039,6 +1228,7 @@ Common operations:
 .\prod.cmd releases
 .\prod.cmd rollback
 .\prod.cmd backup
+.\prod.cmd auto-status
 ```
 
 See `docs/operations/windows-production.md` and
@@ -1058,7 +1248,7 @@ Verification:
 - Every documented command exists and matches dispatcher help output.
 - No production section recommends WSL, `bootRun`, or `SPRING_DATA_MONGODB_URI`.
 
-#### Code Edit 8.2
+#### Code Edit 9.2
 - File: `docs/operations/windows-production.md`
 - Lines: after 0
 - Action: add
@@ -1082,7 +1272,7 @@ collection-count or index mismatch blocks cutover. Production never leaves port
 Verification:
 - Follow the runbook on a clean test installation and record every command/output needed to complete install, migration rehearsal, rollback, and reboot acceptance.
 
-#### Code Edit 8.3
+#### Code Edit 9.3
 - File: `docs/operations/mongodb-backup-restore.md`
 - Lines: 1-154
 - Action: replace
@@ -1117,10 +1307,10 @@ archives remain fallback evidence until migration soak closure.
 Verification:
 - Execute native backup and validation-restore commands against Windows MongoDB and confirm the runbook captures archive path, hash, counts, indexes, and HTTP smoke evidence.
 
-### Task 9 - Execute migration rehearsal and controlled native cutover
+### Task 10 - Execute migration rehearsal and controlled native cutover
 
 Sequence / dependencies:
-- Runs only after Tasks 1-8 pass automated review and merge through a PR.
+- Runs only after Tasks 1-9 pass automated review and merge through a PR.
 - Requires a fresh production backup and explicit maintenance-window announcement.
 
 Implementation notes:
@@ -1138,7 +1328,7 @@ Verification:
 - Native `MongoDB` and `ChristopherBellDev` services report Running and Automatic.
 - Rehearse application rollback and WSL migration rollback before ending the maintenance window.
 
-### Task 10 - Prove boot persistence, publish, and close the migration
+### Task 11 - Prove boot persistence, automatic deployment, publish, and close the migration
 
 Sequence / dependencies:
 - Runs after Task 9 native cutover is stable.
@@ -1166,6 +1356,7 @@ Verification:
 - `prod.cmd`, `Makefile`: add operator command interfaces.
 - `ops/production/windows/prod.ps1`: add command dispatcher.
 - `ops/production/windows/modules/*.psm1`: add common, deploy, install, migration, and operations logic.
+- `ops/production/windows/modules/Production.AutoDeploy.psm1`: add the one-minute remote-SHA poller, state, backoff, and Scheduled Task lifecycle.
 - `ops/production/windows/service/*`: add WinSW configuration and secret-safe Java launcher.
 - `ops/production/windows/config/*`: add non-secret configuration examples.
 - `ops/production/windows/tests/*.Tests.ps1`: add Pester coverage.
@@ -1190,6 +1381,7 @@ Verification:
 - Pin the development/test prerequisite to Pester 5.x and document `Install-Module Pester -Scope CurrentUser -MinimumVersion 5.0 -MaximumVersion 5.99` when it is absent; production runtime commands must not require Pester.
 - Observe failing tests before implementing each module.
 - Required command: `Invoke-Pester ops/production/windows/tests -Output Detailed`.
+- Prove an unchanged remote SHA performs no fetch, build, service restart, or deployment attempt, and a changed SHA invokes exactly one locked deployment.
 - Run targeted Java tests:
   - `gradlew.bat --no-daemon :website:test --tests dev.christopherbell.configuration.SchedulingConfigurationTest`
   - `gradlew.bat --no-daemon :website:test --tests dev.christopherbell.configuration.MongoProfileConfigurationTest`
@@ -1206,6 +1398,8 @@ Verification:
 - Confirm no startup import or scheduled mutation starts in candidate logs.
 - Restore the fresh archive into `christopherbell_restore_check`, compare canonical inventories, and run the candidate against it.
 - Install services, test stop/start/recovery, switch releases, and rehearse rollback.
+- Install the automatic-deploy Scheduled Task, verify it starts at boot under `SYSTEM`, and confirm `prod auto-status` reports task and state metadata.
+- Push or merge a controlled no-op commit to `main`, verify detection within roughly one polling interval, and prove the active release reaches that exact SHA through the normal deployment checks.
 - Perform a controlled Windows reboot and verify automatic startup without interactive login.
 
 ## Validation
@@ -1215,6 +1409,7 @@ Verification:
 - WinSW download hash matches the pinned SHA-256 before installation.
 - No secrets appear in Git diff, process command lines, service XML, release metadata, or logs.
 - `prod deploy` proves the deployed SHA equals freshly fetched `origin/main`.
+- Automatic polling proves the unchanged-SHA path is read-only and the changed-SHA path uses the same deployment lock, candidate validation, switch, and rollback behavior as manual deploy.
 - Candidate and production checks prove the app reads native Windows `christopherbell`.
 - Frozen WSL source and final Windows MongoDB inventories match exactly.
 - Automatic rollback restores a known-good release after an induced verification failure.
@@ -1243,6 +1438,8 @@ Verification:
 - Windows reboot interrupts the development host: require an explicit maintenance window and verified backups first.
 - Service account lacks filesystem/network privileges: validate ACLs, MongoDB access, mail/network access, and temp-file behavior before cutover.
 - Native and WSL MongoDB both binding 27017: stop/disable the non-target service at each controlled phase and identify the listener PID/service before testing.
+- Scheduled Task identity or ACL drift: install under `SYSTEM`, validate access to ProgramData tools/state and outbound Git, and surface failures through `prod auto-status`.
+- Repeated deployment of a bad SHA: persist the failed SHA and apply the configured backoff so polling continues without rebuilding the same revision every minute.
 
 ## Completion Criteria
 
@@ -1253,6 +1450,7 @@ Verification:
 - Final Windows MongoDB inventory matches the frozen WSL source exactly.
 - Native candidate and production smoke checks pass without data mutation.
 - Deployment from latest `origin/main`, automatic rollback, manual rollback, backup, logs, status, restart, retention, and uninstall are verified.
+- A merge to `origin/main` is detected and deployed automatically within roughly one minute without an inbound webhook, self-hosted runner, or interactive login.
 - A full Windows reboot proves both services and port 8080 start without user login.
 - WSL production state remains intact through the agreed soak period and is retired only by a separately confirmed cleanup step.
 - Builder test report, spoke review, closure, session memory, indexes, and validation are complete and pushed.
