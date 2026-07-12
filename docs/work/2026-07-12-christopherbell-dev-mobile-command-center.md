@@ -21,7 +21,8 @@
 
 - Project spec: [christopherbell.dev Mobile Command Center Spec](../specs/2026-07-12-christopherbell-dev-mobile-command-center.md)
 - Implementation plan: [christopherbell.dev Mobile Command Center Implementation Plan](../implementation-plans/2026-07-12-christopherbell-dev-mobile-command-center.md)
-- Spoke task, updates, review, test report, and closure: pending later delivery phases
+- Spoke task: [Implement christopherbell.dev Mobile Command Center](../spoke-tasks/2026-07-12-christopherbell-dev-mobile-command-center-implementation.md)
+- Spoke updates, review, test report, and closure: pending later delivery phases
 
 ## Validation Intent
 
@@ -36,6 +37,6 @@ None.
 
 ## Next Steps
 
-1. Implement in an isolated worktree from refreshed `origin/main`.
+1. Execute the dispatched implementation plan in an isolated worktree from refreshed `origin/main`.
 2. Complete safe local runtime testing and the Builder test-report checkpoint.
 3. Complete PR, CI, merge, production restart, closure, and memory phases.
