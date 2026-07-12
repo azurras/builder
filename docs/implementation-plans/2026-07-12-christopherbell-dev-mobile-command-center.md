@@ -84,7 +84,7 @@ Sequence / dependencies:
 - First implementation task after the worktree and baseline test because all later providers and action mappings consume these types and properties.
 
 Interfaces:
-- Produces `CommandCenterProperties`, `CommandCenterConfiguration`, `APIVersion.V20260712`, OSHI `SystemInfoProvider`, and one configured `CommandExecutor` bean.
+- Produces `CommandCenterProperties`, `CommandCenterConfiguration`, `APIVersion.V20260712`, and the OSHI `oshi.spi.SystemInfoProvider` bean.
 - Later tasks consume `CommandCenterProperties` and `/2026-07-12` without adding alternative configuration sources.
 
 Files:
@@ -99,7 +99,7 @@ Files:
 
 - [ ] **Step 1: Write the failing configuration-binding test** for five-second sampling, 15-minute history, 60-second power delay, simulated local actions, and fixed production paths.
 - [ ] **Step 2: Run** `./gradlew :website:test --tests dev.christopherbell.admin.commandcenter.CommandCenterPropertiesTest` and expect failure because the properties class does not exist.
-- [ ] **Step 3: Add the dependency, version constant, typed properties, factory beans, and profile configuration exactly once.**
+- [ ] **Step 3: Add the dependency, version constant, typed properties, OSHI `SystemInfoProvider` factory bean, and profile configuration exactly once.**
 - [ ] **Step 4: Run the targeted test and** `./gradlew :website:dependencies --configuration runtimeClasspath`; expect the test to pass and OSHI/jLibreHardwareMonitor to resolve once.
 - [ ] **Step 5: Commit** with `git commit -m "Add command center configuration foundation"`.
 
@@ -400,6 +400,7 @@ Files:
 - Create `website/src/main/java/dev/christopherbell/admin/commandcenter/action/SimulatedCommandExecutor.java`.
 - Create `website/src/main/java/dev/christopherbell/admin/commandcenter/action/WindowsCommandExecutor.java`.
 - Create `website/src/main/java/dev/christopherbell/admin/commandcenter/action/CommandCenterActionService.java`.
+- Modify `website/src/main/java/dev/christopherbell/admin/commandcenter/CommandCenterConfiguration.java` created in Task 1 to select the simulated or Windows `CommandExecutor` bean from `command-center.actions.mode`.
 - Modify `website/src/main/java/dev/christopherbell/admin/activity/AdminActivityService.java:25-49`.
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/action/CommandCenterActionServiceTest.java`.
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/action/WindowsCommandExecutorTest.java`.
@@ -408,7 +409,7 @@ Files:
 - [ ] **Step 2: Write failing executor tests** asserting every exact argument list and proving no request value can alter it.
 - [ ] **Step 3: Run targeted tests** and expect missing-type failures.
 - [ ] **Step 4: Implement a `SecureRandom` challenge store** with atomic removal and fake-clock seams; verify current account state and password with `AccountRepository`, `PermissionService`, and `PasswordUtil` at execution time.
-- [ ] **Step 5: Implement simulated and Windows executors**; schedule website restart after the accepted response path and use a 60-second OS countdown for machine actions.
+- [ ] **Step 5: Implement simulated and Windows executors and wire their property-selected bean in `CommandCenterConfiguration`**; schedule website restart after the accepted response path and use a 60-second OS countdown for machine actions.
 - [ ] **Step 6: Refactor admin auditing** to accept an explicit actor id/username for background completion while preserving the existing request-context `record(...)` API.
 - [ ] **Step 7: Run targeted and full tests**, then commit with `git commit -m "Add protected command center actions"`.
 
