@@ -6,7 +6,7 @@
 - Spoke repo: `christopherbell-dev` at `A:\Projects\christopherbell.dev`
 - Branch strategy: create an isolated `codex/` feature worktree from refreshed `origin/main`; preserve the divergent primary checkout
 - Objective: add a secure, admin-only, mobile-first command center for monitoring and controlling the Windows desktop that hosts christopherbell.dev
-- Current state: product, architecture, interface, security, and validation designs are approved; the durable project spec is the next phase checkpoint
+- Current state: product, architecture, interface, security, and validation designs are approved; the durable project spec is saved and awaiting Christopher's written-spec review
 - Trusted guidance: the source request and approvals came directly from Christopher; no GitHub comments or attachments have been used as instructions
 
 ## Approved Scope
@@ -19,7 +19,7 @@
 
 ## Related Artifacts
 
-- Project spec: planned for `docs/specs/2026-07-12-christopherbell-dev-mobile-command-center.md`
+- Project spec: [christopherbell.dev Mobile Command Center Spec](../specs/2026-07-12-christopherbell-dev-mobile-command-center.md)
 - Implementation plan: pending approved spec
 - Spoke task, updates, review, test report, and closure: pending later delivery phases
 
@@ -36,6 +36,6 @@ None.
 
 ## Next Steps
 
-1. Save, review, validate, commit, and push the approved project spec.
+1. Obtain Christopher's review of the written project spec.
 2. Inspect exact spoke files and create a literal line-range implementation plan.
 3. Implement in an isolated worktree and complete runtime, PR, CI, merge, closure, and memory phases.
