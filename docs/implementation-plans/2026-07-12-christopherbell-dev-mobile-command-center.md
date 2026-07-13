@@ -23,7 +23,7 @@
 
 ## Document Status
 
-ready-for-execution
+complete
 
 ## Objective
 
@@ -97,11 +97,11 @@ Files:
 - Modify `website/src/main/resources/application-prod.yml:21-25`.
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/CommandCenterPropertiesTest.java`.
 
-- [ ] **Step 1: Write the failing configuration-binding test** for five-second sampling, 15-minute history, 60-second power delay, simulated local actions, and fixed production paths.
-- [ ] **Step 2: Run** `./gradlew :website:test --tests dev.christopherbell.admin.commandcenter.CommandCenterPropertiesTest` and expect failure because the properties class does not exist.
-- [ ] **Step 3: Add the dependency, version constant, typed properties, OSHI `SystemInfoProvider` factory bean, and profile configuration exactly once.**
-- [ ] **Step 4: Run the targeted test and** `./gradlew :website:dependencies --configuration runtimeClasspath`; expect the test to pass and OSHI/jLibreHardwareMonitor to resolve once.
-- [ ] **Step 5: Commit** with `git commit -m "Add command center configuration foundation"`.
+- [x] **Step 1: Write the failing configuration-binding test** for five-second sampling, 15-minute history, 60-second power delay, simulated local actions, and fixed production paths.
+- [x] **Step 2: Run** `./gradlew :website:test --tests dev.christopherbell.admin.commandcenter.CommandCenterPropertiesTest` and expect failure because the properties class does not exist.
+- [x] **Step 3: Add the dependency, version constant, typed properties, OSHI `SystemInfoProvider` factory bean, and profile configuration exactly once.**
+- [x] **Step 4: Run the targeted test and** `./gradlew :website:dependencies --configuration runtimeClasspath`; expect the test to pass and OSHI/jLibreHardwareMonitor to resolve once.
+- [x] **Step 5: Commit** with `git commit -m "Add command center configuration foundation"`.
 
 #### Code Edit 1.1
 - File: `website/build.gradle.kts`
@@ -229,12 +229,12 @@ Files:
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/CommandCenterMetricsServiceTest.java`.
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/NvidiaMetricsProviderTest.java`.
 
-- [ ] **Step 1: Write failing provider and aggregation tests** for initial CPU ticks, zero/NaN CPU temperature, RAM, disk, network deltas, NVIDIA CSV parsing, timeout/malformed/missing executable, independent provider failure, thresholds, stale-last-good state, and bounded history eviction.
-- [ ] **Step 2: Run the two targeted test classes** and expect missing-type failures.
-- [ ] **Step 3: Implement the immutable model and providers**, checking both zero and `NaN` for unavailable temperature and timing every external process.
-- [ ] **Step 4: Implement one scheduled collector** that catches provider failures independently, pings MongoDB with a bounded call, includes build/app uptime, and publishes one atomic cached snapshot.
-- [ ] **Step 5: Run targeted tests**, then `./gradlew :website:test`; expect all tests to pass without requiring NVIDIA on CI.
-- [ ] **Step 6: Commit** with `git commit -m "Add cached command center host metrics"`.
+- [x] **Step 1: Write failing provider and aggregation tests** for initial CPU ticks, zero/NaN CPU temperature, RAM, disk, network deltas, NVIDIA CSV parsing, timeout/malformed/missing executable, independent provider failure, thresholds, stale-last-good state, and bounded history eviction.
+- [x] **Step 2: Run the two targeted test classes** and expect missing-type failures.
+- [x] **Step 3: Implement the immutable model and providers**, checking both zero and `NaN` for unavailable temperature and timing every external process.
+- [x] **Step 4: Implement one scheduled collector** that catches provider failures independently, pings MongoDB with a bounded call, includes build/app uptime, and publishes one atomic cached snapshot.
+- [x] **Step 5: Run targeted tests**, then `./gradlew :website:test`; expect all tests to pass without requiring NVIDIA on CI.
+- [x] **Step 6: Commit** with `git commit -m "Add cached command center host metrics"`.
 
 #### Code Edit 2.1
 - File: `website/src/main/java/dev/christopherbell/admin/commandcenter/model/CommandCenterSnapshot.java`
@@ -351,12 +351,12 @@ Files:
 - Create `website/src/main/java/dev/christopherbell/admin/commandcenter/logs/CommandCenterLogService.java`.
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/logs/CommandCenterLogServiceTest.java`.
 
-- [ ] **Step 1: Write failing `@TempDir` tests** for initial tail, cursor advance, byte/line bounds, literal filtering, severity filtering, invalid cursor, oversized query, rotation, truncation, missing file, UTF-8 replacement, and all redaction classes.
-- [ ] **Step 2: Run the targeted log test** and expect failure because the service is absent.
-- [ ] **Step 3: Implement fixed-path incremental reads** with `RandomAccessFile`, an opaque URL-safe cursor containing fingerprint and offset, and a reset flag when the file identity/size changes.
-- [ ] **Step 4: Implement redaction before filtering/return**, classify only `TRACE`, `DEBUG`, `INFO`, `WARN`, and `ERROR`, and cap output by both configured lines and bytes.
-- [ ] **Step 5: Run the targeted test and full website tests**; expect no real production log access from tests.
-- [ ] **Step 6: Commit** with `git commit -m "Add bounded redacted command center logs"`.
+- [x] **Step 1: Write failing `@TempDir` tests** for initial tail, cursor advance, byte/line bounds, literal filtering, severity filtering, invalid cursor, oversized query, rotation, truncation, missing file, UTF-8 replacement, and all redaction classes.
+- [x] **Step 2: Run the targeted log test** and expect failure because the service is absent.
+- [x] **Step 3: Implement fixed-path incremental reads** with `RandomAccessFile`, an opaque URL-safe cursor containing fingerprint and offset, and a reset flag when the file identity/size changes.
+- [x] **Step 4: Implement redaction before filtering/return**, classify only `TRACE`, `DEBUG`, `INFO`, `WARN`, and `ERROR`, and cap output by both configured lines and bytes.
+- [x] **Step 5: Run the targeted test and full website tests**; expect no real production log access from tests.
+- [x] **Step 6: Commit** with `git commit -m "Add bounded redacted command center logs"`.
 
 #### Code Edit 3.1
 - File: `website/src/main/java/dev/christopherbell/admin/commandcenter/logs/CommandCenterLogService.java`
@@ -405,13 +405,13 @@ Files:
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/action/CommandCenterActionServiceTest.java`.
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/action/WindowsCommandExecutorTest.java`.
 
-- [ ] **Step 1: Write failing action-service tests** for active/approved/admin checks, correct and incorrect passwords, exact phrases, challenge ownership/action/expiry/replay/concurrent consumption, failure-window throttling, accepted-action cooldown, idempotency, disabled/non-Windows modes, cancellation, and safe audit metadata.
-- [ ] **Step 2: Write failing executor tests** asserting every exact argument list and proving no request value can alter it.
-- [ ] **Step 3: Run targeted tests** and expect missing-type failures.
-- [ ] **Step 4: Implement a `SecureRandom` challenge store** with atomic removal and fake-clock seams; verify current account state and password with `AccountRepository`, `PermissionService`, and `PasswordUtil` at execution time.
-- [ ] **Step 5: Implement simulated and Windows executors and wire their property-selected bean in `CommandCenterConfiguration`**; schedule website restart after the accepted response path and use a 60-second OS countdown for machine actions.
-- [ ] **Step 6: Refactor admin auditing** to accept an explicit actor id/username for background completion while preserving the existing request-context `record(...)` API.
-- [ ] **Step 7: Run targeted and full tests**, then commit with `git commit -m "Add protected command center actions"`.
+- [x] **Step 1: Write failing action-service tests** for active/approved/admin checks, correct and incorrect passwords, exact phrases, challenge ownership/action/expiry/replay/concurrent consumption, failure-window throttling, accepted-action cooldown, idempotency, disabled/non-Windows modes, cancellation, and safe audit metadata.
+- [x] **Step 2: Write failing executor tests** asserting every exact argument list and proving no request value can alter it.
+- [x] **Step 3: Run targeted tests** and expect missing-type failures.
+- [x] **Step 4: Implement a `SecureRandom` challenge store** with atomic removal and fake-clock seams; verify current account state and password with `AccountRepository`, `PermissionService`, and `PasswordUtil` at execution time.
+- [x] **Step 5: Implement simulated and Windows executors and wire their property-selected bean in `CommandCenterConfiguration`**; schedule website restart after the accepted response path and use a 60-second OS countdown for machine actions.
+- [x] **Step 6: Refactor admin auditing** to accept an explicit actor id/username for background completion while preserving the existing request-context `record(...)` API.
+- [x] **Step 7: Run targeted and full tests**, then commit with `git commit -m "Add protected command center actions"`.
 
 #### Code Edit 4.1
 - File: `website/src/main/java/dev/christopherbell/admin/commandcenter/action/CommandCenterActionType.java`
@@ -559,10 +559,10 @@ Files:
 - Create `website/src/main/java/dev/christopherbell/admin/commandcenter/CommandCenterController.java`.
 - Test `website/src/test/java/dev/christopherbell/admin/commandcenter/CommandCenterControllerTest.java`.
 
-- [ ] **Step 1: Write failing `@WebMvcTest` cases** for anonymous 401, user 403, admin 200/202, payload shapes, validation errors, and zero interactions on rejected callers for every route.
-- [ ] **Step 2: Run the controller test** and expect failure because the controller is absent.
-- [ ] **Step 3: Add thin endpoints** that use Bean Validation, never log request bodies, return `Response<T>`, and map accepted actions to HTTP 202.
-- [ ] **Step 4: Run controller and full tests**, then commit with `git commit -m "Expose admin command center APIs"`.
+- [x] **Step 1: Write failing `@WebMvcTest` cases** for anonymous 401, user 403, admin 200/202, payload shapes, validation errors, and zero interactions on rejected callers for every route.
+- [x] **Step 2: Run the controller test** and expect failure because the controller is absent.
+- [x] **Step 3: Add thin endpoints** that use Bean Validation, never log request bodies, return `Response<T>`, and map accepted actions to HTTP 202.
+- [x] **Step 4: Run controller and full tests**, then commit with `git commit -m "Expose admin command center APIs"`.
 
 #### Code Edit 5.1
 - File: `website/src/main/java/dev/christopherbell/admin/commandcenter/CommandCenterController.java`
@@ -638,14 +638,14 @@ Files:
 - Create `website/src/test/js/command-center.test.js`.
 - Modify `website/src/test/js/a11y-markup.test.js` after its final test.
 
-- [ ] **Step 1: Write failing route, markup, and pure-JavaScript tests** for the hidden shell, required landmarks/labels, admin link, API paths, formatting unavailable/stale readings, polling backoff/visibility decisions, exact phrases, countdown state, and log lines returned only as text.
-- [ ] **Step 2: Run focused Java and JS tests** and expect missing route/module/template failures.
-- [ ] **Step 3: Add the public data-free page shell route and `PUBLIC_URLS` entry**; keep every API absent from the public list.
-- [ ] **Step 4: Add the responsive template and API constants**, using a native dialog for step-up confirmation and dedicated live regions for health/action/log state.
-- [ ] **Step 5: Add pure helpers and page orchestration**; gate through `API.accounts.me`, poll only when visible, use `textContent` for logs, and clear password fields immediately after submission.
-- [ ] **Step 6: Add Mission Control CSS** with phone-first one-column cards, desktop grid expansion, visible focus states, reduced-motion support, and a separate danger zone.
-- [ ] **Step 7: Run `node --check` on both new modules, targeted Java/JS tests, `:website:jsTest`, and `:website:test`.**
-- [ ] **Step 8: Commit** with `git commit -m "Add mobile command center page"`.
+- [x] **Step 1: Write failing route, markup, and pure-JavaScript tests** for the hidden shell, required landmarks/labels, admin link, API paths, formatting unavailable/stale readings, polling backoff/visibility decisions, exact phrases, countdown state, and log lines returned only as text.
+- [x] **Step 2: Run focused Java and JS tests** and expect missing route/module/template failures.
+- [x] **Step 3: Add the public data-free page shell route and `PUBLIC_URLS` entry**; keep every API absent from the public list.
+- [x] **Step 4: Add the responsive template and API constants**, using a native dialog for step-up confirmation and dedicated live regions for health/action/log state.
+- [x] **Step 5: Add pure helpers and page orchestration**; gate through `API.accounts.me`, poll only when visible, use `textContent` for logs, and clear password fields immediately after submission.
+- [x] **Step 6: Add Mission Control CSS** with phone-first one-column cards, desktop grid expansion, visible focus states, reduced-motion support, and a separate danger zone.
+- [x] **Step 7: Run `node --check` on both new modules, targeted Java/JS tests, `:website:jsTest`, and `:website:test`.**
+- [x] **Step 8: Commit** with `git commit -m "Add mobile command center page"`.
 
 #### Code Edit 6.1
 - File: `website/src/main/java/dev/christopherbell/view/content/ContentViewController.java`
@@ -833,11 +833,11 @@ Files:
 - Modify `website/src/main/resources/static/css/README.md:37-76`.
 - Modify root `README.md` production/configuration sections only if new environment variables must be operator-visible.
 
-- [ ] **Step 1: Update feature documentation** with package ownership, API routes, provider behavior, unavailable semantics, fixed log boundary, exact action set, simulation default, production enablement, and verification commands.
-- [ ] **Step 2: Run Java format/static checks already configured by the build**, `node --check` on touched modules, and `git diff --check`.
-- [ ] **Step 3: Run targeted command-center tests**, `:website:jsTest`, `:website:test`, and `:website:build` with isolated `GRADLE_USER_HOME` if the shared Windows daemon registry denies access.
-- [ ] **Step 4: Search the diff** for `Runtime.exec`, `cmd.exe`, `powershell`, caller-provided paths, password logging, `innerHTML` log rendering, and secrets; expected result is no unsafe match.
-- [ ] **Step 5: Commit** with `git commit -m "Document command center operations"`.
+- [x] **Step 1: Update feature documentation** with package ownership, API routes, provider behavior, unavailable semantics, fixed log boundary, exact action set, simulation default, production enablement, and verification commands.
+- [x] **Step 2: Run Java format/static checks already configured by the build**, `node --check` on touched modules, and `git diff --check`.
+- [x] **Step 3: Run targeted command-center tests**, `:website:jsTest`, `:website:test`, and `:website:build` with isolated `GRADLE_USER_HOME` if the shared Windows daemon registry denies access.
+- [x] **Step 4: Search the diff** for `Runtime.exec`, `cmd.exe`, `powershell`, caller-provided paths, password logging, `innerHTML` log rendering, and secrets; expected result is no unsafe match.
+- [x] **Step 5: Commit** with `git commit -m "Document command center operations"`.
 
 #### Code Edit 7.1
 - File: `website/src/main/java/dev/christopherbell/admin/README.md`
@@ -887,14 +887,14 @@ Implementation notes:
 - Use Builder spoke dispatch/update/review artifacts, `save-test-report`, `close-story-issue`, `close-hub-work`, and `save-session-memory` at their required checkpoints.
 - Do not execute real restart/shutdown machine commands; only the merged website-service restart is exercised after production deployment.
 
-- [ ] **Step 1: Start local MongoDB if needed and boot the worktree app** on port 8090 with a unique Gradle home, a controlled temporary log path, and `command-center.actions.mode=SIMULATED`; keep production port 8080 untouched.
-- [ ] **Step 2: Exercise anonymous, regular-user, and admin API flows** with exact requests and responses; capture snapshot readings, sensor unavailable behavior, log redaction/filter/rotation, challenge failures, successful simulated commands, audit records, countdown/cancel state, and mobile/desktop screenshots.
-- [ ] **Step 3: Save and validate the Builder test report**, update indexes/hub state, commit, and push the test-report checkpoint.
-- [ ] **Step 4: Push `codex/mobile-command-center` and open a draft PR** summarizing security boundaries, test evidence, and `LocalSystem` residual risk.
-- [ ] **Step 5: Wait for required Java matrix and CodeQL checks**, fix only in-scope failures with systematic debugging, and merge only when required gates pass.
-- [ ] **Step 6: Deploy the merged production artifact** through the existing native Windows deployment workflow, then use the command center's real `Restart Website` action once.
-- [ ] **Step 7: Verify service recovery**: WinSW running, port 8080 listening, `GET /` returns 200, admin command-center snapshot/log endpoints return 200, and no unexpected error-log entry appears.
-- [ ] **Step 8: Record spoke update/review, close the hub work, save final session memory, update indexes, validate hub state, and commit/push Builder main.**
+- [x] **Step 1: Start local MongoDB if needed and boot the worktree app** on port 8090 with a unique Gradle home, a controlled temporary log path, and `command-center.actions.mode=SIMULATED`; keep production port 8080 untouched.
+- [x] **Step 2: Exercise anonymous, regular-user, and admin API flows** with exact requests and responses; capture snapshot readings, sensor unavailable behavior, log redaction/filter/rotation, challenge failures, successful simulated commands, audit records, countdown/cancel state, and mobile/desktop screenshots.
+- [x] **Step 3: Save and validate the Builder test report**, update indexes/hub state, commit, and push the test-report checkpoint.
+- [x] **Step 4: Push `codex/mobile-command-center` and open a draft PR** summarizing security boundaries, test evidence, and `LocalSystem` residual risk.
+- [x] **Step 5: Wait for required Java matrix and CodeQL checks**, fix only in-scope failures with systematic debugging, and merge only when required gates pass.
+- [x] **Step 6: Deploy the merged production artifact** through the existing native Windows deployment workflow, then use the command center's real `Restart Website` action once.
+- [x] **Step 7: Verify service recovery**: WinSW running, port 8080 listening, `GET /` returns 200, admin command-center snapshot/log endpoints return 200, and no unexpected error-log entry appears.
+- [x] **Step 8: Record spoke update/review, close the hub work, save final session memory, update indexes, validate hub state, and commit/push Builder main.**
 
 ## Code Changes
 
