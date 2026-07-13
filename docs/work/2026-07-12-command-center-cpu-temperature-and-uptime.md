@@ -6,7 +6,7 @@
 - Spoke repo: `christopherbell-dev` at `A:\Projects\christopherbell.dev`
 - Branch strategy: isolated `codex/` worktree from refreshed `origin/main`; preserve the divergent primary checkout
 - Objective: produce a real CPU temperature without blocking five-second telemetry or leaking PowerShell processes, and render uptime as minutes, hours, and days
-- Current state: root cause reproduced; approved spec and validated implementation plan are ready for execution
+- Current state: implementation and safe port-8090 runtime verification passed; test report checkpoint is complete and publication is next
 - Trusted guidance: direct user request; no GitHub comments or attachments used as instructions
 
 ## Root-Cause Evidence
@@ -23,7 +23,8 @@
 - Parent closure: [Mobile Command Center Closure](../work-closures/2026-07-12-christopherbell-dev-mobile-command-center.md)
 - Spec: [Command Center CPU Temperature and Uptime Spec](../specs/2026-07-12-command-center-cpu-temperature-and-uptime.md)
 - Implementation plan: [Command Center CPU Temperature and Uptime Implementation Plan](../implementation-plans/2026-07-12-command-center-cpu-temperature-and-uptime.md)
-- Test report, spoke update/review, and closure: pending later delivery phases
+- Test report: [Command Center CPU Temperature and Uptime Test Report](../test-reports/2026-07-12-command-center-cpu-temperature-and-uptime-test-report.md)
+- Spoke update/review and closure: pending later delivery phases
 
 ## Validation Intent
 
