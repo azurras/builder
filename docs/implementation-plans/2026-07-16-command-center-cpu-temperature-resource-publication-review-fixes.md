@@ -68,6 +68,12 @@ Amend commit `3be9fa6fb5790368b0d83d30d273ea56b997c3f7` so independent review re
   `DACL_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION`, verify
   `SE_DACL_PROTECTED`, enable native access in test/candidate/production JVMs,
   and rerun the full delivery and production acceptance loop.
+- Second follow-up merge: PR `#1210`,
+  `cc41865e14aef50e7ccb32c9d3f6b47cd6c85feb`.
+- Final acceptance-discovered host issue: PowerShell 7 cannot satisfy the
+  LibreHardwareMonitor 0.9.6 full-framework `MutexSecurity` constructor, while
+  Windows PowerShell 5.1 returns stable 64-68 Celsius samples with zero stderr.
+- Final follow-up branch: `codex/cpu-temperature-powershell-host`.
 
 ## Non-Goals
 
@@ -958,6 +964,11 @@ Verification:
 - [ ] **Step 8: Run full verification, review, follow-up PR, CI, and merge.**
 - [ ] **Step 9: Refresh installed production tooling, deploy the follow-up, and
   repeat direct plus cached CPU-temperature acceptance.**
+- [x] **Step 10: Capture raw probe stdout/stderr across six samples and prove
+  the PowerShell host incompatibility.**
+- [ ] **Step 11: Pin production verification to Windows PowerShell 5.1, make
+  script errors terminating, update hashes, review, merge, and repeat
+  acceptance.**
 
 ## Code Changes
 
@@ -977,6 +988,7 @@ Verification:
 - `website/build.gradle.kts`
 - `build.gradle.kts`
 - `ops/production/windows/service/Start-ChristopherBellDev.ps1`
+- `website/src/main/resources/lib/cpu-temperature.ps1`
 - `docs/operations/windows-production.md`
 
 ## Unit Testing
@@ -989,6 +1001,9 @@ Verification:
   and ends with `SE_DACL_PROTECTED`.
 - Pester proof that candidate and production launchers include
   `--enable-native-access=ALL-UNNAMED`.
+- Pester proof that production verification uses the full-framework
+  `powershell.exe` host and the probe script sets
+  `$ErrorActionPreference = 'Stop'`.
 - Monotonic timeout clamp red/green Pester.
 
 ## Local Testing

@@ -27,6 +27,17 @@ directory. The acceptance script restored `sensorLibrariesEnabled=false`; the
 website remained healthy. This acceptance-discovered gap is part of the same
 recovery objective and requires an explicit Windows protected-DACL operation.
 
+The protected-DACL follow-up, PR `#1210` at merge
+`cc41865e14aef50e7ccb32c9d3f6b47cd6c85feb`, then passed resource ownership and
+ACL verification. Raw elevated sampling established the next incompatibility:
+PowerShell 7 returned exit code zero with empty stdout while stderr reported
+that LibreHardwareMonitor 0.9.6 could not find the full .NET Framework
+`Mutex(Boolean, String, Boolean ByRef, MutexSecurity)` constructor. The same
+pinned resources under Windows PowerShell 5.1 produced six clean readings from
+64 to 68 Celsius in approximately 0.7 seconds each. Production verification
+must therefore use the same fixed full-framework host as the application probe,
+and the script must make PowerShell errors terminating.
+
 ## Goals
 
 - Extract and verify a fresh current-version resource set under a protected nonmatching staging name.
@@ -37,6 +48,10 @@ recovery objective and requires an explicit Windows protected-DACL operation.
 - Disable native sensor libraries in the parallel `prod,deploy-smoke` candidate so a candidate cannot create or delete production sensor resources.
 - Preserve checksum verification, ACL hardening, nonce validation, and fresh-directory extraction.
 - Disable and verify Windows DACL inheritance on every hardened sensor path.
+- Run the pinned LibreHardwareMonitor 0.9.6 script only through Windows
+  PowerShell 5.1, not PowerShell 7.
+- Make probe-script errors terminating so stderr failures cannot exit zero with
+  empty output.
 - Let elevated startup verification poll for the lazy first-sample extraction instead of assuming it already exists.
 - Keep the exact-one-live-directory requirement after the bounded wait.
 - Prove the fix locally, through independent review and GitHub CI, and on the production service.
@@ -129,6 +144,7 @@ Add a private PowerShell wait helper that polls the protected sensor base for ex
 - `website/build.gradle.kts`
 - `build.gradle.kts`
 - `ops/production/windows/service/Start-ChristopherBellDev.ps1`
+- `website/src/main/resources/lib/cpu-temperature.ps1`
 - `ops/production/windows/modules/Production.Sensors.psm1`
 - `ops/production/windows/tests/Production.Sensors.Tests.ps1`
 - `ops/production/windows/modules/Production.Deploy.psm1`
