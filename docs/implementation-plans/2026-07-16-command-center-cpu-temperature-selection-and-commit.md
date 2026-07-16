@@ -760,3 +760,349 @@ Verification:
   pass.
 - Builder test report, spoke update/review, closure, and session memory are
   validated, committed, and pushed.
+
+## Compact Application Commit Card Amendment
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use
+> `superpowers:subagent-driven-development` (recommended) or
+> `superpowers:executing-plans` to implement this amendment task-by-task.
+> Steps use checkbox syntax for tracking.
+
+**Goal:** Remove the duplicate Application commit subtitle while showing a
+mobile-friendly eight-character SHA and preserving the full commit as
+accessible title text.
+
+**Architecture:** Keep commit metadata and validation unchanged. Add pure
+frontend presentation helpers for the optional secondary detail and accessible
+title, then make the DOM renderer consume those helpers so behavior is directly
+testable without a browser DOM dependency.
+
+**Tech Stack:** ECMAScript modules, Node's built-in test runner, Gradle, Spring
+Boot static resources.
+
+### Global Constraints
+
+- Keep the card label `Application commit`.
+- Display the first eight characters of an available commit identifier.
+- Do not render a secondary line for a commit reading.
+- Preserve the complete commit identifier in the value node's `title`
+  attribute.
+- Keep unavailable and malformed commit behavior unchanged.
+- Do not change the API response, Java provider, release metadata, CSS, or
+  server-side validation.
+- Use branch `codex/compact-application-commit-card` from refreshed
+  `origin/main`.
+
+### File Structure
+
+- `website/src/main/resources/static/js/lib/command-center.js`: pure metric
+  value, secondary-detail, and accessible-title presentation rules.
+- `website/src/main/resources/static/js/command-center.js`: DOM assembly using
+  the pure presentation rules.
+- `website/src/test/js/command-center.test.js`: red-green regression coverage
+  for short SHA, suppressed duplicate detail, full accessible title, and
+  unchanged non-commit detail.
+
+### Task 4: Add pure commit-card presentation rules
+
+**Files:**
+
+- Modify:
+  `website/src/test/js/command-center.test.js:1-57`
+- Modify:
+  `website/src/main/resources/static/js/lib/command-center.js:10-39`
+
+**Interfaces:**
+
+- Consumes: API metric readings with `unit`, `status`, `value`, and `detail`.
+- Produces:
+  `displayMetric(reading): string`,
+  `metricDetail(reading): string|null`, and
+  `metricTitle(reading): string|null`.
+
+- [ ] **Step 1: Write the failing short-SHA test**
+
+Replace the commit assertion in
+`metric display formats service state, start timestamps, and commit
+identifiers` with:
+
+```javascript
+  const commit = {
+    key: 'application.commit',
+    status: 'AVAILABLE',
+    value: 1,
+    unit: 'commit',
+    detail: '0123456789abcdef0123456789abcdef01234567',
+  };
+  assert.equal(displayMetric(commit), '01234567');
+```
+
+- [ ] **Step 2: Run the focused test and verify RED**
+
+Run:
+
+```powershell
+node --test website/src/test/js/command-center.test.js
+```
+
+Expected: FAIL because `displayMetric(commit)` returns the complete
+40-character SHA instead of `01234567`.
+
+- [ ] **Step 3: Implement the minimal short-SHA formatting**
+
+Replace the commit branch in `displayMetric` with:
+
+```javascript
+  if (reading.unit === 'commit') {
+    return String(reading.detail || 'Unavailable').slice(0, 8);
+  }
+```
+
+- [ ] **Step 4: Re-run the focused test and verify GREEN**
+
+Run:
+
+```powershell
+node --test website/src/test/js/command-center.test.js
+```
+
+Expected: all command-center JavaScript tests pass.
+
+- [ ] **Step 5: Write the failing presentation-helper test**
+
+Add this namespace import after the existing imports:
+
+```javascript
+import * as commandCenterHelpers
+  from '../../main/resources/static/js/lib/command-center.js';
+```
+
+Add:
+
+```javascript
+test('commit cards suppress duplicate detail and retain the full accessible title', () => {
+  assert.equal(typeof commandCenterHelpers.metricDetail, 'function');
+  assert.equal(typeof commandCenterHelpers.metricTitle, 'function');
+  const sha = '0123456789abcdef0123456789abcdef01234567';
+  const commit = {
+    key: 'application.commit',
+    status: 'AVAILABLE',
+    value: 1,
+    unit: 'commit',
+    detail: sha,
+  };
+
+  assert.equal(commandCenterHelpers.metricDetail(commit), null);
+  assert.equal(commandCenterHelpers.metricTitle(commit), sha);
+  assert.equal(commandCenterHelpers.metricDetail({
+    unit: 'celsius',
+    detail: 'Last successful reading',
+  }), 'Last successful reading');
+  assert.equal(commandCenterHelpers.metricTitle({
+    unit: 'celsius',
+    detail: 'Last successful reading',
+  }), null);
+});
+```
+
+- [ ] **Step 6: Run the focused test and verify RED**
+
+Run:
+
+```powershell
+node --test website/src/test/js/command-center.test.js
+```
+
+Expected: FAIL on the first `typeof` assertion because `metricDetail` and
+`metricTitle` do not exist.
+
+- [ ] **Step 7: Implement the pure helpers**
+
+Add after `displayMetric`:
+
+```javascript
+/** Return optional secondary metric text without duplicating commit values. */
+export function metricDetail(reading) {
+  const detail = reading?.detail == null ? '' : String(reading.detail);
+  if (!detail || reading?.unit === 'commit') return null;
+  return detail;
+}
+
+/** Preserve the complete commit identifier as accessible title text. */
+export function metricTitle(reading) {
+  if (reading?.unit !== 'commit' || !reading?.detail) return null;
+  return String(reading.detail);
+}
+```
+
+- [ ] **Step 8: Re-run the focused test and verify GREEN**
+
+Run:
+
+```powershell
+node --test website/src/test/js/command-center.test.js
+```
+
+Expected: all command-center JavaScript tests pass.
+
+- [ ] **Step 9: Commit the pure presentation rules**
+
+```powershell
+git add website/src/main/resources/static/js/lib/command-center.js `
+  website/src/test/js/command-center.test.js
+git commit -m "Compact application commit presentation"
+```
+
+### Task 5: Make the card renderer consume the presentation rules
+
+**Files:**
+
+- Modify:
+  `website/src/test/js/command-center.test.js:75-84`
+- Modify:
+  `website/src/main/resources/static/js/command-center.js:3-16,283-302`
+
+**Interfaces:**
+
+- Consumes:
+  `metricDetail(reading): string|null` and
+  `metricTitle(reading): string|null` from Task 4.
+- Produces: a commit card with eight-character primary value, no `<small>`
+  duplicate, and the full SHA in `strong.command-metric-value[title]`.
+
+- [ ] **Step 1: Write the failing renderer-contract test**
+
+Add:
+
+```javascript
+test('metric card renderer uses pure detail and accessible title rules', () => {
+  const source = fs.readFileSync(
+    'website/src/main/resources/static/js/command-center.js',
+    'utf8'
+  );
+
+  assert.match(source, /metricDetail\(reading\)/);
+  assert.match(source, /metricTitle\(reading\)/);
+  assert.doesNotMatch(source, /if \(reading\.detail\)/);
+});
+```
+
+- [ ] **Step 2: Run the focused test and verify RED**
+
+Run:
+
+```powershell
+node --test website/src/test/js/command-center.test.js
+```
+
+Expected: FAIL because the DOM renderer still branches directly on
+`reading.detail`.
+
+- [ ] **Step 3: Import and apply the presentation helpers**
+
+Add `metricDetail` and `metricTitle` to the import list from
+`./lib/command-center.js`.
+
+Replace the value/detail portion of `metricCard` with:
+
+```javascript
+  const valueNode = document.createElement('strong');
+  valueNode.className = 'command-metric-value';
+  valueNode.textContent = displayMetric(reading);
+  const title = metricTitle(reading);
+  if (title) valueNode.title = title;
+  const status = document.createElement('span');
+  status.className = 'command-metric-status';
+  status.textContent = state === 'available' ? 'Live' : state;
+  card.append(label, valueNode, status, sparkline(points, `${reading.label || reading.key} 15 minute trend`));
+  const detailText = metricDetail(reading);
+  if (detailText) {
+    const detail = document.createElement('small');
+    detail.textContent = detailText;
+    card.append(detail);
+  }
+```
+
+- [ ] **Step 4: Re-run the focused test and verify GREEN**
+
+Run:
+
+```powershell
+node --test website/src/test/js/command-center.test.js
+```
+
+Expected: all command-center JavaScript tests pass.
+
+- [ ] **Step 5: Run the complete application verification**
+
+Run:
+
+```powershell
+$env:GRADLE_USER_HOME = Join-Path $env:TEMP (
+  'christopherbell-dev-gradle-compact-commit')
+.\gradlew.bat :website:jsTest :website:build --no-daemon
+git diff --check
+```
+
+Expected: all JavaScript and Java tests pass, the executable JAR builds, and
+`git diff --check` produces no output.
+
+- [ ] **Step 6: Commit the renderer integration**
+
+```powershell
+git add website/src/main/resources/static/js/command-center.js `
+  website/src/test/js/command-center.test.js
+git commit -m "Remove duplicate commit card detail"
+```
+
+### Task 6: Review, publish, deploy, and confirm
+
+**Files:**
+
+- Update:
+  `docs/test-reports/2026-07-16-command-center-cpu-temperature-selection-and-application-commit-test-report.md`
+- Update:
+  `docs/work/2026-07-12-command-center-cpu-temperature-and-uptime.md`
+- Update the related spoke review, closure, and session-memory records.
+
+**Interfaces:**
+
+- Consumes: clean tested spoke commits from Tasks 4 and 5.
+- Produces: merged immutable release, production acceptance, and closed Builder
+  records.
+
+- [ ] **Step 1: Request independent code review**
+
+Require no Critical or Important findings before publication.
+
+- [ ] **Step 2: Push and open a pull request**
+
+Push `codex/compact-application-commit-card`, open a PR against `main`, and
+include the red-green evidence and the production visual defect.
+
+- [ ] **Step 3: Pass CI and merge**
+
+Require all repository build and CodeQL checks to pass, then squash-merge.
+
+- [ ] **Step 4: Deploy the immutable merge**
+
+Use the native Windows production deployment workflow. Verify the active
+`release.json` equals the merge SHA before visual acceptance.
+
+- [ ] **Step 5: Verify production**
+
+Require:
+
+- Local and public homepages return HTTP 200 with `<title>CB | Home</title>`.
+- `MongoDB`, `ChristopherBellDev`, and `cloudflared` remain Running and
+  Automatic.
+- CPU Package selection, PawnIO signature, Defender state, and probe-process
+  bounds remain healthy.
+- The authenticated Application commit card shows eight SHA characters, has
+  no duplicate subtitle, and exposes the full SHA as title text.
+
+- [ ] **Step 6: Finish Builder closure**
+
+Mark the spec, implementation plan, and test report complete; record the spoke
+update/review and hub closure; save session memory; update indexes; validate
+hub state; commit and push each required Builder checkpoint.
