@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Make CPU-temperature enablement reliable after production service restarts by removing securely owned stale LibreHardwareMonitor extraction directories and by allowing startup verification to wait briefly for the one live directory created by the first metrics sample.
+Make CPU-temperature enablement reliable after production service restarts by atomically publishing one fully verified LibreHardwareMonitor extraction directory, removing securely owned stale siblings, disabling native sensor extraction in deployment candidates, and allowing startup verification to wait briefly for the one live directory.
 
 ## Background
 
@@ -20,9 +20,12 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 
 ## Goals
 
-- Remove prior current-version extraction directories before provisioning a fresh sensor resource directory.
+- Extract and verify a fresh current-version resource set under a protected nonmatching staging name.
+- Atomically rename the complete staging directory to its final matching nonce name.
+- Remove every prior matching current-version sibling while excluding the newly published live directory.
 - Validate each cleanup target as a direct, non-link child of the ACL-protected sensor base before deletion.
 - Fail closed if stale cleanup cannot complete.
+- Disable native sensor libraries in the parallel `prod,deploy-smoke` candidate so a candidate cannot create or delete production sensor resources.
 - Preserve checksum verification, ACL hardening, nonce validation, and fresh-directory extraction.
 - Let elevated startup verification poll for the lazy first-sample extraction instead of assuming it already exists.
 - Keep the exact-one-live-directory requirement after the bounded wait.
@@ -46,8 +49,19 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - Every cleanup target and descendant must be checked with `NOFOLLOW_LINKS`; symbolic links, junctions, or other reparse points must stop provisioning.
 - The existing ACL policy must harden and verify every stale path before deletion.
 - Deletion must be strict for pre-provision cleanup: any failure must abort provisioning instead of being ignored.
-- The new nonce directory must be created only after stale cleanup succeeds.
+- The new resource set must be extracted under a nonmatching protected staging name so the operational verifier cannot observe incomplete resources.
+- Publishing must use an atomic same-directory rename to the final matching nonce name; unsupported atomic movement must fail closed.
+- Cleanup must exclude the freshly published directory and remove every other matching current-version sibling before provisioning returns.
+- If cleanup fails, provisioning must remove the newly published directory and fail closed.
+- A cross-process file lease beneath the protected base must be acquired before staging or cleanup and held for the complete `NativeLibraries` lifetime.
+- A second process that cannot acquire the lease must fail closed without creating, deleting, or probing resource directories.
 - The owned live directory may continue to use best-effort shutdown cleanup; the next provisioning cycle is the authoritative stale recovery boundary.
+
+### Candidate Isolation
+
+- `Test-CandidateRelease` must force `COMMAND_CENTER_SENSOR_LIBRARIES_ENABLED=false`.
+- The candidate override must remain present when a restore-check database override is also supplied.
+- Deployment candidates must not provision, probe, clean, or otherwise mutate the production sensor directory.
 
 ### Bounded Operational Wait
 
@@ -78,7 +92,9 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 
 ## Proposed Approach
 
-Add strict stale-directory retirement to `SecureNativeLibraryProvisioner` immediately after the base directory is verified and ACL-hardened. The cleanup walks each matching direct child without following links, validates every entry, applies the existing ACL policy, and deletes bottom-up. Only then does provisioning create and populate the new nonce directory.
+Add protected nonmatching staging to `SecureNativeLibraryProvisioner`. Populate, checksum-verify, and ACL-harden every resource in staging, then atomically rename the complete directory to its final matching nonce name. Cleanup excludes that live directory, walks every other matching sibling without following links, validates each entry, applies the existing ACL policy, and deletes bottom-up. If cleanup fails, the published directory is removed by the existing failure path. This ordering prevents the directory count from transiently reaching one while the sole remaining directory is stale and prevents the verifier from observing incomplete fresh resources.
+
+Force the native sensor switch to `false` in `Test-CandidateRelease` so the parallel deployment smoke process cannot race the production service or create stale extraction directories when it is forcibly stopped.
 
 Add a private PowerShell wait helper that polls the protected sensor base for exactly one current-version directory. `Get-ProductionCpuTemperature` will use that helper before performing its existing protected-tree, checksum, and direct-probe validation.
 
@@ -88,6 +104,8 @@ Add a private PowerShell wait helper that polls the protected sensor base for ex
 - `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisionerTest.java`
 - `ops/production/windows/modules/Production.Sensors.psm1`
 - `ops/production/windows/tests/Production.Sensors.Tests.ps1`
+- `ops/production/windows/modules/Production.Deploy.psm1`
+- `ops/production/windows/tests/Production.Deploy.Tests.ps1`
 - `docs/operations/windows-production.md`
 
 ## Validation Plan
