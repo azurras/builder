@@ -52,12 +52,14 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - The new resource set must be extracted under a nonmatching protected staging name so the operational verifier cannot observe incomplete resources.
 - Publishing must use an atomic same-directory rename to the final matching nonce name; unsupported atomic movement must fail closed.
 - Cleanup must exclude the freshly published directory and remove every other matching current-version sibling before provisioning returns.
-- If cleanup fails, provisioning must remove the newly published directory and fail closed.
+- If provisioning or cleanup fails, a strict validated rollback must delete the owned staging or published tree; rollback failures must be reported rather than ignored.
 - A cross-process file lease beneath the protected base must be acquired before staging or cleanup and held for the complete `NativeLibraries` lifetime.
 - A second process that cannot acquire the lease must fail closed without creating, deleting, or probing resource directories.
+- Every unsuccessful lease acquisition path must close its file channel.
 - After stale cleanup succeeds, the application must atomically publish a protected owner marker containing its current Java PID and process start timestamp.
 - The final owner marker must not exist while resources are staging or stale cleanup is incomplete.
-- The owned live directory may continue to use best-effort shutdown cleanup; the next provisioning cycle is the authoritative stale recovery boundary.
+- Owner-marker atomic publication must be the final fallible provisioning operation so an unsuccessful provision can never leave a readiness signal.
+- Best-effort deletion is permitted only during normal `NativeLibraries.close()`; the next provisioning cycle is the authoritative stale recovery boundary.
 
 ### Candidate Isolation
 
@@ -71,6 +73,7 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - Polling must occur every 250 milliseconds.
 - Zero or multiple directories may be transient during cleanup and lazy provisioning.
 - A directory counts as live only when its protected owner marker matches both the Java PID currently listening on the configured production port and that process's start timestamp within a one-second platform-precision tolerance.
+- PowerShell enumeration must apply the same exact nonce-name regex as Java before counting or inspecting markers.
 - A sole stale directory with an absent or old owner marker must not satisfy startup verification.
 - The timeout error must include the final observed live and total directory counts.
 - Once exactly one directory exists, all existing ACL, hash, file-completeness, direct-probe, and Celsius plausibility checks remain mandatory.

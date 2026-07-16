@@ -14,6 +14,8 @@
 - Publish only with `StandardCopyOption.ATOMIC_MOVE`; fail closed if atomic publication is unavailable.
 - Hold one exclusive file lease beneath the protected base until `NativeLibraries.close()`.
 - Publish a protected current-Java-PID and process-start owner marker only after stale cleanup succeeds.
+- Use strict rollback for every unsuccessful provision; reserve best-effort deletion for normal close.
+- Close the lease channel on every unsuccessful `tryLock()` path.
 - Delete only validated current-version siblings and abandoned nonmatching staging directories.
 - Force `COMMAND_CENTER_SENSOR_LIBRARIES_ENABLED=false` for every deployment candidate.
 - Keep the verifier wait at 15 seconds with at most 250 milliseconds per sleep.
@@ -525,13 +527,18 @@ Proposed:
     try {
       FileLock lock = channel.tryLock();
       if (lock == null) {
-        channel.close();
         throw new SecurityException("CPU sensor resources are already in use.");
       }
       return new SensorLease(channel, lock);
     } catch (OverlappingFileLockException failure) {
-      channel.close();
       throw new SecurityException("CPU sensor resources are already in use.", failure);
+    } catch (IOException | RuntimeException failure) {
+      try {
+        channel.close();
+      } catch (IOException closeFailure) {
+        failure.addSuppressed(closeFailure);
+      }
+      throw failure;
     }
   }
 ```
@@ -659,17 +666,68 @@ Proposed:
       throw new SecurityException("CPU sensor owner marker changed before publication.");
     }
     Files.move(stagingMarker, ownerMarker, StandardCopyOption.ATOMIC_MOVE);
-    verifyNotLinkOrReparsePoint(ownerMarker);
-    aclPolicy.hardenAndVerify(ownerMarker);
-    if (!owner.equals(Files.readString(
-        ownerMarker, java.nio.charset.StandardCharsets.US_ASCII))) {
-      throw new SecurityException("CPU sensor owner marker changed after publication.");
-    }
   }
 ```
 
 Verification:
 - The publication test must prove the marker is absent during cleanup and equals the current JVM PID after provisioning returns.
+
+#### Code Edit 2.11
+- File: `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisioner.java`
+- Lines: 130-141
+- Action: replace
+
+Current:
+```java
+    } catch (IOException | RuntimeException failure) {
+      if (ownedDirectory != null) deleteTree(ownedDirectory);
+      if (lease != null) lease.close();
+      if (failure instanceof SecurityException securityException) {
+        throw securityException;
+      }
+      throw new SecurityException("Secure native library provisioning failed.", failure);
+    }
+```
+
+Proposed:
+```java
+    } catch (IOException | RuntimeException failure) {
+      try {
+        if (ownedDirectory != null
+            && Files.exists(ownedDirectory, LinkOption.NOFOLLOW_LINKS)) {
+          deleteOwnedTreeStrict(ownedDirectory);
+        }
+      } catch (IOException | RuntimeException rollbackFailure) {
+        var combined = new SecurityException(
+            "Secure native library provisioning rollback failed.",
+            rollbackFailure);
+        combined.addSuppressed(failure);
+        throw combined;
+      } finally {
+        if (lease != null) lease.close();
+      }
+      if (failure instanceof SecurityException securityException) {
+        throw securityException;
+      }
+      throw new SecurityException("Secure native library provisioning failed.", failure);
+    }
+```
+
+```java
+  private void deleteOwnedTreeStrict(Path directory) throws IOException {
+    var tree = new ArrayList<Path>();
+    collectTrustedTree(directory, tree);
+    tree.sort(java.util.Comparator.reverseOrder());
+    for (Path path : tree) {
+      Files.delete(path);
+    }
+  }
+```
+
+Verification:
+- Failed stale cleanup must leave no owner marker.
+- Rollback failure must surface a `SecurityException` containing `rollback failed`.
+- Normal `NativeLibraries.close()` retains best-effort cleanup.
 
 - [ ] **Step 1: Apply Code Edits 2.1 through 2.3 only and observe red.**
 - [ ] **Step 2: Apply Code Edits 2.4 through 2.9.**
@@ -743,7 +801,10 @@ function Wait-ProductionSensorResourceDirectory {
     while ($true) {
         $allDirectories = if (Test-Path -LiteralPath $Base -PathType Container) {
             @(Get-ChildItem -LiteralPath $Base -Directory `
-                -Filter 'librehardwaremonitor-0.9.6-*' -ErrorAction Stop)
+                -Filter 'librehardwaremonitor-0.9.6-*' -ErrorAction Stop |
+                Where-Object {
+                    $_.Name -match '^librehardwaremonitor-0\.9\.6-[A-Za-z0-9-]{1,64}$'
+                })
         } else {
             @()
         }
