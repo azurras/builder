@@ -40,7 +40,8 @@ The orphaned Java process has kept the public site reachable, but it is not acce
 ### Service Logging
 
 - `ChristopherBellDev.xml` must use WinSW `roll-by-size`.
-- The size threshold must remain 10 MiB (`10485760` bytes).
+- The size threshold must be 10 MiB, expressed in WinSW 2.12.0's documented
+  KiB units as `10240`.
 - Retention must be explicitly bounded to seven rolled files.
 - The configuration must not contain `roll-by-size-time`, `autoRollAtTime`, or a time-based filename pattern.
 - The active output filename must remain `C:\ProgramData\christopherbell.dev\logs\ChristopherBellDev.out.log` so the command center continues reading the same protected log.

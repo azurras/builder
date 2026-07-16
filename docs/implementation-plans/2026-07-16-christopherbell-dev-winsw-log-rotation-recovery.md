@@ -16,7 +16,7 @@
 - Do not weaken ProgramData ACLs, Defender settings, installer verification, or sensor fail-closed behavior.
 - Do not terminate unrelated Java or PowerShell processes.
 - Do not enable sensors while the website is running outside the Windows service.
-- Keep the WinSW size threshold at exactly `10485760` bytes and retention at exactly seven rolled files.
+- Keep the WinSW size threshold at exactly `10240` KiB (10 MiB) and retention at exactly seven rolled files.
 - Keep `sensorLibrariesEnabled=false` until service recovery and stability checks pass.
 
 ---
@@ -110,7 +110,7 @@ Proposed:
         $log = $service.service.log
 
         [string]$log.mode | Should -Be 'roll-by-size'
-        [int]$log.sizeThreshold | Should -Be 10485760
+        [int]$log.sizeThreshold | Should -Be 10240
         [int]$log.keepFiles | Should -Be 7
         $log.autoRollAtTime | Should -BeNullOrEmpty
         $log.pattern | Should -BeNullOrEmpty
@@ -129,7 +129,7 @@ Verification:
 Current:
 ```xml
   <log mode="roll-by-size-time">
-    <sizeThreshold>10485760</sizeThreshold>
+    <sizeThreshold>10240</sizeThreshold>
     <pattern>yyyyMMdd</pattern>
     <autoRollAtTime>00:00:00</autoRollAtTime>
     <zipOlderThanNumDays>7</zipOlderThanNumDays>
@@ -140,7 +140,7 @@ Current:
 Proposed:
 ```xml
   <log mode="roll-by-size">
-    <sizeThreshold>10485760</sizeThreshold>
+    <sizeThreshold>10240</sizeThreshold>
     <keepFiles>7</keepFiles>
   </log>
 ```
@@ -221,7 +221,7 @@ Implementation notes:
 Verification:
 - Record the pre-recovery System event count for Service Control Manager event 7031 and the current listener/parent chain.
 - Confirm `sensorLibrariesEnabled` is Boolean `false`.
-- Confirm the installed XML contains `roll-by-size`, threshold `10485760`, and `keepFiles` `7`.
+- Confirm the installed XML contains `roll-by-size`, threshold `10240`, and `keepFiles` `7`.
 - Start `ChristopherBellDev`, then wait conditionally until it is `Running` and port 8080 has exactly one listener.
 - Confirm the listener belongs to the new service-owned PowerShell/Java process tree, not the old PIDs.
 - Run `prod.ps1 verify-startup`; expect all three services `Running` and `Automatic`, protected state valid, local status `200`, and public status `200`.
