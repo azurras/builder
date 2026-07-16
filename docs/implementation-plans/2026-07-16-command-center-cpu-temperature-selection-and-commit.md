@@ -63,6 +63,26 @@ the protected deployed release metadata.
 
 None.
 
+## Independent Review Amendment
+
+Independent review of initial commit `c352b94c` found that a fixed operational
+probe hash would break verification after rollback and that launcher-based
+`GIT_COMMIT` injection would not reach normal merge-only production without a
+separate tools/service installation. The following rules supersede conflicting
+edits below:
+
+- Do not modify `Production.Deploy.psm1`,
+  `Start-ChristopherBellDev.ps1`, or their tests for Application commit.
+- Resolve commit metadata inside `ApplicationHostMetricsProvider` from the
+  active working directory's `release.json`, falling back only when the
+  configured commit is absent.
+- Do not keep `CpuTemperatureScriptSha256` in
+  `Production.Sensors.psm1`.
+- Derive the expected script SHA from
+  `current\app.jar!/BOOT-INF/classes/lib/cpu-temperature.ps1`.
+- Keep the displayed label generic `CPU temperature` because fallback hardware
+  may not expose CPU Package.
+
 ## Task Breakdown
 
 ### Task 1 - Select actual CPU temperature deterministically
@@ -293,7 +313,69 @@ Verification:
   `ops/production/windows/modules/Production.Sensors.psm1`.
 - Run `:website:verifySensorRuntime`.
 
-### Task 2 - Export protected release metadata as Application commit
+#### Code Edit 1.6
+
+- File: `ops/production/windows/modules/Production.Sensors.psm1`
+- Lines: 7 and 155-185
+- Action: replace
+
+Current:
+
+```powershell
+$script:CpuTemperatureScriptSha256 = '<one release-specific hash>'
+```
+
+```powershell
+if ((Get-FileHash -LiteralPath $scriptPath -Algorithm SHA256).Hash -ne
+    $script:CpuTemperatureScriptSha256) {
+    throw 'Live CPU temperature resource verification failed.'
+}
+```
+
+Proposed:
+
+```powershell
+function Get-ProductionCpuTemperatureScriptHash {
+    param([Parameter(Mandatory)][string]$Root)
+    $jar = Join-Path $Root 'current\app.jar'
+    $archive = [IO.Compression.ZipFile]::OpenRead($jar)
+    try {
+        $entries = @($archive.Entries | Where-Object {
+            $_.FullName -eq 'BOOT-INF/classes/lib/cpu-temperature.ps1'
+        })
+        if ($entries.Count -ne 1) {
+            throw 'Active release CPU probe resource is unavailable.'
+        }
+        $stream = $entries[0].Open()
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try {
+            return -join (
+                $sha.ComputeHash($stream) |
+                ForEach-Object { $_.ToString('X2') }
+            )
+        } finally {
+            $sha.Dispose()
+            $stream.Dispose()
+        }
+    } finally {
+        $archive.Dispose()
+    }
+}
+```
+
+Verification:
+
+- Pester creates a synthetic active JAR and proves the returned hash matches
+  its embedded probe.
+- The prior release's probe hash must remain verifiable after `current`
+  changes during rollback.
+
+### Task 2 - Superseded launcher approach
+
+Sequence / dependencies:
+
+- Do not execute Code Edits 2.1 through 2.5 below. They are retained only as
+  review history and are superseded by Task 2A.
 
 Sequence / dependencies:
 
@@ -461,6 +543,86 @@ Verification:
 - Re-run focused Install Pester and expect green.
 - Confirm installed launcher refresh occurs during production deployment
   acceptance.
+
+### Task 2A - Resolve Application commit inside the active release
+
+Sequence / dependencies:
+
+- Runs after the independent-review amendment and Task 1.
+- Does not depend on installed production tools or launcher refresh.
+
+Implementation notes:
+
+- Extend `ProbeResult` with an optional release commit.
+- Read only a bounded regular `release.json` in the active process working
+  directory.
+- Parse JSON with the application's existing Jackson library.
+- Reuse the existing safe-commit allowlist.
+
+#### Code Edit 2A.1
+
+- File: `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/ApplicationHostMetricsProviderTest.java`
+- Lines: 17-48
+- Action: replace
+
+Current:
+
+```java
+new ApplicationHostMetricsProvider.ProbeResult(
+    Optional.of(true), OptionalDouble.of(12.5))
+```
+
+Proposed:
+
+```java
+new ApplicationHostMetricsProvider.ProbeResult(
+    Optional.of(true),
+    OptionalDouble.of(12.5),
+    Optional.of("0123456789abcdef0123456789abcdef01234567"))
+```
+
+Verification:
+
+- A configured safe commit remains preferred.
+- Without one, the validated release SHA is available.
+- Missing or malformed release metadata remains unavailable.
+
+#### Code Edit 2A.2
+
+- File: `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/ApplicationHostMetricsProvider.java`
+- Lines: 37-60 and 87-128
+- Action: replace
+
+Current:
+
+```java
+String commit = safeCommit(properties.getCommitIdentifier());
+```
+
+```java
+record ProbeResult(Optional<Boolean> serviceRunning, OptionalDouble responseMillis) {}
+```
+
+Proposed:
+
+```java
+String commit = safeCommit(properties.getCommitIdentifier());
+if (commit == null) {
+  commit = safeCommit(result.releaseCommit().orElse(null));
+}
+```
+
+```java
+record ProbeResult(
+    Optional<Boolean> serviceRunning,
+    OptionalDouble responseMillis,
+    Optional<String> releaseCommit) {}
+```
+
+Verification:
+
+- Run `ApplicationHostMetricsProviderTest`.
+- Run the complete command-center metrics tests.
 
 ### Task 3 - Document, verify, review, publish, and deploy
 

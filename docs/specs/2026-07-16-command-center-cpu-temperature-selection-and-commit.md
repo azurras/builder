@@ -51,7 +51,8 @@ unavailable.
 - Fall back deterministically when CPU Package is unavailable.
 - Exclude every `Distance to TjMax` sensor from all fallbacks.
 - Preserve empty output when no plausible actual temperature exists.
-- Export the exact deployed release SHA to both candidate and production JARs.
+- Resolve the exact deployed release SHA inside the application from the active
+  release's protected metadata so merge-only deployment remains sufficient.
 - Reject missing or malformed release metadata instead of accepting an
   attacker-controlled or ambiguous commit label.
 - Prove both fixes with red-green automated tests, complete local suites,
@@ -85,14 +86,24 @@ unavailable.
 
 ### Application Commit
 
-- Read the release SHA only from the protected release directory's
-  `release.json`.
+- Read the release SHA only from `release.json` in the application's active
+  release working directory.
 - Require exactly one lowercase hexadecimal SHA with 40 characters.
-- Set `GIT_COMMIT` in `Start-ProductionJar` for deployment candidates.
-- Set `GIT_COMMIT` in `Start-ChristopherBellDev.ps1` before launching the
-  production JAR.
-- A missing or invalid release metadata file must stop that launch path.
+- Prefer an explicitly configured safe commit label when present; otherwise
+  use the validated active release SHA.
+- Missing or malformed release metadata must keep the card explicitly
+  unavailable without stopping the website.
 - Preserve the existing Java allowlist for displayed commit identifiers.
+
+### Rollback-Aware Sensor Verification
+
+- Operational verification must derive the expected probe-script hash from the
+  active `current\app.jar` resource.
+- The active JAR must contain exactly one
+  `BOOT-INF/classes/lib/cpu-temperature.ps1` entry.
+- The protected extracted script must match that active-release hash.
+- Do not pin one operational hash that makes the previous release unverifiable
+  after rollback.
 
 ### Production Safety
 
@@ -111,10 +122,16 @@ drop every TjMax-distance row, then choose CPU Package, Core Max, or the maximum
 remaining value in that order. Keep stdout numeric-only so the bounded Java
 probe contract remains unchanged.
 
-Add one production PowerShell helper that reads and validates `release.json`.
-Use it from candidate launch and mirror the same strict validation in the
-installed service launcher, exporting the SHA as process-scoped `GIT_COMMIT`
-before Java starts.
+Extend the application's existing operational probe result with an optional
+active-release commit. The default probe reads a small regular `release.json`
+from the process working directory, parses it with the application's JSON
+library, and passes only the validated SHA through the existing safe-commit
+allowlist.
+
+Replace the operational fixed script hash with a helper that opens the active
+`current\app.jar`, hashes its embedded CPU probe resource, and compares the
+protected extracted script against that active-release hash. This keeps
+verification compatible when `current` points back to a prior release.
 
 ## Files and Modules
 
@@ -122,10 +139,9 @@ before Java starts.
 - `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisioner.java`
 - `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/LibreHardwareCpuTemperatureProvider.java`
 - `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/LibreHardwareCpuTemperatureProviderTest.java`
-- `ops/production/windows/modules/Production.Deploy.psm1`
-- `ops/production/windows/service/Start-ChristopherBellDev.ps1`
-- `ops/production/windows/tests/Production.Deploy.Tests.ps1`
-- `ops/production/windows/tests/Production.Install.Tests.ps1`
+- `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/ApplicationHostMetricsProvider.java`
+- `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/ApplicationHostMetricsProviderTest.java`
+- `ops/production/windows/modules/Production.Sensors.psm1`
 - `ops/production/windows/tests/Production.Sensors.Tests.ps1`
 - `docs/operations/windows-production.md`
 
@@ -133,7 +149,8 @@ before Java starts.
 
 1. Add source-contract and launch-environment tests first; observe failures.
 2. Implement named CPU sensor preference and release-metadata export.
-3. Update the pinned script SHA in Java and PowerShell.
+3. Update the application-bundle script SHA in Java and make operational
+   verification derive the active-release script hash from the JAR.
 4. Run focused Java and Pester tests.
 5. Run complete Windows Pester and full Gradle build.
 6. Obtain independent review with no Critical or Important findings.
