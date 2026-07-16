@@ -316,7 +316,7 @@ Verification:
 #### Code Edit 1.6
 
 - File: `ops/production/windows/modules/Production.Sensors.psm1`
-- Lines: 7 and 155-185
+- Lines: 7-185
 - Action: replace
 
 Current:
@@ -590,7 +590,7 @@ Verification:
 #### Code Edit 2A.2
 
 - File: `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/ApplicationHostMetricsProvider.java`
-- Lines: 37-60 and 87-128
+- Lines: 37-128
 - Action: replace
 
 Current:
