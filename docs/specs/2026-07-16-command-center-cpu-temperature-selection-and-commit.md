@@ -95,6 +95,37 @@ unavailable.
   unavailable without stopping the website.
 - Preserve the existing Java allowlist for displayed commit identifiers.
 
+### Application Commit Card UI Amendment
+
+Production visual acceptance showed that the metric renderer uses
+`reading.detail` twice for commit readings: `displayMetric` renders the full SHA
+as the primary value, then the generic card renderer appends the same detail as
+a `<small>` secondary line. The duplicate full SHA adds no information and can
+extend beyond a narrow mobile card.
+
+The considered approaches are:
+
+1. Keep the full SHA as the value and suppress only the duplicate detail line.
+   This removes redundancy but leaves a visually dominant 40-character value.
+2. Show the first eight SHA characters, suppress the duplicate detail line,
+   and retain the complete SHA as the value node's accessible title. This is
+   the approved approach because it is compact without discarding the precise
+   deployed identity.
+3. Add a dedicated copy control. This is deferred because the command center
+   does not currently expose copy controls for other metric cards and the
+   reported defect does not require a new interaction.
+
+Approved UI behavior:
+
+- Keep the card label `Application commit`.
+- Display the first eight characters of an available commit identifier.
+- Do not render a secondary line when the detail is the same commit identifier
+  already represented by the primary value.
+- Preserve the complete commit identifier in the value node's `title`
+  attribute for accessible detail and desktop inspection.
+- Keep unavailable and malformed commit behavior unchanged.
+- Do not change the API response or server-side release-metadata validation.
+
 ### Rollback-Aware Sensor Verification
 
 - Operational verification must derive the expected probe-script hash from the
@@ -162,6 +193,9 @@ verification compatible when `current` points back to a prior release.
     temperature and the deployed commit SHA.
 11. Confirm services, Defender state, probe bounds, local/public HTTP bodies,
     and uptime formatting remain healthy.
+12. Add a failing JavaScript regression proving a full commit is shortened to
+    eight characters and the card renderer suppresses duplicate commit detail.
+13. Confirm the rendered value retains the full SHA as accessible title text.
 
 ## Open Questions
 
