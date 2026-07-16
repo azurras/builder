@@ -55,6 +55,8 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - If cleanup fails, provisioning must remove the newly published directory and fail closed.
 - A cross-process file lease beneath the protected base must be acquired before staging or cleanup and held for the complete `NativeLibraries` lifetime.
 - A second process that cannot acquire the lease must fail closed without creating, deleting, or probing resource directories.
+- After stale cleanup succeeds, the application must atomically publish a protected owner marker containing its current Java PID and process start timestamp.
+- The final owner marker must not exist while resources are staging or stale cleanup is incomplete.
 - The owned live directory may continue to use best-effort shutdown cleanup; the next provisioning cycle is the authoritative stale recovery boundary.
 
 ### Candidate Isolation
@@ -68,7 +70,9 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - `Production.Sensors.psm1` must wait up to 15 seconds for exactly one live current-version directory.
 - Polling must occur every 250 milliseconds.
 - Zero or multiple directories may be transient during cleanup and lazy provisioning.
-- The timeout error must include the final observed directory count.
+- A directory counts as live only when its protected owner marker matches both the Java PID currently listening on the configured production port and that process's start timestamp within a one-second platform-precision tolerance.
+- A sole stale directory with an absent or old owner marker must not satisfy startup verification.
+- The timeout error must include the final observed live and total directory counts.
 - Once exactly one directory exists, all existing ACL, hash, file-completeness, direct-probe, and Celsius plausibility checks remain mandatory.
 
 ### Automated Validation

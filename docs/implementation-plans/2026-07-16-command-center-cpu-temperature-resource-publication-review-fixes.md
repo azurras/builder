@@ -13,6 +13,7 @@
 - Do not expose a matching directory before all pinned resources are copied, checksum-verified, and ACL-hardened.
 - Publish only with `StandardCopyOption.ATOMIC_MOVE`; fail closed if atomic publication is unavailable.
 - Hold one exclusive file lease beneath the protected base until `NativeLibraries.close()`.
+- Publish a protected current-Java-PID and process-start owner marker only after stale cleanup succeeds.
 - Delete only validated current-version siblings and abandoned nonmatching staging directories.
 - Force `COMMAND_CENTER_SENSOR_LIBRARIES_ENABLED=false` for every deployment candidate.
 - Keep the verifier wait at 15 seconds with at most 250 milliseconds per sleep.
@@ -32,6 +33,7 @@ Amend commit `3be9fa6fb5790368b0d83d30d273ea56b997c3f7` so independent review re
 
 - Observe candidate-isolation, nonmatching-staging, and exclusive-lease tests fail against the current commit.
 - Prevent the PowerShell verifier from seeing incomplete fresh resources or a transient final stale directory.
+- Prevent a sole stale directory from being accepted before the new process publishes its owner marker.
 - Prevent a candidate or second process from deleting resources owned by the production service.
 - Use a monotonic timeout and clamp the final wait interval.
 - Re-run complete local verification and independent review before publishing.
@@ -190,11 +192,14 @@ Proposed:
     Path fresh = tempDir.resolve("librehardwaremonitor-0.9.6-fresh");
     boolean[] finalVisibleDuringCopy = {false};
     boolean[] finalCompleteDuringCleanup = {false};
+    boolean[] ownerMarkerVisibleDuringCleanup = {false};
     var provisioner = provisionerWithLibraryCompanionAndScript(path -> {
       if (path.equals(stale)) {
         finalCompleteDuringCleanup[0] =
             Files.exists(fresh.resolve("LibreHardwareMonitorLib.dll"))
                 && Files.exists(fresh.resolve("cpu-temperature.ps1"));
+        ownerMarkerVisibleDuringCleanup[0] =
+            Files.exists(fresh.resolve("live-owner.pid"));
       }
     }, "fresh", () -> finalVisibleDuringCopy[0] |= Files.exists(fresh));
 
@@ -202,10 +207,14 @@ Proposed:
 
     assertThat(finalVisibleDuringCopy[0]).isFalse();
     assertThat(finalCompleteDuringCleanup[0]).isTrue();
+    assertThat(ownerMarkerVisibleDuringCleanup[0]).isFalse();
     assertThat(stale).doesNotExist();
     assertThat(libraries.directory()).isEqualTo(fresh);
     assertThat(Files.readString(libraries.libreHardwareMonitor(), UTF_8))
         .isEqualTo("trusted");
+    String marker = Files.readString(fresh.resolve("live-owner.pid"), UTF_8);
+    assertThat(marker).contains("pid=" + ProcessHandle.current().pid());
+    assertThat(marker).contains("startedAtEpochMillis=");
     libraries.close();
   }
 ```
@@ -616,6 +625,52 @@ Verification:
 - Run the complete `SecureNativeLibraryProvisionerTest`.
 - Run `git diff --check`.
 
+#### Code Edit 2.10
+- File: `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisioner.java`
+- Lines: after 128
+- Action: add
+
+Proposed:
+```java
+      publishOwnerMarker(versionDirectory);
+```
+
+```java
+  private void publishOwnerMarker(Path directory) throws IOException {
+    long ownerPid = ProcessHandle.current().pid();
+    long startedAtEpochMillis = ProcessHandle.current().info().startInstant()
+        .orElseThrow(() -> new SecurityException(
+            "CPU sensor owner process start time is unavailable."))
+        .toEpochMilli();
+    String owner = "pid=" + ownerPid + System.lineSeparator()
+        + "startedAtEpochMillis=" + startedAtEpochMillis + System.lineSeparator();
+    Path stagingMarker = directory.resolve(".live-owner.pid-staging");
+    Path ownerMarker = directory.resolve("live-owner.pid");
+    Files.writeString(
+        stagingMarker,
+        owner,
+        java.nio.charset.StandardCharsets.US_ASCII,
+        StandardOpenOption.CREATE_NEW,
+        StandardOpenOption.WRITE);
+    verifyNotLinkOrReparsePoint(stagingMarker);
+    aclPolicy.hardenAndVerify(stagingMarker);
+    if (!owner.equals(Files.readString(
+        stagingMarker, java.nio.charset.StandardCharsets.US_ASCII))) {
+      throw new SecurityException("CPU sensor owner marker changed before publication.");
+    }
+    Files.move(stagingMarker, ownerMarker, StandardCopyOption.ATOMIC_MOVE);
+    verifyNotLinkOrReparsePoint(ownerMarker);
+    aclPolicy.hardenAndVerify(ownerMarker);
+    if (!owner.equals(Files.readString(
+        ownerMarker, java.nio.charset.StandardCharsets.US_ASCII))) {
+      throw new SecurityException("CPU sensor owner marker changed after publication.");
+    }
+  }
+```
+
+Verification:
+- The publication test must prove the marker is absent during cleanup and equals the current JVM PID after provisioning returns.
+
 - [ ] **Step 1: Apply Code Edits 2.1 through 2.3 only and observe red.**
 - [ ] **Step 2: Apply Code Edits 2.4 through 2.9.**
 - [ ] **Step 3: Run the focused tests and expect green.**
@@ -677,6 +732,8 @@ function Wait-ProductionSensorResourceDirectory {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$Base,
+        [Parameter(Mandatory)][int]$OwnerPid,
+        [Parameter(Mandatory)][datetime]$OwnerStartedAt,
         [timespan]$Timeout = ([timespan]::FromSeconds(15)),
         [ValidateRange(1,5000)][int]$PollMilliseconds = 250
     )
@@ -684,19 +741,25 @@ function Wait-ProductionSensorResourceDirectory {
     $stopwatch = [Diagnostics.Stopwatch]::StartNew()
     $observedCount = 0
     while ($true) {
-        $directories = if (Test-Path -LiteralPath $Base -PathType Container) {
+        $allDirectories = if (Test-Path -LiteralPath $Base -PathType Container) {
             @(Get-ChildItem -LiteralPath $Base -Directory `
                 -Filter 'librehardwaremonitor-0.9.6-*' -ErrorAction Stop)
         } else {
             @()
         }
+        $directories = @($allDirectories | Where-Object {
+            Test-ProductionSensorOwnerMarker `
+                -Directory $_ `
+                -OwnerPid $OwnerPid `
+                -OwnerStartedAt $OwnerStartedAt
+        })
         $observedCount = $directories.Count
         $remainingMilliseconds = $Timeout.TotalMilliseconds - $stopwatch.Elapsed.TotalMilliseconds
         if ($observedCount -eq 1 -and $remainingMilliseconds -ge 0) {
             return $directories[0]
         }
         if ($remainingMilliseconds -le 0) {
-            throw "Expected exactly one live CPU temperature resource directory; found $observedCount."
+            throw "Expected exactly one live CPU temperature resource directory; found $observedCount live of $($allDirectories.Count) total."
         }
         Start-Sleep -Milliseconds ([int][math]::Ceiling(
             [math]::Min($PollMilliseconds, $remainingMilliseconds)))
@@ -706,6 +769,82 @@ function Wait-ProductionSensorResourceDirectory {
 
 Verification:
 - Re-run focused sensor Pester and expect green.
+
+#### Code Edit 3.3
+- File: `ops/production/windows/modules/Production.Sensors.psm1`
+- Lines: before 82
+- Action: add
+
+Proposed:
+```powershell
+function Test-ProductionSensorOwnerMarker {
+    param(
+        [Parameter(Mandatory)]$Directory,
+        [Parameter(Mandatory)][int]$OwnerPid,
+        [Parameter(Mandatory)][datetime]$OwnerStartedAt
+    )
+    $marker = Join-Path $Directory.FullName 'live-owner.pid'
+    if (-not (Test-Path -LiteralPath $marker -PathType Leaf)) {
+        return $false
+    }
+    $raw = Get-Content -LiteralPath $marker -ErrorAction Stop
+    $values = @{}
+    foreach ($line in $raw) {
+        if ($line -match '^([A-Za-z]+)=(\d+)$') {
+            $values[$Matches[1]] = $Matches[2]
+        }
+    }
+    [long]$markerPid = 0
+    [long]$markerStartedAt = 0
+    if (-not [long]::TryParse([string]$values.pid, [ref]$markerPid) -or
+        -not [long]::TryParse([string]$values.startedAtEpochMillis, [ref]$markerStartedAt)) {
+        return $false
+    }
+    $markerStart = [DateTimeOffset]::FromUnixTimeMilliseconds($markerStartedAt).UtcDateTime
+    $delta = [math]::Abs(($markerStart - $OwnerStartedAt.ToUniversalTime()).TotalMilliseconds)
+    return $markerPid -eq $OwnerPid -and $delta -le 1000
+}
+```
+
+Verification:
+- Add Pester coverage showing an old PID marker is ignored and the current PID marker is selected.
+
+#### Code Edit 3.4
+- File: `ops/production/windows/modules/Production.Sensors.psm1`
+- Lines: 110-118
+- Action: replace
+
+Current:
+```powershell
+    $base = Join-Path $Root 'config\command-center-sensors'
+    $directory = (
+        Wait-ProductionSensorResourceDirectory -Base $base
+    ).FullName
+```
+
+Proposed:
+```powershell
+    $config = Get-Content -LiteralPath (Join-Path $Root 'config\deploy.json') -Raw |
+        ConvertFrom-Json
+    $listeners = @(
+        Get-NetTCPConnection -LocalPort ([int]$config.productionPort) `
+            -State Listen -ErrorAction SilentlyContinue
+    )
+    if ($listeners.Count -ne 1) {
+        throw "Expected exactly one production listener for CPU sensor ownership; found $($listeners.Count)."
+    }
+    $base = Join-Path $Root 'config\command-center-sensors'
+    $ownerProcess = Get-Process -Id ([int]$listeners[0].OwningProcess) -ErrorAction Stop
+    $directory = (
+        Wait-ProductionSensorResourceDirectory `
+            -Base $base `
+            -OwnerPid ([int]$listeners[0].OwningProcess) `
+            -OwnerStartedAt $ownerProcess.StartTime
+    ).FullName
+```
+
+Verification:
+- Existing direct-probe verification must use only the resource directory owned by the current production Java listener.
 
 - [ ] **Step 1: Add Code Edit 3.1 only and observe red.**
 - [ ] **Step 2: Apply Code Edit 3.2 and observe green.**
