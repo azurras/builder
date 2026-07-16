@@ -25,7 +25,7 @@
 
 ## Document Status
 
-`ready-for-execution`
+`in-progress`
 
 ## Objective
 
@@ -54,6 +54,20 @@ Amend commit `3be9fa6fb5790368b0d83d30d273ea56b997c3f7` so independent review re
 - Base: `origin/main` at `d33a2c41e1e9b23c4b313ff6fb19ac389f8d7699`
 - Branch: `codex/cpu-temperature-stale-resources`
 - Current amendable commit: `3be9fa6fb5790368b0d83d30d273ea56b997c3f7`
+
+### Acceptance-discovered continuation
+
+- First merge: PR `#1209`,
+  `24dcd245c584f20280fb5e066c1690f4b8b7482e`.
+- Follow-up branch: `codex/cpu-temperature-acl-protection`.
+- Elevated acceptance passed stale-owner selection and then failed closed on
+  `Protected production path must disable ACL inheritance`.
+- Root cause: Java NIO `AclFileAttributeView.setAcl` does not set the Windows
+  protected-DACL control flag.
+- Required continuation: reapply the verified DACL through JNA with
+  `DACL_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION`, verify
+  `SE_DACL_PROTECTED`, enable native access in test/candidate/production JVMs,
+  and rerun the full delivery and production acceptance loop.
 
 ## Non-Goals
 
@@ -937,6 +951,13 @@ Verification:
 - [ ] **Step 3: Push, open PR, pass CI, and merge.**
 - [ ] **Step 4: Deploy and complete live acceptance.**
 - [ ] **Step 5: Save and push all Builder closure artifacts.**
+- [x] **Step 6: Reproduce the acceptance-discovered inherited-DACL failure with
+  a Windows-only Java regression.**
+- [x] **Step 7: Implement and verify the protected-DACL JNA bridge and explicit
+  native-access launch contract.**
+- [ ] **Step 8: Run full verification, review, follow-up PR, CI, and merge.**
+- [ ] **Step 9: Refresh installed production tooling, deploy the follow-up, and
+  repeat direct plus cached CPU-temperature acceptance.**
 
 ## Code Changes
 
@@ -953,6 +974,9 @@ Verification:
 - `ops/production/windows/tests/Production.Sensors.Tests.ps1`
 - `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisioner.java`
 - `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisionerTest.java`
+- `website/build.gradle.kts`
+- `build.gradle.kts`
+- `ops/production/windows/service/Start-ChristopherBellDev.ps1`
 - `docs/operations/windows-production.md`
 
 ## Unit Testing
@@ -961,6 +985,10 @@ Verification:
 - Nonmatching complete publication red/green Java test.
 - Exclusive lifetime lease red/green Java test.
 - Existing stale-link Java safety regression.
+- Windows-only red/green proof that a directory begins with inherited DACL state
+  and ends with `SE_DACL_PROTECTED`.
+- Pester proof that candidate and production launchers include
+  `--enable-native-access=ALL-UNNAMED`.
 - Monotonic timeout clamp red/green Pester.
 
 ## Local Testing

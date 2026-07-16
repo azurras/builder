@@ -2,7 +2,7 @@
 
 ## Document Status
 
-`ready-for-execution`
+`in-progress`
 
 ## Purpose
 
@@ -18,6 +18,15 @@ An elevated diagnostic then sampled `C:\ProgramData\christopherbell.dev\config\c
 
 The application intentionally extracts checksum-pinned sensor resources into a fresh nonce directory. Shutdown cleanup is best-effort because Windows may retain a short-lived lock on the DLL after a probe exits. No startup path currently retires prior owned directories, so each affected restart can leave another validly named protected directory. The operational verifier correctly refuses to choose among multiple candidates.
 
+The first merged recovery, PR `#1209` at merge
+`24dcd245c584f20280fb5e066c1690f4b8b7482e`, fixed stale-resource ownership and
+deployed successfully. Its elevated acceptance advanced to protected-tree
+verification, then failed closed because Java NIO replaced the intended ACL
+entries without disabling Windows DACL inheritance on the freshly published
+directory. The acceptance script restored `sensorLibrariesEnabled=false`; the
+website remained healthy. This acceptance-discovered gap is part of the same
+recovery objective and requires an explicit Windows protected-DACL operation.
+
 ## Goals
 
 - Extract and verify a fresh current-version resource set under a protected nonmatching staging name.
@@ -27,6 +36,7 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - Fail closed if stale cleanup cannot complete.
 - Disable native sensor libraries in the parallel `prod,deploy-smoke` candidate so a candidate cannot create or delete production sensor resources.
 - Preserve checksum verification, ACL hardening, nonce validation, and fresh-directory extraction.
+- Disable and verify Windows DACL inheritance on every hardened sensor path.
 - Let elevated startup verification poll for the lazy first-sample extraction instead of assuming it already exists.
 - Keep the exact-one-live-directory requirement after the bounded wait.
 - Prove the fix locally, through independent review and GitHub CI, and on the production service.
@@ -57,6 +67,11 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - A second process that cannot acquire the lease must fail closed without creating, deleting, or probing resource directories.
 - Every unsuccessful lease acquisition path must close its file channel.
 - After stale cleanup succeeds, the application must atomically publish a protected owner marker containing its current Java PID and process start timestamp.
+- The Windows ACL policy must use the fixed JNA bridge to reapply the verified
+  DACL with `PROTECTED_DACL_SECURITY_INFORMATION`, then confirm
+  `SE_DACL_PROTECTED`; Java NIO ACL entries alone are insufficient.
+- Production and candidate JVM launchers must explicitly allow native access
+  for the fixed JNA bridge.
 - The final owner marker must not exist while resources are staging or stale cleanup is incomplete.
 - Owner-marker atomic publication must be the final fallible provisioning operation so an unsuccessful provision can never leave a readiness signal.
 - Best-effort deletion is permitted only during normal `NativeLibraries.close()`; the next provisioning cycle is the authoritative stale recovery boundary.
@@ -72,7 +87,9 @@ The application intentionally extracts checksum-pinned sensor resources into a f
 - `Production.Sensors.psm1` must wait up to 15 seconds for exactly one live current-version directory.
 - Polling must occur every 250 milliseconds.
 - Zero or multiple directories may be transient during cleanup and lazy provisioning.
-- A directory counts as live only when its protected owner marker matches both the Java PID currently listening on the configured production port and that process's start timestamp within a one-second platform-precision tolerance.
+- A directory counts as live only when its protected owner marker matches both
+  the Java PID currently listening on the configured production port and that
+  process's exact integer epoch-millisecond start timestamp.
 - PowerShell enumeration must apply the same exact nonce-name regex as Java before counting or inspecting markers.
 - A sole stale directory with an absent or old owner marker must not satisfy startup verification.
 - The timeout error must include the final observed live and total directory counts.
@@ -109,6 +126,9 @@ Add a private PowerShell wait helper that polls the protected sensor base for ex
 
 - `website/src/main/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisioner.java`
 - `website/src/test/java/dev/christopherbell/admin/commandcenter/metrics/SecureNativeLibraryProvisionerTest.java`
+- `website/build.gradle.kts`
+- `build.gradle.kts`
+- `ops/production/windows/service/Start-ChristopherBellDev.ps1`
 - `ops/production/windows/modules/Production.Sensors.psm1`
 - `ops/production/windows/tests/Production.Sensors.Tests.ps1`
 - `ops/production/windows/modules/Production.Deploy.psm1`
