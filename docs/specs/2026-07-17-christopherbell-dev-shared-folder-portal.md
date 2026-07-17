@@ -2,7 +2,7 @@
 
 ## Document Status
 
-`ready-for-execution`. The interactive design and written spec were approved on July 17, 2026. Implementation remains gated on an execution-ready implementation plan.
+`ready-for-execution`. The interactive design and written spec were approved on July 17, 2026. The service-identity architecture correction was approved the same day after source inspection. Implementation remains gated on an execution-ready implementation plan.
 
 ## Purpose
 
@@ -32,7 +32,7 @@ Approved decisions:
 - Deleted items enter an isolated 30-day recycle area rather than being immediately destroyed.
 - Audit records are retained for 180 days by default.
 - The implementation is integrated into the existing Spring Boot application.
-- The production web process and FFmpeg children must run under a restricted Windows service identity, not `LocalSystem`.
+- The existing website service identity remains unchanged because Command Center requires its current Windows privileges; FFmpeg and ffprobe instead run through a separate restricted local worker.
 
 ## Background
 
@@ -307,7 +307,7 @@ Each record includes account identifier, action, safe relative path or non-sensi
 - Do not execute uploaded files.
 - Continue relying on host real-time antimalware protection for filesystem writes; explicit antivirus orchestration is not part of version one.
 
-Production must not run uploaded media parsers or FFmpeg as `LocalSystem`. Move the website service to a dedicated restricted Windows service identity, preferably a service-specific virtual account if WinSW and the host configuration support it. Grant only the application, configuration, log, `A:\Shared`, and private feature-data access required for runtime. Keep privileged deployment automation separate from the web process. The implementation plan must verify MongoDB connectivity, configuration access, log access, port binding, deploy-lock behavior, and service restart under the new identity before production cutover.
+Production must not run uploaded media parsers, ffprobe, or FFmpeg in the privileged website process. Keep the existing website service identity because Command Center directly invokes Windows service, shutdown/reboot, and privileged sensor operations. Run all media inspection and transcoding through a separate restricted local worker identity. Give that worker read-only access to `A:\Shared`, modify access only to its private job, staging, and cache roots, and no access to application secrets, deployment controls, service controls, or shutdown privileges. The Spring application owns authorization, queue admission, validated job creation, status presentation, and output delivery; the worker accepts only constrained job descriptors and fixed transcode profiles. The implementation plan must verify worker ACL isolation, process identity, job validation, failure containment, and website/Command Center behavior before production cutover.
 
 ## Error Handling
 
@@ -377,11 +377,12 @@ Source inspection during implementation planning should confirm exact line range
 1. Install pinned FFmpeg and ffprobe binaries from a verified source and record their versions and checksums.
 2. Back up the existing service configuration and record current production health.
 3. Create visible and private roots with explicit NTFS ACLs.
-4. Configure the restricted website service identity and prove it can read required application/configuration/log paths, use MongoDB, bind the alternate port, and access only the intended shared paths.
-5. Run a prod-profile alternate-port verification using controlled test files and no production-port disruption.
-6. Apply the production service configuration and restart through the existing safe deployment workflow.
-7. Confirm the public home page, login, an authorized shared-folder listing, an unauthorized denial, original download/range behavior, native media playback, one controlled derivative, Back Office permission changes, audit visibility, and ordinary production health.
-8. Record deployment and runtime evidence in Builder closure/session artifacts.
+4. Install the restricted media-worker service and prove its identity can read originals and modify only its private job, staging, and cache roots.
+5. Prove the worker cannot read application secrets or invoke website-service, shutdown, reboot, or deployment controls.
+6. Run a prod-profile alternate-port verification using controlled test files and no production-port disruption.
+7. Apply the production service configuration and restart through the existing safe deployment workflow.
+8. Confirm the public home page, login, an authorized shared-folder listing, an unauthorized denial, original download/range behavior, native media playback, one controlled derivative, Back Office permission changes, audit visibility, Command Center controls/sensors, and ordinary production health.
+9. Record deployment and runtime evidence in Builder closure/session artifacts.
 
 ## Acceptance Criteria
 
@@ -401,24 +402,25 @@ Source inspection during implementation planning should confirm exact line range
 - Deletes are recoverable for 30 days by default and permanent purge is admin-only.
 - Audit records cover the approved event set without secrets, contents, absolute paths, or range-request noise.
 - FFmpeg failure cannot break listings, safe previews, original downloads, login, or public pages.
-- The production web process and FFmpeg do not run as `LocalSystem`.
+- FFmpeg and ffprobe run only in the restricted worker identity; the privileged website process never parses uploaded media or spawns media tools.
+- Existing Command Center service, power, and sensor operations still work under the unchanged website service identity.
 - Automated tests, local app testing, Builder test reporting, CI, merge, production verification, closure, and session memory complete successfully.
 
 ## Risks and Mitigations
 
-- **Uploaded-media parser risk:** Run the application and FFmpeg under a restricted identity, use fixed commands and timeouts, and never execute uploads.
+- **Uploaded-media parser risk:** Isolate ffprobe and FFmpeg in a restricted worker, accept only validated job descriptors and fixed profiles, enforce timeouts, and never execute uploads.
 - **Filesystem escape or destructive race:** Canonicalize relative paths, reject reparse points, recheck before mutation, and use observed-item concurrency tokens.
 - **Disk exhaustion:** Enforce per-file, cache, queue, output, staging-expiration, and free-space limits.
 - **Production CPU/GPU contention:** Allow one low-priority job, prefer bounded hardware acceleration, surface queue state, and preserve all non-transcode behavior during failure.
 - **Progressive-stream complexity:** Require a tested bounded mechanism, explicit seek limitations while growing, and normal range service after completion.
-- **Service-identity regression:** Prove dependencies and alternate-port production behavior before changing port 8080, with backed-up service configuration and rollback.
+- **Privilege-boundary regression:** Prove worker ACLs and identity restrictions while regression-testing the unchanged privileged website service and Command Center before changing port 8080.
 - **Large implementation scope:** Keep feature packages small, controllers thin, APIs explicit, and tasks test-first and independently reviewable.
 - **Direct Windows mutations bypass website audit:** Accept the filesystem as source of truth; audit website operations only and document that out-of-band host edits are not attributable through the portal.
 
 ## Rollback
 
 - Restore the prior application build and backed-up Windows service configuration.
-- Return production to the previous service identity only if necessary for emergency recovery and document the security exception.
+- Stop and disable the restricted media-worker service when rolling back the feature.
 - Disable shared-folder routes and workers through configuration when a narrower rollback is sufficient.
 - Do not delete or modify `A:\Shared` during rollback.
 - Preserve recycle contents until their retention policy or an explicit admin purge applies.
