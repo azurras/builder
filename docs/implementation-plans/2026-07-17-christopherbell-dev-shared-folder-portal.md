@@ -108,13 +108,6 @@ void sharedFolderStateCannotBecomeWriteOnly() {
       .isInstanceOf(InvalidRequestException.class);
 }
 
-@Test
-void adminAlwaysReceivesEffectiveReadAndWrite() {
-  account.setRole(Role.ADMIN);
-  account.setPermissions(Set.of());
-  assertThat(sharedFolderAccess.effectivePermissions(account))
-      .containsExactlyInAnyOrder(SHARED_FOLDER_READ, SHARED_FOLDER_WRITE);
-}
 ```
 
 Verification:
@@ -275,8 +268,8 @@ public ResponseEntity<Response<AccountDetail>> updateSharedFolderPermissions(
 
 Verification:
 
-- Add controller tests for ADMIN success, non-admin 403, invalid body 400, revocation, and ADMIN effective invariants.
-- Record a permission-change audit event without storing the request body.
+- Add controller tests for ADMIN success, non-admin 403, invalid body 400, and revocation.
+- Task 5 wires permission changes into the persistent shared-folder audit sink after that implementation exists.
 
 #### Code Edit 1.5
 
@@ -440,6 +433,40 @@ Verification:
 
 - Test fresh repository lookup on every call, inactive/unapproved denial, ADMIN defaults, WRITE implication, and immediate revocation with an unchanged JWT.
 
+#### Code Edit 2.4a
+
+- File: `website/src/test/java/dev/christopherbell/sharedfolder/SharedFolderAccessServiceTest.java`
+- Lines: 1
+- Action: add
+
+Proposed:
+
+```java
+@Test
+void adminAlwaysReceivesEffectiveReadAndWrite() {
+  account.setRole(Role.ADMIN);
+  account.setPermissions(Set.of());
+  when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
+
+  assertThat(sharedFolderAccess.effectivePermissions(account))
+      .containsExactlyInAnyOrder(SHARED_FOLDER_READ, SHARED_FOLDER_WRITE);
+}
+
+@Test
+void unchangedJwtLosesAccessImmediatelyAfterRepositoryRevocation() {
+  when(accountRepository.findById(account.getId()))
+      .thenReturn(Optional.of(accountWithRead()), Optional.of(accountWithoutPermissions()));
+  assertThatCode(sharedFolderAccess::requireRead).doesNotThrowAnyException();
+  assertThatThrownBy(sharedFolderAccess::requireRead)
+      .isInstanceOf(AccessDeniedException.class);
+}
+```
+
+Verification:
+
+- Run the focused access-service test and record RED before implementation and GREEN afterward.
+- Keep this test in Task 2 because Task 1 does not yet define `SharedFolderAccessService`.
+
 #### Code Edit 2.5
 
 - File: `cbell-lib/src/main/java/dev/christopherbell/libs/api/APIVersion.java`
@@ -456,6 +483,26 @@ Verification:
 
 - Use `V20260717` for every shared-folder controller mapping and corresponding browser API helper.
 - Do not create unversioned shared-folder data or mutation routes.
+
+#### Code Edit 2.6
+
+- File: `website/src/main/java/dev/christopherbell/sharedfolder/audit/SharedFolderAuditSink.java`
+- Lines: 1
+- Action: add
+
+Proposed:
+
+```java
+@FunctionalInterface
+public interface SharedFolderAuditSink {
+  void record(SharedFolderAuditCommand command);
+}
+```
+
+Verification:
+
+- Add the bounded `SharedFolderAuditCommand` value type with account ID, action, safe relative path/resource ID, timestamp, client IP, optional size, outcome, and safe failure category only.
+- Do not register a production bean or inject the sink into operations until Task 5 adds MongoDB persistence; this keeps intermediate application contexts valid.
 
 ### Task 3 - Add the portal shell, navigation, listing, metadata, downloads, and safe previews
 
@@ -688,7 +735,6 @@ public SharedEntry move(MoveRequest request) {
   conflicts.requireExplicitReplace(target, request.replace());
   paths.recheckForMutation(source, target);
   Files.move(source, target, moveOptions(request.replace()));
-  audit.record("MOVE", request.path(), "SUCCESS");
   return entries.describe(target);
 }
 ```
@@ -696,7 +742,7 @@ public SharedEntry move(MoveRequest request) {
 Verification:
 
 - Controllers accept explicit DTOs and return 409 for conflicts/stale observations.
-- Every mutation records bounded audit data and never exposes an absolute path.
+- Task 5 wires every mutation into the persistent audit sink and tests that records never expose an absolute path.
 
 #### Code Edit 4.3
 
@@ -919,7 +965,6 @@ public RecycleItem recycle(String path, ObservedItem observed) {
   Path payload = recyclePaths.payload(item.id());
   Files.move(source, payload, StandardCopyOption.ATOMIC_MOVE);
   repository.save(item);
-  audit.record("RECYCLE", path, "SUCCESS");
   return item;
 }
 ```
@@ -957,6 +1002,34 @@ Verification:
 - Compute `expiresAt = occurredAt + properties.auditRetention()` so the configured 180-day default remains adjustable.
 - Add service tests proving bounded paths/categories, no headers/tokens/body/content/absolute paths/tool command lines, and no per-range-event noise.
 - Confirm MongoDB creates the zero-second TTL index on `expiresAt` and document actual expiry semantics in tests/docs.
+
+#### Code Edit 5.3a
+
+- File: `website/src/main/java/dev/christopherbell/sharedfolder/audit/MongoSharedFolderAuditSink.java`
+- Lines: 1
+- Action: add
+
+Proposed:
+
+```java
+@Component
+@RequiredArgsConstructor
+public final class MongoSharedFolderAuditSink implements SharedFolderAuditSink {
+  private final SharedFolderAuditRepository repository;
+  private final SharedFolderProperties properties;
+
+  @Override
+  public void record(SharedFolderAuditCommand command) {
+    repository.save(SharedFolderAuditEvent.from(
+        command, command.occurredAt().plus(properties.auditRetention())));
+  }
+}
+```
+
+Verification:
+
+- Inject the now-registered sink into permission changes, listings/content access without range noise, previews, uploads, mutations, recycle/restore/purge, and transcode admission/completion/failure.
+- Add focused tests for each event family and verify failures degrade the requested operation according to the spec instead of leaking request bodies, absolute paths, or tool arguments.
 
 #### Code Edit 5.4
 
@@ -1479,6 +1552,7 @@ Sequence / dependencies:
 
 - Runs only after Task 9 passes.
 - This is the production safety gate and Builder closeout path.
+- The Task 10 implementer edits and commits only spoke operational test code. The controller owns Builder test-report, review, closure, and session-memory artifacts in separate Builder `main` checkpoints.
 
 #### Code Edit 10.1
 
@@ -1504,7 +1578,7 @@ Verification:
 - Run only against explicitly confirmed fixture/config paths; do not invoke a real shutdown.
 - Confirm worker read/write ACLs, service identity/priority, process tree, executable hashes, and failure isolation.
 
-#### Code Edit 10.2
+#### Controller Checkpoint 10.2
 
 - File: `docs/test-reports/2026-07-17-christopherbell-dev-shared-folder-portal.md`
 - Lines: 1
@@ -1531,7 +1605,7 @@ Verification:
 - Exercise login, listing, copied link, unauthorized denial, immediate revocation, native FLAC/browser-supported media, MKV fallback, progressive start-before-finish, cache hit, 10 GB policy with smaller configured fixture, resume, conflict, recycle/restore/purge, audit filters, low-space simulation, unavailable FFmpeg, and mobile/desktop UI.
 - Record response-body evidence, not only status codes.
 
-#### Code Edit 10.3
+#### Controller Checkpoint 10.3
 
 - File: `docs/work-closures/2026-07-17-christopherbell-dev-shared-folder-portal.md`
 - Lines: 1
