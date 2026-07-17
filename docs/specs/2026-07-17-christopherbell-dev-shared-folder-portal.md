@@ -2,7 +2,7 @@
 
 ## Document Status
 
-`ready-for-review`. The interactive design was approved on July 17, 2026. Implementation planning and code changes remain gated on review of this written spec.
+`ready-for-execution`. The interactive design and written spec were approved on July 17, 2026. Implementation remains gated on an execution-ready implementation plan.
 
 ## Purpose
 
@@ -297,7 +297,8 @@ Each record includes account identifier, action, safe relative path or non-sensi
 
 ## Security and Service Identity
 
-- Keep `/shared` and every shared-folder API out of the public-route allowlist.
+- Permit only the data-free `/shared` page shell through the public-route allowlist because browser navigation cannot send the JWT stored in local storage. Its JavaScript must redirect signed-out visitors through login and reveal no filenames, paths, permissions, storage state, or media data before an authenticated API check succeeds.
+- Keep every shared-folder data, content, mutation, permission, audit, recycle, and transcode API out of the public-route allowlist.
 - Enforce current-account active/approved state and effective capabilities at the controller and service boundary.
 - Apply endpoint-aware rate limits to upload-session creation, chunk writes, mutation requests, permission changes, and transcode requests.
 - Set restrictive content headers for every preview and download response.
