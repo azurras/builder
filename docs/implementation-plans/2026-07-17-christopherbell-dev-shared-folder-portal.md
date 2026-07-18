@@ -72,7 +72,13 @@ None.
 - Load shared-folder permissions from the current account record for each protected request; do not place them in the long-lived JWT.
 - Never construct shell command strings from filenames. Pass fixed executable/argument arrays and validated job JSON only.
 - Keep the website on port 8080 untouched until alternate-port prod-profile verification and the Builder test report pass.
-- Commit and push each logical spoke checkpoint, then complete independent review, CI, merge, production verification, Builder closure, and session memory.
+- Treat every numbered spoke task as a hard delivery checkpoint: implement it with RED/GREEN evidence,
+  run its task-level and regression verification, obtain an approving independent review, remediate
+  all Critical and Important findings, then commit and push the reviewed task branch before starting
+  the next numbered task. A task is not complete until its reviewed commit is present on the remote.
+- Failed or incomplete review cycles remain part of the active task. They may use local remediation
+  commits for safety, but they do not satisfy the task-completion checkpoint and do not authorize the
+  next task.
 
 ## Task Breakdown
 
