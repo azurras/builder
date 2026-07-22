@@ -113,3 +113,37 @@ The user reported that the initial skill felt light on guidance. They approved r
 
 - Incorporate concrete findings from the user's review through the same test-first contract cycle.
 - If the user explicitly authorizes independent agent evaluation later, run fresh-context forward tests without leaking the intended outcomes.
+
+## 21:43 - Apply user review corrections
+
+### Request
+
+The user reviewed the expanded skill and asked Codex to fix five concrete issues: an invalid Java nested-record constructor, an implementation-only sequence that contradicted review use, an overly narrow failing-test rule, unclear composition with task-specific skills, and a JavaScript example that treated malformed upstream data like an expected domain result.
+
+### Work Completed
+
+- Split `SKILL.md` into common setup, Implementation Mode, and read-only Review Mode. Review Mode now prohibits code modification unless explicitly requested and reports findings from non-mutating verification.
+- Declared the skill a cross-cutting coding standard that composes with implementation, debugging, security, review, framework, and other task-specific skills rather than replacing them.
+- Added an Evidence by Change Type table covering behavioral RED tests, existing regressions, compiler/type-check failures, analyzer findings, passing characterization baselines for behavior-preserving refactors, and artifact-native validation for configuration, migrations, and executable examples.
+- Updated the Before-Edit Brief, final evidence gate, common mistakes, testing sequence, and semantic-change guidance to use the evidence taxonomy without weakening behavioral TDD.
+- Corrected the nested Java record constructor to `public Enabled {}` and completed the illustrative types required by the example.
+- Changed the JavaScript example so invalid JSON and invalid remote user shape throw `UserServiceProtocolError` with the original cause, while not-found remains an ordinary result.
+- Updated `agents/openai.yaml` to select implementation or review mode and use risk-appropriate evidence.
+- Added four focused regression methods for operating-mode separation, evidence taxonomy, Java constructor visibility, and JavaScript protocol-fault classification.
+- Committed and pushed the revision as `e352536` (`Refine Jane Street skill operating modes`).
+
+### Validation
+
+- RED: the focused suite failed four tests matching the four contract/example defects.
+- GREEN: all 10 focused Jane Street skill tests passed.
+- Full Builder regression: 29 of 29 tests passed.
+- The corrected Java example was accepted by JShell 25 with all interfaces, records, and enum created successfully.
+- The corrected JavaScript example passed `node --check`.
+- Skill validation reported `Skill is valid!`; all 22 repo-scoped metadata files parsed.
+- `git diff --check` passed with line-ending notices only.
+- Hub indexes remained current and hub validation passed with only the pre-existing July 8-9 legacy-plan warnings.
+
+### Current State and Follow-Up
+
+- Builder `main` is pushed through `e352536`; no spoke repositories or services changed.
+- No required implementation follow-up remains. Further changes should respond to new user review findings with the same test-first contract cycle.
