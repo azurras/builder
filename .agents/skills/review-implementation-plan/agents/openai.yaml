@@ -1,4 +1,4 @@
 interface:
   display_name: "Review Implementation Plan"
   short_description: "Review plan readiness"
-  default_prompt: "Use $review-implementation-plan to review this Builder plan for execution readiness, blockers, vague tasks, missing line ranges, missing code edits, weak validation, and an explicit $write-jane-street-style-code constraint on every code-changing task."
+  default_prompt: "Use $review-implementation-plan to reject vague Builder plans, including any code-changing task without $write-jane-street-style-code, a task-specific five-field Before-Edit Brief, literal edits, and concrete validation."

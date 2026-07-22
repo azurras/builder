@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Implementation Plan"
   short_description: "Save complete implementation plans"
-  default_prompt: "Use $save-implementation-plan to save this implementation plan with status, branch, goals, ordered tasks, literal line-range code edit blocks, risks, testing details, and $write-jane-street-style-code as a required constraint for every code-changing task, then commit and push it before moving on."
+  default_prompt: "Use $save-implementation-plan to save this plan with executable code edits, testing details, and $write-jane-street-style-code plus its five-field Before-Edit Brief for every code-changing task, then commit and push it before moving on."

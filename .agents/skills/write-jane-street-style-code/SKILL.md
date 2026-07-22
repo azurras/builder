@@ -5,86 +5,95 @@ description: Use when creating, modifying, refactoring, or reviewing production 
 
 # Write Jane Street-Style Code
 
-### Overview
+## Overview
 
-Before writing or modifying code, make invariants obvious, interfaces uniform, behavior testable, and the diff easy to review. Follow repository-native syntax and formatting.
+Make invalid states difficult to express, interfaces predictable, effects and failures visible, and every semantic change easy to test and review. Apply these principles through repository-native language conventions; do not imitate OCaml syntax or replace local formatters, linters, frameworks, or security rules.
 
 **REQUIRED SUB-SKILL:** Use `superpowers:test-driven-development` for features, bug fixes, refactors, and behavior changes.
 
-### Workflow
+## Mandatory Sequence
 
-1. Read repository instructions, adjacent code, tests, and public interfaces.
-2. State the required behavior and invariants.
-3. Witness the smallest relevant failing test.
-4. Implement the smallest cohesive passing change.
-5. Run native formatting, static analysis, and focused tests.
-6. Review the diff for clarity, correctness, and unnecessary complexity.
+1. Read repository instructions, adjacent implementation, tests, and public interfaces.
+2. Load the references selected by the routing table below.
+3. Write the Before-Edit Brief.
+4. Resolve contradictions or missing facts through read-only investigation.
+5. Witness the smallest relevant failing test.
+6. Implement the smallest cohesive passing change.
+7. Run repository-native formatting, static analysis, focused tests, and proportionate integration checks.
+8. Apply the review rubric in `references/testing-and-review.md` to the final diff.
 
-### House-Style Contract
+Do not edit code until the required references are read and the Before-Edit Brief is coherent. If investigation changes an assumption, revise the brief before continuing.
 
-- Encode valid states and invariants in types, constructors, or validated boundaries.
-- Prefer small composable units with narrow and uniform interfaces.
-- Keep data flow, mutation, side effects, and failure behavior explicit.
-- Use precise names and straightforward control flow.
-- Add abstraction only for demonstrated duplication or a protected invariant.
-- Use behavior-focused tests; add property-based or generative tests when state-space coverage matters.
-- Keep changes small, cohesive, and reviewable. Exclude unrelated refactors.
-- Preserve local conventions unless correctness, safety, or the approved requirement demands change.
+## Before-Edit Brief
 
-Read `references/language-adaptations.md` only for the language being changed.
+Write one concrete statement for each field. A narrow change may use one sentence per field.
 
-### Quick Reference
+- **Behavior:** State the externally observable change or behavior that must remain unchanged.
+- **Invariants:** State what must always hold and which states must be rejected or made unrepresentable.
+- **Boundary/API:** Name the affected public or module boundary, compatibility constraints, and neighboring interface pattern.
+- **Effects and failures:** Identify I/O, mutation, time, randomness, concurrency, external services, expected failures, and unexpected faults.
+- **Tests and evidence:** Name the first failing test, the risks it covers, and the final verification evidence.
 
-| Concern | Default |
+## Reference Routing
+
+| Observable work scope | Required reference |
 |---|---|
-| State | Represent allowed cases; reject invalid construction early. |
-| Interface | Match neighboring names, argument order, and return shapes. |
-| Effects | Isolate I/O, mutation, clocks, randomness, and services. |
-| Errors | Expose domain failures; do not hide malformed states. |
-| Abstraction | Prefer direct code until reuse or an invariant justifies a boundary. |
-| Tests | Assert behavior and invariants, not incidental calls. |
+| Domain state, validation, API, errors, effects, abstraction, concurrency, compatibility, or performance changes | Read `references/design-and-api.md`. |
+| Any behavior change, refactor, bug fix, test change, or code review | Read `references/testing-and-review.md`. |
+| Java source or tests | Read `references/java.md`. |
+| JavaScript or TypeScript source or tests | Read `references/javascript.md`. |
+| Python source or tests | Read `references/python.md`. |
+| Executable templates or code-bearing configuration | Read `references/templates-and-configuration.md`. |
 
-### Example
+Load every applicable row and only the applicable language guides. A cross-language change may require multiple guides.
 
-```java
-final class Ports {
-    sealed interface ParseResult permits Valid, Invalid {}
+## House Defaults
 
-    record Valid(int value) implements ParseResult {
-        Valid {
-            if (value < 1 || value > 65_535) {
-                throw new IllegalArgumentException("port out of range");
-            }
-        }
-    }
+| Concern | Default decision |
+|---|---|
+| State | Represent allowed cases directly; validate untrusted data once at the boundary. |
+| Interface | Match parallel names, argument order, return shapes, and failure conventions. |
+| Effects | Keep I/O and mutable ownership at explicit seams; pass clocks, randomness, and services when control matters. |
+| Failures | Distinguish absence, expected domain failure, programmer error, and infrastructure failure. Preserve causal context. |
+| Abstraction | Start direct; extract only to remove demonstrated duplication, protect an invariant, or isolate an effect. |
+| Data flow | Prefer visible transformations and one clear owner for mutable state. |
+| Performance | Make surprising cost, blocking, allocation, or remote work visible in the interface or name. |
+| Tests | Prove behavior at the narrowest public boundary; use properties when examples cannot cover the state space. |
+| Change size | Keep one coherent purpose per diff and exclude opportunistic restyling. |
 
-    record Invalid(String message) implements ParseResult {}
+## Stop Conditions
 
-    static ParseResult parse(String raw) {
-        try {
-            return new Valid(Integer.parseInt(raw));
-        } catch (IllegalArgumentException error) {
-            return new Invalid(error.getMessage());
-        }
-    }
-}
-```
+Stop and redesign before editing when any of these is unresolved:
 
-Callers must handle success and failure explicitly, and `Valid` cannot contain an out-of-range port.
+- Valid and invalid domain states cannot be distinguished at a trusted boundary.
+- Callers cannot tell whether a function mutates, blocks, performs I/O, or may fail.
+- Parallel APIs would use inconsistent names, arguments, results, or error conventions without a documented reason.
+- The test requires extensive mocking or private-state assertions because the boundary is too coupled.
+- A proposed abstraction has no current reuse, protected invariant, or isolated effect.
+- The change mixes unrelated behavior or restyling that can be separated safely.
 
-### Common Mistakes
+## Final Evidence Gate
 
-- Restyling unrelated code.
-- Adding abstractions that protect no invariant.
-- Hiding `null`, exceptions, or malformed input behind sentinel values.
-- Compressing control flow until intent is harder to review.
+Before claiming completion:
+
+- Confirm the Before-Edit Brief still describes the implemented behavior.
+- Confirm invalid states are rejected before trusted code relies on them.
+- Confirm effects, ownership, and failures are visible at their boundaries.
+- Confirm every semantic production change has observable test evidence or a recorded explanation that an existing failing test now passes.
+- Confirm formatters, analyzers, focused tests, and required integration checks passed.
+- Report every blocker from the review rubric; do not downgrade a blocker to a warning for convenience.
+- Confirm the diff is the smallest complete change and preserves repository-native conventions.
+
+## Common Mistakes
+
+- Treating the brief as generic ceremony instead of naming the actual boundary and risk.
+- Wrapping malformed input in `null`, a sentinel, or a broad exception that erases the cause.
+- Adding interfaces, factories, helpers, or configuration knobs before a real boundary exists.
+- Compressing control flow until ownership or failure paths are difficult to trace.
+- Approving snapshots without reading the semantic change.
 - Testing mocks or internal calls instead of behavior.
+- Restyling unrelated code.
 
-### Final Review
+## Sources and Adaptation
 
-- Are invalid states rejected or unrepresentable?
-- Are interfaces consistent with neighboring code?
-- Are effects and failures visible at their boundaries?
-- Does each abstraction earn its cost?
-- Do tests demonstrate behavior and important edge cases?
-- Is the diff the smallest complete change?
+This standard adapts public Jane Street engineering themes—uniform interfaces, explicit failure, strong representations, small tested changes, and careful review—to the language and repository in scope. Consult the linked primary sources in `references/design-and-api.md`; use them as rationale, not as a substitute for the concrete rules in this skill.

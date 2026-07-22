@@ -14,38 +14,100 @@ def read(path: Path) -> str:
 
 
 class JaneStreetCodeStyleTests(unittest.TestCase):
-    def test_skill_package_declares_house_style_contract(self) -> None:
+    def test_skill_entrypoint_requires_brief_and_routes_references(self) -> None:
         skill_path = STYLE_SKILL / "SKILL.md"
         metadata_path = STYLE_SKILL / "agents" / "openai.yaml"
-        reference_path = STYLE_SKILL / "references" / "language-adaptations.md"
 
-        self.assertTrue(skill_path.is_file())
-        self.assertTrue(metadata_path.is_file())
-        self.assertTrue(reference_path.is_file())
-
-        skill = read(skill_path)
-        skill_lower = skill.lower()
-        metadata_lower = read(metadata_path).lower()
-        reference_lower = read(reference_path).lower()
+        skill = read(skill_path).lower()
+        metadata = read(metadata_path).lower()
 
         self.assertIn("name: write-jane-street-style-code", skill)
-        self.assertIn("description: Use when", skill)
+        self.assertIn("description: use when", skill)
         for required in (
-            "before writing or modifying code",
-            "encode valid states",
-            "narrow and uniform interfaces",
-            "mutation, side effects, and failure behavior explicit",
-            "property-based",
-            "small, cohesive, and reviewable",
-            "repository-native",
-            "final review",
+            "before-edit brief",
+            "**behavior:**",
+            "**invariants:**",
+            "**boundary/api:**",
+            "**effects and failures:**",
+            "**tests and evidence:**",
+            "do not edit code",
+            "references/design-and-api.md",
+            "references/testing-and-review.md",
+            "references/java.md",
+            "references/javascript.md",
+            "references/python.md",
+            "references/templates-and-configuration.md",
         ):
-            self.assertIn(required, skill_lower)
+            self.assertIn(required, skill)
 
-        self.assertIn("$write-jane-street-style-code", metadata_lower)
-        self.assertIn("allow_implicit_invocation: true", metadata_lower)
-        for heading in ("### java", "### javascript", "### python", "### templates"):
-            self.assertIn(heading, reference_lower)
+        self.assertNotIn("language-adaptations.md", skill)
+        self.assertIn("$write-jane-street-style-code", metadata)
+        self.assertIn("before-edit brief", metadata)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+
+    def test_design_and_testing_references_are_authoritative(self) -> None:
+        design_path = STYLE_SKILL / "references" / "design-and-api.md"
+        testing_path = STYLE_SKILL / "references" / "testing-and-review.md"
+
+        self.assertTrue(design_path.is_file())
+        self.assertTrue(testing_path.is_file())
+
+        design = read(design_path).lower()
+        testing = read(testing_path).lower()
+        for required in (
+            "## table of contents",
+            "invalid states",
+            "validation boundary",
+            "uniform interfaces",
+            "absence",
+            "expected domain failure",
+            "preserve error context",
+            "mutation ownership",
+            "concurrency",
+            "abstraction",
+            "dependency direction",
+            "performance",
+            "compatibility",
+            "worked example",
+        ):
+            self.assertIn(required, design)
+
+        for required in (
+            "## table of contents",
+            "test-selection matrix",
+            "property",
+            "scenario",
+            "snapshot",
+            "integration",
+            "concurrency",
+            "semantic production change",
+            "## blockers",
+            "## warnings",
+            "finding format",
+        ):
+            self.assertIn(required, testing)
+
+    def test_language_references_supply_idiomatic_decisions_and_examples(self) -> None:
+        references = {
+            "java.md": ("sealed", "junit"),
+            "javascript.md": ("async", "boundary validation"),
+            "python.md": ("dataclass", "pytest"),
+            "templates-and-configuration.md": ("escaping", "explicit defaults"),
+        }
+
+        for filename, language_terms in references.items():
+            with self.subTest(reference=filename):
+                path = STYLE_SKILL / "references" / filename
+                self.assertTrue(path.is_file())
+                content = read(path).lower()
+                for required in (
+                    "## table of contents",
+                    "## decision guide",
+                    "## good and bad",
+                    "repository-native",
+                    *language_terms,
+                ):
+                    self.assertIn(required, content)
 
     def test_repo_and_orchestrator_require_the_style_skill(self) -> None:
         agents = read(ROOT / "AGENTS.md").lower()
@@ -88,6 +150,9 @@ class JaneStreetCodeStyleTests(unittest.TestCase):
         self.assertIn("every code-changing task", save_skill)
         self.assertIn("reject the plan", review_skill)
         self.assertIn("before code changes", dispatch_skill)
+        self.assertIn("before-edit brief", save_skill)
+        self.assertIn("before-edit brief", review_skill)
+        self.assertIn("before-edit brief", dispatch_skill)
 
     def test_spoke_review_checks_house_style_compliance(self) -> None:
         folder = SKILLS / "review-spoke-work"
@@ -97,6 +162,9 @@ class JaneStreetCodeStyleTests(unittest.TestCase):
         self.assertIn("house-style compliance", skill)
         self.assertIn("merge readiness", skill)
         self.assertIn("write-jane-street-style-code", skill)
+        self.assertIn("blockers", skill)
+        self.assertIn("warnings", skill)
+        self.assertIn("finding format", skill)
         self.assertIn("$write-jane-street-style-code", prompt)
 
 

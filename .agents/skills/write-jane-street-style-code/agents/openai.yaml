@@ -1,7 +1,7 @@
 interface:
   display_name: "Write Jane Street-Style Code"
-  short_description: "Apply rigorous cross-language code style"
-  default_prompt: "Use $write-jane-street-style-code before creating or modifying code so invariants, interfaces, tests, and reviewability meet the house standard."
+  short_description: "Apply the rigorous house coding standard"
+  default_prompt: "Use $write-jane-street-style-code before editing code: load the routed references, write the five-field Before-Edit Brief, test first, and apply the blocker/warning review rubric."
 
 policy:
   allow_implicit_invocation: true

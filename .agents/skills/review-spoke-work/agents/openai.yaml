@@ -1,4 +1,4 @@
 interface:
   display_name: "Review Spoke Work"
   short_description: "Record reviews of spoke repo work"
-  default_prompt: "Use $review-spoke-work to review spoke changes with $write-jane-street-style-code, record findings and validation, and decide merge readiness."
+  default_prompt: "Use $review-spoke-work with $write-jane-street-style-code to compare the diff with its Before-Edit Brief, classify findings as blockers or warnings, record validation, and decide merge readiness."
