@@ -5,6 +5,7 @@ Use this reference for every behavior change, bug fix, refactor, test change, an
 ## Table of Contents
 
 - [Testing sequence](#testing-sequence)
+- [Evidence by change type](#evidence-by-change-type)
 - [Test-selection matrix](#test-selection-matrix)
 - [Choose the boundary under test](#choose-the-boundary-under-test)
 - [Require semantic-change evidence](#require-semantic-change-evidence)
@@ -23,18 +24,31 @@ Use this reference for every behavior change, bug fix, refactor, test change, an
 
 ## Testing Sequence
 
-For a feature, bug fix, refactor, or behavior change:
+For implementation work:
 
 1. State the behavior and risk in the Before-Edit Brief.
 2. Select the narrowest public boundary that can prove it.
-3. Write one test that fails for the intended reason.
-4. Run it and inspect the failure before editing production code.
-5. Implement the smallest passing change.
+3. Select the starting evidence from Evidence by Change Type.
+4. Run it and inspect the result before editing production code.
+5. Implement the smallest change that satisfies or preserves the stated contract.
 6. Add only the boundary, property, integration, or concurrency coverage justified by remaining risk.
 7. Run focused tests, then the repository's proportionate regression suite.
 8. Inspect the production and test diff together.
 
-Follow `superpowers:test-driven-development` for the complete RED-GREEN-REFACTOR discipline. This reference selects evidence; it does not weaken the test-first rule.
+Follow `superpowers:test-driven-development` for features, bug fixes, and behavior changes. This reference selects evidence for type-level work, analyzer corrections, behavior-preserving refactors, and non-source artifacts without manufacturing a behavioral failure.
+
+## Evidence by Change Type
+
+| Change type | Starting evidence | Completion evidence |
+|---|---|---|
+| Feature, behavior change, or bug fix | Failing behavioral test or existing regression | The same test passes, relevant boundary coverage passes, and the regression suite remains green. |
+| Type-level contract | Compiler or type-check failure | The intended invalid program is rejected and valid runtime behavior remains covered. |
+| Static policy or analyzer correction | Reproduced analyzer finding | The finding is absent and semantic behavior is tested when it changed. |
+| Behavior-preserving refactor | Passing characterization baseline | The same observable contract passes after the refactor; add characterization coverage before editing when necessary. |
+| Configuration, migration, or executable example | Failing validator, dry-run, migration check, compilation, or reproducible command | The same artifact-level command passes plus any required runtime or rollback evidence. |
+| Code review | Supplied tests, commands, diff, and reviewable contract | Non-mutating verification and findings; review does not manufacture RED evidence or edit code. |
+
+RED evidence is required when the claim is that behavior, a type constraint, a static rule, or an executable artifact is currently wrong. A pure behavior-preserving refactor starts from a green characterization baseline because the claim is preservation.
 
 ## Test-Selection Matrix
 
@@ -67,12 +81,12 @@ If a test needs extensive mocking or detailed knowledge of internal call order, 
 
 ## Require Semantic-Change Evidence
 
-Every semantic production change must have observable test evidence. Meet this rule in one of two ways:
+Every semantic production change must have observable evidence appropriate to the change type. For runtime behavior, meet this rule in one of two ways:
 
 1. Add or change a test, witness it fail, and then make it pass; or
 2. Record that an existing test failed before the production edit and passes afterward, including the failing behavior it proved.
 
-A formatting-only or comment-only change has no semantic production change. A refactor that intentionally preserves behavior still requires existing tests to demonstrate the preserved contract; add a characterization test first when coverage is insufficient.
+A formatting-only or comment-only change has no semantic production change. A behavior-preserving refactor requires a passing characterization baseline before and after; add characterization coverage first when existing coverage is insufficient, but do not manufacture a failure.
 
 Do not claim that compilation alone proves runtime behavior unless the entire change is a type-level constraint and the compiler failure was the explicit RED evidence.
 

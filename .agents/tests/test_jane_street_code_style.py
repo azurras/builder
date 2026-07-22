@@ -87,6 +87,62 @@ class JaneStreetCodeStyleTests(unittest.TestCase):
         ):
             self.assertIn(required, testing)
 
+    def test_entrypoint_separates_implementation_and_review_modes(self) -> None:
+        skill = read(STYLE_SKILL / "SKILL.md").lower()
+        metadata = read(STYLE_SKILL / "agents" / "openai.yaml").lower()
+
+        for required in (
+            "cross-cutting coding standard",
+            "compose it with task-specific",
+            "does not replace",
+            "## operating mode",
+            "### implementation mode",
+            "### review mode",
+            "do not modify code unless explicitly requested",
+            "inspect the stated evidence",
+        ):
+            self.assertIn(required, skill)
+
+        self.assertIn("implementation or review mode", metadata)
+
+    def test_entrypoint_selects_evidence_by_change_type(self) -> None:
+        skill = read(STYLE_SKILL / "SKILL.md").lower()
+        testing = read(
+            STYLE_SKILL / "references" / "testing-and-review.md"
+        ).lower()
+
+        for required in (
+            "red evidence",
+            "failing behavioral test",
+            "existing regression",
+            "compiler/type-check failure",
+            "analyzer finding",
+            "passing characterization baseline",
+            "do not manufacture a failure",
+        ):
+            self.assertIn(required, skill)
+
+        self.assertIn("evidence by change type", testing)
+        self.assertIn("behavior-preserving refactor", testing)
+
+    def test_java_example_uses_public_nested_record_constructor(self) -> None:
+        java = read(STYLE_SKILL / "references" / "java.md")
+
+        self.assertIn("public Enabled {", java)
+        self.assertNotIn("\n        Enabled {", java)
+
+    def test_javascript_example_treats_malformed_remote_data_as_protocol_fault(
+        self,
+    ) -> None:
+        javascript = read(STYLE_SKILL / "references" / "javascript.md")
+
+        self.assertIn("UserServiceProtocolError", javascript)
+        self.assertIn("cause: parsed.error", javascript)
+        self.assertNotIn(
+            "return parsed.ok ? { ok: true, value: parsed.value } : parsed;",
+            javascript,
+        )
+
     def test_language_references_supply_idiomatic_decisions_and_examples(self) -> None:
         references = {
             "java.md": ("sealed", "junit"),

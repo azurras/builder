@@ -1,7 +1,7 @@
 interface:
   display_name: "Write Jane Street-Style Code"
   short_description: "Apply the rigorous house coding standard"
-  default_prompt: "Use $write-jane-street-style-code before editing code: load the routed references, write the five-field Before-Edit Brief, test first, and apply the blocker/warning review rubric."
+  default_prompt: "Use $write-jane-street-style-code as a cross-cutting standard: choose implementation or review mode, load routed references, use the Before-Edit Brief and risk-appropriate evidence, and apply the blocker/warning rubric."
 
 policy:
   allow_implicit_invocation: true

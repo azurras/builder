@@ -113,12 +113,18 @@ sealed interface Endpoint permits Endpoint.Disabled, Endpoint.Enabled {
     record Disabled() implements Endpoint {}
 
     record Enabled(int port) implements Endpoint {
-        Enabled {
+        public Enabled {
             if (port < 1 || port > 65_535) {
                 throw new IllegalArgumentException("port out of range");
             }
         }
     }
+}
+
+record SessionId(String value) {}
+
+enum Reason {
+    REFUSED
 }
 
 sealed interface ConnectResult permits ConnectResult.Connected, ConnectResult.Rejected {

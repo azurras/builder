@@ -104,17 +104,37 @@ export async function loadUser(id) {
 Good: boundary outcomes are explicit.
 
 ```javascript
+class UserServiceProtocolError extends Error {
+  constructor(message, options) {
+    super(message, options);
+    this.name = "UserServiceProtocolError";
+  }
+}
+
 export async function loadUser(id, { signal, request = fetch }) {
   const response = await request(`/api/users/${encodeURIComponent(id)}`, { signal });
   if (response.status === 404) return { ok: false, error: { kind: "not-found" } };
   if (!response.ok) throw new Error(`user request failed: ${response.status}`);
 
-  const parsed = parseUser(await response.json());
-  return parsed.ok ? { ok: true, value: parsed.value } : parsed;
+  let body;
+  try {
+    body = await response.json();
+  } catch (cause) {
+    throw new UserServiceProtocolError("user service returned invalid JSON", { cause });
+  }
+
+  const parsed = parseUser(body);
+  if (!parsed.ok) {
+    throw new UserServiceProtocolError("user service returned invalid user data", {
+      cause: parsed.error,
+    });
+  }
+
+  return { ok: true, value: parsed.value };
 }
 ```
 
-Use this shape only if it matches neighboring APIs. The important decisions are runtime validation, distinct failure categories, visible cancellation, and injectable external effect.
+Use this shape only if it matches neighboring APIs. Here, not-found is an ordinary caller-visible outcome; malformed remote data is an upstream protocol fault with preserved context. The other important decisions are visible cancellation and an injectable external effect.
 
 ## Review Checklist
 

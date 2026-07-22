@@ -9,20 +9,58 @@ description: Use when creating, modifying, refactoring, or reviewing production 
 
 Make invalid states difficult to express, interfaces predictable, effects and failures visible, and every semantic change easy to test and review. Apply these principles through repository-native language conventions; do not imitate OCaml syntax or replace local formatters, linters, frameworks, or security rules.
 
-**REQUIRED SUB-SKILL:** Use `superpowers:test-driven-development` for features, bug fixes, refactors, and behavior changes.
+This is a cross-cutting coding standard. Compose it with task-specific implementation, debugging, security, review, and framework skills; it does not replace them.
 
-## Mandatory Sequence
+**REQUIRED SUB-SKILL:** Use `superpowers:test-driven-development` for features, bug fixes, and behavior changes.
+
+## Operating Mode
+
+Choose implementation or review mode from the user's requested outcome and your authority. If the request includes both, complete review mode first, then enter implementation mode only for changes the user authorized.
+
+In either mode:
 
 1. Read repository instructions, adjacent implementation, tests, and public interfaces.
 2. Load the references selected by the routing table below.
-3. Write the Before-Edit Brief.
-4. Resolve contradictions or missing facts through read-only investigation.
-5. Witness the smallest relevant failing test.
-6. Implement the smallest cohesive passing change.
-7. Run repository-native formatting, static analysis, focused tests, and proportionate integration checks.
-8. Apply the review rubric in `references/testing-and-review.md` to the final diff.
+3. Identify the behavior, invariants, boundary, effects/failures, and relevant evidence.
+
+### Implementation Mode
+
+Use for creating, modifying, or refactoring code.
+
+1. Write the Before-Edit Brief.
+2. Resolve contradictions or missing facts through read-only investigation.
+3. Select and witness the evidence required by Evidence by Change Type.
+4. Implement the smallest cohesive change.
+5. Run repository-native formatting, static analysis, focused tests, and proportionate integration checks.
+6. Apply the review rubric in `references/testing-and-review.md` to the final diff.
 
 Do not edit code until the required references are read and the Before-Edit Brief is coherent. If investigation changes an assumption, revise the brief before continuing.
+
+### Review Mode
+
+Use for reviewing an existing change. Do not modify code unless explicitly requested.
+
+1. Inspect the stated evidence: requirements, Before-Edit Brief, diff, tests, and validation results. If the brief is absent, reconstruct the contract from trusted requirements and report the missing artifact when the workflow requires it.
+2. Inspect affected callers, parallel interfaces, trust boundaries, effects, failure paths, and compatibility surfaces.
+3. Run available non-mutating verification proportionate to the risk.
+4. Apply the blockers, warnings, and finding format in `references/testing-and-review.md`.
+5. Report findings and evidence without implementing corrections.
+
+Review mode does not require manufacturing a failing test or producing a passing change.
+
+## Evidence by Change Type
+
+Use the evidence type that can disprove the intended claim:
+
+| Change type | Required starting evidence |
+|---|---|
+| Feature, behavior change, or bug fix | A failing behavioral test or existing regression that demonstrates the missing or incorrect behavior. Follow `superpowers:test-driven-development`. |
+| Type-level contract | A compiler/type-check failure that demonstrates the absent constraint; add runtime tests as well when runtime behavior changes. |
+| Static policy or analyzer-driven correction | The analyzer finding from the repository-native tool, plus behavioral evidence when semantics change. |
+| Behavior-preserving refactor | A passing characterization baseline before and after the refactor. Add characterization coverage first when existing coverage is insufficient. Do not manufacture a failure. |
+| Code-bearing configuration, migration, or executable example | A failing validation, dry-run, migration check, compilation, or reproducible command appropriate to the artifact and risk. |
+
+Call the failing form **RED evidence**. A passing characterization baseline is preservation evidence, not RED; record it explicitly instead of pretending it failed.
 
 ## Before-Edit Brief
 
@@ -32,7 +70,7 @@ Write one concrete statement for each field. A narrow change may use one sentenc
 - **Invariants:** State what must always hold and which states must be rejected or made unrepresentable.
 - **Boundary/API:** Name the affected public or module boundary, compatibility constraints, and neighboring interface pattern.
 - **Effects and failures:** Identify I/O, mutation, time, randomness, concurrency, external services, expected failures, and unexpected faults.
-- **Tests and evidence:** Name the first failing test, the risks it covers, and the final verification evidence.
+- **Tests and evidence:** Name the selected RED evidence or passing characterization baseline, the risks it covers, and the final verification evidence.
 
 ## Reference Routing
 
@@ -79,7 +117,7 @@ Before claiming completion:
 - Confirm the Before-Edit Brief still describes the implemented behavior.
 - Confirm invalid states are rejected before trusted code relies on them.
 - Confirm effects, ownership, and failures are visible at their boundaries.
-- Confirm every semantic production change has observable test evidence or a recorded explanation that an existing failing test now passes.
+- Confirm every semantic production change has evidence appropriate to its change type; runtime behavior changes still require behavioral evidence.
 - Confirm formatters, analyzers, focused tests, and required integration checks passed.
 - Report every blocker from the review rubric; do not downgrade a blocker to a warning for convenience.
 - Confirm the diff is the smallest complete change and preserves repository-native conventions.
@@ -91,6 +129,7 @@ Before claiming completion:
 - Adding interfaces, factories, helpers, or configuration knobs before a real boundary exists.
 - Compressing control flow until ownership or failure paths are difficult to trace.
 - Approving snapshots without reading the semantic change.
+- Manufacturing a failing test for a behavior-preserving refactor instead of recording a characterization baseline.
 - Testing mocks or internal calls instead of behavior.
 - Restyling unrelated code.
 
