@@ -58,6 +58,7 @@ Official references:
 ### Failure behavior
 
 - If stopping fails, no worker files or registration are changed.
+- If worker file preparation or ACL application fails, the existing registration remains present and stopped; uninstall has not started.
 - If uninstall fails, the installer attempts to leave the existing worker stopped and reports the uninstall cause.
 - If uninstall succeeds but disappearance cannot be proven, installation does not continue.
 - If reinstall or presence verification fails, the operation reports the original cause and attempts to leave any resulting worker registration stopped.
@@ -73,7 +74,7 @@ Official references:
 
 ## Proposed Approach
 
-Keep `Install-SharedFolderWorkerService` as the single lifecycle owner. Add injected service-presence wait actions so tests can prove exact ordering without touching SCM. For an existing service, the function stops it, runs WinSW 2 `uninstall`, waits for absence, writes/protects the worker files, runs WinSW 2 `install`, and waits for presence. For a missing service, it writes/protects files, installs, and verifies presence. Both paths then set and verify `LocalService`, stop defensively, and return without starting the worker.
+Keep `Install-SharedFolderWorkerService` as the single lifecycle owner. Add an injected service-presence wait action so tests can prove exact ordering without touching SCM. For an existing service, the function stops it, prepares and protects all worker files while the stopped registration still exists, runs WinSW 2 `uninstall`, waits for absence, runs WinSW 2 `install`, and waits for presence. For a missing service, it prepares and protects files, installs, and verifies presence. Both paths then set and verify `LocalService`, stop defensively, and return without starting the worker.
 
 The implementation must not parse WinSW error text. Exit codes, bounded SCM state, service identity, and final stopped state are authoritative.
 
