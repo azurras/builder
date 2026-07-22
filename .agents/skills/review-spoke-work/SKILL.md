@@ -18,11 +18,11 @@ Record review findings for spoke repo work in the hub so quality decisions and r
 
 ## Review Content
 
-Lead with findings ordered by severity. Include reviewed repo, branch/commit/PR, scope reviewed, validation checked, risks, requested changes, and merge readiness.
+Lead with findings ordered by severity. Include reviewed repo, branch/commit/PR, scope reviewed, validation checked, house-style compliance against `write-jane-street-style-code`, risks, requested changes, and merge readiness.
 
 ## Workflow
 
-1. Inspect the spoke update or repo diff.
+1. Inspect the spoke update or repo diff. When code changed, invoke `write-jane-street-style-code` and evaluate the diff against its final review checklist.
 2. Write findings-first Markdown review.
 3. Save the review, preferring the helper script.
 4. Save session memory and use `commit-push-builder-main`.

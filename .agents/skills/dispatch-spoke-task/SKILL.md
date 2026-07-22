@@ -18,13 +18,13 @@ Write the handoff brief that tells a spoke agent exactly what to do in another r
 
 ## Task Brief Content
 
-Include target repo, local path, branch policy, objective, strict scope, files likely involved, constraints, validation, expected output, and required return format.
+Include target repo, local path, branch policy, objective, strict scope, files likely involved, constraints, validation, expected output, and required return format. For every implementation or code-changing brief, include `Required skill: write-jane-street-style-code` and direct the spoke agent to invoke it before code changes.
 
 ## Workflow
 
 1. Confirm the spoke repo is registered or record why it is not yet registered.
-2. Draft a task brief that can be pasted directly to another agent.
-3. Include instructions for the spoke agent to return commit/PR/status/test details.
+2. Draft a task brief that can be pasted directly to another agent. When code may change, include `Required skill: write-jane-street-style-code` before the implementation instructions.
+3. Include instructions for the spoke agent to invoke the required skill before code changes and return commit/PR/status/test details plus house-style validation.
 4. Save the task brief, preferring the helper script.
 5. Save session memory and use `commit-push-builder-main`.
 

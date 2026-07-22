@@ -11,6 +11,13 @@ This repository is the `builder` AI workflow hub. Treat it as the starting point
 - Keep skills focused and update their `SKILL.md`, helper scripts, and `agents/openai.yaml` together when behavior changes.
 - Shared helper code for skill scripts lives under `.agents/lib/`.
 
+## Code-Writing Standard
+
+- Before creating or modifying production source code, tests, reusable scripts or automation, migrations, code-bearing configuration, templates with executable behavior, or copy-ready implementation examples, invoke `write-jane-street-style-code`.
+- This requirement applies to Builder and every spoke repository coordinated through Builder.
+- Read-only inspection and validation commands, generated files, vendored code, and lockfiles are outside the invocation boundary unless intentionally edited by hand.
+- Follow repository-native language conventions, formatters, linters, security rules, and established local patterns while applying the skill's invariant, interface, testing, and reviewability principles.
+
 ## Durable Artifacts
 
 - Save session memory under `docs/session-memory/`.

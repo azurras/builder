@@ -1,4 +1,4 @@
 interface:
   display_name: "Dispatch Spoke Task"
   short_description: "Write task briefs for spoke repos"
-  default_prompt: "Use $dispatch-spoke-task to write a precise task brief for an agent working in a spoke repository."
+  default_prompt: "Use $dispatch-spoke-task to write a precise spoke-repo brief that requires $write-jane-street-style-code before every code change and asks for house-style validation in the return report."

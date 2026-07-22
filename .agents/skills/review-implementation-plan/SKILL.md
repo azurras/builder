@@ -16,6 +16,7 @@ Reject the plan if any of these are true:
 - Document status is `ready-for-execution` but any Code Edit has `line range pending file inspection`.
 - A code-changing task lacks a `Code Edit` block.
 - A `Code Edit` block lacks `File`, `Lines`, `Action`, `Current`, `Proposed`, or `Verification`.
+- A code-changing task omits `Required skill: write-jane-street-style-code` or does not direct execution to invoke it before code edits; reject the plan until the constraint is explicit.
 - Testing sections do not name concrete commands or checks.
 - Local testing is missing for runtime behavior.
 - Rollback/recovery, risks, or completion criteria are empty.

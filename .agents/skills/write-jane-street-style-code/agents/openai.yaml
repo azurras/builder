@@ -1,0 +1,7 @@
+interface:
+  display_name: "Write Jane Street-Style Code"
+  short_description: "Apply rigorous cross-language code style"
+  default_prompt: "Use $write-jane-street-style-code before creating or modifying code so invariants, interfaces, tests, and reviewability meet the house standard."
+
+policy:
+  allow_implicit_invocation: true

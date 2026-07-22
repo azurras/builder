@@ -33,7 +33,7 @@ Every implementation plan should include:
 - Non-Goals: work that is explicitly out of scope.
 - Assumptions: facts the plan relies on.
 - Open Questions: unresolved decisions, blockers, or unknowns; write "None" only after checking.
-- Task Breakdown: ordered tasks that divide the work into executable units. Each task must include sequence/dependencies, expected files or modules, implementation notes, task-level verification, and one or more Code Edit blocks when code changes are planned.
+- Task Breakdown: ordered tasks that divide the work into executable units. Each task must include sequence/dependencies, expected files or modules, implementation notes, task-level verification, and one or more Code Edit blocks when code changes are planned. Every code-changing task must state `Required skill: write-jane-street-style-code` in its Implementation notes and direct execution to invoke it before code edits.
 - Code Edit blocks: literal edit instructions inside the relevant task. Each block must name the file path, current line range, action, current code for replace/delete, proposed code for add/replace, and task-level verification. Use real fenced code blocks, not prose summaries, when the code can be known from file inspection.
 - Code Changes: an index of the task-level Code Edit blocks, grouped by file and action. Do not put the only code examples here; the literal code belongs in the task where it will be executed.
 - Files or modules involved: expected code, docs, config, or test locations when a short file inventory helps scanning.
@@ -57,6 +57,7 @@ Sequence / dependencies:
 - Runs after Task N-1 because ...
 
 Implementation notes:
+- Required skill: `write-jane-street-style-code` before any code edits.
 - ...
 
 #### Code Edit N.1
@@ -144,6 +145,7 @@ Every successful implementation plan save in the builder repo must be committed 
 Sequence / dependencies:
 
 Implementation notes:
+- Required skill: `write-jane-street-style-code` before any code edits.
 
 #### Code Edit 1.1
 - File: `path/to/file.ext`
