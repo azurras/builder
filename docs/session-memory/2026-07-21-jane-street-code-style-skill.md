@@ -62,3 +62,54 @@ The approved design and implementation plan were saved as phase checkpoints:
 
 - No required follow-up remains for this request.
 - Future code-writing plans, spoke briefs, and reviews should be covered by the regression test; update the new skill, companion metadata, and contract test together if the house style evolves.
+
+## 21:20 - Expand the skill into the authoritative coding standard
+
+### Request
+
+The user reported that the initial skill felt light on guidance. They approved replacing the lightweight checklist with an authoritative, progressively disclosed design, testing, and review standard and asked Codex to implement it immediately for user review.
+
+### Work Completed
+
+- Revised and published the approved specification in commit `1359c23`.
+- Replaced the short entrypoint with a mandatory sequence, a five-field Before-Edit Brief, explicit reference routing, house defaults, stop conditions, and a final evidence gate.
+- Replaced the 301-word catch-all language reference with six focused references:
+  - `design-and-api.md` for domain states, validation boundaries, uniform interfaces, failure categories, error context, effects, concurrency, abstraction, dependency direction, performance, naming, and compatibility.
+  - `testing-and-review.md` for a risk-based test-selection matrix, semantic-change evidence, properties, scenario/expect/snapshot tests, integration, concurrency, doubles, blockers, warnings, and a concrete finding format.
+  - `java.md`, `javascript.md`, `python.md`, and `templates-and-configuration.md` for repository-native decision guides, paired good/bad examples, testing guidance, and review checklists.
+- Updated skill UI metadata so the default prompt requires reference loading, the Before-Edit Brief, test-first work, and the review rubric.
+- Updated `save-implementation-plan`, `review-implementation-plan`, and `dispatch-spoke-task` so code-changing work carries a task-specific Before-Edit Brief instead of merely naming the skill.
+- Updated `review-spoke-work` so reviews compare the diff with the brief, distinguish blockers from warnings, and use the shared finding format.
+- Expanded `.agents/tests/test_jane_street_code_style.py` from four to six methods that enforce the deeper package and workflow contract.
+- Committed and pushed the implementation as `c2ca68d` (`Expand Jane Street coding standard`).
+
+### Decisions
+
+- Kept `SKILL.md` as the always-loaded dispatcher and mandatory process, with detailed material one reference level below it.
+- Required `design-and-api.md` by observable design scope, `testing-and-review.md` for all behavior changes and reviews, and only the language guides actually involved.
+- Made guidance structural where omission was the failure: the Before-Edit Brief has fixed fields and review findings have a fixed evidence shape.
+- Kept language-specific examples idiomatic and subordinate to repository-native versions, frameworks, formatters, and security rules.
+- Did not run subagent forward-testing because the active coordination policy prohibited subagent use without explicit user authorization. The user's direct skill review is the next evaluation surface.
+
+### Validation
+
+- RED: the expanded focused suite ran six methods and failed eight assertions/subtests for the missing references, brief enforcement, and review rubric.
+- GREEN: `python -m unittest discover -s .agents/tests -p 'test_jane_street_code_style.py' -v` passed 6 of 6 methods.
+- Full regression: `python -m unittest discover -s .agents/tests -p 'test_*.py' -v` passed 25 of 25 tests.
+- Skill validation reported `Skill is valid!`.
+- All 22 repo-scoped `agents/openai.yaml` files parsed successfully.
+- `git diff --check` passed with only line-ending notices.
+- `update-hub-indexes` reported indexes current.
+- `validate-hub-state` passed with only the existing legacy-plan warnings from July 8-9.
+- The six reference files total 1,087 lines and approximately 8,803 words; every file longer than 100 lines includes a table of contents.
+
+### Current State
+
+- Builder branch `main` is pushed through implementation commit `c2ca68d`.
+- No spoke repositories or running services changed.
+- The user intends to review the completed skill and may request refinements.
+
+### Follow-Ups
+
+- Incorporate concrete findings from the user's review through the same test-first contract cycle.
+- If the user explicitly authorizes independent agent evaluation later, run fresh-context forward tests without leaking the intended outcomes.
