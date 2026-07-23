@@ -30,7 +30,7 @@ For implementation work:
 2. Select the narrowest public boundary that can prove it.
 3. Select the starting evidence from Evidence by Change Type.
 4. Run it and inspect the result before editing production code.
-5. Implement the smallest change that satisfies or preserves the stated contract.
+5. Implement the change that satisfies or preserves the stated contract.
 6. Add only the boundary, property, integration, or concurrency coverage justified by remaining risk.
 7. Run focused tests, then the repository's proportionate regression suite.
 8. Inspect the production and test diff together.
@@ -241,7 +241,7 @@ Write every finding in this shape:
 Location: path and tight line range
 Contract: violated behavior, invariant, boundary, effect/failure rule, or evidence requirement
 Evidence: concrete execution path, counterexample, failing command, or missing proof
-Required change: smallest correction or evidence needed
+Required change: correction or evidence needed
 ```
 
 Lead with the consequence, not a vague label. “Concurrent refresh can publish stale state” is better than “possible race.” Include enough evidence that the author can reproduce or reason about the issue without guessing.
@@ -264,4 +264,4 @@ Do not invent findings to make a review look thorough.
 - [Jane Street code review](https://www.janestreet.com/tech-talks/janestreet-code-review/)
 - [What the interns have wrought: property testing](https://blog.janestreet.com/what-the-interns-have-wrought-2022/)
 
-These sources motivate the emphasis on small changes, executable examples, properties, and high-scrutiny review. Apply the concrete Builder standard above through the repository's own testing tools.
+These sources motivate the emphasis on cohesive changes, executable examples, properties, and high-scrutiny review. Apply the concrete Builder standard above through the repository's own testing tools.

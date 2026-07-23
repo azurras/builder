@@ -30,7 +30,7 @@ Use for creating, modifying, or refactoring code.
 1. Write the Before-Edit Brief.
 2. Resolve contradictions or missing facts through read-only investigation.
 3. Select and witness the evidence required by Evidence by Change Type.
-4. Implement the smallest cohesive change.
+4. Implement a cohesive change that fully satisfies the stated contract.
 5. Run repository-native formatting, static analysis, focused tests, and proportionate integration checks.
 6. Apply the review rubric in `references/testing-and-review.md` to the final diff.
 
@@ -120,7 +120,7 @@ Before claiming completion:
 - Confirm every semantic production change has evidence appropriate to its change type; runtime behavior changes still require behavioral evidence.
 - Confirm formatters, analyzers, focused tests, and required integration checks passed.
 - Report every blocker from the review rubric; do not downgrade a blocker to a warning for convenience.
-- Confirm the diff is the smallest complete change and preserves repository-native conventions.
+- Confirm the diff is complete, cohesive, and preserves repository-native conventions.
 
 ## Common Mistakes
 
@@ -135,4 +135,4 @@ Before claiming completion:
 
 ## Sources and Adaptation
 
-This standard adapts public Jane Street engineering themes—uniform interfaces, explicit failure, strong representations, small tested changes, and careful review—to the language and repository in scope. Consult the linked primary sources in `references/design-and-api.md`; use them as rationale, not as a substitute for the concrete rules in this skill.
+This standard adapts public Jane Street engineering themes—uniform interfaces, explicit failure, strong representations, cohesive tested changes, and careful review—to the language and repository in scope. Consult the linked primary sources in `references/design-and-api.md`; use them as rationale, not as a substitute for the concrete rules in this skill.

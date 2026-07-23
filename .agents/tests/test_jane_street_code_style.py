@@ -125,6 +125,22 @@ class JaneStreetCodeStyleTests(unittest.TestCase):
         self.assertIn("evidence by change type", testing)
         self.assertIn("behavior-preserving refactor", testing)
 
+    def test_implementation_guidance_prioritizes_complete_cohesive_work(self) -> None:
+        skill = read(STYLE_SKILL / "SKILL.md").lower()
+        testing = read(
+            STYLE_SKILL / "references" / "testing-and-review.md"
+        ).lower()
+
+        for discouraged in (
+            "implement the smallest cohesive change",
+            "smallest complete change",
+            "implement the smallest change",
+            "required change: smallest correction",
+        ):
+            self.assertNotIn(discouraged, skill + testing)
+        self.assertIn("fully satisfies the stated contract", skill)
+        self.assertIn("complete, cohesive", skill)
+
     def test_java_example_uses_public_nested_record_constructor(self) -> None:
         java = read(STYLE_SKILL / "references" / "java.md")
 
