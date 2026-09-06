@@ -1,7 +1,7 @@
 # Builder Skill Consolidation
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Purpose
 Implement the user's approved reduction from 22 discoverable Builder skills to 11, informed by the repository's session history. Preserve operational safeguards and durable evidence while simplifying routing and shared mechanics.
@@ -25,3 +25,7 @@ Characterize legacy artifact commands in temporary directories; test new snapsho
 
 ## Open Questions
 None. The user approved the preceding consolidation proposal and requested implementation.
+
+## Completion Evidence
+
+Implemented and pushed as `63ab5c8`. See the [migration map](../skill-migration.md) for all retired names and supported commands, and [completion continuity](../session-memory/2026-09-06-builder-skill-consolidation.md) for validation and final state. Runtime application testing is not applicable: these changes affect standalone Builder tools and workflow guidance; temporary-repository CLI scenarios supply native evidence.

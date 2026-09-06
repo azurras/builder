@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 Deliver the approved 22-to-11 Builder skill consolidation with compatible commands and verified operational boundaries.
@@ -94,7 +94,7 @@ Characterization baseline for refactors; failing regressions for changed snapsho
 Exercise actual CLI commands and Git in temporary directories. Application runtime report is not applicable because no application runtime behavior changes.
 
 ## Validation
-Review verdict: ready. Tasks identify inspected boundaries, behavior, dependencies, failure modes, and concrete verification. Independent behavioral review runs before final publication.
+Completed: 55 unittest cases passed, all 11 skill entrypoints and UI metadata validated, all 19 CLI --help checks passed, and hub validation passed with the same eight historical-plan warnings. Independent Python and mode-scenario reviews found no remaining blockers after correcting report-only scope and UI descriptions.
 
 ## Rollback or Recovery
 Revert consolidation commits to restore old discovery. Legacy scripts and artifacts are retained throughout. Never force push or modify unrelated checkout state.
@@ -104,3 +104,7 @@ Retired paths referenced by tests/current guidance must migrate; historical help
 
 ## Completion Criteria
 11 discoverable skills; legacy command compatibility, snapshot and maintenance tests pass; checkpoints/safety scenarios preserved; docs/indexes validated; reviewed changes and continuity pushed.
+
+## Completion Evidence
+
+Implemented and pushed as `63ab5c8`. See the [migration map](../skill-migration.md) for all retired names and supported commands, and [completion continuity](../session-memory/2026-09-06-builder-skill-consolidation.md) for validation and final state. Runtime application testing is not applicable: these changes affect standalone Builder tools and workflow guidance; temporary-repository CLI scenarios supply native evidence.
