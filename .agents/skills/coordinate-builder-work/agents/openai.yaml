@@ -1,0 +1,6 @@
+interface:
+  display_name: "Coordinate Builder Work"
+  short_description: "Coordinate work, handoffs, updates, and closure"
+  default_prompt: "Use $coordinate-builder-work. Choose start, actual dispatch, returned update, or close. Keep one ledger with links to primary evidence; do not invent delegation. Require $write-jane-street-style-code and a Before-Edit Brief before code changes in dispatched work. Finalize intended artifacts once per phase."
+policy:
+  allow_implicit_invocation: true

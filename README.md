@@ -14,6 +14,7 @@ Builder is an AI workflow hub for durable project planning, implementation workf
 │   ├── decisions/
 │   ├── implementation-plans/
 │   ├── session-memory/
+│   ├── test-reports/
 │   ├── specs/
 │   ├── spoke-reviews/
 │   ├── spoke-tasks/
@@ -33,31 +34,30 @@ Repo-scoped Codex skills live in `.agents/skills/` so future Codex sessions can 
 
 ## Skills
 
-The repository currently includes these workflow skills:
+The repository has 11 discoverable skills:
 
-- `save-session-memory`: writes detailed dated session memory under `docs/session-memory/`.
-- `save-project-spec`: saves Markdown project specs under `docs/specs/`.
-- `save-implementation-plan`: saves Markdown implementation plans under `docs/implementation-plans/`.
-- `commit-push-builder-main`: commits and pushes completed Builder repo changes to `main`, guarded to this repository and origin.
-- `register-spoke-repo`: records external repositories coordinated from the hub.
-- `start-hub-work`: creates a central work ledger for cross-repo initiatives.
-- `dispatch-spoke-task`: writes task briefs for agents working in spoke repos.
-- `ingest-spoke-update`: records returned status and results from spoke agents.
-- `sync-spoke-state`: snapshots Git state for registered spoke repositories.
-- `save-decision-record`: saves durable architecture or workflow decisions.
-- `review-spoke-work`: records reviews of spoke repo changes.
-- `close-hub-work`: saves final closure records for hub-and-spoke work.
-- `update-hub-indexes`: regenerates Markdown indexes and `docs/active.md`.
-- `validate-hub-state`: checks hub artifact conventions, links, statuses, templates, and skills.
+| Skill | Responsibility |
+| --- | --- |
+| `complete-builder-work` | Full delivery or closure-only work |
+| `plan-builder-work` | Spec, plan, read-only review/validation, optional decision |
+| `coordinate-builder-work` | Work ledger, actual dispatch, returned update, hub closure |
+| `record-runtime-verification` | Save or validate local application evidence |
+| `manage-spoke-repositories` | Inspect by default, explicit register or snapshot |
+| `maintain-builder-hub` | Read-only check or explicit index refresh and validation |
+| `commit-push-builder-main` | Publish selected Builder files with repository guards |
+| `verify-local-spring-app` | Isolated Spring verification and authorized deployment |
+| `write-jane-street-style-code` | Cross-language coding and review standard |
+| `review-spoke-work` | Independent spoke review and merge-readiness evidence |
+| `save-session-memory` | Durable continuity and verified closure result |
 
-Each skill contains a `SKILL.md`, optional helper scripts, and `agents/openai.yaml` UI metadata.
-Shared Python helper code for skill scripts lives in `.agents/lib/`.
+Each has `SKILL.md` and `agents/openai.yaml`; detailed modes live in focused references. Shared Python helpers live in `.agents/lib/`. Old CLI paths remain supported. See the [migration map](docs/skill-migration.md) for retired skill names.
 
 ## Durable Artifacts
 
 Use Markdown for durable workflow artifacts.
 
 - Session memory: `docs/session-memory/YYYY-MM-DD-title.md`
+- Runtime test reports: `docs/test-reports/YYYY-MM-DD-title.md`
 - Project specs: `docs/specs/YYYY-MM-DD-title.md`
 - Implementation plans: `docs/implementation-plans/YYYY-MM-DD-title.md`
 - Central work records: `docs/work/YYYY-MM-DD-title.md`
@@ -74,29 +74,15 @@ Session memory should explain what happened in enough detail for a future agent 
 
 ## Completion Workflow
 
-For substantive completed requests:
+For complete issue/feature work, use `complete-builder-work`: spec, reviewed plan, implementation, applicable verification, publication, continuity, and verified closure. A request limited to one phase stays within that phase.
 
-1. Save session memory with `save-session-memory`.
-2. Commit and push the repository with `commit-push-builder-main`.
-
-When saving a project spec or implementation plan, save the artifact first, then follow the same commit and push workflow.
+Each saved spec, plan, applicable runtime report, and continuity record is a separate publication checkpoint. Use the [phase finalizer](.agents/skills/maintain-builder-hub/references/phase-finalization.md) to refresh indexes, validate, and publish selected files. Maintenance and internal review do not create their own memory/commit cycles.
 
 ## Hub-And-Spoke Workflow
 
-For work that affects other repositories:
+Use `manage-spoke-repositories` to establish repository context. `coordinate-builder-work` keeps one ledger and creates dispatch/update records only for actual handoffs or returned results. Review spoke changes with `review-spoke-work`, then close the initiative with evidence links and honest final status. Preserve full evidence in its primary report/review; link it from closure and continuity.
 
-1. Register the external repo with `register-spoke-repo`.
-2. Start a central work ledger with `start-hub-work`.
-3. Dispatch focused spoke work with `dispatch-spoke-task`.
-4. Ingest returned spoke results with `ingest-spoke-update`.
-5. Refresh repository state with `sync-spoke-state`.
-6. Record durable decisions with `save-decision-record`.
-7. Review spoke changes with `review-spoke-work`.
-8. Close the initiative with `close-hub-work`.
-
-The hub keeps the state. Spoke repos hold implementation changes.
-
-After changing durable hub artifacts, run `update-hub-indexes` and `validate-hub-state` before committing when practical.
+The hub keeps coordination state; spoke repositories hold implementation changes. Inspection and maintenance checks are read-only by default. Explicit snapshot/refresh modes persist intended state.
 
 ## Git Scope
 

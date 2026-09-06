@@ -1,4 +1,0 @@
-interface:
-  display_name: "Validate Implementation Plan"
-  short_description: "Check implementation plan quality"
-  default_prompt: "Use $validate-implementation-plan to check status, sequential tasks, inspected file/symbol contracts or legacy Code Edit blocks, testing, risks, and completion criteria. Structural validation does not replace semantic readiness review."

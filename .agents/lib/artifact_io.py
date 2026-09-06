@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime as dt
 from pathlib import Path
+import re
 
 from builder_hub import slugify, write_text
 
@@ -30,6 +31,7 @@ def save_dated_markdown(
     fallback_slug: str,
     artifact_date: dt.date | None = None,
     overwrite: bool = False,
+    preserve_truncated_hyphen: bool = False,
 ) -> Path:
     clean_title = title.strip()
     if not clean_title:
@@ -42,7 +44,12 @@ def save_dated_markdown(
     artifact_dir = resolve_artifact_dir(root.expanduser().resolve(), directory)
     artifact_dir.mkdir(parents=True, exist_ok=True)
     date = artifact_date or dt.datetime.now().astimezone().date()
-    artifact_file = artifact_dir / f"{date.isoformat()}-{slugify(clean_title, fallback_slug)}.md"
+    filename_slug = slugify(clean_title, fallback_slug)
+    if preserve_truncated_hyphen:
+        # Five legacy record CLIs truncated after trimming; retain their filenames.
+        ascii_title = clean_title.lower().encode("ascii", "ignore").decode("ascii")
+        filename_slug = re.sub(r"[^a-z0-9]+", "-", ascii_title).strip("-")[:80] or fallback_slug
+    artifact_file = artifact_dir / f"{date.isoformat()}-{filename_slug}.md"
 
     if artifact_file.exists() and not overwrite:
         raise FileExistsError(f"{artifact_file} already exists; pass --overwrite to replace it")

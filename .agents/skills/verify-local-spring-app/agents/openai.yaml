@@ -1,4 +1,4 @@
 interface:
   display_name: "Verify Local Spring App"
   short_description: "Verify isolated Spring app runtime"
-  default_prompt: "Use $verify-local-spring-app to verify effective test database isolation before tests/startup, run the candidate on a non-production port, capture runtime evidence, and clean up the candidate. Deploy only under existing authorization using the supported service/deployment mechanism with rollback and health verification."
+  default_prompt: "Use $verify-local-spring-app to verify effective test database isolation before tests/startup, run the candidate on a non-production port, capture runtime evidence, and clean up the candidate. Deploy only under existing authorization using the supported service/deployment mechanism with rollback and health verification. Save actual runtime proof through record-runtime-verification."

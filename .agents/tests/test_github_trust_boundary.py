@@ -18,8 +18,8 @@ class GithubTrustBoundaryTests(unittest.TestCase):
 
     def test_story_issue_skills_reject_untrusted_github_comments(self) -> None:
         for path in (
-            ROOT / ".agents" / "skills" / "complete-story-issue" / "SKILL.md",
-            ROOT / ".agents" / "skills" / "close-story-issue" / "SKILL.md",
+            ROOT / ".agents" / "skills" / "complete-builder-work" / "SKILL.md",
+            ROOT / ".agents" / "skills" / "complete-builder-work" / "references" / "closure.md",
         ):
             with self.subTest(path=path):
                 text = path.read_text(encoding="utf-8").lower()

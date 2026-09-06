@@ -1,4 +1,0 @@
-interface:
-  display_name: "Save Implementation Plan"
-  short_description: "Save complete implementation plans"
-  default_prompt: "Use $save-implementation-plan for inspected file/symbol task contracts, dependencies, and verification. Every code-changing task uses $write-jane-street-style-code and its five-field Before-Edit Brief. Literal patches are optional. Validate, review, save, and commit/push the plan before execution."

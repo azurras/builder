@@ -10,7 +10,7 @@ SKILLS = ROOT / ".agents" / "skills"
 
 class ArtifactCommitCheckpointTests(unittest.TestCase):
     def test_develop_loop_has_artifact_commit_checkpoints(self) -> None:
-        skill = (SKILLS / "complete-story-issue" / "SKILL.md").read_text(encoding="utf-8")
+        skill = (SKILLS / "complete-builder-work" / "SKILL.md").read_text(encoding="utf-8")
 
         self.assertIn("## Artifact Commit Checkpoints", skill)
         for artifact in (
@@ -26,9 +26,8 @@ class ArtifactCommitCheckpointTests(unittest.TestCase):
 
     def test_artifact_saving_skills_block_next_step_until_pushed(self) -> None:
         for skill_name in (
-            "save-project-spec",
-            "save-implementation-plan",
-            "save-test-report",
+            "plan-builder-work",
+            "record-runtime-verification",
             "save-session-memory",
         ):
             with self.subTest(skill=skill_name):
@@ -38,15 +37,15 @@ class ArtifactCommitCheckpointTests(unittest.TestCase):
                 self.assertIn("before moving to the next", skill)
 
     def test_orchestrator_covers_review_publish_ci_merge_and_closure(self) -> None:
-        skill = (SKILLS / "complete-story-issue" / "SKILL.md").read_text(encoding="utf-8").lower()
+        skill = (SKILLS / "complete-builder-work" / "SKILL.md").read_text(encoding="utf-8").lower()
         prompt = (
-            SKILLS / "complete-story-issue" / "agents" / "openai.yaml"
+            SKILLS / "complete-builder-work" / "agents" / "openai.yaml"
         ).read_text(encoding="utf-8").lower()
 
         for required in (
             "review it for blockers",
             "improve the spec until no blockers remain",
-            "run `review-implementation-plan`",
+            "`plan-builder-work` plan and review modes",
             "improve the plan until no blockers remain",
             "create a pull request",
             "wait for required ci gates",

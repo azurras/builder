@@ -1,4 +1,0 @@
-interface:
-  display_name: "Review Implementation Plan"
-  short_description: "Review plan readiness"
-  default_prompt: "Use $review-implementation-plan to check inspected targets, task contracts, dependencies, verification, and recovery. Code-changing tasks require $write-jane-street-style-code and a Before-Edit Brief. Accept contracts without prewritten code; verify optional legacy patches when supplied."

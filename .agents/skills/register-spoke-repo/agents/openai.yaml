@@ -1,4 +1,0 @@
-interface:
-  display_name: "Register Spoke Repo"
-  short_description: "Register external spoke repositories"
-  default_prompt: "Use $register-spoke-repo to inspect the active Windows or macOS Builder root and target repository facts, then update the registry with an explicit --root. Review and publish only intended Builder changes."

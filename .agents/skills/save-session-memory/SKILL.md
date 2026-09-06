@@ -32,7 +32,7 @@ Write enough detail that a future agent can resume without reading the entire co
 - Current state: branch/worktree notes, generated artifacts, running services, and any dirty files that matter.
 - Follow-ups: next steps, open questions, or risks that future agents should know.
 
-Prefer factual detail over conversation transcript. Mention absolute paths for important local files when useful.
+Link primary reports, plans, and review evidence; summarize their outcomes without copying full narratives. Preserve the facts needed to resume. Prefer factual detail over conversation transcript. Mention absolute paths for important local files when useful.
 
 ## Workflow
 
@@ -40,7 +40,7 @@ Prefer factual detail over conversation transcript. Mention absolute paths for i
 2. Inspect relevant final state if needed with `git status --short`, focused file reads, or test output summaries.
 3. Draft a detailed Markdown entry using the content checklist above.
 4. Append the entry to the matching `docs/session-memory/` file, preferring the helper script below.
-5. After the memory file is saved, use `commit-push-builder-main` to commit and push the builder repo changes to `main`.
+5. After saving memory, use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) to refresh indexes, validate, and publish the intended files.
 6. The saved session memory must be committed and pushed before moving to the next delivery-loop step or final completion.
 7. Briefly mention the memory file path and commit/push result in the final response if the memory update was part of the user's request.
 

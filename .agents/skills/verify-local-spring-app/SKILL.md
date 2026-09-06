@@ -20,7 +20,7 @@ The development host may also serve production. Choose verification-only or veri
 2. Start the candidate on the alternate port with explicit configuration. Keep its process/session handle, command, artifact/commit identity, and log location. Start background helpers hidden on Windows unless the user requested a visible window.
 3. Poll with a bounded startup deadline and check the application's expected readiness response. An arbitrary HTTP response, redirect to login, or error page is not proof of health.
 4. Exercise changed endpoints/UI flows with representative inputs and relevant regressions. Record URL/port, method or UI action, sanitized input, expected/actual status and output, and pass/fail results.
-5. Stop only the candidate process owned by this verification session, including on failure. Save runtime evidence with `save-test-report` when working through Builder.
+5. Stop only the candidate process owned by this verification session, including on failure. Save runtime evidence with `record-runtime-verification` when working through Builder.
 6. For verification-only scope, finish here. Do not restart production.
 
 ## Authorized Deployment

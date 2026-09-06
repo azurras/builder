@@ -29,7 +29,7 @@ Use this finding format:
 Location: path and tight line range
 Contract: violated behavior, invariant, boundary, effect/failure rule, or evidence requirement
 Evidence: concrete path, counterexample, failing command, or missing proof
-Required change: smallest correction or evidence needed
+Required change: correction or evidence needed to resolve the finding
 ```
 
 ## Workflow
@@ -37,7 +37,7 @@ Required change: smallest correction or evidence needed
 1. Inspect the spoke update or repo diff. When code changed, invoke `write-jane-street-style-code`, read its testing-and-review reference, and compare the diff with the final Before-Edit Brief.
 2. Classify concrete findings as blockers or warnings and use the required finding format.
 3. Save the review, preferring the helper script.
-4. Save session memory and use `commit-push-builder-main`.
+4. Link primary evidence and use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) for the authorized review record. Do not create another continuity artifact for each review substep. A review-only request without persistence returns findings without writing or committing.
 
 ## Helper Script
 

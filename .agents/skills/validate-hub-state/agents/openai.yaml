@@ -1,4 +1,0 @@
-interface:
-  display_name: "Validate Hub State"
-  short_description: "Check Builder hub state integrity"
-  default_prompt: "Use $validate-hub-state to validate Builder artifacts, links, statuses, skill metadata, and both supported implementation-plan formats. Only explicitly grandfathered historical plans may skip structural validation."

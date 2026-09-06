@@ -183,9 +183,9 @@ class JaneStreetCodeStyleTests(unittest.TestCase):
 
     def test_repo_and_orchestrator_require_the_style_skill(self) -> None:
         agents = read(ROOT / "AGENTS.md").lower()
-        orchestrator = read(SKILLS / "complete-story-issue" / "SKILL.md").lower()
+        orchestrator = read(SKILLS / "complete-builder-work" / "SKILL.md").lower()
         prompt = read(
-            SKILLS / "complete-story-issue" / "agents" / "openai.yaml"
+            SKILLS / "complete-builder-work" / "agents" / "openai.yaml"
         ).lower()
 
         for required in (
@@ -204,9 +204,9 @@ class JaneStreetCodeStyleTests(unittest.TestCase):
 
     def test_planning_and_dispatch_carry_the_style_skill(self) -> None:
         contracts = {
-            "save": SKILLS / "save-implementation-plan",
-            "review": SKILLS / "review-implementation-plan",
-            "dispatch": SKILLS / "dispatch-spoke-task",
+            "save": SKILLS / "plan-builder-work",
+            "review": SKILLS / "plan-builder-work",
+            "dispatch": SKILLS / "coordinate-builder-work",
         }
 
         for name, folder in contracts.items():
