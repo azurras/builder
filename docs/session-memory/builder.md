@@ -2125,3 +2125,16 @@ Implemented and pushed as `63ab5c8`. See the [migration map](#source-docs-skill-
 
 <!-- /migrated-source: docs/specs/2026-09-06-builder-skill-consolidation.md -->
 
+
+
+## 2026-09-07 16:33 Central Daylight Time - Three-document project continuity completed
+
+Consolidated the repository around implementation plans, runtime test reports, and one append-only memory document per project, as requested. Published implementation commit `9127288` to Builder main.
+
+Preserved all 267 substantive source documents from `78f0183`: 36 in Builder memory, 229 in christopherbell-dev memory, and 2 in personal-computer-cleanup memory. Imported sections retain dates, original paths, source hashes, full transformed bodies, and evidence links. Exact originals remain in Git. Historical instructions and statuses are explicitly archival.
+
+Removed active.md and the obsolete specs, spoke, work, closure, and templates folders. Useful template examples now live beside their skills. Updated skills, metadata, append/snapshot helpers, indexes, and validation so future progress stays in the project memory. Plans contain requirements and design; runtime reports remain separate.
+
+Verification: all 56 unittest tests passed; source-by-source migration audit passed; 525 local fragment links resolved; all 11 helper entrypoints started; hub refresh/check and diff checks passed. Independent final review found no actionable gaps and separately confirmed preserved plans/reports/examples and absence of retired sources. Eight existing historical-plan schema warnings remain. No application runtime behavior changed, so no runtime test report applies.
+
+[Implementation plan](../implementation-plans/2026-09-06-three-document-project-continuity.md) is complete. Future entries append here for Builder, or to the corresponding existing project file. No external issue or deployment was part of this request.
