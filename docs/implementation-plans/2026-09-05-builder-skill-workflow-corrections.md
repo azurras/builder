@@ -13,7 +13,7 @@ Implement the five approved skill corrections and their dependent contracts.
 Prevent unrelated commits, make delivery gates consistent, permit maintainable plans, and preserve production during local verification.
 
 ## Inputs
-- [Approved scope](../specs/2026-09-05-builder-skill-workflow-corrections.md).
+- [Approved scope](../session-memory/builder.md#source-docs-specs-2026-09-05-builder-skill-workflow-corrections-md).
 - User selected the five fixes from the preceding audit; no additional design approval is needed.
 
 ## Branch

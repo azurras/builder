@@ -1,21 +1,16 @@
 ---
 name: coordinate-builder-work
-description: Maintain a Builder work ledger, prepare an actual spoke-agent handoff, record returned updates, or close a hub initiative.
+description: Coordinate project work and actual agent handoffs, recording progress and closure in the project session-memory document.
 ---
 
 # Coordinate Builder Work
 
-Choose start, dispatch, update, or close. Use only records that help coordinate the actual work. Same-agent spoke work can use a work ledger and primary evidence links without invented delegation or returned-update artifacts.
+Read the implementation plan and the project's latest relevant session-memory entries. Use the same project document for work intake, actual dispatch briefs, returned updates, blockers, decisions, and completion. Do not create separate work, spoke-task, update, or closure artifacts, or invent delegation for same-agent work.
 
-| Mode | Record and contract |
-| --- | --- |
-| Start | `docs/work/`: objective, canonical status, owner, specs/plans, repositories, current state, blockers, validation, next steps. One ledger per initiative. |
-| Dispatch | `docs/spoke-tasks/`: actual target agent/repo/path, branch policy, objective, strict scope, constraints, inspected targets, validation and return format. |
-| Update | `docs/spoke-updates/`: returned provenance, status, changes, commit/PR links, evidence, blockers and next actions. Link an existing brief when available; do not invent one. |
-| Close | `docs/work-closures/`: final status, delivered/parked scope, publication and evidence links, known gaps and next owner/action. Update the ledger status too. |
+For start/update entries, record objective, status, owner, repository, plan link, evidence, blockers, and next action. Use plain statuses such as active, blocked, complete, or cancelled; historical statuses are evidence of their time.
 
-Use matching templates under `docs/templates/` and canonical statuses in `docs/status-model.md`. The work ledger holds current status; reports/reviews hold primary evidence; the closure links those facts instead of copying full narratives. Parked or blocked work is not complete. Hub closure does not itself authorize external issue closure; use `complete-builder-work` closure mode when needed.
+For actual handoffs, include target repo/path and branch policy, objective, scope, constraints, inspected targets, verification, and return format. Every code-changing dispatch requires `write-jane-street-style-code` before code changes and a Before-Edit Brief covering Behavior, Invariants, Boundary/API, Effects and failures, and Tests and evidence. The recipient inspects and revises the brief before edits, then returns commits/PRs, results, blockers and warnings.
 
-For every code-changing dispatch, require `write-jane-street-style-code` before code changes and a Before-Edit Brief covering Behavior, Invariants, Boundary/API, Effects and failures, Tests and evidence. The recipient must inspect and revise it before editing, then return commits/PRs, validation, final brief, blockers and warnings. Check repository context with `manage-spoke-repositories`; registration alone does not authorize source mutations.
+Record returned updates with their provenance and links. Record completion with final publication, applicable verification, unresolved gaps and next ownership. Blocked or parked work is not complete. External issue closure still uses `complete-builder-work` and verified readback.
 
-Read [commands](references/commands.md) for persistence. After writing the intended records, use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md). Save one continuity record at substantive completion or an authorized handoff, not after every coordination substep.
+Persist with `save-session-memory` using the existing `--project` slug. Multiple meaningful updates append to the same document. Use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) once at the authorized phase boundary, without a second memory record summarizing the first.

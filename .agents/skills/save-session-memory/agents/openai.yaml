@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Session Memory"
-  short_description: "Record dated Markdown session memory"
-  default_prompt: "Use $save-session-memory to write a detailed dated Markdown memory entry for the completed request, then commit and push it before final completion. Link primary evidence instead of duplicating reports. Refresh and validate with maintain-builder-hub, then publish selected files at the continuity checkpoint."
+  short_description: "Append progress to stable project memory"
+  default_prompt: "Use $save-session-memory. Append to the existing project file using required --project; dates and titles label entries. Preserve prior entries and link primary plan/report evidence. Record progress, reviews, decisions, repository context and closure in that file. Finalize authorized updates and publish continuity before external closure."

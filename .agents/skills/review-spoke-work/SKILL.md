@@ -1,6 +1,6 @@
 ---
 name: review-spoke-work
-description: Save a review record for work completed in a spoke repository. Use when reviewing a spoke repo diff, branch, pull request, CI result, implementation, validation evidence, or readiness to merge while preserving the review in Builder.
+description: Review spoke repository changes and preserve authorized findings in the existing project session-memory document.
 ---
 
 # Review Spoke Work
@@ -11,10 +11,7 @@ Record review findings for spoke repo work in the hub so quality decisions and r
 
 ## Storage Rules
 
-- Store review records under `docs/spoke-reviews/`.
-- Name files `YYYY-MM-DD-title.md`.
-- Write Markdown only.
-- Link related work records, task briefs, updates, commits, and PRs.
+Append authorized review findings to `docs/session-memory/<project>.md` through `save-session-memory`. Use the existing project slug and link the reviewed plan, commit/PR and runtime report. Do not create a separate review document. Review-only scope without persistence returns findings without writing or committing.
 
 ## Review Content
 
@@ -36,13 +33,5 @@ Required change: correction or evidence needed to resolve the finding
 
 1. Inspect the spoke update or repo diff. When code changed, invoke `write-jane-street-style-code`, read its testing-and-review reference, and compare the diff with the final Before-Edit Brief.
 2. Classify concrete findings as blockers or warnings and use the required finding format.
-3. Save the review, preferring the helper script.
-4. Link primary evidence and use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) for the authorized review record. Do not create another continuity artifact for each review substep. A review-only request without persistence returns findings without writing or committing.
-
-## Helper Script
-
-```bash
-python3 .agents/skills/review-spoke-work/scripts/review_spoke_work.py \
-  --title "Review Title" \
-  < review.md
-```
+3. When persistence is requested or part of authorized delivery, append the findings with `save-session-memory --project <existing-project>` using the helper command in that skill.
+4. Use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) for the review entry; do not add a second continuity artifact.

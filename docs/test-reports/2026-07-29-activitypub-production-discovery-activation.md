@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-[ChristopherBell.dev ActivityPub Production Discovery Activation](../work/2026-07-29-christopherbell-dev-activitypub-production-discovery-activation.md)
+[ChristopherBell.dev ActivityPub Production Discovery Activation](../session-memory/christopherbell-dev.md#source-docs-work-2026-07-29-christopherbell-dev-activitypub-production-discovery-activation-md)
 
 ## Branch
 

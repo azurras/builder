@@ -131,7 +131,7 @@ Verification: `./gradlew test --tests AppTest`
             root = Path(directory)
             for name in module.ARTIFACT_DIRS:
                 (root / name).mkdir(parents=True, exist_ok=True)
-            for name in (*module.TEMPLATE_FILES, *module.INDEX_FILES):
+            for name in module.INDEX_FILES:
                 target = root / name
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text("# Fixture\n", encoding="utf-8")

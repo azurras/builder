@@ -1,97 +1,45 @@
 # Builder
 
-Builder is an AI workflow hub for durable project planning, implementation workflow artifacts, and session continuity. The repository is designed to be opened as the starting point for work so agents can use the checked-in guidance, skills, and documentation conventions consistently.
+Builder is the workflow hub for planning, verification evidence, and project continuity.
 
-## Repository Layout
+## Documents
 
-```text
-.
-├── AGENTS.md
-├── .agents/
-│   ├── lib/
-│   └── skills/
-├── docs/
-│   ├── implementation-plans/
-│   ├── session-memory/
-│   ├── test-reports/
-│   ├── specs/
-│   ├── spoke-reviews/
-│   ├── spoke-tasks/
-│   ├── spoke-updates/
-│   ├── spokes/
-│   ├── templates/
-│   ├── work/
-│   └── work-closures/
-└── README.md
-```
-
-## Agent Guidance
-
-`AGENTS.md` contains repo-wide instructions that Codex loads at the start of work in this repository. It defines the durable artifact locations, the completion workflow, and the Git safety rules for this hub.
-
-Repo-scoped Codex skills live in `.agents/skills/` so future Codex sessions can discover them automatically from the repository root.
-
-## Skills
-
-The repository has 11 discoverable skills:
-
-| Skill | Responsibility |
+| Location | Purpose |
 | --- | --- |
-| `complete-builder-work` | Full delivery or closure-only work |
-| `plan-builder-work` | Plan, read-only review/validation, optional spec or decision |
-| `coordinate-builder-work` | Work ledger, actual dispatch, returned update, hub closure |
-| `record-runtime-verification` | Save or validate local application evidence |
-| `manage-spoke-repositories` | Inspect by default, explicit register or snapshot |
-| `maintain-builder-hub` | Read-only check or explicit index refresh and validation |
-| `commit-push-builder-main` | Publish selected Builder files with repository guards |
-| `verify-local-spring-app` | Isolated Spring verification and authorized deployment |
-| `write-jane-street-style-code` | Cross-language coding and review standard |
-| `review-spoke-work` | Independent spoke review and merge-readiness evidence |
-| `save-session-memory` | Durable continuity and verified closure result |
+| [Implementation plans](docs/implementation-plans/index.md) | Requirements, acceptance criteria, design decisions, ordered tasks and verification |
+| [Test reports](docs/test-reports/index.md) | Actual runtime inputs, responses, results and evidence |
+| [Project session memory](docs/session-memory/index.md) | Dated progress, decisions, reviews, blockers, repository facts, publication and closure |
 
-Each has `SKILL.md` and `agents/openai.yaml`; detailed modes live in focused references. Shared Python helpers live in `.agents/lib/`. Helpers live under their current owning skills; retired folders and old CLI paths are removed. See the [migration map](docs/skill-migration.md) for retired skill names.
+Each project has one stable memory file. Append to it across tasks and dates; the entry title does not create another document. Current projects are [Builder](docs/session-memory/builder.md), [christopherbell.dev](docs/session-memory/christopherbell-dev.md), and [personal-computer cleanup](docs/session-memory/personal-computer-cleanup.md).
 
-## Durable Artifacts
+Historical specs, spoke updates/reviews/tasks, work/closure records and per-request memories have been combined into the corresponding project memories with source navigation, dates, provenance and relocated links. Imported status is historical, not a claim about current production. Current AGENTS.md and skills define the workflow. There is no active.md; read the latest relevant project entries for progress.
 
-Use Markdown for durable workflow artifacts.
+## Workflow
 
-- Session memory: `docs/session-memory/YYYY-MM-DD-title.md`
-- Runtime test reports: `docs/test-reports/YYYY-MM-DD-title.md`
-- Optional project specs: `docs/specs/YYYY-MM-DD-title.md`
-- Implementation plans: `docs/implementation-plans/YYYY-MM-DD-title.md`
-- Central work records: `docs/work/YYYY-MM-DD-title.md`
-- Spoke task briefs: `docs/spoke-tasks/YYYY-MM-DD-title.md`
-- Spoke updates: `docs/spoke-updates/YYYY-MM-DD-title.md`
-- Spoke reviews: `docs/spoke-reviews/YYYY-MM-DD-title.md`
-- Optional decisions (folder created on demand): `docs/decisions/YYYY-MM-DD-title.md`
-- Work closures: `docs/work-closures/YYYY-MM-DD-title.md`
-- Spoke registry and state: `docs/spokes/`
-- Templates: `docs/templates/`
-- Status model: `docs/status-model.md`
+Reviewed implementation plan -> development -> applicable verification -> publication -> project memory -> verified issue closure. Plans are published before development. Runtime reports remain required when runtime behavior changes; tooling-only work uses appropriate native checks. Append progress and decisions to project memory as work proceeds, then record final publication and closure there.
 
-Session memory should explain what happened in enough detail for a future agent to understand the project state without rereading the whole conversation.
+## Skills and Tools
 
-## Completion Workflow
+Repo-scoped skills live in `.agents/skills/`; shared Python helpers are in `.agents/lib/`.
 
-For complete issue/feature work, use `complete-builder-work`: reviewed implementation plan, implementation, applicable verification, publication, continuity, and verified closure. A request limited to one phase stays within that phase.
+| Skill | Role |
+| --- | --- |
+| `complete-builder-work` | Delivery and verified closure |
+| `plan-builder-work` | Implementation planning and read-only review/validation |
+| `save-session-memory` | Append entries to the existing project document |
+| `record-runtime-verification` | Runtime report writing and validation |
+| `coordinate-builder-work` | Actual handoffs and coordination recorded in project memory |
+| `review-spoke-work` | Independent review, with authorized findings appended to memory |
+| `manage-spoke-repositories` | Read-only Git inspection or explicit memory snapshot |
+| `maintain-builder-hub` | Check or refresh the three indexes and validate documents |
+| `commit-push-builder-main` | Publish reviewed selected Builder files |
+| `verify-local-spring-app` | Isolated verification and authorized deployment |
+| `write-jane-street-style-code` | Coding and review standard |
 
-The plan includes requirements, acceptance criteria, and design decisions. A separate spec is optional for substantial requirements exploration, work spanning multiple implementation plans, or an explicit request. Each reviewed plan, applicable runtime report, and continuity record is a separate publication checkpoint; optional specs may share the plan checkpoint. Use the [phase finalizer](.agents/skills/maintain-builder-hub/references/phase-finalization.md) to refresh indexes, validate, and publish selected files. Maintenance and internal review do not create their own memory/commit cycles.
+Append Markdown from stdin with `python .agents/skills/save-session-memory/scripts/save_session_memory.py --root . --project builder --title 'Progress update'`. Use the correct existing project slug. Run maintenance with `python .agents/skills/maintain-builder-hub/scripts/maintain_builder_hub.py check --root .`; explicitly use `refresh` after authorized changes.
 
-Empty optional specs/decisions folders are not generated by maintenance. Existing specs, reports, and coordination records are retained as project history.
-
-## Hub-And-Spoke Workflow
-
-Use `manage-spoke-repositories` to establish repository context. `coordinate-builder-work` keeps one ledger and creates dispatch/update records only for actual handoffs or returned results. Review spoke changes with `review-spoke-work`, then close the initiative with evidence links and honest final status. Preserve full evidence in its primary report/review; link it from closure and continuity.
-
-The hub keeps coordination state; spoke repositories hold implementation changes. Inspection and maintenance checks are read-only by default. Explicit snapshot/refresh modes persist intended state.
+The migration audit command is `python .agents/skills/save-session-memory/scripts/consolidate_project_memory.py --root . --source-commit 78f0183 --verify`. It compares imported bodies to the original Git corpus. Old helper paths that wrote separate artifacts are retired.
 
 ## Git Scope
 
-The commit/push skill is intentionally scoped to:
-
-- Windows repository: `C:\Users\Christopher\Developer\builder`
-- macOS repository: `/Users/cbell/Developer/builder`
-- Branch: `main`
-- Origin: `https://github.com/azurras/builder.git`
-
-Do not use that skill for other repositories.
+Builder publication is restricted to `C:\Users\Christopher\Developer\builder` or `/Users/cbell/Developer/builder`, branch `main`, origin `https://github.com/azurras/builder.git`. Preserve unrelated work and review explicit file selections before committing.

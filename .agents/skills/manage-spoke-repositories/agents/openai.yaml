@@ -1,6 +1,6 @@
 interface:
   display_name: "Manage Spoke Repositories"
-  short_description: "Inspect, register, or snapshot spoke repositories"
-  default_prompt: "Use $manage-spoke-repositories. Default to read-only inspect. Use snapshot only for explicit persistence and register only for verified registry changes. Surface Git errors and preserve unchanged snapshot files. Do not change spoke repositories or create routine memory/commit loops."
+  short_description: "Inspect repositories or append project snapshots"
+  default_prompt: "Use $manage-spoke-repositories. Inspect the verified --path read-only by default. Read historical repository facts from project memory and reverify them. Explicit snapshot requires --project and appends to that memory; no registry or standalone snapshot file. Surface Git errors and preserve unrelated source state."
 policy:
   allow_implicit_invocation: true

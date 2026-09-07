@@ -1,6 +1,6 @@
 interface:
   display_name: "Record Runtime Verification"
   short_description: "Save or validate local application evidence"
-  default_prompt: "Use $record-runtime-verification. Choose report or read-only validate mode. Require real local application interaction, exact sanitized inputs/outputs, and pass/fail evidence. Unit-test-only output belongs in native validation. Publish a saved runtime report at its phase checkpoint."
+  default_prompt: "Use $record-runtime-verification. Save or validate real runtime inputs, outputs and pass/fail evidence. Keep reports separate and link them from the project memory. Use the skill reference template; no templates folder under docs."
 policy:
   allow_implicit_invocation: true

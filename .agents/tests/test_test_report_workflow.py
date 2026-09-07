@@ -74,30 +74,8 @@ class TestReportWorkflowTests(unittest.TestCase):
                 "## Bugs / Follow-ups\nNone.\n",
                 encoding="utf-8",
             )
-            for directory in (
-                "docs/session-memory",
-                "docs/specs",
-                "docs/implementation-plans",
-                "docs/spokes",
-                "docs/work",
-                "docs/spoke-tasks",
-                "docs/spoke-updates",
-                "docs/spoke-reviews",
-                "docs/decisions",
-                "docs/work-closures",
-                "docs/templates",
-            ):
+            for directory in ("docs/session-memory", "docs/implementation-plans"):
                 (root / directory).mkdir(parents=True, exist_ok=True)
-            for template in (
-                "work-record.md",
-                "spoke-task.md",
-                "spoke-update.md",
-                "spoke-review.md",
-                "decision-record.md",
-                "work-closure.md",
-                "test-report.md",
-            ):
-                (root / "docs" / "templates" / template).write_text("# Template\n", encoding="utf-8")
 
             index_result = subprocess.run(
                 [sys.executable, str(INDEX_SCRIPT), "--root", str(root)],

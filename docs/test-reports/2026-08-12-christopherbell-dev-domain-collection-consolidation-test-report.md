@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-[Domain Collection Consolidation](../work/2026-08-10-christopherbell-dev-domain-collection-consolidation.md)
+[Domain Collection Consolidation](../session-memory/christopherbell-dev.md#source-docs-work-2026-08-10-christopherbell-dev-domain-collection-consolidation-md)
 
 ## Branch
 

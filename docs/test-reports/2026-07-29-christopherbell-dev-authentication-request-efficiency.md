@@ -10,7 +10,7 @@ was removed under explicit authority, with exact zero-match verification afterwa
 
 ## Story/Issue
 
-[christopherbell.dev Performance, Scalability, and Library Optimization](../work/2026-07-29-christopherbell-dev-performance-scalability-library-optimization.md),
+[christopherbell.dev Performance, Scalability, and Library Optimization](../session-memory/christopherbell-dev.md#source-docs-work-2026-07-29-christopherbell-dev-performance-scalability-library-optimization-md),
 authentication request-efficiency plan.
 
 ## Branch

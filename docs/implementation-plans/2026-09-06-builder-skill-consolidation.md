@@ -13,7 +13,7 @@ Deliver the approved 22-to-11 Builder skill consolidation with compatible comman
 Reduce discovery overlap, deduplicate artifact writers, make repository state reliable, and centralize maintenance without weakening phase checkpoints.
 
 ## Inputs
-[Approved specification](../specs/2026-09-06-builder-skill-consolidation.md), existing skill audit and repository session history.
+[Approved specification](../session-memory/builder.md#source-docs-specs-2026-09-06-builder-skill-consolidation-md), existing skill audit and repository session history.
 
 ## Branch
 Builder main, canonical origin, explicit selected-file commits.
@@ -107,4 +107,4 @@ Retired paths referenced by tests/current guidance must migrate; historical help
 
 ## Completion Evidence
 
-Implemented and pushed as `63ab5c8`. See the [migration map](../skill-migration.md) for all retired names and supported commands, and [completion continuity](../session-memory/2026-09-06-builder-skill-consolidation.md) for validation and final state. Runtime application testing is not applicable: these changes affect standalone Builder tools and workflow guidance; temporary-repository CLI scenarios supply native evidence.
+Implemented and pushed as `63ab5c8`. See the [migration map](../session-memory/builder.md#source-docs-skill-migration-md) for all retired names and supported commands, and [completion continuity](../session-memory/builder.md#source-docs-session-memory-2026-09-06-builder-skill-consolidation-md) for validation and final state. Runtime application testing is not applicable: these changes affect standalone Builder tools and workflow guidance; temporary-repository CLI scenarios supply native evidence.

@@ -19,4 +19,4 @@ Write test reports as evidence artifacts, not chat transcripts. Every test repor
 Do not write a report whose only evidence is `npm test`, `pytest`, `./gradlew test`, `mvn test`, or similar automated test output. Do not require references to specs or implementation plans. Include those links only when they are directly useful for traceability.
 
 
-Use `docs/templates/test-report.md`; status is draft, complete, blocked, or superseded. Record candidate identity and cleanup, plus deployment proof only when deployment was in scope.
+Use [the report template](template.md); status is draft, complete, blocked, or superseded. Record candidate identity and cleanup, plus deployment proof only when deployment was in scope.

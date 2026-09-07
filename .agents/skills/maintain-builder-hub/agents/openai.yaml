@@ -1,6 +1,6 @@
 interface:
   display_name: "Maintain Builder Hub"
   short_description: "Check or refresh Builder artifact indexes"
-  default_prompt: "Use $maintain-builder-hub. Choose read-only check by default or explicit refresh followed by validation. Report failures. Maintenance creates no memory or commits; the calling phase owns finalization and publication. Do not create empty optional specs/decisions folders; index them once records exist."
+  default_prompt: "Use $maintain-builder-hub. Check by default or explicitly refresh the three document indexes and validate. Do not create active.md or separate work/spoke/spec/closure records. Maintenance creates no memory or commits; the phase owner finalizes authorized changes."
 policy:
   allow_implicit_invocation: true

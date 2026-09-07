@@ -116,13 +116,3 @@ def extract_status(markdown: str) -> str | None:
 
 def markdown_links(markdown: str) -> list[str]:
     return re.findall(r"\[[^\]]+\]\(([^)]+)\)", markdown)
-
-
-OPTIONAL_ARTIFACT_DIRS = frozenset({"docs/specs", "docs/decisions"})
-
-
-def requires_artifact_index(root: Path, directory: str) -> bool:
-    """Optional artifacts need an index only once a Markdown record exists."""
-    return directory not in OPTIONAL_ARTIFACT_DIRS or any(
-        path.name != "index.md" for path in list_markdown(root, directory)
-    )

@@ -12,7 +12,8 @@ LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
 from artifact_quality import validate_implementation_plan_text, validate_test_report_text
-from builder_hub import OPTIONAL_ARTIFACT_DIRS, requires_artifact_index, STATUS_VALUES, extract_status, list_markdown, markdown_links, parse_dated_file, read_text
+from project_memory import PROJECT_RE
+from builder_hub import list_markdown, markdown_links, parse_dated_file, read_text
 
 
 # Historical pre-schema plans remain warnings; all other plans must validate.
@@ -28,46 +29,9 @@ LEGACY_PLAN_NAMES = frozenset({
 })
 
 
-ARTIFACT_DIRS = (
-    "docs/session-memory",
-    "docs/specs",
-    "docs/implementation-plans",
-    "docs/test-reports",
-    "docs/spokes",
-    "docs/work",
-    "docs/spoke-tasks",
-    "docs/spoke-updates",
-    "docs/spoke-reviews",
-    "docs/decisions",
-    "docs/work-closures",
-)
-
-INDEX_FILES = (
-    "docs/active.md",
-    "docs/work/index.md",
-    "docs/spokes/index.md",
-    "docs/decisions/index.md",
-    "docs/specs/index.md",
-    "docs/implementation-plans/index.md",
-    "docs/test-reports/index.md",
-    "docs/spoke-tasks/index.md",
-    "docs/spoke-updates/index.md",
-    "docs/spoke-reviews/index.md",
-    "docs/work-closures/index.md",
-    "docs/session-memory/index.md",
-)
-
-TEMPLATE_FILES = (
-    "docs/templates/work-record.md",
-    "docs/templates/spoke-task.md",
-    "docs/templates/spoke-update.md",
-    "docs/templates/spoke-review.md",
-    "docs/templates/decision-record.md",
-    "docs/templates/work-closure.md",
-    "docs/templates/test-report.md",
-)
-
-SPECIAL_DOC_NAMES = {"index.md", "state.md", "repos.md", "active.md", "status-model.md"}
+ARTIFACT_DIRS = ("docs/session-memory", "docs/implementation-plans", "docs/test-reports")
+INDEX_FILES = tuple(f"{directory}/index.md" for directory in ARTIFACT_DIRS)
+SPECIAL_DOC_NAMES = {"index.md"}
 
 
 def validate_skill_frontmatter(root: Path, errors: list[str]) -> None:
@@ -113,36 +77,26 @@ def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
 
-    for directory in ARTIFACT_DIRS:
-        if directory not in OPTIONAL_ARTIFACT_DIRS and not (root / directory).exists():
-            warnings.append(f"Missing artifact directory: {directory}")
-
-    for template in TEMPLATE_FILES:
-        if not (root / template).exists():
-            errors.append(f"Missing template: {template}")
-
+    docs = root / "docs"
+    allowed = {Path(directory).name for directory in ARTIFACT_DIRS}
+    if docs.exists():
+        for entry in docs.iterdir():
+            if not entry.is_dir() or entry.name not in allowed:
+                errors.append(f"Unexpected docs entry: {entry}")
     for index in INDEX_FILES:
-        if not requires_artifact_index(root, Path(index).parent.as_posix()):
-            continue
-        if not (root / index).exists():
+        if not (root / index).is_file():
             errors.append(f"Missing index: {index}")
 
     for directory in ARTIFACT_DIRS:
         for path in list_markdown(root, directory):
             if path.name in SPECIAL_DOC_NAMES:
                 continue
-            if not parse_dated_file(path):
+            if directory == "docs/session-memory":
+                if not PROJECT_RE.fullmatch(path.stem):
+                    errors.append(f"{path}: memory filename must be a stable project slug")
+            elif not parse_dated_file(path):
                 errors.append(f"{path}: filename must use YYYY-MM-DD-title.md")
             validate_links(path, root, errors)
-
-    for path in list_markdown(root, "docs/work"):
-        if path.name == "index.md":
-            continue
-        status = extract_status(read_text(path))
-        if status and status not in STATUS_VALUES:
-            errors.append(f"{path}: invalid status {status!r}")
-        if not status:
-            warnings.append(f"{path}: missing explicit status")
 
     for path in list_markdown(root, "docs/implementation-plans"):
         if path.name == "index.md":

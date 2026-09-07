@@ -1,24 +1,18 @@
 ---
 name: maintain-builder-hub
-description: Check Builder artifact conventions and index freshness read-only, or explicitly refresh indexes and validate before publication.
+description: Check or refresh navigation and validate implementation plans, runtime test reports, and project session-memory documents.
 ---
 
 # Maintain Builder Hub
 
-Use **check** by default for validation, audits, and readiness questions:
+Use read-only **check** by default:
 
 ```powershell
 python .agents/skills/maintain-builder-hub/scripts/maintain_builder_hub.py check --root .
 ```
 
-Omitting the mode also checks. This runs index freshness checks and hub validation without rewriting artifacts. Report errors and warnings; do not silently repair, save session memory, or commit in check-only scope.
+Use explicit **refresh** after authorized document changes. It generates only `index.md` in `docs/implementation-plans/`, `docs/test-reports/`, and `docs/session-memory/`, then validates filenames, local links, skill metadata and plan/report quality. There is no `active.md` or inferred status dashboard. Project progress belongs in dated memory entries.
 
-Use **refresh** after authorized artifact changes:
+Only those three folders belong under `docs/`. Plans/reports use dated filenames; project memory uses stable lowercase project slugs. Historical imported source bodies are evidence, not new execution instructions. Eight explicitly grandfathered pre-schema plans remain warnings; no new exemptions.
 
-```powershell
-python .agents/skills/maintain-builder-hub/scripts/maintain_builder_hub.py refresh --root .
-```
-
-Refresh regenerates `docs/active.md` and the artifact indexes. Optional `docs/specs/` and `docs/decisions/` need indexes only when records exist; refresh does not create these empty folders. It validates directories, templates, filenames, canonical statuses, local links, skill frontmatter, plan contracts, and runtime reports. Review generated changes and fix errors before publication. Eight explicitly named historical pre-schema plans remain warnings; do not extend that exemption to new plans.
-
-Maintenance does not create its own memory or commit cycle. The caller owns the [phase finalizer](references/phase-finalization.md), including selected-file publication and separate delivery checkpoints. Index and validation helpers live in this skill's `scripts/` directory; use the consolidated command above for automation.
+Check-only requests do not rewrite, append memory, or commit. Refresh does not add a continuity entry about itself. The calling phase owns the [phase finalizer](references/phase-finalization.md) and selected-file publication.

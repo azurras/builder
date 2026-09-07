@@ -18,7 +18,7 @@ Make Tools the single alphabetized navigation location for Music, Command Center
 
 ## Inputs
 
-The approved [Tools Menu Access Navigation spec](../specs/2026-07-29-christopherbell-dev-tools-menu-access-navigation.md), refreshed spoke `origin/main` at `e393687d10c40b856f35d669c25bf3ea65c5c083`, and the user's standing authorization to continue without routine approvals.
+The approved [Tools Menu Access Navigation spec](../session-memory/christopherbell-dev.md#source-docs-specs-2026-07-29-christopherbell-dev-tools-menu-access-navigation-md), refreshed spoke `origin/main` at `e393687d10c40b856f35d669c25bf3ea65c5c083`, and the user's standing authorization to continue without routine approvals.
 
 ## Branch
 

@@ -1,20 +1,18 @@
 ---
 name: manage-spoke-repositories
-description: Inspect registered repositories read-only, explicitly persist a Git-state snapshot, or register verified repository facts in Builder.
+description: Inspect a repository read-only or append verified repository facts and snapshots to the corresponding project memory.
 ---
 
 # Manage Spoke Repositories
 
-Default to **inspect** for questions about repository state. Use **snapshot** only when persisting state is requested or needed by authorized coordination; use **register** to change the registry. None of these modes authorizes source edits, fetch/push, cleanup, or deployment.
+Read repository context from the project's memory. Reverify the actual path, origin, branch, and relevant guardrails before acting; historical configuration may be stale. Record newly verified context through `save-session-memory` with the existing project slug. There is no separate repository registry.
 
-Run from the verified Builder root:
+Default to read-only inspection:
 
 ```powershell
-python .agents/skills/manage-spoke-repositories/scripts/manage_spoke_repositories.py inspect --root .
+python .agents/skills/manage-spoke-repositories/scripts/manage_spoke_repositories.py inspect --path 'A:\Projects\christopherbell.dev'
 ```
 
-Omitting the mode also inspects. Inspection reads `docs/spokes/repos.md` and prints local branch, HEAD, origin, and dirty state without writing. It does not infer current remote synchronization from local state. Missing/inaccessible repositories and Git failures produce explicit errors and a nonzero result, never a clean result.
+Use the path established for this task. Omitting the mode also inspects. Git failures produce explicit errors and nonzero status, never a clean result. Inspection does not fetch, modify the source repo, append memory, or authorize deployment.
 
-**Snapshot:** replace `inspect` with `snapshot` to save `docs/spokes/state.md`. Unchanged semantic state preserves existing bytes and modification time; a timestamp advances only when state changes. Error states are saved honestly and still fail the command. Review changes, then use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) if changed; no extra memory artifact is needed for routine refresh.
-
-**Register:** read [registration](references/registration.md) for verified path/remote/branch, purpose, guardrails, and the command. Review only the intended registry section, then finalize the phase. Existing local Git data can be stale; record gaps rather than inventing facts.
+For an authorized persistent snapshot, use `snapshot --path <verified-path> --root . --project <existing-project>`. It appends dated evidence to that project's session memory. Repeating the same most-recent snapshot leaves memory unchanged; errors are recorded honestly and still fail the command. Use the phase finalizer for changed memory, without a separate state file or extra summary entry.

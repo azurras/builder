@@ -1,6 +1,6 @@
 interface:
   display_name: "Plan Builder Work"
-  short_description: "Create and review plans; save optional specs"
-  default_prompt: "Use $plan-builder-work. Start directly with a plan including requirements, acceptance criteria, and design decisions; choose read-only review/validate or optional spec/decision modes when requested. Use only the requested scope. Review/validate are read-only. Apply $write-jane-street-style-code and task-specific Before-Edit Brief contracts to code-changing plans. Publish the reviewed plan checkpoint; optional specs can share it. Separate specs are optional for substantial requirements exploration, multiple implementation plans, or an explicit user request."
+  short_description: "Create, review, or validate implementation plans"
+  default_prompt: "Use $plan-builder-work. Create a self-contained implementation plan or perform requested read-only review/validation. Put requirements and design in the plan and progress/decisions in project memory. Apply $write-jane-street-style-code and task-specific Before-Edit Briefs to code-changing plans; publish the plan before execution."
 policy:
   allow_implicit_invocation: true

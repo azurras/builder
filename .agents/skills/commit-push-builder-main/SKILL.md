@@ -25,7 +25,7 @@ Operate only in `C:\Users\Christopher\Developer\builder` on Windows or `/Users/c
 ## PowerShell Examples
 
 ```powershell
-python .agents/skills/commit-push-builder-main/scripts/commit_push_builder_main.py --message 'Save reviewed workflow update' --path 'docs/specs/2026-09-06-example.md' --path 'docs/specs/index.md' --dry-run
+python .agents/skills/commit-push-builder-main/scripts/commit_push_builder_main.py --message 'Save reviewed workflow update' --path 'docs/implementation-plans/2026-09-06-example.md' --path 'docs/implementation-plans/index.md' --dry-run
 ```
 
 Replace example filenames with the exact files reviewed for the current task. Remove `--dry-run` to perform the authorized commit and push.
@@ -36,4 +36,4 @@ python .agents/skills/commit-push-builder-main/scripts/commit_push_builder_main.
 
 ## Checkpoints
 
-Use this skill after `plan-builder-work` plan mode (or an explicitly requested spec-only save), `record-runtime-verification` report mode, and `save-session-memory`, and for other authorized Builder persistence checkpoints. Preserve the delivery loop's separate phase commits. Git/network failure is a failed checkpoint until the intended commit is published.
+Use this skill after `plan-builder-work` plan mode, `record-runtime-verification` report mode, and `save-session-memory`, and for other authorized Builder persistence checkpoints. Preserve the delivery loop's separate phase commits. Git/network failure is a failed checkpoint until the intended commit is published.

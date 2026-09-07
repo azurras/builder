@@ -30,7 +30,7 @@ complete
 
 ## Objective
 
-Deliver Phase 1 of [the approved modular-monolith specification](../specs/2026-08-04-christopherbell-dev-modular-monolith.md): a test-only Spring Modulith model, explicit discovery configuration, normalized ArchUnit dependency conditions, a checked-in legacy violation store, generated module documentation, and contributor commands. The deliverable prevents architecture debt from increasing without forcing existing capability packages to close in one branch.
+Deliver Phase 1 of [the approved modular-monolith specification](../session-memory/christopherbell-dev.md#source-docs-specs-2026-08-04-christopherbell-dev-modular-monolith-md): a test-only Spring Modulith model, explicit discovery configuration, normalized ArchUnit dependency conditions, a checked-in legacy violation store, generated module documentation, and contributor commands. The deliverable prevents architecture debt from increasing without forcing existing capability packages to close in one branch.
 
 ## Goals
 

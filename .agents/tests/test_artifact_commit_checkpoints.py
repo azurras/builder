@@ -23,10 +23,10 @@ class ArtifactCommitCheckpointTests(unittest.TestCase):
                 skill.lower(),
             )
 
-    def test_default_delivery_starts_with_plan_and_spec_is_optional(self) -> None:
+    def test_default_delivery_starts_with_plan_and_uses_project_memory(self) -> None:
         skill = (SKILLS / "complete-builder-work" / "SKILL.md").read_text(encoding="utf-8").lower()
         self.assertIn("start directly with `plan-builder-work` plan and review modes", skill)
-        self.assertIn("a separate spec is optional", skill)
+        self.assertIn("there are no separate spec, spoke, work or closure documents", skill)
         self.assertIn("requirements, acceptance criteria, relevant design decisions", skill)
         self.assertNotIn("project spec must be committed and pushed before the loop continues", skill)
         planning = (SKILLS / "plan-builder-work" / "references" / "review.md").read_text(encoding="utf-8").lower()

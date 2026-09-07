@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-- Work record: [christopherbell.dev Modular Monolith Foundation](../work/2026-08-04-christopherbell-dev-modular-monolith-foundation.md)
+- Work record: [christopherbell.dev Modular Monolith Foundation](../session-memory/christopherbell-dev.md#source-docs-work-2026-08-04-christopherbell-dev-modular-monolith-foundation-md)
 - Implementation plan: [Modular Monolith Foundation](../implementation-plans/2026-08-04-christopherbell-dev-modular-monolith-foundation.md)
 - Scope: foundation delivery for test-only Spring Modulith discovery, normalized ArchUnit dependency enforcement, a frozen legacy baseline, generated architecture documentation, and contributor workflow.
 
