@@ -4,10 +4,23 @@
 task-contract-v1
 
 ## Document Status
-complete
+ready-for-execution
 
 ## Objective
-Reconfigure Builder around implementation plans, test reports, and append-only project session memory; consolidate existing records without losing history or evidence links.
+Reconfigure Builder around implementation plans, test reports, and dated session memory; consolidate existing records without losing history or evidence links.
+
+## User Correction - Dated Session Records
+The permanent per-project file structure below was an incorrect interpretation, explicitly rejected by the user. This correction supersedes that filename contract: save `YYYY-MM-DD-project.md`, one file for each date work occurred on a project. Record the work and everything that took place, including decisions, reviews, verification, blockers, and outcomes. Append same-day activity; different dates create separate files.
+
+### Correction Task - Restore daily continuity
+Dependencies: Published source-preserving migration at `a925262`.
+Files: project_memory.py, memory writer and repository snapshot consumers, migration helper, maintenance, affected skill guidance and tests, docs/session-memory, linked plans/reports, README.md and AGENTS.md.
+Behavior: Split the preserved historical corpus into dated project files and relocate evidence links. Preserve every imported source and the later completion entry. Assign undated legacy sources using their recorded Git change date, explicitly labeled as provenance rather than a known activity date.
+Invariants: No content loss, no permanent project files, no fabricated work dates, existing same-day bytes preserved on append, different days remain separate.
+Boundary/API: --project plus --date (default local date) determines filename; --title labels an entry. Repository snapshots use one captured date for lookup and append.
+Effects and failures: Verify replacement files and all source coverage before deleting the three mistaken aggregate files; reject invalid dates before writing. Preserve historical instructions as evidence, while current guidance uses dated files.
+Tests and evidence: Existing tests currently encode the rejected behavior. Replace them with same-day append, different-day separation, invalid-date rejection and dated migration coverage. Run regression suite, full source audit, link checks and hub validation.
+Verification: All 267 imported bodies and post-migration entries accounted for; no undated memory files remain; publish correction and save this work in the actual day's session memory.
 
 ## Goals
 Replace per-request memory and parallel spoke/work/spec/closure records with corresponding project memory documents. Remove active.md and obsolete document folders. Keep implementation plans and test reports independently reviewable. Update tools, instructions, metadata, and tests so old structures are not recreated.
