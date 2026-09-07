@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 Make a reviewed implementation plan the default delivery entry point and remove unused artifact folders without deleting project history.
@@ -68,3 +68,7 @@ Old checkpoint wording can reintroduce a spec gate. Generator and validator must
 
 ## Completion Criteria
 New default documented consistently, optional-folder cases pass, unnecessary folder removed, evidence and continuity published.
+
+## Completion Evidence
+
+Published implementation `d5bd048` after plan checkpoint `c0ad2e5`. All 56 tests passed, all 11 skills and metadata validated, hub refresh/check passed with eight unchanged historical plan warnings, and independent review found no blockers. Only the empty decisions index was deleted; all historical records remain. See [session continuity](../session-memory/2026-09-06-plan-first-builder-workflow.md).
