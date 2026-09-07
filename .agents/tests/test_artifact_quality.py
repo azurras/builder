@@ -114,7 +114,7 @@ Verification: `./gradlew test --tests AppTest`
 """ + VALID_PLAN[end:]
 
     def test_save_cli_accepts_contract_and_refuses_incomplete_task_before_write(self) -> None:
-        script = ROOT / ".agents/skills/save-implementation-plan/scripts/save_implementation_plan.py"
+        script = ROOT / ".agents/skills/plan-builder-work/scripts/save_implementation_plan.py"
         with tempfile.TemporaryDirectory() as directory:
             for title, content, expected in (("Valid", self.contract_plan(), 0), ("Invalid", self.contract_plan().replace("Symbols: `App.requiredSecret`", "Symbols:"), 1)):
                 result = subprocess.run([sys.executable, str(script), "--root", directory, "--date", "2099-04-05", "--title", title], input=content, text=True, capture_output=True)
@@ -123,7 +123,7 @@ Verification: `./gradlew test --tests AppTest`
                 self.assertEqual(artifact.exists(), expected == 0)
 
     def test_hub_validates_new_plans_without_literal_code_edits(self) -> None:
-        script = ROOT / ".agents/skills/validate-hub-state/scripts/validate_hub_state.py"
+        script = ROOT / ".agents/skills/maintain-builder-hub/scripts/validate_hub_state.py"
         spec = importlib.util.spec_from_file_location("hub_validation", script)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)

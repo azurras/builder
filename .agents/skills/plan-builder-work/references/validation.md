@@ -3,7 +3,7 @@
 Run the shared validator against the supplied Markdown. It accepts inspected file/symbol task contracts without requiring line ranges or replacement code, and retains support for legacy Code Edit blocks.
 
 ```powershell
-python .agents/skills/validate-implementation-plan/scripts/validate_implementation_plan.py docs/implementation-plans/YYYY-MM-DD-title.md
+python .agents/skills/plan-builder-work/scripts/validate_implementation_plan.py docs/implementation-plans/YYYY-MM-DD-title.md
 ```
 
 With no filename, the CLI reads stdin. The save helper uses the same validator and refuses invalid artifacts before writing.

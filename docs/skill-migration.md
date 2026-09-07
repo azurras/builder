@@ -24,8 +24,16 @@ The September 2026 consolidation reduces discovery from 22 skills to 11. Histori
 
 The five other entry points remain: `commit-push-builder-main`, `verify-local-spring-app`, `write-jane-street-style-code`, `review-spoke-work`, and `save-session-memory`. Independent code review, production safeguards, selected-file publication, and durable continuity remain separate responsibilities.
 
-Retired directories retain Python commands so existing automation and historical instructions keep working. They no longer contain `SKILL.md` or UI metadata. No compatibility stub is discoverable as a duplicate skill. The decision-record template and command remain available through planning; a standalone decision skill is unnecessary for the observed workflow.
+The user subsequently requested complete removal of the old skill folders. All 17 retired folders are now deleted, including compatibility locations. Needed helpers were moved into the consolidated skills below, retaining their script filenames and arguments. Historical artifacts retain the paths that existed when written; use these new locations for current commands. The decision-record template remains available.
 
-`sync_spoke_state.py` still writes snapshots by default for compatibility; add `--inspect` for no writes. The new `manage_spoke_repositories.py` defaults to inspect and requires `snapshot` for persistence. Unchanged snapshots preserve contents and modification time; Git failures now produce explicit errors and nonzero status. The legacy index/validation and artifact save commands keep their paths and arguments.
+| Helper group | Current scripts directory |
+| --- | --- |
+| Work start, dispatch, returned update, hub closure | `.agents/skills/coordinate-builder-work/scripts/` |
+| Spec, plan save/validate, optional decision | `.agents/skills/plan-builder-work/scripts/` |
+| Runtime report save/validate | `.agents/skills/record-runtime-verification/scripts/` |
+| Register and state snapshot | `.agents/skills/manage-spoke-repositories/scripts/` |
+| Index generation and hub validation | `.agents/skills/maintain-builder-hub/scripts/` |
+
+`manage_spoke_repositories.py` defaults to inspect and requires `snapshot` for persistence. Its relocated `sync_spoke_state.py` helper writes snapshots by default; add `--inspect` for no writes. Unchanged snapshots preserve contents and modification time; Git failures produce explicit errors and nonzero status.
 
 Use the [phase finalizer](../.agents/skills/maintain-builder-hub/references/phase-finalization.md) once per artifact-writing phase. Required spec, plan, runtime-report, and continuity checkpoints remain separate. Internal maintenance and review do not generate additional memory/commit cycles. Link primary evidence rather than copying it into every record.

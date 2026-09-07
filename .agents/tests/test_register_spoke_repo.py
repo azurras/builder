@@ -8,7 +8,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / ".agents" / "skills" / "register-spoke-repo" / "scripts" / "register_spoke_repo.py"
+SCRIPT = ROOT / ".agents" / "skills" / "manage-spoke-repositories" / "scripts" / "register_spoke_repo.py"
 
 
 class RegisterSpokeRepoTests(unittest.TestCase):

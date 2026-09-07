@@ -16,8 +16,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", default=".")
     args = parser.parse_args(argv)
     commands = [
-        [sys.executable, "-B", str(SKILLS / "update-hub-indexes/scripts/update_hub_indexes.py"), "--root", args.root],
-        [sys.executable, "-B", str(SKILLS / "validate-hub-state/scripts/validate_hub_state.py"), "--root", args.root],
+        [sys.executable, "-B", str(SKILLS / "maintain-builder-hub/scripts/update_hub_indexes.py"), "--root", args.root],
+        [sys.executable, "-B", str(SKILLS / "maintain-builder-hub/scripts/validate_hub_state.py"), "--root", args.root],
     ]
     if args.mode == "check":
         commands[0].append("--check")

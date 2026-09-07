@@ -28,3 +28,13 @@ Spec checkpoint `b4ee9aa` and plan checkpoint `c678ae0` were published before de
 ### Decisions and Follow-ups
 
 Keep the existing helper paths as compatibility interfaces and use the migration map for old skill invocations in historical session records. Preserve separate spec, plan, applicable runtime report, and continuity phase commits. Link primary evidence instead of copying it across work/closure/memory. Reverting the implementation commit restores old skill discovery if recovery is needed. No implementation follow-ups remain; the eight historical plan warnings are unchanged legacy documentation debt.
+
+## 23:40 - Builder Skill Consolidation
+
+### Follow-up: Remove Retired Skill Folders
+
+The user requested deletion of the remaining old skill folders, superseding the earlier decision to preserve legacy command locations. Removed all 17 retired directories. Needed helpers now live under coordinate-builder-work, plan-builder-work, record-runtime-verification, manage-spoke-repositories, and maintain-builder-hub, with unchanged script filenames and arguments. Updated active instructions, command dispatch, tests, README, and the migration map. Historical records retain the paths used at the time; current commands must use the new locations.
+
+Validation: all 55 tests passed after relocation, including a strengthened assertion that exactly the 11 current skill directories exist. All 19 helper startup checks passed. Hub validation and index freshness passed with the same eight historical plan warnings; git diff --check passed. No application runtime testing applies to this directory and command-routing cleanup. No external issue closure is applicable.
+
+The final checks were briefly blocked by the automatic approval review usage limit, then completed after the user's continuation. This cleanup and continuity update are being published together as the final checkpoint.

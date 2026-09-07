@@ -40,7 +40,7 @@ Unversioned historical literal-patch plans retain their original whole-plan vali
 Pass complete Markdown through stdin. For an existing draft file:
 
 ```powershell
-Get-Content -Raw -LiteralPath $draftPath | python .agents/skills/save-implementation-plan/scripts/save_implementation_plan.py --root . --title 'Implementation title'
+Get-Content -Raw -LiteralPath $draftPath | python .agents/skills/plan-builder-work/scripts/save_implementation_plan.py --root . --title 'Implementation title'
 ```
 
 Set `$draftPath` to the reviewed draft. The helper refuses accidental overwrite and exits nonzero on invalid plan structure. It retains `--date`, `--plan-dir`, and `--overwrite` for explicit requests.

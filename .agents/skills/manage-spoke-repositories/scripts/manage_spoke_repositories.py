@@ -13,7 +13,7 @@ def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     mode = args.pop(0) if args and args[0] in {"inspect", "snapshot", "register"} else "inspect"
     if mode == "register":
-        return subprocess.run([sys.executable, "-B", str(SKILLS / "register-spoke-repo/scripts/register_spoke_repo.py"), *args], check=False).returncode
+        return subprocess.run([sys.executable, "-B", str(SKILLS / "manage-spoke-repositories/scripts/register_spoke_repo.py"), *args], check=False).returncode
     return snapshot([*args, "--inspect"] if mode == "inspect" else args)
 
 

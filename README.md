@@ -50,7 +50,7 @@ The repository has 11 discoverable skills:
 | `review-spoke-work` | Independent spoke review and merge-readiness evidence |
 | `save-session-memory` | Durable continuity and verified closure result |
 
-Each has `SKILL.md` and `agents/openai.yaml`; detailed modes live in focused references. Shared Python helpers live in `.agents/lib/`. Old CLI paths remain supported. See the [migration map](docs/skill-migration.md) for retired skill names.
+Each has `SKILL.md` and `agents/openai.yaml`; detailed modes live in focused references. Shared Python helpers live in `.agents/lib/`. Helpers live under their current owning skills; retired folders and old CLI paths are removed. See the [migration map](docs/skill-migration.md) for retired skill names.
 
 ## Durable Artifacts
 

@@ -9,6 +9,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 SKILLS = ROOT / ".agents/skills"
+OWNERS = {'close-hub-work': 'coordinate-builder-work', 'dispatch-spoke-task': 'coordinate-builder-work', 'ingest-spoke-update': 'coordinate-builder-work', 'start-hub-work': 'coordinate-builder-work', 'save-decision-record': 'plan-builder-work', 'save-project-spec': 'plan-builder-work', 'save-implementation-plan': 'plan-builder-work', 'validate-implementation-plan': 'plan-builder-work', 'save-test-report': 'record-runtime-verification', 'validate-test-report': 'record-runtime-verification', 'register-spoke-repo': 'manage-spoke-repositories', 'sync-spoke-state': 'manage-spoke-repositories', 'update-hub-indexes': 'maintain-builder-hub', 'validate-hub-state': 'maintain-builder-hub'}
+
 WRITERS = {
     "start-hub-work": ("start_hub_work", "work", "hub-work"),
     "dispatch-spoke-task": ("dispatch_spoke_task", "spoke-tasks", "spoke-task"),
@@ -28,7 +30,7 @@ class ArtifactWriterCompatibilityTests(unittest.TestCase):
     def test_legacy_writers_preserve_paths_content_overwrite_and_slug_edges(self):
         for skill, (command, directory, fallback) in WRITERS.items():
             with self.subTest(skill=skill), tempfile.TemporaryDirectory() as temp:
-                script = SKILLS / skill / "scripts" / f"{command}.py"
+                script = SKILLS / OWNERS.get(skill, skill) / "scripts" / f"{command}.py"
                 args = ("--root", temp, "--title", "Example: Record!", "--date", "2099-04-05")
                 result = run(script, *args, body="# Example\nEvidence.\n")
                 target = Path(temp) / "docs" / directory / "2099-04-05-example-record.md"
@@ -65,7 +67,7 @@ class RepositoryInspectionTests(unittest.TestCase):
         registry = self.root / "docs/spokes/repos.md"
         registry.parent.mkdir(parents=True)
         registry.write_text(f"<!-- spoke:example -->\n## Example\n- Local path: `{self.repo}`\n<!-- /spoke:example -->\n")
-        self.script = SKILLS / "sync-spoke-state/scripts/sync_spoke_state.py"
+        self.script = SKILLS / "manage-spoke-repositories/scripts/sync_spoke_state.py"
 
     def git(self, *args):
         return subprocess.run(["git", *args], cwd=self.repo, check=True,
@@ -176,6 +178,7 @@ class SkillDiscoveryTests(unittest.TestCase):
                     "record-runtime-verification", "manage-spoke-repositories", "maintain-builder-hub",
                     "commit-push-builder-main", "verify-local-spring-app", "write-jane-street-style-code",
                     "review-spoke-work", "save-session-memory"}
+        self.assertEqual({p.name for p in SKILLS.iterdir() if p.is_dir()}, expected)
         self.assertEqual({p.parent.name for p in SKILLS.glob("*/SKILL.md")}, expected)
         self.assertEqual({p.parents[1].name for p in SKILLS.glob("*/agents/openai.yaml")}, expected)
         for name in expected:

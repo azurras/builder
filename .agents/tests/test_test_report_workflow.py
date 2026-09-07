@@ -8,9 +8,9 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SAVE_SCRIPT = ROOT / ".agents" / "skills" / "save-test-report" / "scripts" / "save_test_report.py"
-INDEX_SCRIPT = ROOT / ".agents" / "skills" / "update-hub-indexes" / "scripts" / "update_hub_indexes.py"
-VALIDATE_SCRIPT = ROOT / ".agents" / "skills" / "validate-hub-state" / "scripts" / "validate_hub_state.py"
+SAVE_SCRIPT = ROOT / ".agents" / "skills" / "record-runtime-verification" / "scripts" / "save_test_report.py"
+INDEX_SCRIPT = ROOT / ".agents" / "skills" / "maintain-builder-hub" / "scripts" / "update_hub_indexes.py"
+VALIDATE_SCRIPT = ROOT / ".agents" / "skills" / "maintain-builder-hub" / "scripts" / "validate_hub_state.py"
 
 
 class TestReportWorkflowTests(unittest.TestCase):
