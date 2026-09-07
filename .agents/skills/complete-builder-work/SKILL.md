@@ -12,14 +12,17 @@ Use full delivery for a request to complete work. Resume from evidenced state; d
 ## Delivery
 
 1. Capture the source item, acceptance criteria, repo, branch strategy, and closing condition. Discover missing context before asking.
-2. Use `plan-builder-work` spec mode: review it for blockers and improve the spec until no blockers remain. Save and publish the spec checkpoint.
-3. Use `plan-builder-work` plan and review modes with inspected targets, task contracts, dependencies, verification, and recovery. Improve the plan until no blockers remain; structural validation and semantic review must pass before ready-for-execution. Save and publish the plan checkpoint.
-4. Before writing or modifying code, invoke `write-jane-street-style-code`. Implement within scope and preserve unrelated dirty worktrees.
-5. Classify Runtime Evidence Required using the rule below, then run applicable verification. For Spring runtime work use `verify-local-spring-app` and its database/effect isolation safeguards.
-6. When runtime evidence is required, use `record-runtime-verification` to save, validate, and publish actual runtime proof. Otherwise record the reason and native checks in the plan or continuity record.
-7. Publish by target policy. Builder uses its scoped main-branch workflow. Where PR delivery is required, create a pull request, wait for required CI gates, resolve in-scope failures, and merge only after required gates pass. Confirm the merge. A draft PR or failed/unmerged delivery is incomplete. Carry out authorized deployment and verify its result where delivery requires it.
-8. Use `save-session-memory` for verified delivery, primary evidence links, remaining gaps, and proposed issue closure text. Publish continuity with closure pending.
-9. Close Story/Issue using [closure](references/closure.md). Read back the actual external result, append it to the same continuity record, and publish that update. No source issue means closure is not applicable.
+2. Start directly with `plan-builder-work` plan and review modes. Include requirements, acceptance criteria, relevant design decisions, inspected targets, task contracts, dependencies, verification, and recovery. Improve the plan until no blockers remain; structural validation and semantic review must pass before ready-for-execution. Save and publish the plan checkpoint.
+3. Before writing or modifying code, invoke `write-jane-street-style-code`. Implement within scope and preserve unrelated dirty worktrees.
+4. Classify Runtime Evidence Required using the rule below, then run applicable verification. For Spring runtime work use `verify-local-spring-app` and its database/effect isolation safeguards.
+5. When runtime evidence is required, use `record-runtime-verification` to save, validate, and publish actual runtime proof. Otherwise record the reason and native checks in the plan or continuity record.
+6. Publish by target policy. Builder uses its scoped main-branch workflow. Where PR delivery is required, create a pull request, wait for required CI gates, resolve in-scope failures, and merge only after required gates pass. Confirm the merge. A draft PR or failed/unmerged delivery is incomplete. Carry out authorized deployment and verify its result where delivery requires it.
+7. Use `save-session-memory` for verified delivery, primary evidence links, remaining gaps, and proposed issue closure text. Publish continuity with closure pending.
+8. Close Story/Issue using [closure](references/closure.md). Read back the actual external result, append it to the same continuity record, and publish that update. No source issue means closure is not applicable.
+
+## Optional Specs
+
+A separate spec is optional. Create one only for substantial requirements exploration, work spanning multiple implementation plans, or an explicit user request. Otherwise the implementation plan contains the requirements and design decisions; no spec or explanation for skipping one is required. An optional spec may be published with its plan. A spec-only request ends after publishing that artifact.
 
 ## Runtime Evidence Required
 
@@ -31,7 +34,6 @@ Not required for documentation, planning, static policy, or standalone tooling w
 
 Use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) at each boundary. Do not batch separate delivery phases into a later commit.
 
-- Project spec must be committed and pushed before the loop continues to planning.
 - Implementation plan must be committed and pushed before the loop continues to development.
 - Test report must be committed and pushed before the loop continues to publication/closure.
 - Session memory must be committed and pushed before the loop continues to closure. Publish the actual closure result afterward.

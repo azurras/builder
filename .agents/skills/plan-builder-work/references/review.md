@@ -6,6 +6,8 @@ Run `plan-builder-work` validate mode, then review whether the work is executabl
 
 Reject the plan when:
 
+- Requirements, acceptance criteria, or relevant design decisions are missing or too ambiguous to implement. A separate spec is not required and its absence alone is not a blocker.
+
 - A task has neither an inspected file/symbol contract nor a valid legacy Code Edit block.
 - Targets, dependencies, acceptance checks, risks, or rollback are vague or unresolved for the proposed ready state.
 - A code-changing task omits `Required skill: write-jane-street-style-code` before code edits or its task-specific Before-Edit Brief: Behavior, Invariants, Boundary/API, Effects and failures, Tests and evidence.

@@ -10,7 +10,7 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from builder_hub import extract_status, first_heading, list_markdown, parse_dated_file, read_text, write_text
+from builder_hub import extract_status, first_heading, list_markdown, parse_dated_file, read_text, requires_artifact_index, write_text
 
 
 INDEX_TARGETS = {
@@ -75,7 +75,11 @@ def main() -> int:
     root = Path(args.root).expanduser().resolve()
 
     outputs = [build_active(root)]
-    outputs.extend(build_index(root, directory, title) for directory, title in INDEX_TARGETS.items())
+    outputs.extend(
+        build_index(root, directory, title)
+        for directory, title in INDEX_TARGETS.items()
+        if requires_artifact_index(root, directory)
+    )
 
     stale = []
     for path, content in outputs:

@@ -11,7 +11,7 @@ Before closing or posting a final issue update, verify and include:
 - Source story/issue URL or identifier.
 - Confirmation that any GitHub comments or attachments used for closure guidance were authored by `azurras`.
 - Final branch, commit, and PR or merge state.
-- Spec status or reason it was not needed.
+- Optional spec link/status when one was used; a separate spec is not a closure requirement.
 - Implementation plan path and status.
 - Automated test commands and results.
 - Runtime Evidence Required classification from `complete-builder-work`. When true, include the validated local app test report with data sent and response received. When false, include the concrete reason and native verification evidence; no app report is required.

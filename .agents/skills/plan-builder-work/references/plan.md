@@ -4,7 +4,7 @@ Save Markdown under `docs/implementation-plans/YYYY-MM-DD-title.md` at the activ
 
 ## Execution Contract
 
-A plan names the work and the evidence needed to complete it. Exact line ranges and prewritten replacement code are optional. Prefer inspected files and stable symbols; use literal patches when they clarify a fragile edit. Reinspect targets before editing if the checkout has changed.
+A plan is the default planning artifact. Include the requirements, explicit acceptance criteria, relevant design decisions and tradeoffs, and evidence needed to complete the work; use existing Goals, Inputs, Code Changes, and Completion Criteria sections or clear dedicated headings. A separate spec is not a prerequisite. Link an existing spec when useful instead of duplicating it. Exact line ranges and prewritten replacement code are optional. Prefer inspected files and stable symbols; use literal patches when they clarify a fragile edit. Reinspect targets before editing if the checkout has changed.
 
 Include these document sections: Document Status, Objective, Goals, Inputs, Branch, Non-Goals, Assumptions, Open Questions, Task Breakdown, Code Changes, Files and Modules, Unit Testing, Local Testing, Validation, Rollback or Recovery, Risks, and Completion Criteria. Keep entries concise; explain when a section is not applicable.
 

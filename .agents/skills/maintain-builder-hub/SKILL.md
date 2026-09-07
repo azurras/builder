@@ -19,6 +19,6 @@ Use **refresh** after authorized artifact changes:
 python .agents/skills/maintain-builder-hub/scripts/maintain_builder_hub.py refresh --root .
 ```
 
-Refresh regenerates `docs/active.md` and the artifact indexes, then validates directories, templates, filenames, canonical statuses, local links, skill frontmatter, plan contracts, and runtime reports. Review generated changes and fix errors before publication. Eight explicitly named historical pre-schema plans remain warnings; do not extend that exemption to new plans.
+Refresh regenerates `docs/active.md` and the artifact indexes. Optional `docs/specs/` and `docs/decisions/` need indexes only when records exist; refresh does not create these empty folders. It validates directories, templates, filenames, canonical statuses, local links, skill frontmatter, plan contracts, and runtime reports. Review generated changes and fix errors before publication. Eight explicitly named historical pre-schema plans remain warnings; do not extend that exemption to new plans.
 
 Maintenance does not create its own memory or commit cycle. The caller owns the [phase finalizer](references/phase-finalization.md), including selected-file publication and separate delivery checkpoints. Index and validation helpers live in this skill's `scripts/` directory; use the consolidated command above for automation.

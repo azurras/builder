@@ -14,7 +14,6 @@ class ArtifactCommitCheckpointTests(unittest.TestCase):
 
         self.assertIn("## Artifact Commit Checkpoints", skill)
         for artifact in (
-            "project spec",
             "implementation plan",
             "test report",
             "session memory",
@@ -23,6 +22,15 @@ class ArtifactCommitCheckpointTests(unittest.TestCase):
                 f"{artifact} must be committed and pushed before the loop continues",
                 skill.lower(),
             )
+
+    def test_default_delivery_starts_with_plan_and_spec_is_optional(self) -> None:
+        skill = (SKILLS / "complete-builder-work" / "SKILL.md").read_text(encoding="utf-8").lower()
+        self.assertIn("start directly with `plan-builder-work` plan and review modes", skill)
+        self.assertIn("a separate spec is optional", skill)
+        self.assertIn("requirements, acceptance criteria, relevant design decisions", skill)
+        self.assertNotIn("project spec must be committed and pushed before the loop continues", skill)
+        planning = (SKILLS / "plan-builder-work" / "references" / "review.md").read_text(encoding="utf-8").lower()
+        self.assertIn("its absence alone is not a blocker", planning)
 
     def test_artifact_saving_skills_block_next_step_until_pushed(self) -> None:
         for skill_name in (
@@ -43,8 +51,6 @@ class ArtifactCommitCheckpointTests(unittest.TestCase):
         ).read_text(encoding="utf-8").lower()
 
         for required in (
-            "review it for blockers",
-            "improve the spec until no blockers remain",
             "`plan-builder-work` plan and review modes",
             "improve the plan until no blockers remain",
             "create a pull request",
@@ -55,7 +61,6 @@ class ArtifactCommitCheckpointTests(unittest.TestCase):
             self.assertIn(required, skill)
 
         for required_prompt_text in (
-            "spec review",
             "implementation plan review",
             "pr creation",
             "ci gates",

@@ -12,7 +12,7 @@ LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
 from artifact_quality import validate_implementation_plan_text, validate_test_report_text
-from builder_hub import STATUS_VALUES, extract_status, list_markdown, markdown_links, parse_dated_file, read_text
+from builder_hub import OPTIONAL_ARTIFACT_DIRS, requires_artifact_index, STATUS_VALUES, extract_status, list_markdown, markdown_links, parse_dated_file, read_text
 
 
 # Historical pre-schema plans remain warnings; all other plans must validate.
@@ -114,7 +114,7 @@ def main() -> int:
     warnings: list[str] = []
 
     for directory in ARTIFACT_DIRS:
-        if not (root / directory).exists():
+        if directory not in OPTIONAL_ARTIFACT_DIRS and not (root / directory).exists():
             warnings.append(f"Missing artifact directory: {directory}")
 
     for template in TEMPLATE_FILES:
@@ -122,6 +122,8 @@ def main() -> int:
             errors.append(f"Missing template: {template}")
 
     for index in INDEX_FILES:
+        if not requires_artifact_index(root, Path(index).parent.as_posix()):
+            continue
         if not (root / index).exists():
             errors.append(f"Missing index: {index}")
 

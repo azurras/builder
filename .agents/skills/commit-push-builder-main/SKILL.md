@@ -36,4 +36,4 @@ python .agents/skills/commit-push-builder-main/scripts/commit_push_builder_main.
 
 ## Checkpoints
 
-Use this skill after `plan-builder-work` spec/plan modes, `record-runtime-verification` report mode, and `save-session-memory`, and for other authorized Builder persistence checkpoints. Preserve the delivery loop's separate phase commits. Git/network failure is a failed checkpoint until the intended commit is published.
+Use this skill after `plan-builder-work` plan mode (or an explicitly requested spec-only save), `record-runtime-verification` report mode, and `save-session-memory`, and for other authorized Builder persistence checkpoints. Preserve the delivery loop's separate phase commits. Git/network failure is a failed checkpoint until the intended commit is published.
