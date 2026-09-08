@@ -1,4 +1,4 @@
 interface:
   display_name: "Commit Push Builder Main"
   short_description: "Commit and push builder main"
-  default_prompt: "Use $commit-push-builder-main to commit only explicitly selected Builder files with repeated --path arguments, or inspect outgoing commits and use --push-only to recover a failed push without changing the index. Preserve separate artifact checkpoints and use maintain-builder-hub before publication."
+  default_prompt: "Use $commit-push-builder-main for reviewed selected Builder files or push-only recovery; preserve unrelated state and verify publication."

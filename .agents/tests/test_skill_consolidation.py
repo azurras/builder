@@ -29,7 +29,7 @@ class RepositoryInspectionTests(unittest.TestCase):
         (self.repo / "file.md").write_text("tracked", encoding="utf-8")
         self.git("add", "file.md")
         self.git("commit", "-m", "Fixture")
-        self.script = SKILLS / "manage-spoke-repositories/scripts/manage_spoke_repositories.py"
+        self.script = SKILLS / "complete-builder-work/scripts/manage_spoke_repositories.py"
 
     def git(self, *args):
         return subprocess.run(["git", *args], cwd=self.repo, text=True, capture_output=True, check=True)
@@ -107,10 +107,10 @@ class MaintenanceModeTests(unittest.TestCase):
 
 class SkillDiscoveryTests(unittest.TestCase):
     def test_discovery_is_exact_and_active_links_resolve(self):
-        expected = {"complete-builder-work", "plan-builder-work", "coordinate-builder-work",
-                    "record-runtime-verification", "manage-spoke-repositories", "maintain-builder-hub",
+        expected = {"complete-builder-work", "plan-builder-work",
+                    "record-runtime-verification", "maintain-builder-hub",
                     "commit-push-builder-main", "verify-local-spring-app", "write-jane-street-style-code",
-                    "review-spoke-work", "save-session-memory"}
+                    "save-session-memory"}
         self.assertEqual({p.name for p in SKILLS.iterdir() if p.is_dir()}, expected)
         self.assertEqual({p.parent.name for p in SKILLS.glob("*/SKILL.md")}, expected)
         self.assertEqual({p.parents[1].name for p in SKILLS.glob("*/agents/openai.yaml")}, expected)

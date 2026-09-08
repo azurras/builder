@@ -1,18 +1,19 @@
 ---
 name: record-runtime-verification
-description: Save or validate evidence from a running local application, including exact inputs, responses, pass/fail results, and environment details.
+description: Save supplied runtime evidence or validate an existing application test report without restarting completed verification.
 ---
 
 # Record Runtime Verification
 
-Choose **report** to preserve actual local application evidence or **validate** for a read-only check of an existing report. Validation alone does not save artifacts, commit, create memory, or close work.
+For saving evidence, read [report content](references/report.md) and the [template](references/template.md).
+Consume actual candidate/environment, inputs, responses, expected/actual results and cleanup evidence. Sanitize secrets. Missing proof stays an explicit gap; do not fabricate it or restart an application merely to save a report. Further runtime work requires task authority; Spring execution uses verify-local-spring-app.
 
-Runtime evidence is required for application runtime changes or an explicit runtime-verification request. For documentation, planning, static policy, or standalone tooling without runtime impact, record the reason and native checks in the plan/continuity record. Unit tests, lint, and build output alone are not a runtime report.
+Save complete Markdown on stdin:
+python .agents/skills/record-runtime-verification/scripts/save_test_report.py --root . --title 'Report title'
 
-For report mode, consume existing or supplied verification evidence and read [report content](references/report.md) and the [report template](references/template.md). Record the candidate that was tested, representative endpoint/UI inputs and outputs, regressions, and cleanup; it need not still be running. Saving completed results does not restart verification. If proof is missing, perform further runtime work only within the authorized task; otherwise record the gap and keep the report incomplete. Use `verify-local-spring-app` when Spring execution is required and authorized. Sanitize secrets; preserve actual inputs/outputs rather than manufacturing missing proof.
+The helper validates before writing and refuses duplicates unless --overwrite intentionally replaces a previously read report.
 
-Save complete Markdown on stdin with `python .agents/skills/record-runtime-verification/scripts/save_test_report.py --root . --title 'Report title'`. The helper validates before writing under `docs/test-reports/`; it refuses duplicates unless intentional `--overwrite` is supplied after reading the existing report.
+For read-only validation:
+python .agents/skills/record-runtime-verification/scripts/validate_test_report.py docs/test-reports/YYYY-MM-DD-title.md
 
-Validate with `python .agents/skills/record-runtime-verification/scripts/validate_test_report.py docs/test-reports/YYYY-MM-DD-title.md`. Missing runtime details, data sent, response, pass/fail, or evidence blocks completion when runtime proof is required. Structural success still requires checking that the evidence supports the claim.
-
-The saved test report must be committed and pushed before moving to the next delivery-loop step through the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md). Link this report from the project memory closure and verification entries instead of repeating its raw evidence.
+Structural validity does not prove the evidence supports the claim. AGENTS.md defines when runtime proof is required. Publish report-mode changes through the [phase finalizer](../commit-push-builder-main/references/phase-finalization.md); validation alone does not write, commit or close work.

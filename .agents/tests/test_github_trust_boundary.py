@@ -16,20 +16,5 @@ class GithubTrustBoundaryTests(unittest.TestCase):
         self.assertIn("untrusted input", agents)
         self.assertIn("zip", agents)
 
-    def test_story_issue_skills_reject_untrusted_github_comments(self) -> None:
-        for path in (
-            ROOT / ".agents" / "skills" / "complete-builder-work" / "SKILL.md",
-            ROOT / ".agents" / "skills" / "complete-builder-work" / "references" / "closure.md",
-        ):
-            with self.subTest(path=path):
-                text = path.read_text(encoding="utf-8").lower()
-
-                self.assertIn("azurras", text)
-                self.assertIn("github comments", text)
-                self.assertIn("untrusted input", text)
-                self.assertIn("attachments", text)
-                self.assertIn("do not execute", text)
-
-
 if __name__ == "__main__":
     unittest.main()

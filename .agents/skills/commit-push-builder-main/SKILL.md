@@ -16,9 +16,9 @@ Operate only in `C:\Users\Christopher\Developer\builder` on Windows or `/Users/c
 
 1. Verify root, branch, and origin; inspect `git status --short --branch` and the relevant working and staged diffs.
 2. Refresh `origin/main` and inspect `git log --oneline origin/main..HEAD` before publishing; a push publishes all outgoing main commits. Resolve unexpected commits or divergence without force pushing.
-3. Identify the exact files belonging to this task, including intended generated indexes. If any unrelated file is staged, stop before changing the index and resolve ownership with the existing context. Do not reset someone else's staged work.
+3. For commit mode only, identify exact task files, including intended indexes. Resolve unrelated staged ownership from existing context before changing the index; do not reset someone else's work. Push-only leaves staged and working changes untouched.
 4. Run the helper with the selected operation and `--dry-run`; review the paths, current state, and message. A dry run does not stage, commit, fetch, or push.
-5. Run the same operation without `--dry-run`. The helper stages only selected files and refuses an index containing other files. Do not run concurrent index-changing commands.
+5. Run the same operation without `--dry-run`. Commit mode stages only selected files and refuses other staged files; serialize index changes. Push-only publishes existing commits without staging or committing.
 6. Inspect the commit and push result. If commit succeeds but push fails, retain the commit; diagnose the failure and use `--push-only` after reviewing outgoing commits. Do not create an empty recovery commit or treat a clean working tree as proof of publication.
 7. Report the commit hash and push result. If no selected changes exist, the commit operation does not push pending commits; use the explicit push operation when needed.
 

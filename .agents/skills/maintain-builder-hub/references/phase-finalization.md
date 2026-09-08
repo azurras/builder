@@ -1,10 +1,3 @@
 # Phase Finalization
 
-Use this once at the end of an authorized artifact-writing phase:
-
-1. Finish the intended artifacts, linking primary evidence and updating related status. Keep existing content unless intentional replacement is authorized.
-2. Run `maintain-builder-hub` **refresh** to regenerate indexes and validate. Fix errors and review resulting diffs. A failed validation blocks publication; do not hide it by editing generated evidence or downgrading status inaccurately.
-3. Invoke `commit-push-builder-main`, inspect Git state and outgoing commits, and dry-run an explicit list of intended files. Commit/push that same reviewed selection. Preserve unrelated staged/dirty work. A failed push leaves the checkpoint incomplete; retain the commit and retry publication through the push-only mode after diagnosis.
-4. Confirm publication before starting the next delivery phase. Implementation plan, applicable runtime report, and continuity remain separate checkpoints. Do not combine those phases into one delayed commit.
-
-A single phase may append the dated session record and update indexes with its primary plan or report. Substeps on the same date append to that day's project file; work on another date gets another file. Record work and events throughout the session and save continuity at substantive completion or an authorized handoff. Record proposed external closure before acting; record and publish the verified result in the file for its actual date afterward. Check-only/review-only requests do not enter this finalizer unless the user also requests persistence.
+The maintained procedure is [Finish an Authorized Writing Phase](../../commit-push-builder-main/references/phase-finalization.md). This link preserves references from historical session records.

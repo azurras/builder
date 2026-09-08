@@ -33,7 +33,7 @@ Unversioned historical literal-patch plans retain their original whole-plan vali
 2. Draft the plan with a branch, concrete contracts, ordered dependencies, testing, recovery, and completion criteria. Use draft or blocked when inspection or execution prerequisites remain unresolved.
 3. Run `plan-builder-work` review mode and correct blockers. Mechanical validation checks structure; it cannot prove that a symbol was inspected or that a proposed change is correct.
 4. Save with the helper, which validates before writing. Use `plan-builder-work` validate mode to recheck saved plans. Do not mark ready-for-execution until validation and review pass.
-5. Use the [phase finalizer](../../maintain-builder-hub/references/phase-finalization.md) with the exact saved plan and intended indexes. The implementation plan must be committed and pushed before moving to the next delivery-loop step.
+5. Use the [phase finalizer](../../commit-push-builder-main/references/phase-finalization.md) with the exact saved plan and intended indexes at the AGENTS.md publication checkpoint.
 
 ## PowerShell Helper
 

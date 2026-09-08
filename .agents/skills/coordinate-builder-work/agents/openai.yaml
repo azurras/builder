@@ -1,6 +1,0 @@
-interface:
-  display_name: "Coordinate Builder Work"
-  short_description: "Coordinate work, handoffs, updates, and closure"
-  default_prompt: "Use $coordinate-builder-work. Use the implementation plan and append meaningful coordination, handoff, progress, blocker and closure updates to the dated project session record for the actual work date. Do not create parallel work/spoke documents. Require $write-jane-street-style-code and a Before-Edit Brief before code changes in actual dispatches."
-policy:
-  allow_implicit_invocation: true

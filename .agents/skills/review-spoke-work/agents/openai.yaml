@@ -1,4 +1,0 @@
-interface:
-  display_name: "Review Spoke Work"
-  short_description: "Record reviews of spoke repo work"
-  default_prompt: "Use $review-spoke-work. Review changes and house-style compliance with $write-jane-street-style-code. Return findings read-only unless persistence is authorized, then append them to the dated project session record for the actual work date with commit/PR and evidence links."

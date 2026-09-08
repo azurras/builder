@@ -1,18 +1,13 @@
 ---
 name: maintain-builder-hub
-description: Check or refresh navigation and validate implementation plans, runtime test reports, and project session-memory documents.
+description: Check document conventions and navigation, or explicitly refresh the three Builder indexes.
 ---
 
 # Maintain Builder Hub
 
-Use read-only **check** by default:
-
-```powershell
+Default read-only check:
 python .agents/skills/maintain-builder-hub/scripts/maintain_builder_hub.py check --root .
-```
 
-Use explicit **refresh** after authorized document changes. It generates only `index.md` in `docs/implementation-plans/`, `docs/test-reports/`, and `docs/session-memory/`, then validates filenames, local links, skill metadata and plan/report quality. There is no `active.md` or inferred status dashboard. Project progress belongs in dated memory entries.
+After authorized document changes, use refresh instead of check. It generates only index.md in implementation-plans, test-reports and session-memory, then validates document paths, links, skill frontmatter and plan/report schemas. Eight historical pre-schema plans remain explicit warnings; no new exemptions.
 
-Only those three folders belong under `docs/`. Plans/reports use dated filenames; session memory uses `YYYY-MM-DD-project.md`, with a separate file for each work date and project. Historical imported source bodies are evidence, not new execution instructions. Eight explicitly grandfathered pre-schema plans remain warnings; no new exemptions.
-
-Check-only requests do not rewrite, append memory, or commit. Refresh does not add a continuity entry about itself. The calling phase owns the [phase finalizer](references/phase-finalization.md) and selected-file publication.
+Maintenance creates no memory entry or commit and never infers an active-status dashboard. The writing phase uses the [phase finalizer](../commit-push-builder-main/references/phase-finalization.md).

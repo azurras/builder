@@ -1,6 +1,6 @@
 interface:
   display_name: "Complete Builder Work"
-  short_description: "Deliver Builder work or verify final closure"
-  default_prompt: "Use $complete-builder-work. Run implementation plan review, development, verification, PR creation where required, CI gates, merge, and issue closure. Append progress and closure to the dated project session record for the actual work date; use only plan/report/project-memory documents. Apply $write-jane-street-style-code before code changes, preserve publication checkpoints and closure readback."
+  short_description: "Deliver work and coordinate verified handoffs"
+  default_prompt: "Use $complete-builder-work to resume authorized delivery through verified publication and closure, loading coordination or repository inspection only when needed."
 policy:
   allow_implicit_invocation: true

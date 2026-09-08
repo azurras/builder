@@ -1,20 +1,17 @@
 ---
 name: plan-builder-work
-description: Create or review an implementation plan containing requirements and design decisions, or validate an existing plan.
+description: Create a self-contained implementation plan, review its readiness, or validate its structure.
 ---
 
 # Plan Builder Work
 
-Default to a self-contained implementation plan: requirements, acceptance criteria, relevant design decisions/tradeoffs, inspected targets, ordered task contracts, verification and recovery. Requirements exploration and specifications belong in this plan; decisions and progress belong in project session memory. Do not create separate spec or decision files.
+Choose only the requested mode:
+- Plan: read [format and save command](references/plan.md).
+- Review: use [semantic readiness criteria](references/review.md).
+- Validate: use [structural validation](references/validation.md).
 
-| Mode | Instructions |
-| --- | --- |
-| Plan | [Inspected task contracts and save command](references/plan.md) |
-| Review | [Semantic readiness review](references/review.md) |
-| Validate | [Structural validator](references/validation.md) |
+Put requirements, acceptance criteria and design in the plan; record work and decisions in dated memory. Reuse an applicable existing plan and current Before-Edit Brief instead of recreating them. Update only what new evidence changes.
 
-Every code-changing task requires `write-jane-street-style-code` and a task-specific Before-Edit Brief. Reject the plan when targets, dependencies, acceptance criteria, authority, verification, or recovery remain unresolved for its proposed status. Exact line ranges and replacement code are optional for inspected contracts; preserve valid historical plan schemas.
+Review/validation are read-only unless edits were requested. Planning-only scope ends at the published plan. Read existing content before intentional full replacement with --overwrite.
 
-Review and validate are read-only unless changes were requested. A planning-only request ends at its published plan; do not start implementation. Read existing content before intentional full replacement with `--overwrite`.
-
-Implementation plan artifacts must be committed and pushed before moving to the next delivery phase through the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md). Link the plan from `YYYY-MM-DD-project.md` for the date the planning or other work occurred. Different dates have separate session records.
+Follow AGENTS.md publication checkpoints using the [phase finalizer](../commit-push-builder-main/references/phase-finalization.md).
