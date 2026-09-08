@@ -3,7 +3,7 @@
 ## Plan Format
 task-contract-v1
 ## Document Status
-ready-for-execution
+complete
 ## Objective
 Reduce loaded instructions and unnecessary human input while preserving quality and dated work history.
 ## Goals
@@ -47,3 +47,6 @@ Restore reviewed files from bf99d89 through a normal corrective commit; never fo
 Over-shortening can hide safeguards; preserve operational contracts and review realistic boundary scenarios. Word count is a size proxy, not measured conversation token usage.
 ## Completion Criteria
 Eight skills, materially smaller maintained guidance, passing checks, published implementation and dated session continuity.
+
+## Completion Evidence
+Published implementation as `996eb1e`. Eight skill folders remain; the repository inspection helper was relocated unchanged. Markdown words across AGENTS.md, README.md and skill documentation decreased from 17,568 to 6,201 (65%); entrypoints decreased from 4,786 to 2,187 (54%). These are instruction-size measurements, not measured task-token savings. All 40 retained tests, eight official skill validations, 11 helper startup checks and hub validation passed. Sixteen duplicated-prose/example assertions were removed; behavioral helper coverage remains. Independent scenario review confirmed read-only review, saving stopped-app evidence, push-only recovery and cross-day work; its push-only wording finding was fixed. Eight existing historical-plan warnings remain. No application runtime impact or external issue closure applies.
