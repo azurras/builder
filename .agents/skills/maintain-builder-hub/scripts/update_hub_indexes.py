@@ -24,7 +24,7 @@ def item_line(index_file: Path, path: Path) -> str:
     parsed = parse_dated_file(path)
     date = parsed[0] if parsed else "project"
     title = first_heading(path)
-    status = (extract_status(read_text(path)) or "") if parsed else ""
+    status = (extract_status(read_text(path)) or "") if path.parent.name != "session-memory" else ""
     link = path.name
     suffix = f" - `{status}`" if status else ""
     return f"- {date}: [{title}]({link}){suffix}"

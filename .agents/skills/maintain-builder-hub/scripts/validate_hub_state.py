@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 from pathlib import Path
 import re
 import sys
@@ -92,8 +93,14 @@ def main() -> int:
             if path.name in SPECIAL_DOC_NAMES:
                 continue
             if directory == "docs/session-memory":
-                if not PROJECT_RE.fullmatch(path.stem):
-                    errors.append(f"{path}: memory filename must be a stable project slug")
+                parsed = parse_dated_file(path)
+                try:
+                    dt.date.fromisoformat(path.name[:10])
+                    valid = parsed and PROJECT_RE.fullmatch(path.stem[11:])
+                except ValueError:
+                    valid = False
+                if not valid:
+                    errors.append(f"{path}: memory filename must use YYYY-MM-DD-project.md")
             elif not parse_dated_file(path):
                 errors.append(f"{path}: filename must use YYYY-MM-DD-title.md")
             validate_links(path, root, errors)

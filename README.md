@@ -10,7 +10,7 @@ Builder is the workflow hub for planning, verification evidence, and project con
 | [Test reports](docs/test-reports/index.md) | Actual runtime inputs, responses, results and evidence |
 | [Project session memory](docs/session-memory/index.md) | Dated progress, decisions, reviews, blockers, repository facts, publication and closure |
 
-Each project has one stable memory file. Append to it across tasks and dates; the entry title does not create another document. Current projects are [Builder](docs/session-memory/builder.md), [christopherbell.dev](docs/session-memory/christopherbell-dev.md), and [personal-computer cleanup](docs/session-memory/personal-computer-cleanup.md).
+Session memory uses `YYYY-MM-DD-project.md`: a separate file for every date work occurred on a project. Record that day's work, requests, actions, decisions, discoveries, attempts, reviews, verification, blockers and outcomes. Append more same-day activity to the same file; create another file for a different date. Browse the [dated session records](docs/session-memory/index.md) for Builder, christopherbell.dev, and personal-computer cleanup.
 
 Historical specs, spoke updates/reviews/tasks, work/closure records and per-request memories have been combined into the corresponding project memories with source navigation, dates, provenance and relocated links. Imported status is historical, not a claim about current production. Current AGENTS.md and skills define the workflow. There is no active.md; read the latest relevant project entries for progress.
 
@@ -26,7 +26,7 @@ Repo-scoped skills live in `.agents/skills/`; shared Python helpers are in `.age
 | --- | --- |
 | `complete-builder-work` | Delivery and verified closure |
 | `plan-builder-work` | Implementation planning and read-only review/validation |
-| `save-session-memory` | Append entries to the existing project document |
+| `save-session-memory` | Record work and events in the appropriate dated project file |
 | `record-runtime-verification` | Runtime report writing and validation |
 | `coordinate-builder-work` | Actual handoffs and coordination recorded in project memory |
 | `review-spoke-work` | Independent review, with authorized findings appended to memory |

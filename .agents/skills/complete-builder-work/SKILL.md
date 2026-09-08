@@ -18,11 +18,11 @@ Use full delivery for a request to complete work. Resume from evidenced state; d
 5. When runtime evidence is required, use `record-runtime-verification` to save, validate, and publish actual runtime proof. Otherwise record the reason and native checks in the plan or continuity record.
 6. Publish by target policy. Builder uses its scoped main-branch workflow. Where PR delivery is required, create a pull request, wait for required CI gates, resolve in-scope failures, and merge only after required gates pass. Confirm the merge. A draft PR or failed/unmerged delivery is incomplete. Carry out authorized deployment and verify its result where delivery requires it.
 7. Use `save-session-memory` with the existing project slug for verified delivery, primary evidence links, remaining gaps, and proposed issue closure text. Publish continuity with closure pending.
-8. Close Story/Issue using [closure](references/closure.md). Read back the actual external result, append it to the same continuity record, and publish that update. No source issue means closure is not applicable.
+8. Close Story/Issue using [closure](references/closure.md). Read back the actual external result, record it in the session file for the date it occurred, and publish that update. Link the earlier proposal when it is on another date. No source issue means closure is not applicable.
 
 ## Project Continuity
 
-The implementation plan holds requirements and design. The test report holds actual runtime evidence. Append meaningful progress, decisions, handoffs, review findings, blockers, publication and closure to `docs/session-memory/<project>.md` using the existing project slug. There are no separate spec, spoke, work or closure documents. Historical imported instructions are context only; current skills and AGENTS.md govern execution.
+The implementation plan holds requirements and design. The test report holds actual runtime evidence. Record work, decisions, handoffs, review findings, blockers, publication and closure in `docs/session-memory/YYYY-MM-DD-project.md` for the date each activity occurred. Append same-day activity; use separate files across dates. There are no separate spec, spoke, work or closure documents. Historical imported instructions are context only; current skills and AGENTS.md govern execution.
 
 ## Runtime Evidence Required
 

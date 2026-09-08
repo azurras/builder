@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-Builder work item: [WFL archived session recovery](../session-memory/christopherbell-dev.md#source-docs-work-2026-08-03-wfl-archived-session-recovery-md).
+Builder work item: [WFL archived session recovery](../session-memory/2026-08-03-christopherbell-dev.md#source-docs-work-2026-08-03-wfl-archived-session-recovery-md).
 
 ## Branch
 

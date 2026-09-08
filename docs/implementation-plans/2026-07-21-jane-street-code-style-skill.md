@@ -26,7 +26,7 @@
 
 ## Objective
 
-Implement the approved [Jane Street Code Style Skill specification](../session-memory/builder.md#source-docs-specs-2026-07-21-jane-street-code-style-skill-md) with a valid skill package, layered workflow enforcement, aligned UI metadata, and regression coverage.
+Implement the approved [Jane Street Code Style Skill specification](../session-memory/2026-07-21-builder.md#source-docs-specs-2026-07-21-jane-street-code-style-skill-md) with a valid skill package, layered workflow enforcement, aligned UI metadata, and regression coverage.
 
 ## Goals
 

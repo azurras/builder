@@ -75,8 +75,13 @@ def prepare(root: Path, commit: str):
             mapping[(root / path).resolve()] = Destination(templates[path])
         elif p.parent.name in SOURCE_FOLDERS and p.name != "index.md" or path in {"docs/status-model.md", "docs/skill-migration.md"}:
             project = project_for(path, body)
-            sources[path] = project
-            mapping[(root / path).resolve()] = Destination(root / f"docs/session-memory/{project}.md", source_anchor(path))
+            match = re.search(r"\d{4}-\d{2}-\d{2}", p.name)
+            day = match.group() if match else git(root, "log", "-1", "--format=%as", commit, "--", path).strip()
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day):
+                raise ValueError(f"No evidenced date for source: {path}")
+            session = f"{day}-{project}"
+            sources[path] = session
+            mapping[(root / path).resolve()] = Destination(root / f"docs/session-memory/{session}.md", source_anchor(path))
     headings = {(root / path).resolve(): set(heading_ids(body).values()) for path, body in originals.items()}
     outputs = {}
     sections = {}
@@ -89,9 +94,10 @@ def prepare(root: Path, commit: str):
         output = root / f"docs/session-memory/{project}.md"
         selected = sorted((path for path, owner in sources.items() if owner == project),
                           key=lambda path: (re.search(r"\d{4}-\d{2}-\d{2}", path).group() if re.search(r"\d{4}-\d{2}-\d{2}", path) else "0000", path))
-        parts = [f"# {project} Project Memory\n\n{summaries[project]}\n\n"
+        parts = [f"# {project[:10]} - {project[11:]} Session Memory\n\n{summaries[project[11:]]}\n\n"
                  "## Reading and Updating This Record\n\n"
-                 "Append dated progress, decisions, reviews, blockers, publication and closure here. "
+                 "This file records work and events for this project on this date. Append same-day progress, decisions, reviews, blockers, publication and closure here; use a separate file for each other date. "
+                 "Sources with no date in their filename are grouped by their last recorded Git change date in the original corpus; that is archival provenance, not a claim that every described event occurred that day. "
                  "Plans and runtime reports remain separate evidence documents. "
                  "Imported instructions and statuses are historical evidence, not current operating policy; current AGENTS.md and skills take precedence. "
                  "Use the source navigation or search for an issue, date, or topic rather than loading the entire history.\n\n"

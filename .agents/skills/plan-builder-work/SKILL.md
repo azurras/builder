@@ -17,4 +17,4 @@ Every code-changing task requires `write-jane-street-style-code` and a task-spec
 
 Review and validate are read-only unless changes were requested. A planning-only request ends at its published plan; do not start implementation. Read existing content before intentional full replacement with `--overwrite`.
 
-Implementation plan artifacts must be committed and pushed before moving to the next delivery phase through the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md). Link the plan from the project's existing session memory when recording progress or completion; do not create another per-request memory file.
+Implementation plan artifacts must be committed and pushed before moving to the next delivery phase through the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md). Link the plan from `YYYY-MM-DD-project.md` for the date the planning or other work occurred. Different dates have separate session records.

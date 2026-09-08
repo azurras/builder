@@ -11,7 +11,7 @@ Record review findings for spoke repo work in the hub so quality decisions and r
 
 ## Storage Rules
 
-Append authorized review findings to `docs/session-memory/<project>.md` through `save-session-memory`. Use the existing project slug and link the reviewed plan, commit/PR and runtime report. Do not create a separate review document. Review-only scope without persistence returns findings without writing or committing.
+Append authorized review findings to `docs/session-memory/YYYY-MM-DD-project.md` for the date of the review through `save-session-memory`. Use the existing project slug and link the reviewed plan, commit/PR and runtime report. Do not create a separate review document. Review-only scope without persistence returns findings without writing or committing.
 
 ## Review Content
 

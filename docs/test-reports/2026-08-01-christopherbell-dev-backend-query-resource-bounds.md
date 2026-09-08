@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-[christopherbell.dev Performance, Scalability, and Library Optimization](../session-memory/christopherbell-dev.md#source-docs-work-2026-07-29-christopherbell-dev-performance-scalability-library-optimization-md),
+[christopherbell.dev Performance, Scalability, and Library Optimization](../session-memory/2026-07-29-christopherbell-dev.md#source-docs-work-2026-07-29-christopherbell-dev-performance-scalability-library-optimization-md),
 backend query and resource-bounds plan.
 
 ## Branch

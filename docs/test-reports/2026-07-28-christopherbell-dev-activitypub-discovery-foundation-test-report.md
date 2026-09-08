@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-Release 3 gate 1 from [Void Public Growth Program](../session-memory/christopherbell-dev.md#source-docs-specs-2026-07-28-void-public-growth-program-md), implemented by [the approved plan](../implementation-plans/2026-07-28-christopherbell-dev-activitypub-discovery-foundation.md) and shipped in [PR #1316](https://github.com/azurras/christopherbell.dev/pull/1316).
+Release 3 gate 1 from [Void Public Growth Program](../session-memory/2026-07-28-christopherbell-dev.md#source-docs-specs-2026-07-28-void-public-growth-program-md), implemented by [the approved plan](../implementation-plans/2026-07-28-christopherbell-dev-activitypub-discovery-foundation.md) and shipped in [PR #1316](https://github.com/azurras/christopherbell.dev/pull/1316).
 
 ## Branch
 

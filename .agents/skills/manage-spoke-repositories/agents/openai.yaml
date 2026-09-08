@@ -1,6 +1,6 @@
 interface:
   display_name: "Manage Spoke Repositories"
   short_description: "Inspect repositories or append project snapshots"
-  default_prompt: "Use $manage-spoke-repositories. Inspect the verified --path read-only by default. Read historical repository facts from project memory and reverify them. Explicit snapshot requires --project and appends to that memory; no registry or standalone snapshot file. Surface Git errors and preserve unrelated source state."
+  default_prompt: "Use $manage-spoke-repositories. Inspect the verified --path read-only by default. Read historical repository facts from dated project session records and reverify them. Explicit snapshot requires --project and appends to today's dated project file; no registry or standalone snapshot file. Surface Git errors and preserve unrelated source state."
 policy:
   allow_implicit_invocation: true

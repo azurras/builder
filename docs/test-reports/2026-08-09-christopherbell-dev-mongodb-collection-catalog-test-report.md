@@ -6,8 +6,8 @@ complete
 
 ## Story/Issue
 
-- Work record: [christopherbell.dev MongoDB Collection Catalog](../session-memory/christopherbell-dev.md#source-docs-work-2026-08-09-christopherbell-dev-mongodb-collection-catalog-md)
-- Specification: [MongoDB Collection Catalog](../session-memory/christopherbell-dev.md#source-docs-specs-2026-08-09-christopherbell-dev-mongodb-collection-catalog-md)
+- Work record: [christopherbell.dev MongoDB Collection Catalog](../session-memory/2026-08-09-christopherbell-dev.md#source-docs-work-2026-08-09-christopherbell-dev-mongodb-collection-catalog-md)
+- Specification: [MongoDB Collection Catalog](../session-memory/2026-08-09-christopherbell-dev.md#source-docs-specs-2026-08-09-christopherbell-dev-mongodb-collection-catalog-md)
 - Implementation plan: [MongoDB Collection Catalog](../implementation-plans/2026-08-09-christopherbell-dev-mongodb-collection-catalog.md)
 - Source request: reduce MongoDB operational overhead safely for the website without compromising correctness or mutating live data.
 

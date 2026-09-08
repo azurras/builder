@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append a dated entry to one stable project memory file."""
+"""Append work and events to the dated session record for a project."""
 import argparse
 from pathlib import Path
 import sys

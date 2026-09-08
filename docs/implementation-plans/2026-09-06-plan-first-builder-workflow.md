@@ -71,4 +71,4 @@ New default documented consistently, optional-folder cases pass, unnecessary fol
 
 ## Completion Evidence
 
-Published implementation `d5bd048` after plan checkpoint `c0ad2e5`. All 56 tests passed, all 11 skills and metadata validated, hub refresh/check passed with eight unchanged historical plan warnings, and independent review found no blockers. Only the empty decisions index was deleted; all historical records remain. See [session continuity](../session-memory/builder.md#source-docs-session-memory-2026-09-06-plan-first-builder-workflow-md).
+Published implementation `d5bd048` after plan checkpoint `c0ad2e5`. All 56 tests passed, all 11 skills and metadata validated, hub refresh/check passed with eight unchanged historical plan warnings, and independent review found no blockers. Only the empty decisions index was deleted; all historical records remain. See [session continuity](../session-memory/2026-09-06-builder.md#source-docs-session-memory-2026-09-06-plan-first-builder-workflow-md).

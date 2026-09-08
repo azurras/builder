@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-[WFL rating-weighted Void upgrade work record](../session-memory/christopherbell-dev.md#source-docs-work-2026-08-02-christopherbell-dev-wfl-rating-weighted-void-upgrade-md)
+[WFL rating-weighted Void upgrade work record](../session-memory/2026-08-02-christopherbell-dev.md#source-docs-work-2026-08-02-christopherbell-dev-wfl-rating-weighted-void-upgrade-md)
 
 ## Branch
 

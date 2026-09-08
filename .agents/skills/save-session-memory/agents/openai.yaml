@@ -1,4 +1,4 @@
 interface:
   display_name: "Save Session Memory"
-  short_description: "Append progress to stable project memory"
-  default_prompt: "Use $save-session-memory. Append to the existing project file using required --project; dates and titles label entries. Preserve prior entries and link primary plan/report evidence. Record progress, reviews, decisions, repository context and closure in that file. Finalize authorized updates and publish continuity before external closure."
+  short_description: "Record work in separate dated session files"
+  default_prompt: "Use $save-session-memory. Write YYYY-MM-DD-project.md using --project and the actual work --date (default today). Append same-day events; different dates require separate files. Record the work, requests, actions, discoveries, decisions, attempts, reviews, verification, blockers and outcomes. Preserve history and publish authorized continuity updates."

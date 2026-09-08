@@ -6,7 +6,7 @@ complete
 
 ## Story/Issue
 
-[christopherbell.dev PostgreSQL Migration](../session-memory/christopherbell-dev.md#source-docs-work-2026-08-13-christopherbell-dev-postgresql-migration-md), Task 8 shadow rehearsal and PostgreSQL-only candidate acceptance.
+[christopherbell.dev PostgreSQL Migration](../session-memory/2026-08-13-christopherbell-dev.md#source-docs-work-2026-08-13-christopherbell-dev-postgresql-migration-md), Task 8 shadow rehearsal and PostgreSQL-only candidate acceptance.
 
 ## Branch
 

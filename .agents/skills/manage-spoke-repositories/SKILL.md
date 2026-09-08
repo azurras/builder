@@ -15,4 +15,4 @@ python .agents/skills/manage-spoke-repositories/scripts/manage_spoke_repositorie
 
 Use the path established for this task. Omitting the mode also inspects. Git failures produce explicit errors and nonzero status, never a clean result. Inspection does not fetch, modify the source repo, append memory, or authorize deployment.
 
-For an authorized persistent snapshot, use `snapshot --path <verified-path> --root . --project <existing-project>`. It appends dated evidence to that project's session memory. Repeating the same most-recent snapshot leaves memory unchanged; errors are recorded honestly and still fail the command. Use the phase finalizer for changed memory, without a separate state file or extra summary entry.
+For an authorized persistent snapshot, use `snapshot --path <verified-path> --root . --project <existing-project>`. It appends evidence to today's `YYYY-MM-DD-project.md`. Repeating today's most-recent snapshot leaves memory unchanged; a new day has its own record. Errors are recorded honestly and still fail the command. Use the phase finalizer for changed memory, without a separate state file or extra summary entry.

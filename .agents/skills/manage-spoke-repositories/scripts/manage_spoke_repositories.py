@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Inspect a repository or append its snapshot to project memory."""
 import argparse
+import datetime as dt
 import hashlib
 from pathlib import Path
 import re
@@ -18,8 +19,9 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     parser.add_argument("--project", help="Required for snapshot persistence")
     args = parser.parse_args()
+    day = dt.date.today().isoformat()
     try:
-        target = project_path(Path(args.root), args.project or "") if args.mode == "snapshot" else None
+        target = project_path(Path(args.root), args.project or "", day) if args.mode == "snapshot" else None
         content, failed = inspect_repository(Path(args.path))
         print(content, end="")
         if target:
@@ -28,7 +30,7 @@ def main() -> int:
             snapshots = re.findall(r"<!-- git-snapshot: ([a-f0-9]+) -->", previous)
             if not snapshots or snapshots[-1] != digest:
                 append_entry(Path(args.root), args.project, "Repository inspection",
-                             f"<!-- git-snapshot: {digest} -->\n" + content)
+                             f"<!-- git-snapshot: {digest} -->\n" + content, date=day)
             print(target)
         return 1 if failed else 0
     except (ValueError, OSError) as exc:

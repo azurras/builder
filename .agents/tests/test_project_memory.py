@@ -14,25 +14,28 @@ def run(*args, body="Evidence."):
 
 
 class ProjectMemoryTests(unittest.TestCase):
-    def test_dates_and_titles_append_to_same_project_without_rewriting(self):
+    def test_same_day_appends_and_different_dates_have_separate_files(self):
         with tempfile.TemporaryDirectory() as temp:
             first = run("--root", temp, "--project", "sample", "--title", "Start",
                         "--date", "2099-01-01", body="First evidence.")
             self.assertEqual(first.returncode, 0, first.stderr)
-            path = Path(temp) / "docs/session-memory/sample.md"
+            path = Path(temp) / "docs/session-memory/2099-01-01-sample.md"
             before = path.read_bytes()
             second = run("--root", temp, "--project", "sample", "--title", "Finish",
-                         "--date", "2099-02-01", body="Final evidence.")
+                         "--date", "2099-01-01", body="Final evidence.")
             self.assertEqual(second.returncode, 0, second.stderr)
             self.assertTrue(path.read_bytes().startswith(before))
             text = path.read_text(encoding="utf-8")
             self.assertIn("2099-01-01", text)
-            self.assertIn("2099-02-01", text)
             self.assertIn("First evidence.", text)
             self.assertIn("Final evidence.", text)
             self.assertEqual(len(list(path.parent.glob("*.md"))), 1)
+            self.assertEqual(run("--root", temp, "--project", "sample", "--title", "Next day",
+                                 "--date", "2099-02-01", body="Next day evidence.").returncode, 0)
+            self.assertNotIn("Next day evidence.", path.read_text())
+            self.assertIn("Next day evidence.", (path.parent / "2099-02-01-sample.md").read_text())
             self.assertEqual(run("--root", temp, "--project", "other", "--title", "Start").returncode, 0)
-            self.assertEqual(len(list(path.parent.glob("*.md"))), 2)
+            self.assertEqual(len(list(path.parent.glob("*.md"))), 3)
 
     def test_invalid_or_missing_project_and_empty_body_do_not_write(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -40,6 +43,8 @@ class ProjectMemoryTests(unittest.TestCase):
                 self.assertNotEqual(run("--root", temp, "--project", project, "--title", "Entry").returncode, 0)
             self.assertNotEqual(run("--root", temp, "--title", "Entry").returncode, 0)
             self.assertNotEqual(run("--root", temp, "--project", "sample", "--title", "Entry", body=" ").returncode, 0)
+            self.assertNotEqual(run("--root", temp, "--project", "sample", "--title", "Entry",
+                                    "--date", "2099-02-30").returncode, 0)
             self.assertFalse((Path(temp) / "docs").exists())
 
 
@@ -68,7 +73,7 @@ class MigrationTransformTests(unittest.TestCase):
             result = subprocess.run(command + ["--apply"], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertFalse((root / "docs/templates").exists())
-            self.assertIn("Preserve me.", (root / "docs/session-memory/builder.md").read_text())
+            self.assertIn("Preserve me.", (root / "docs/session-memory/2026-07-04-builder.md").read_text())
             for skill, source in (("plan-builder-work", "implementation-plan"),
                                   ("record-runtime-verification", "test-report")):
                 self.assertEqual((root / f".agents/skills/{skill}/references/example.md").read_text(),

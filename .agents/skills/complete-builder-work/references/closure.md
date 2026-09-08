@@ -29,7 +29,7 @@ Before closing or posting a final issue update, verify and include:
 
 ## Perform and Verify Closure
 
-Use the existing user authorization for the issue update. Record the exact proposed text in the continuity record first, then post the authorized update/closure and read back the issue state. Append the actual result and source link to that same continuity record; run the phase finalizer and publish the result. A failed issue update is not a successful closure. If there is no source issue, record closure as not applicable and do not create an issue solely to close it.
+Use the existing user authorization for the issue update. Record the exact proposed text in the dated session record first, then post the authorized update/closure and read back the issue state. Record the actual result and source link in the file for the date it occurs; run the phase finalizer and publish the result. A failed issue update is not a successful closure. If there is no source issue, record closure as not applicable and do not create an issue solely to close it.
 
 ## Output Shape
 

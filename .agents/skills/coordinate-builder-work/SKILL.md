@@ -5,7 +5,7 @@ description: Coordinate project work and actual agent handoffs, recording progre
 
 # Coordinate Builder Work
 
-Read the implementation plan and the project's latest relevant session-memory entries. Use the same project document for work intake, actual dispatch briefs, returned updates, blockers, decisions, and completion. Do not create separate work, spoke-task, update, or closure artifacts, or invent delegation for same-agent work.
+Read the implementation plan and the project's latest relevant dated session records. Record work intake, actual dispatch briefs, returned updates, blockers, decisions, and completion in `YYYY-MM-DD-project.md` for the date each occurred. Do not create separate work, spoke-task, update, or closure artifacts, or invent delegation for same-agent work.
 
 For start/update entries, record objective, status, owner, repository, plan link, evidence, blockers, and next action. Use plain statuses such as active, blocked, complete, or cancelled; historical statuses are evidence of their time.
 
@@ -13,4 +13,4 @@ For actual handoffs, include target repo/path and branch policy, objective, scop
 
 Record returned updates with their provenance and links. Record completion with final publication, applicable verification, unresolved gaps and next ownership. Blocked or parked work is not complete. External issue closure still uses `complete-builder-work` and verified readback.
 
-Persist with `save-session-memory` using the existing `--project` slug. Multiple meaningful updates append to the same document. Use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) once at the authorized phase boundary, without a second memory record summarizing the first.
+Persist with `save-session-memory` using the existing `--project` slug and actual work `--date`. Same-day updates append to that day's document; a different date gets a separate file. Use the [phase finalizer](../maintain-builder-hub/references/phase-finalization.md) once at the authorized phase boundary, without a second memory record summarizing the first.

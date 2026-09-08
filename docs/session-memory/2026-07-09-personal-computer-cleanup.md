@@ -1,10 +1,10 @@
-# personal-computer-cleanup Project Memory
+# 2026-07-09 - personal-computer-cleanup Session Memory
 
 Personal computer cleanup requirements and planning history. The imported record does not establish that cleanup was executed.
 
 ## Reading and Updating This Record
 
-Append dated progress, decisions, reviews, blockers, publication and closure here. Plans and runtime reports remain separate evidence documents. Imported instructions and statuses are historical evidence, not current operating policy; current AGENTS.md and skills take precedence. Use the source navigation or search for an issue, date, or topic rather than loading the entire history.
+This file records work and events for this project on this date. Append same-day progress, decisions, reviews, blockers, publication and closure here; use a separate file for each other date. Sources with no date in their filename are grouped by their last recorded Git change date in the original corpus; that is archival provenance, not a claim that every described event occurred that day. Plans and runtime reports remain separate evidence documents. Imported instructions and statuses are historical evidence, not current operating policy; current AGENTS.md and skills take precedence. Use the source navigation or search for an issue, date, or topic rather than loading the entire history.
 
 ## Imported Source Navigation
 
