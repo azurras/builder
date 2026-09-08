@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 Reconfigure Builder around implementation plans, test reports, and dated session memory; consolidate existing records without losing history or evidence links.
@@ -21,6 +21,8 @@ Boundary/API: --project plus --date (default local date) determines filename; --
 Effects and failures: Verify replacement files and all source coverage before deleting the three mistaken aggregate files; reject invalid dates before writing. Preserve historical instructions as evidence, while current guidance uses dated files.
 Tests and evidence: Existing tests currently encode the rejected behavior. Replace them with same-day append, different-day separation, invalid-date rejection and dated migration coverage. Run regression suite, full source audit, link checks and hub validation.
 Verification: All 267 imported bodies and post-migration entries accounted for; no undated memory files remain; publish correction and save this work in the actual day's session memory.
+
+Correction completed September 8 and published as `6aa5edd`: the 267 imported documents and later entry are preserved across 31 dated records before today's closeout. All 56 tests passed, including same-day append, different-date separation, invalid dates and rejection of undated files. Full source audit and all 525 fragment links passed. Review's cross-midnight wording findings were corrected. September 7 work is recorded in its dated file; September 8 publication and final checks are recorded separately. This dated-file correction supersedes the original permanent-file design below.
 
 ## Goals
 Replace per-request memory and parallel spoke/work/spec/closure records with corresponding project memory documents. Remove active.md and obsolete document folders. Keep implementation plans and test reports independently reviewable. Update tools, instructions, metadata, and tests so old structures are not recreated.
