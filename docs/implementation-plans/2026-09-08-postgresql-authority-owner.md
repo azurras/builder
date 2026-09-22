@@ -57,21 +57,21 @@ Required skill: write-jane-street-style-code.
 ### Task 3 - Preserve safe snapshot failure classification
 Required skill: write-jane-street-style-code.
 - Dependencies: Task 2 cutover attempts repeatedly exited from the Java source-snapshot stage without exposing a cause; frozen snapshot diagnostics then passed.
-- Files: `website/src/main/java/dev/christopherbell/configuration/persistence/migration/PostgresqlMigrationSourceSnapshotCli.java`.
-- Symbols: `execute` failure handling.
-- Inspection: merged `c1468096` source-snapshot CLI catches runtime and I/O failures and emits only a generic message; production cutover reports `java.exe exited with code 2`; read-only execution of the same snapshot succeeds for all 52 kinds after rollback and during a frozen, archived-source diagnostic.
-- Behavior: retain exit code 2 while reporting the thrown exception class and cause classes to stderr, so operators can distinguish database, Mongo, and input failures.
-- Invariants: never print exception messages, stack traces, URIs, credentials, or source records; do not alter snapshot semantics or production data.
-- Boundary/API: additive stderr diagnostics only; stdout evidence and process exit contract remain unchanged.
-- Effects and failures: no database writes; stderr reveals only class names, with generic message retained.
-- Tests and evidence: the user explicitly requested no new regression tests; compile the changed source and rely on required CI plus guarded production outcome.
-- Verification: run `:website:classes`, review the exact diff for secret-safe output, then wait for required CI before merge and cutover retry.
+- Files: `website/src/main/java/dev/christopherbell/configuration/persistence/migration/PostgresqlMigrationSourceSnapshotCli.java`; `ops/production/windows/modules/Production.Common.psm1`; `ops/production/windows/modules/Production.PostgreSqlMigration.psm1`; existing `PostgresqlMigrationSourceSnapshotCliTest.java` contract assertion.
+- Symbols: `execute` failure handling; `Invoke-CheckedProcess`; `$script:DefaultProcessAction`.
+- Inspection: merged `0b1531e2` CLI writes only exception and cause class names to stderr; `Invoke-CheckedProcess` captures then discards stderr; production cutover reports only `java.exe exited with code 2`; the same read-only snapshot succeeds after rollback and during the frozen, archived-source diagnostic.
+- Behavior: retain exit code 2 and stdout evidence while forwarding allowlisted class-name lines to the cutover error report only when invoking the source-snapshot CLI.
+- Invariants: never print exception messages, stack traces, URIs, credentials, or source records; do not forward arbitrary stderr; do not alter snapshot semantics or production data.
+- Boundary/API: an opt-in safe-diagnostic switch on the checked process helper; enabled only for the snapshot CLI. The existing contract test's expected stderr is updated without adding a test.
+- Effects and failures: no database writes; report includes only strict class-name lines and the existing generic process failure.
+- Tests and evidence: the user explicitly requested no new regression tests or local test runs; compile the changed Java source, retain the existing assertion update, and rely on required CI plus guarded production outcome.
+- Verification: run `:website:classes`, review the allowlist and call-site scope, then wait for required CI before merge and cutover retry.
 
 ## Code Changes
-Separate explicit trusted ownership from ordinary user ownership, reusing the established trusted write-principal set. Do not change ACL creation or relax cryptographic evidence verification. Preserve only exception class metadata when the read-only Java source snapshot fails; do not print exception messages or sensitive data.
+Separate explicit trusted ownership from ordinary user ownership, reusing the established trusted write-principal set. Do not change ACL creation or relax cryptographic evidence verification. Preserve and forward only allowlisted exception class metadata when the read-only Java source snapshot fails; do not print exception messages or sensitive data.
 
 ## Files and Modules
-Task 1 owns the Java loader and migration runbook. Task 2 reuses existing operational modules. Task 3 owns the Java snapshot CLI error boundary; do not add regression tests per the user's explicit instruction.
+Task 1 owns the Java loader and migration runbook. Task 2 reuses existing operational modules. Task 3 owns the Java snapshot CLI error boundary and its narrow PowerShell stderr bridge; update only the existing contract assertion and add no regression test.
 
 ## Unit Testing
 Run `:website:test --tests '*FinalizeEvidenceLoaderTest'` first, then migration-focused tests. These policy/file tests require no database. Database-backed tests, if needed, must target only database `test` with an isolated role.
