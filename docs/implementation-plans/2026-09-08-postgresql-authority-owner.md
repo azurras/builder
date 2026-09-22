@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 Resolve the proven Windows authority-file ownership mismatch and resume the approved migration without weakening protected ACLs.
@@ -67,11 +67,36 @@ Required skill: write-jane-street-style-code.
 - Tests and evidence: the user explicitly requested no new regression tests or local test runs; compile the changed Java source, retain the existing assertion update, and rely on required CI plus guarded production outcome.
 - Verification: run `:website:classes`, review the allowlist and call-site scope, then wait for required CI before merge and cutover retry.
 
+### Task 4 - Run schema bootstrap from a current origin/main release
+Required skill: write-jane-street-style-code.
+- Dependencies: Task 3 merged as `b532cb06`; bootstrap retry on September 22 failed with Java exit code 1. Production current resolves to release `e073823d14ffed0b4c113707d16c0ad0cfe1b7fa`, which predates `ProductionPostgresqlSchemaMigrator`; read-only database inventory confirms Flyway and migration ledger tables are absent.
+- Files: `ops/production/windows/modules/Production.PostgreSql.psm1`; existing PostgreSQL orchestration assertions only.
+- Symbols: `Invoke-ProductionPostgreSqlSchemaMigrationCore`, `Resolve-OriginMainRelease`, `New-ReleaseFromOriginMain`.
+- Inspection: `Production.PostgreSql.psm1` runs the schema migrator from the `current` junction. `Production.Deploy.psm1` exports helpers that fetch `origin/main` and build an exact-SHA release; `prod.ps1` imports `Production.Deploy` before the PostgreSQL module. Production cutover preflight uses the same release helpers. Current refreshed main is `b532cb06`.
+- Behavior: bootstrap runs `ProductionPostgresqlSchemaMigrator` from a verified release built at the fetched `origin/main` SHA, never from the potentially stale active website release.
+- Invariants: do not change the live `current` junction or website process to bootstrap schemas; preserve protected credentials and safe failure reporting; build only the exact fetched SHA under the fixed ProgramData release boundary.
+- Boundary/API: reuse existing exported deployment functions; retain the existing process action contract and Java migrator main class.
+- Effects and failures: fetch/build may create an immutable release and worktree; database migration remains the only database mutation. Abort before database invocation if fetch/build/release validation fails.
+- Tests and evidence: user explicitly requested no new regression tests and no local test runs. Update existing contract assertions only if required; rely on required CI, PowerShell parser, diff review, then supported production bootstrap and schema readback.
+- Verification: parse changed PowerShell, run `git diff --check`, inspect the exact fetched-release flow, pass required CI and merge, invoke supported `postgres-bootstrap`, and read back Flyway/migration-ledger versions while confirming website current SHA remains unchanged.
+
+### Task 5 - Resume the approved guarded cutover
+- Dependencies: Tasks 3-4 merged; schema bootstrap completed and version/table readback confirmed; previous journal remains terminal pre-authority rollback with Mongo authoritative.
+- Files: existing `ops/production/windows/prod.ps1` supported command; dated Builder runtime report and session memory.
+- Symbols: `postgres-cutover`, source snapshot, journal and authority publication.
+- Inspection: production approval remains valid for up to 30 minutes downtime; prior attempts rolled back before authority and Mongo remains the source of truth.
+- Behavior: retry the supported PostgreSQL cutover only after the fresh migrator bootstrap succeeds and readback confirms expected schema state.
+- Invariants: preserve prior journals/evidence; do not alter production ACLs or disclose credentials; keep automation paused until ordinary PostgreSQL-aware deploy and restore proof are established; after authority publication only recover forward.
+- Boundary/API: supported Windows `prod.ps1` command with explicit confirmation switch and pinned merged main release.
+- Effects and failures: authorized production data movement and up to 30 minutes downtime; preserve rollback semantics before authority; stop on failed preflight or evidence.
+- Tests and evidence: actual protected source snapshot and target schema readback; service, listener, endpoint and journal evidence. No new regression tests or local test runs.
+- Verification: complete authorized cutover, confirm authority and application readiness, and save actual runtime evidence before any completion claim; migration remains open until soak, backup/restore, Mongo retirement, and ordinary deploy support are complete.
+
 ## Code Changes
-Separate explicit trusted ownership from ordinary user ownership, reusing the established trusted write-principal set. Do not change ACL creation or relax cryptographic evidence verification. Preserve and forward only allowlisted exception class metadata and SQLSTATE when migration or schema-migrator Java entry points fail; do not print exception messages or sensitive data. The finalize failure category is `42P01`, and schema bootstrap currently exits 1 without creating migration tables; expose its safe cause metadata before retrying bootstrap.
+Separate explicit trusted ownership from ordinary user ownership, reusing the established trusted write-principal set. Do not change ACL creation or relax cryptographic evidence verification. Preserve and forward only allowlisted exception class metadata and SQLSTATE when migration or schema-migrator Java entry points fail; do not print exception messages or sensitive data. The finalize failure category is `42P01`. Bootstrap failed because it ran a migrator absent from the stale active release; run it from a freshly resolved immutable origin/main release instead.
 
 ## Files and Modules
-Task 1 owns the Java loader and migration runbook. Task 2 reuses existing operational modules. Task 3 owns both Java migration CLI boundaries, the production schema migrator boundary, and their narrow PowerShell stderr bridge; update only existing contract assertions and add no regression test.
+Task 1 owns the Java loader and migration runbook. Task 2 reuses existing operational modules. Task 3 owns both Java migration CLI boundaries, the production schema migrator boundary, and their narrow PowerShell stderr bridge. Task 4 changes only the existing schema bootstrap release selection; update only existing assertions if required and add no regression tests. Task 5 is guarded production execution and truthful evidence capture.
 
 ## Unit Testing
 Run `:website:test --tests '*FinalizeEvidenceLoaderTest'` first, then migration-focused tests. These policy/file tests require no database. Database-backed tests, if needed, must target only database `test` with an isolated role.
