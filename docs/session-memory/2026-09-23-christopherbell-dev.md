@@ -41,3 +41,9 @@ The user requested a broad site bug audit and fixes, with authorization for nece
 
 ## Production readback update
 At 2026-09-23 22:23 UTC, a fresh public homepage request still returned HTTP 200, `ChristopherBellDev`, MongoDB, and cloudflared remained Running/Automatic, and port 8080 remained PID 14424. The public WFL freshness API still returned `lastRefreshedOn=2026-08-02T22:44:50.963Z` with `current=false`. No evidence of cutover is available from the current unprivileged token. Earlier `RunAs` dry-run launch remained rejected by platform policy; the user had already authorized deployment. Keep the plan and goal active until an elevated deployment/readback or a user-provided environment change resolves this external blocker.
+
+
+## 2026-09-23 17:26 Central Daylight Time - Related scheduler audit and live readback
+
+## Related scheduler audit update
+A source scan of `@Scheduled` and `ApplicationReadyEvent` code in the site found no second durable monthly/cron importer using the same last-completed-month startup check. Other listed recurring jobs use fixed-delay scheduling or have different startup-maintenance responsibilities; no additional confirmed instance of the WFL defect was found. At 2026-09-23 22:24:52 UTC, public homepage still returned HTTP 200, core services were Running/Automatic, port 8080 was still PID 14424, and public WFL freshness remained `2026-08-02T22:44:50.963Z` (`current=false`). `prod.cmd auto-status` again returned Access Denied for protected `deploy.json`. The goal remains active pending production deployment access and readback.
