@@ -35,3 +35,9 @@ The user requested a broad site bug audit and fixes, with authorization for nece
 ## Builder plan and remaining work
 - The in-progress plan is `docs/implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md`; updated with test, CI, merge, and production-blocker evidence; quality validator passed.
 - Remaining: verify post-merge release SHA, production liveness/readiness and representative routes, WFL freshness/import recovery and recurrence window; finish dated session entry after actual outcome; refresh Builder indexes, validate hub, and publish closeout. Do not mark the goal complete until production acceptance and closeout are complete.
+
+
+## 2026-09-23 17:23 Central Daylight Time - Production readback remains unchanged
+
+## Production readback update
+At 2026-09-23 22:23 UTC, a fresh public homepage request still returned HTTP 200, `ChristopherBellDev`, MongoDB, and cloudflared remained Running/Automatic, and port 8080 remained PID 14424. The public WFL freshness API still returned `lastRefreshedOn=2026-08-02T22:44:50.963Z` with `current=false`. No evidence of cutover is available from the current unprivileged token. Earlier `RunAs` dry-run launch remained rejected by platform policy; the user had already authorized deployment. Keep the plan and goal active until an elevated deployment/readback or a user-provided environment change resolves this external blocker.
