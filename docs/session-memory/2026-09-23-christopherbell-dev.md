@@ -47,3 +47,25 @@ At 2026-09-23 22:23 UTC, a fresh public homepage request still returned HTTP 200
 
 ## Related scheduler audit update
 A source scan of `@Scheduled` and `ApplicationReadyEvent` code in the site found no second durable monthly/cron importer using the same last-completed-month startup check. Other listed recurring jobs use fixed-delay scheduling or have different startup-maintenance responsibilities; no additional confirmed instance of the WFL defect was found. At 2026-09-23 22:24:52 UTC, public homepage still returned HTTP 200, core services were Running/Automatic, port 8080 was still PID 14424, and public WFL freshness remained `2026-08-02T22:44:50.963Z` (`current=false`). `prod.cmd auto-status` again returned Access Denied for protected `deploy.json`. The goal remains active pending production deployment access and readback.
+
+
+## 2026-09-23 18:16 - Cane weekly recovery and merged fix
+
+## Request and authority
+Continued the user's authorized broad site bug audit and fixes. Kept work in the isolated spoke worktree and preserved the dirty authoritative checkout.
+
+## Second confirmed defect and fix
+- Production Cane's history had no weekly snapshots for 2026-09-14 or 2026-09-21; its latest snapshot was 2026-09-07 with 50/50 successful metros. The exact cause remains unconfirmed.
+- Added startup catch-up for overdue weekly collection in `CanesBoxTrackerService`, using the existing collector lease, schedule cron/time zone and metro snapshot history. Added coverage for overdue runs, no-history first collection, next-run timing, duplicate suppression, partial manual snapshots, duplicate metro rows, disabled/deploy-smoke modes, and failure containment. Updated the feature README.
+- Regression tests reproduced three gaps before implementation (missed startup catch-up, duplicate metro rows incorrectly appearing complete, and startup catch-up exception escaping readiness); fixes pass afterward. Focused `CanesBoxTrackerServiceTest` and full `:website:check` passed.
+- Packaged candidate ran on port 8082 with `test,deploy-smoke` and isolated disposable PostgreSQL 18 `test` DB at 5433. Liveness, readiness, homepage, Cane's page/history API, WFL ranking and freshness API all returned HTTP 200. Candidate and cluster were stopped. Runtime evidence is in `docs/test-reports/2026-09-23-2026-09-23-christopherbell-dev-cane-weekly-catch-up-runtime-verification.md` (Builder commit `e4bf356`).
+
+## Review and merge
+- Committed `586ec6c1` on `codex/site-bug-audit-round2-20260923`; opened and attached [PR #1399](https://github.com/azurras/christopherbell.dev/pull/1399).
+- Dependency review, CodeQL, Java and JavaScript analysis, and macOS, Ubuntu and Windows PR builds passed. Squash merge SHA: `5f89e5c286e9c96b1d45dcfbd88bc036cc39c34c` at 2026-09-23 23:06:42 UTC. Post-merge CI Build passed on Windows (9m03s), macOS (4m08s), and Ubuntu (3m44s). PR artifact is attached to the task.
+- Additional source scan of `@Scheduled` jobs did not identify another confirmed missed-run defect of this type.
+
+## Production status and outstanding blocker
+- No automatic deploy workflow is configured; merge does not publish to the production host. At approximately 2026-09-23 23:16 CDT, public Cane's history still showed only nine weeks through 2026-09-07; WFL freshness still read `2026-08-02T22:44:50.963Z`, `current=false`; production port 8080 still belonged to PID 14424.
+- The deployment remains unverified because the current Windows shell cannot read protected deployment state or start the SYSTEM scheduled task. A prior `RunAs` elevation request for a non-mutating dry run was rejected by platform policy. Do not weaken ACLs or bypass the supported deployment procedure.
+- Updated implementation plan `docs/implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md` with both merged fixes, CI and runtime evidence, and the deployment limitation. The plan remains in progress pending an authorized elevated deployment and production acceptance.
