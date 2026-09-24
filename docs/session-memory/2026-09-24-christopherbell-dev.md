@@ -140,3 +140,8 @@ Continued the authorized christopherbell.dev deployer robustness work while resp
 - PR #1420 passed dependency review, CodeQL, and CI on Windows, macOS, and Ubuntu; it merged as `76bd6ad450c306ee7aa22db84df9c93e242821fd`. Post-merge CI Build passed on all three platforms and CodeQL passed.
 - No elevated auto-install, live scheduled-task update, or production mutation was performed. The lock owner's identity remains unconfirmed; the repeating scheduled poller is a plausible source of transient contention, not a verified cause. The new bounded wait addresses that transient condition without deleting or bypassing the lock.
 - Updated implementation plan Task 21 with its post-merge checks and Task 22 with verification, merge, and post-merge evidence. The broader site-audit goal remains active; production acceptance still requires the approved elevated bootstrap when the user is available.
+
+
+## 2026-09-24 07:42 Central Daylight Time - Plan PostgreSQL service status query fix
+
+Performed a read-only scan of current christopherbell.dev production modules after merging Task 22. Source review found that `Get-ProductionPostgreSqlStatus` runs its bounded PostgreSQL identity/settings probe, then suppresses all errors from the PostgreSQL Windows service query and can return `Service='NotInstalled'` despite an inspection failure. Added Task 23 to the existing implementation plan with the native missing-service exception boundary, failure behavior, focused regression, and both-shell verification requirements. No production command or service query against live production was run.
