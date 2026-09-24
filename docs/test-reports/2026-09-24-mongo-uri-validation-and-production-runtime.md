@@ -39,6 +39,7 @@ The source regression tests cover missing and empty URI database paths and accep
 - Candidate readiness response: HTTP status 200; body `{"status":"UP"}`.
 - Candidate homepage response: HTTP status 200; 3,981 bytes, title `CB | Home`.
 - Candidate startup log: Spring Boot reported startup complete and MongoDB driver connected to `127.0.0.1:27019`.
+- Merge-triggered CI follow-up at 2026-09-24 23:38:47 UTC: run `36072990717` completed successfully on Windows, macOS, and Ubuntu; merge-triggered CodeQL run `36072990575` also passed.
 - Production `prod.cmd auto-status` at 2026-09-24 23:30:53 UTC: `status=SERVICE_UNHEALTHY`, `serviceState=STOPPED`, `siteHealth=UNHEALTHY`, `deploymentStatus=DEPLOYMENT_FAILED`, `remoteSha=fb10948cc4d0b3b2d5f739789b8a810713456301`, `activeSha=4b552a63a08c9333bdaa0d7827b23eb811920f37`, `attemptedSha=failedSha=fb10948cc4d0b3b2d5f739789b8a810713456301`, `toolRefreshStatus=SUCCEEDED`, and `failureCategory=DEPLOYMENT`. The sanitized poller query remained `UNKNOWN/ACCESS_DENIED`.
 - Public production readiness response: HTTP status 502 Bad Gateway.
 

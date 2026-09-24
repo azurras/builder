@@ -454,3 +454,17 @@ Focused initializer regressions and `:website:check` passed. For runtime proof, 
 After merge, the SYSTEM poller refreshed tools to `fb10948`, attempted the new main SHA, and recorded `DEPLOYMENT_FAILED`/`SERVICE_STOPPED`. Read-only `prod.cmd auto-status` reports `SERVICE_UNHEALTHY`, active SHA `4b552a63a08c9333bdaa0d7827b23eb811920f37`, failed/attempted SHA `fb10948cc4d0b3b2d5f739789b8a810713456301`, and sanitized poller status `UNKNOWN/ACCESS_DENIED`. Public readiness remains HTTP 502. Merge-triggered CI run 36072990717 was still in progress at this entry time.
 
 The guarded Task 41 recovery script remains prepared and has not run. This task runner rejected a fresh elevated launch before Windows displayed UAC; no protected production configuration, marker, ACL, Mongo data, service, or listener was changed. The user's approval for the guarded repair is already on record; do not bypass the runner restriction. Resume by executing the prepared script through an authorized elevated Windows prompt, then inspect its result and verify local/public readiness, service state, active SHA, and restored recovery policy. Keep Task 41 and the site bug audit open until production acceptance is actually observed.
+
+
+## 2026-09-24 18:39 - Merge CI completed
+
+## 2026-09-24 18:39 Central Daylight Time - merge-triggered CI completed
+
+Follow-up to the 18:34 delivery entry: merge-triggered CI run 36072990717 completed successfully on Windows, macOS, and Ubuntu at 23:38:47 UTC; CodeQL run 36072990575 passed. Updated the Task 40 plan evidence and runtime report. This clears source CI but does not change the production result: `ChristopherBellDev` is stopped, deployer status is `DEPLOYMENT_FAILED`/`SERVICE_STOPPED`, and public readiness remains HTTP 502. Task 41 and the broader site audit remain open until guarded production recovery and live acceptance complete.
+
+
+## 2026-09-24 18:40 - Post-merge checks and report update
+
+## 2026-09-24 18:40 Central Daylight Time - post-merge gates passed and report updated
+
+Merge-triggered CI run 36072990717 completed successfully on Windows, macOS, and Ubuntu at 23:38:47 UTC; merge-triggered CodeQL run 36072990575 passed. Updated Task 40's plan verification and runtime report to include these final checks. The runtime report and plan/memory/index checkpoint were published to Builder `main` as commit `72dc3b29d7ac4dc932efeb516543e8b5e172d554`; follow-up evidence is being checkpointed now. Production is still known unhealthy from the 23:30 UTC read-only observation: `ChristopherBellDev` stopped, deployment failed for the new main SHA, and public readiness returned HTTP 502. Guarded elevated recovery and production acceptance remain outstanding.
