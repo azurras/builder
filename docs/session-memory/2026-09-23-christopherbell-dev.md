@@ -96,3 +96,8 @@ User narrowed the ongoing site-bug goal to deployer robustness and observability
 - Merge-triggered CodeQL and CI Build passed for `9d4929af94a7be916365552fad84d67bb56c4590`; Ubuntu, macOS, and Windows builds/tests all passed. The Windows job took 8m14s.
 - Without opening an elevation prompt, standard-user `prod.cmd auto-status` still returned `STORE_NOT_INITIALIZED`. Public homepage and readiness returned HTTP 200 (`UP`). WFL freshness returned HTTP 200 with `current=false` and the unchanged `2026-08-02T22:44:50.963Z` timestamp. Cane's history returned HTTP 200 with nine snapshots through 2026-09-07; latest collection was 50/50 successful metros at `2026-09-07T11:00:16.849Z`.
 - The live poller has not activated the merged deployer, and the stale data remains. The user is away and previously asked not to trigger prompts while away; the one-time elevated `prod.cmd auto-install` remains the next deployment action. No production acceptance is claimed.
+
+## 2026-09-23 23:46 Central Daylight Time - Verify prerequisite deployer PRs
+
+- Read back PR #1403 as merged to `bcb883b89813ad20fb977e1ff89572464381717a` and PR #1404 as merged to `9a9e39b28517436ca9beb361bd9c959a48baa067`; required dependency-review, CodeQL, language-analysis, and macOS/Ubuntu/Windows checks passed for both.
+- Corrected the plan's stale statement that #1403 CI was pending. No new protected-task attempt or state was observed. Current unauthenticated public freshness remains WFL stale and Cane's latest snapshot Sep 7; standard-user auto-status remains `STORE_NOT_INITIALIZED` for the #1405 publisher.

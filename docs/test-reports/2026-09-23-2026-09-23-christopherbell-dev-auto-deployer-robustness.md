@@ -78,6 +78,8 @@ At approximately 2026-09-23 23:40 CDT, a standard-user `prod.cmd auto-status` st
 
 The merge-triggered CodeQL workflow and CI Build workflow for `9d4929af94a7be916365552fad84d67bb56c4590` completed successfully. CI Build passed on Ubuntu, macOS, and Windows; the Windows build/test job completed in 8m14s.
 
+The prerequisite deployer PRs are also merged: #1403 as `bcb883b89813ad20fb977e1ff89572464381717a` and #1404 as `9a9e39b28517436ca9beb361bd9c959a48baa067`. Their dependency review, CodeQL, language analyses, and Ubuntu, macOS, and Windows CI checks passed. Current standard-user/public evidence does not establish a fresh deployment attempt from those bundles because protected task state and logs remain unavailable.
+
 ## Bugs / Follow-ups
 
 The existing SYSTEM task has not been bootstrapped with the merged implementation. One elevated `auto-install` is needed to activate standard-user status publication and versioned self-refresh. After that, tool refreshes should not require routine elevation. Verify status readability across the tool switch, current release SHA, service/listener/readiness, and public WFL/Cane's freshness after the user completes the one-time approval. Production acceptance is not claimed here.
