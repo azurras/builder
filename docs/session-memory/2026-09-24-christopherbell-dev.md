@@ -29,3 +29,16 @@ Continued the authorized site bug audit. No site display-name change was present
 The merged code is through post-merge verification. The first merge-triggered Windows run failed one unrelated `AsyncDispatcherSecurityIntegrationTest.authenticatedStreamingRequestCompletesThroughAsyncRedispatch` case with `ConcurrentModificationException` at its initial MockMvc request. The PR Windows check had passed; rerunning only the failed post-merge job passed, and the complete rerun CI workflow passed on Windows, macOS, and Ubuntu. Post-merge CodeQL passed. A local reproduction attempt stopped before test execution because Gradle could not establish its loopback connection, so the isolated CI failure remains classified as a transient test/environment issue rather than a confirmed product regression.
 
 Production readiness is unchanged: standard-user `prod.cmd auto-status` reports `STORE_NOT_INITIALIZED`; service `ChristopherBellDev` is Running/Automatic and the local readiness endpoint returned HTTP 200. The site display-name change the user referred to was not present in the current checkout; clarification is pending. PR #1407's account-profile fix is merged and fully verified but not deployed. Its deployment requires elevated `prod.cmd auto-install`; no prompt was opened while the user is away.
+
+
+## 2026-09-24 02:20 - Automatic deploy timestamp fixes merged; production awaits elevation
+
+Continued the authorized deployer robustness and observability work while respecting the user's request not to trigger a prompt while away.
+
+- Fixed PowerShell-version-dependent timestamp handling in automatic deployment. Future-dated status is now unavailable instead of falsely fresh, UTC instants are preserved when reading status, and same-SHA backoff compares true instants across PowerShell 7 and Windows PowerShell 5.1.
+- Fixed Windows PowerShell 5.1 test-only staging failures caused by synthetic paths exceeding its path limit; shortening the unique Pester temp roots keeps the copy and partial-cleanup tests portable.
+- PR #1408 merged at `8b0bcf0e1eca37645bd8a6df3fc603055c679336`; PR #1409 merged at `62f9b92ca744b0de4a6c36e1e59a68f20f4ffc51`. All required PR checks passed. Post-merge CI Build passed on Windows, macOS, and Ubuntu, and post-merge CodeQL passed.
+- The automatic-deploy, operations, and command suites passed 135/135 under both PowerShell 7/Pester 5.9 and Windows PowerShell 5.1/Pester 5.9. Non-elevated `prod.cmd auto-status` and `help` passed; status reports `STORE_NOT_INITIALIZED`.
+- The current deployment checkout `A:\Projects\christopherbell.dev-worktrees\christopherbell-production-bootstrap-20260924` is clean at `62f9b92` and its Git tree matches `origin/main`. Read-only production probes show `ChristopherBellDev` Running/Automatic and readiness UP.
+- No site display-name changes were present in these changes. Production has not been modified. `prod.cmd auto-install -WhatIf` itself requires elevated PowerShell and returned without opening a prompt. The user is away and previously requested no prompt until they return; wait for them to approve the required elevated bootstrap before installing or deploying.
+- Builder implementation plan has Tasks 9-11 updated and published; latest checkpoint commit `5010b78`.
