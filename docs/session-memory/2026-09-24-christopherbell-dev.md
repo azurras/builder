@@ -184,3 +184,8 @@ Continued the published Task 25 sensor diagnostics work on `codex/sensor-query-e
 ## 2026-09-24 08:21 Central Daylight Time - Publish sensor query diagnostics PR
 
 Correction and publication update for the prior Task 25 entry: PR #1423 is now open at https://github.com/azurras/christopherbell.dev/pull/1423 and its required checks are running. The complete PowerShell 7 suites passed 152/152, and all 4 new focused cases also passed under Windows PowerShell 5.1. The broader WinPS suite has 6 unrelated compatibility failures involving Path.GetRelativePath, IO.Compression.ZipFile, and Double.IsFinite; prod.cmd requires PowerShell 7, so these failures do not demonstrate a supported-launcher regression. Task 24 post-merge CodeQL passed; CI Build remains in progress.
+
+
+## 2026-09-24 08:22 Central Daylight Time - Plan PostgreSQL rollback failure handling
+
+Continued read-only robustness review while PR #1423 checks run. The PostgreSQL legacy restore path suppresses inspection/stop failures for the newly installed service and can continue to start the legacy service while the new service may still be running. The installer catch can also replace the original install error if rollback throws. Added Task 26 to the Builder plan for fail-safe rollback and preserving both causes. It depends on Task 25 merging; no code or production state was changed for this follow-up.
