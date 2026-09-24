@@ -246,3 +246,8 @@ Task 28 inspection refinement: the adjacent status-file `Test-Path` is also part
 ## 2026-09-24 09:00 Central Daylight Time - Merge installer query failure fix and start status-path repair
 
 PR #1425 passed all required checks and merged as `dad7cf9916de3a8381a2ae40016b4ef1f70befb9`. The merge command could not delete the local branch because `main` is checked out in the authoritative worktree; GitHub confirms the merge. Post-merge CI Build and CodeQL are running. Refreshed the isolated worktree to that merge and started Task 28 on `codex/auto-deploy-status-query-errors-20260924`; confirmed both path probes in `Get-AutoDeployStatus` can misclassify failed inspection as missing state. No production status mutation, deployment, or elevation occurred.
+
+
+## 2026-09-24 09:08 Central Daylight Time - Fix automatic-deploy status path error reporting
+
+Implemented Task 28 on `codex/auto-deploy-status-query-errors-20260924`. Added directory and status-file query regressions plus successful missing-store/missing-record coverage. Against the previous code, the failure tests returned `STORE_NOT_INITIALIZED` and `STATUS_NOT_PUBLISHED` instead of the sanitized error reasons. Moving both probes inside the existing catch and setting `-ErrorAction Stop` made all 4 focused cases pass. Automatic-deploy, common, operations, and command suites passed 198/198 under PowerShell 7/Pester 5.9 and Windows PowerShell 5.1/Pester 5.9. `prod.ps1 help` and `git diff --check` passed. Task 27 post-merge CodeQL passed; its CI Build remains in progress. No production ACL change or deployment occurred. Task 28 PR not yet created.
