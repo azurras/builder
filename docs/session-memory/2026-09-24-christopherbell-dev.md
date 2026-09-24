@@ -199,3 +199,13 @@ Post-merge completion update: PR #1422's CI Build passed on Windows, macOS, and 
 ## 2026-09-24 08:31 Central Daylight Time - Sensor diagnostics merged; begin rollback safety review
 
 Correction and delivery update for Task 25: PR #1423 passed all required checks and merged as `30fe9e2c1d60c0bb1cdc606fdb0236822c5f88e5`. Post-merge CI Build and CodeQL are queued/in progress. The refreshed site worktree is on `codex/postgres-rollback-safety-20260924` at that merge SHA for the published Task 26 contract. No live production mutation occurred.
+
+
+## 2026-09-24 08:35 Central Daylight Time - Make PostgreSQL rollback fail safely
+
+Implemented Task 26's PostgreSQL legacy restore safety change on `codex/postgres-rollback-safety-20260924`.
+- Restore now distinguishes a genuinely absent PostgreSQL 18 service from unexpected query errors, surfaces stop failures, and waits up to 30 seconds for PostgreSQL 18 to report Stopped before restoring/starting PostgreSQL 16.
+- The installer now preserves both the primary install failure and rollback failure in an AggregateException, in that order.
+- Five new regressions failed against the old behavior and passed after the fix, covering inspection failure, stop failure, stop/wait/start order, native absence, and dual-failure preservation.
+- PostgreSQL, operations, and command Pester suites passed 158/158 in PowerShell 7/Pester 5.9. Windows PowerShell 5.1 passed 156 tests with two unrelated compatibility failures for RandomNumberGenerator.Fill and Convert.ToHexString. CLI help and git diff --check passed.
+- PR #1423 post-merge CodeQL passed; CI Build remains in progress. Task 26 has not yet been published to a PR. No live install, production mutation, or elevation occurred.
