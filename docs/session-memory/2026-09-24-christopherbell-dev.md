@@ -219,3 +219,8 @@ Correction and delivery update: Task 26 is published as PR #1424 at https://gith
 ## 2026-09-24 08:40 Central Daylight Time - Inspect PostgreSQL installer service lookup
 
 While PR #1424's Windows and macOS checks run, confirmed the #1423 post-merge CI Build and CodeQL both passed. Read the PostgreSQL installer from refreshed `origin/main` at `30fe9e2c1d60c0bb1cdc606fdb0236822c5f88e5`: its default `Get-CimInstance Win32_Service` action uses `-ErrorAction SilentlyContinue`. If an existing `postgres.exe` is present and the query emits a non-terminating error, the installer sees `$null`, chooses the partial-install retry path, and reaches legacy preparation/winget despite not knowing whether the service is installed. Existing retry coverage injects successful absence and does not exercise this default failure path. Added Task 27 contract to the plan; implementation awaits Task 26 merge and refreshed `origin/main`. No production inspection or mutation occurred.
+
+
+## 2026-09-24 08:44 Central Daylight Time - Merge rollback safety and start installer query failure fix
+
+PR #1424 passed Windows/macOS/Ubuntu builds, dependency review, and CodeQL, and merged as `187179a5f99ab2982dfb497211addca5476c8105`. The merge command reported only that local branch deletion could not run because `main` is checked out in the authoritative worktree; GitHub confirms the PR is merged. Post-merge CI Build and CodeQL are running. Refreshed the isolated worktree and created `codex/postgres-installer-query-failures-20260924` from the merge SHA; verified Task 27's default service lookup still silently suppresses CIM errors. Updated and published the Builder plan's merge evidence. No production deployment, live service query, elevation, or approval prompt occurred.
