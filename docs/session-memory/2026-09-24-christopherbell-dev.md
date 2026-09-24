@@ -254,3 +254,8 @@ Implemented Task 28 on `codex/auto-deploy-status-query-errors-20260924`. Added d
 
 
 Correction and delivery update: Task 28 is published as PR #1426 at https://github.com/azurras/christopherbell.dev/pull/1426 and attached to the task. Required platform, CodeQL, and dependency review checks have started. Task 27's post-merge CodeQL passed and Windows CI Build is running. No production ACL change, deployment, or elevation occurred.
+
+
+## 2026-09-24 09:12 Central Daylight Time - Inspect candidate process wait diagnostics
+
+Read the candidate listener wait loop in `Production.Deploy.psm1` and its tests at `origin/main` `dad7cf9916de3a8381a2ae40016b4ef1f70befb9`. The helper suppresses `Get-Process` errors and reports all failures as the candidate process exiting before bind, while the following TCP listener query already uses `-ErrorAction Stop`. Added Task 29 to preserve native missing-process behavior while exposing unexpected query failures and proving they prevent listener polling. Task 29 depends on Task 28 merging. PR #1426 checks are running. No production process or listener was inspected or changed.
