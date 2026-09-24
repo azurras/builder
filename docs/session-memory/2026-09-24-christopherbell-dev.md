@@ -367,3 +367,8 @@ On isolated worktree `A:\Projects\christopherbell.dev-worktrees\uppercase-html-t
 ## 2026-09-24 13:58 Central Daylight Time - uppercase tag test rerun correction
 
 The final Node rerun briefly caught a missing closing parenthesis introduced while splitting the longer composer fixture across lines. Corrected it and reran both affected files successfully (14 passed, 0 failed). Committed the test-only change as `6eadef62d935dc541a39e6a86826e2261bc29ffa`. The linked worktree also shows a modified `gradlew.bat` from the failed Gradle invocation; it is unrelated and was deliberately left unstaged and unchanged.
+
+
+## 2026-09-24 14:11 Central Daylight Time - site audit pull requests merged
+
+Both authorized site-audit PRs merged after all required pre-merge checks passed. PR #1433 (automatic-deploy poller registration status) merged as `9e7e5290145e00c02eff7b82468acf7b9a36aca2`; its merge-triggered CI Build and CodeQL checks remain in progress. PR #1434 (uppercase HTML tag escaping test coverage) merged as `a40adac0842a16051e4ba6db9a7cccebbba35f56`; its merge-triggered CI and refreshed CodeQL alerts remain in progress. The open CodeQL alerts still appear in the API as of 2026-09-24 19:10 UTC; do not claim they cleared until the new main scan completes. Production was not deployed or mutated; live auto-status still reports the root poller task absent. A trusted Mongo backup path containing the active migration-015 ledger is still needed for runtime startup proof on draft PR #1432.
