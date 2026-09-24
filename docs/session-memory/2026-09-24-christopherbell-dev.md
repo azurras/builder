@@ -164,3 +164,9 @@ A second read-only sensor audit identified two query failures that are currently
 - PawnIO's Win32_SystemDriver CIM lookup suppresses every error and reports the driver as Missing; a successful empty query and a failed inventory are indistinguishable.
 - CPU-temperature listener ownership suppresses Get-NetTCPConnection errors and reports zero listeners instead of the actual inspection failure.
 Added Task 25 to the implementation plan with behavior and test boundaries. Its implementation is explicitly dependent on Task 24 merging, then refreshing origin/main. No sensor command or production state was changed.
+
+
+## 2026-09-24 08:16 Central Daylight Time - PostgreSQL preflight fix merged; begin sensor diagnostics
+
+Correction and delivery update for the prior Task 24 entry: PR #1422 passed dependency review, CodeQL, and Windows/macOS/Ubuntu CI, then merged as `6a669a3c151e3564de607362c8421acce2f7d421`. Its post-merge CI Build and CodeQL runs are still in progress; do not record production acceptance based on this merge. The Builder plan now records the final local results and Task 25's refreshed base SHA.
+- Task 25 implementation is authorized by the existing audit goal and now begins on `codex/sensor-query-errors-20260924` from refreshed `origin/main` at the Task 24 merge.
