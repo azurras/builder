@@ -232,3 +232,8 @@ Implemented Task 27 on `codex/postgres-installer-query-failures-20260924`. The t
 
 
 Correction and delivery update for Task 27: PR #1425 is open at https://github.com/azurras/christopherbell.dev/pull/1425 and attached to the task. Required CI, CodeQL, and dependency review checks have started. Task 26's post-merge CodeQL passed; its post-merge Windows CI build remains in progress. No production deployment or mutation occurred.
+
+
+## 2026-09-24 08:52 Central Daylight Time - Continue automatic-deployment status audit
+
+Correction to the prior Task 26 status: post-merge CI Build passed on Windows, macOS, and Ubuntu; post-merge CodeQL passed. For Task 28, inspected `Get-AutoDeployStatus` and its tests from the merged baseline `187179a5f99ab2982dfb497211addca5476c8105`. The first status-root `Test-Path` suppresses errors and sits outside the later catch that maps `UnauthorizedAccessException` to `ACCESS_DENIED`; a failed directory inspection can thus be mislabeled `STORE_NOT_INITIALIZED`. Added a task contract to the plan to keep true absence distinct from inaccessible or failed inspection, preserving sanitized non-elevated status behavior. Task 28 depends on Task 27 merging. PR #1425 checks are running. No production status query, ACL change, deployment, or elevation occurred.
