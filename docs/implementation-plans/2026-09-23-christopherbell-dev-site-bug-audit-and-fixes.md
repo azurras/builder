@@ -185,7 +185,7 @@ Find and fix reproducible bugs in the current christopherbell.dev site, verify e
 - Boundary/API: Pester fixture paths only; no production deployment path, API, ACL, or task behavior change.
 - Effects and failures: Prevent host path-length limits from masking the staging behavior under test and preserve the original simulated copy failure as the reported error.
 - Tests and evidence: Reproduce both failures on clean `origin/main` with Windows PowerShell 5.1/Pester 5.9, then require both to pass under Windows PowerShell 5.1 and PowerShell 7; rerun the three related Pester suites.
-- Verification: Pending implementation.
+- Verification: The two staging tests failed on clean `origin/main` under Windows PowerShell 5.1/Pester 5.9, then passed after shortening their unique Pester temporary roots; both also pass under PowerShell 7. The complete automatic-deploy, operations, and command suites now pass under Windows PowerShell 5.1/Pester 5.9 (135/135) and PowerShell 7/Pester 5.9 (135/135). This later fixture correction supersedes the baseline compatibility failures recorded in Tasks 9 and 10. No production code or state changed.
 
 ## Code Changes
 Task 2 is limited to WFL startup catch-up selection, direct unit tests and the owning feature README's scheduling contract. Task 3 extends the existing Cane's weekly collector's startup behavior without changing its persistence schema or API. Task 8 narrows swallowed profile-resolution failures while preserving anonymous fallback behavior. Reinspect all targets before edits.
