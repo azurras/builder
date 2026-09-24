@@ -74,4 +74,4 @@ The isolated database identity check returned database `test`, role `christopher
 
 ## Bugs / Follow-ups
 
-The fix is locally verified but not yet published or deployed. The storage-failure path is proved by the red/green service regression; runtime coverage verifies the adjacent anonymous profile path. Production deployment still requires the documented elevated `prod.cmd auto-install` approval before the protected SYSTEM deployer can refresh its bundle and deploy merged code.
+The fix was merged in PR #1407 at `0028642e712f1e0e1dedd41e0e75bbbc79960dd7`. Required PR checks passed. Post-merge CodeQL and Linux/macOS CI passed; the first post-merge Windows CI run had one unrelated `ConcurrentModificationException` in `AsyncDispatcherSecurityIntegrationTest`, while rerunning its failed job passed. Standard-user `prod.cmd auto-status` still reports `STORE_NOT_INITIALIZED`; production deployment remains pending because protected SYSTEM deployer bootstrap requires elevated `prod.cmd auto-install`. No elevation prompt was opened, and production remains on its prior release.
