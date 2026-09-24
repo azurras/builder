@@ -117,3 +117,15 @@ Continued the authorized site bug audit with the user's focus on deployer robust
 - Source review identified a follow-up: Install-CloudflaredService suppresses all Get-Service query errors and may mistake an inspection failure for service absence. Reproduced the native missing-service FullyQualifiedErrorId in PowerShell 7 and added planned Task 21 to distinguish only that case from unexpected errors.
 - Production remains unchanged. The automatic-deploy store remains uninitialized; the one-time auto-install bootstrap still requires an elevated approval. No display-name changes were included in this PR.
 - Updated Task 20's verification and published the Task 21 contract in the implementation plan. The plan and this activity record are to be refreshed, validated and published together after post-merge checks complete.
+
+
+## 2026-09-24 07:11 Central Daylight Time - Cloudflared query diagnostics merged; deploy-lock contention follow-up planned
+
+Continued the authorized site audit with the user's focus on deployer robustness and observability. The user is away again and explicitly said not to trigger approval prompts; no prompt or elevated production command will be used while they are away.
+
+- PR #1418 post-merge CI Build and CodeQL passed on `3260fe04319914ec3049059906d90e7b683e3d40`.
+- Task 21 fixed `Install-CloudflaredService` suppressing all service-query failures. Only the native `NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand` result now means absent; other errors stop before process or service changes. The new regression failed before the fix. Install, operations, and command suites passed 221 tests with one existing skip under PowerShell 7/Pester 5.9 and Windows PowerShell 5.1/Pester 5.9. Non-elevated CLI help passed, auto-status reported `STORE_NOT_INITIALIZED`, and `git diff --check` passed.
+- PR #1419 passed dependency review, CodeQL, and Windows/macOS/Ubuntu checks; it merged as `f506b6e7aa69a5083dbd0f8da2d79387d4da2367`. Post-merge CI Build and CodeQL were still running at recording time.
+- The user reported `prod.cmd auto-install` failing with `Another production operation is already running.` A one-time elevated read-only diagnostic (approved while the user was present) found the scheduled `ChristopherBellAutoDeploy` task registered, enabled, Ready, with last result 0 and an approximately 60-second repeat interval. The protected lock file metadata is old and does not identify its current owner. Standard-user task queries returned access denied/not found and auto-status still reports `STORE_NOT_INITIALIZED`. No lock, task, service, production data, or configuration was changed. The user then stepped away; do not retry auto-install or open another prompt.
+- Added Task 22 to make manual automatic-deploy task refresh wait a bounded time for transient sharing-lock contention while preserving fail-fast behavior for other callers/errors. The task contract is published before implementation.
+- No name/display-name changes were found in open site PRs; PR #1419 is an installer diagnostics fix, not a name change. Production deployment remains unverified and unchanged.
