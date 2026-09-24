@@ -72,6 +72,12 @@ Both Gradle attempts failed with `java.io.IOException: Unable to establish loopb
 - `gradlew.bat --no-daemon :website:check` and the private-Gradle-home retry â€” failed before task execution as described above.
 - `gh pr checks 1405` â€” all required checks passed; PR squash-merge confirmed as `9d4929af94a7be916365552fad84d67bb56c4590`.
 
+## Post-merge and current live readback
+
+At approximately 2026-09-23 23:40 CDT, a standard-user `prod.cmd auto-status` still returned `available=False`, `freshness=UNAVAILABLE`, `reason=STORE_NOT_INITIALIZED`; it did not prompt or read protected deployment configuration. Public readiness and homepage returned HTTP 200, with readiness `UP`. The public WFL freshness endpoint returned HTTP 200 but still reported `lastRefreshedOn=2026-08-02T22:44:50.963Z`, `current=false`. The Cane's history endpoint returned HTTP 200 with nine snapshots; the latest was `2026-09-07`, collected at `2026-09-07T11:00:16.849Z`, with 50/50 successful metro prices. These reads confirm the merged code has not been activated in production and the data freshness defects remain visible.
+
+The merge-triggered CodeQL workflow and CI Build workflow for `9d4929af94a7be916365552fad84d67bb56c4590` completed successfully. CI Build passed on Ubuntu, macOS, and Windows; the Windows build/test job completed in 8m14s.
+
 ## Bugs / Follow-ups
 
 The existing SYSTEM task has not been bootstrapped with the merged implementation. One elevated `auto-install` is needed to activate standard-user status publication and versioned self-refresh. After that, tool refreshes should not require routine elevation. Verify status readability across the tool switch, current release SHA, service/listener/readiness, and public WFL/Cane's freshness after the user completes the one-time approval. Production acceptance is not claimed here.

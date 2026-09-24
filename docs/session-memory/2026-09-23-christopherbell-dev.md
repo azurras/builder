@@ -90,3 +90,9 @@ User narrowed the ongoing site-bug goal to deployer robustness and observability
 - PR #1405 squash-merged as `9d4929af94a7be916365552fad84d67bb56c4590` (implementation commit `281dccdf913e08134ae6dcee1653dfc33ed8fc51`). Updated origin/main to the merge.
 - Production remains unchanged and acceptance remains pending. The existing SYSTEM task needs one elevated `prod.cmd auto-install` bootstrap before the new status publisher and autonomous tool refresh can run. No elevation prompt was launched while the user is away. After bootstrap, verify the status tool switch, deployed SHA, listener/readiness/routes, and WFL/Cane's data freshness.
 - Builder implementation plan and test report were updated with merge/CI evidence; they remain in progress pending the user's one-time bootstrap approval and actual production readback.
+
+## 2026-09-23 23:40 Central Daylight Time - Post-merge CI and live status
+
+- Merge-triggered CodeQL and CI Build passed for `9d4929af94a7be916365552fad84d67bb56c4590`; Ubuntu, macOS, and Windows builds/tests all passed. The Windows job took 8m14s.
+- Without opening an elevation prompt, standard-user `prod.cmd auto-status` still returned `STORE_NOT_INITIALIZED`. Public homepage and readiness returned HTTP 200 (`UP`). WFL freshness returned HTTP 200 with `current=false` and the unchanged `2026-08-02T22:44:50.963Z` timestamp. Cane's history returned HTTP 200 with nine snapshots through 2026-09-07; latest collection was 50/50 successful metros at `2026-09-07T11:00:16.849Z`.
+- The live poller has not activated the merged deployer, and the stale data remains. The user is away and previously asked not to trigger prompts while away; the one-time elevated `prod.cmd auto-install` remains the next deployment action. No production acceptance is claimed.
