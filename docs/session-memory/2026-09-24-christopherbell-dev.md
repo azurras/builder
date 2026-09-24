@@ -96,3 +96,13 @@ Continued the authorized site audit's deployer robustness and observability work
 ## 2026-09-24 06:06 Central Daylight Time - Correct status diagnostics entry timestamp
 
 Correction: The entry immediately above was recorded at 06:06 Central Daylight Time. Its body accidentally repeated a heading and named 06:15, which was a mistyped future time. Treat the content as one 06:06 activity record; this correction preserves the append-only history.
+
+
+## 2026-09-24 06:33 Central Daylight Time - Release retention fix merged and diagnostics follow-up planned
+
+Continued the authorized site bug audit with a focus on deployer robustness and operator observability. The user asked to avoid any prompt requiring approval while away; no prompt or production mutation occurred.
+
+- PR #1417 fixed release cleanup treating an enumeration failure as an empty release set. The regression failed before implementation; deploy, auto-deploy, operations, and command suites passed 252/252 in both PowerShell 7/Pester 5.9 and Windows PowerShell 5.1/Pester 5.9. Non-elevated CLI help passed and auto-status reported `STORE_NOT_INITIALIZED`.
+- PR #1417 passed dependency review, CodeQL, and Windows/macOS/Ubuntu checks; squash-merged as `1478029f872d29a27c7a31a37300264dfc2c8544`. Post-merge CI Build and CodeQL passed. PR: https://github.com/azurras/christopherbell.dev/pull/1417.
+- Read-only source review found the operator `logs` and `releases` commands also suppress `Get-ChildItem` failures, misreporting query errors as "no log file" or no releases. The install-root initializer creates both directories. Task 20 is planned to surface those errors while preserving valid empty-directory results.
+- Production remains unchanged. The automatic-deploy status store is uninitialized and one-time SYSTEM task bootstrap still requires elevated approval; avoid prompting while the user is away.
