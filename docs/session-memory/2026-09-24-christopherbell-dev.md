@@ -209,3 +209,8 @@ Implemented Task 26's PostgreSQL legacy restore safety change on `codex/postgres
 - Five new regressions failed against the old behavior and passed after the fix, covering inspection failure, stop failure, stop/wait/start order, native absence, and dual-failure preservation.
 - PostgreSQL, operations, and command Pester suites passed 158/158 in PowerShell 7/Pester 5.9. Windows PowerShell 5.1 passed 156 tests with two unrelated compatibility failures for RandomNumberGenerator.Fill and Convert.ToHexString. CLI help and git diff --check passed.
 - PR #1423 post-merge CodeQL passed; CI Build remains in progress. Task 26 has not yet been published to a PR. No live install, production mutation, or elevation occurred.
+
+
+## 2026-09-24 08:37 Central Daylight Time - Publish PostgreSQL rollback safety PR
+
+Correction and delivery update: Task 26 is published as PR #1424 at https://github.com/azurras/christopherbell.dev/pull/1424; required checks are running. PR #1423 post-merge CodeQL passed and CI Build remains in progress, with Ubuntu green and Windows/macOS still running. No production deployment or mutation occurred.
