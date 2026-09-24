@@ -187,6 +187,19 @@ Find and fix reproducible bugs in the current christopherbell.dev site, verify e
 - Tests and evidence: Reproduce both failures on clean `origin/main` with Windows PowerShell 5.1/Pester 5.9, then require both to pass under Windows PowerShell 5.1 and PowerShell 7; rerun the three related Pester suites.
 - Verification: The two staging tests failed on clean `origin/main` under Windows PowerShell 5.1/Pester 5.9, then passed after shortening their unique Pester temporary roots; both also pass under PowerShell 7. The complete automatic-deploy, operations, and command suites now pass under Windows PowerShell 5.1/Pester 5.9 (135/135) and PowerShell 7/Pester 5.9 (135/135). This later fixture correction supersedes the baseline compatibility failures recorded in Tasks 9 and 10. PR #1409 merged as `62f9b92ca744b0de4a6c36e1e59a68f20f4ffc51`; required PR checks, the rerun of the transient Windows integration failure, post-merge Windows/macOS/Ubuntu CI, and post-merge CodeQL passed. No production code or state changed.
 
+### Task 12 - Surface tool-refresh failures when protected state cannot record them
+- Dependencies: Task 7 automatic tool refresh and Task 6 operator status/failure reporting.
+- Files: `ops/production/windows/modules/Production.AutoDeploy.psm1` and `ops/production/windows/tests/Production.AutoDeploy.Tests.ps1`.
+- Symbols: `Start-AutoDeployLoop`, `toolRefreshStatus`, and the one-shot scheduled task result.
+- Inspection: When `Update-AutoDeployToolsFromOriginMain` fails, `Start-AutoDeployLoop` tries to persist `toolRefreshStatus=FAILED`, but an inner empty catch discards a second failure to read/write protected state. It then reloads the old state and proceeds to `Invoke-AutoDeployOnce`, so `auto-status` may retain a prior successful refresh and Task Scheduler may record a successful run. The old trusted tools can remain on disk; the defect is that refresh failure becomes invisible when its state record also cannot be persisted.
+- Required skills: `write-jane-street-style-code` and test-driven development for the regression and fix.
+- Behavior: If tool refresh fails and the failure state cannot be persisted, stop that one-shot before deployment, propagate both failures as an aggregate, publish best-effort `CHECK_FAILED` status from the in-memory failed state, and let the scheduled task record failure. Preserve normal behavior when the failure status is successfully persisted and old tools remain valid.
+- Invariants: Never delete or replace the currently trusted tool bundle on failure; do not deploy using stale state after losing the durable refresh-failure record; keep status publishing best-effort; preserve both causal exceptions.
+- Boundary/API: Internal SYSTEM scheduled-task behavior and existing local operator status document only; no public site route, status schema, task action, or ACL changes.
+- Effects and failures: A refresh-plus-persistence failure becomes visible and retryable on the next scheduled tick while the active tool bundle and production service stay untouched.
+- Tests and evidence: Add a Pester regression that makes tool refresh and protected state persistence fail, first requires the current silent continuation to fail, then asserts no deployment attempt, surfaced `CHECK_FAILED` status using the failed in-memory state, and preservation of both underlying errors. Run the automatic-deploy, operations, and command suites under PowerShell 7 and Windows PowerShell 5.1, plus CLI smoke checks.
+- Verification: Pending implementation.
+
 ## Code Changes
 Task 2 is limited to WFL startup catch-up selection, direct unit tests and the owning feature README's scheduling contract. Task 3 extends the existing Cane's weekly collector's startup behavior without changing its persistence schema or API. Task 8 narrows swallowed profile-resolution failures while preserving anonymous fallback behavior. Reinspect all targets before edits.
 
