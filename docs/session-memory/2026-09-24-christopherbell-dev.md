@@ -259,3 +259,8 @@ Correction and delivery update: Task 28 is published as PR #1426 at https://gith
 ## 2026-09-24 09:12 Central Daylight Time - Inspect candidate process wait diagnostics
 
 Read the candidate listener wait loop in `Production.Deploy.psm1` and its tests at `origin/main` `dad7cf9916de3a8381a2ae40016b4ef1f70befb9`. The helper suppresses `Get-Process` errors and reports all failures as the candidate process exiting before bind, while the following TCP listener query already uses `-ErrorAction Stop`. Added Task 29 to preserve native missing-process behavior while exposing unexpected query failures and proving they prevent listener polling. Task 29 depends on Task 28 merging. PR #1426 checks are running. No production process or listener was inspected or changed.
+
+
+## 2026-09-24 09:16 Central Daylight Time - Merge status-path diagnostics and continue candidate-process audit
+
+PR #1426 passed required Windows, macOS, Ubuntu, dependency-review, and CodeQL checks, then merged as `74c6ca21e9854c34ebc31106567b3d5fe01e54e2`. Its post-merge CI Build and CodeQL are running. Read-only non-elevated `prod.ps1 auto-status` after the fix returned `available=False`, `reason=STORE_NOT_INITIALIZED`, exit 0, with no filesystem error surfaced; this does not establish whether the deployed store is truly absent or inaccessible. Updated Task 28 and Task 29 baseline/dependency evidence in the plan. The deployer change did not modify production ACLs, deployment state, or services. The task worktree's untracked `testResults.xml` remains preserved and outside source commits. Next, implement Task 29 on refreshed `origin/main` with test-first handling for unexpected candidate process lookup failures.
