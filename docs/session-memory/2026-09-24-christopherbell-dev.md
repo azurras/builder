@@ -214,3 +214,8 @@ Implemented Task 26's PostgreSQL legacy restore safety change on `codex/postgres
 ## 2026-09-24 08:37 Central Daylight Time - Publish PostgreSQL rollback safety PR
 
 Correction and delivery update: Task 26 is published as PR #1424 at https://github.com/azurras/christopherbell.dev/pull/1424; required checks are running. PR #1423 post-merge CodeQL passed and CI Build remains in progress, with Ubuntu green and Windows/macOS still running. No production deployment or mutation occurred.
+
+
+## 2026-09-24 08:40 Central Daylight Time - Inspect PostgreSQL installer service lookup
+
+While PR #1424's Windows and macOS checks run, confirmed the #1423 post-merge CI Build and CodeQL both passed. Read the PostgreSQL installer from refreshed `origin/main` at `30fe9e2c1d60c0bb1cdc606fdb0236822c5f88e5`: its default `Get-CimInstance Win32_Service` action uses `-ErrorAction SilentlyContinue`. If an existing `postgres.exe` is present and the query emits a non-terminating error, the installer sees `$null`, chooses the partial-install retry path, and reaches legacy preparation/winget despite not knowing whether the service is installed. Existing retry coverage injects successful absence and does not exercise this default failure path. Added Task 27 contract to the plan; implementation awaits Task 26 merge and refreshed `origin/main`. No production inspection or mutation occurred.
