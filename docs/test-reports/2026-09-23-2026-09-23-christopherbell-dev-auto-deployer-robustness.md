@@ -8,7 +8,7 @@ Implementation plan: `docs/implementation-plans/2026-09-23-christopherbell-dev-s
 
 ## Branch
 
-`codex/auto-deploy-observability-20260923`, based on merged `origin/main` commit `9a9e39b28517436ca9beb361bd9c959a48baa067`. The implementation is local and not yet committed during this report.
+`codex/auto-deploy-observability-20260923`; implementation commit `281dccdf913e08134ae6dcee1653dfc33ed8fc51` was squash-merged through [PR #1405](https://github.com/azurras/christopherbell.dev/pull/1405) as `9d4929af94a7be916365552fad84d67bb56c4590`.
 
 ## App / Environment
 
@@ -59,6 +59,7 @@ Both Gradle attempts failed with `java.io.IOException: Unable to establish loopb
 - Windows PowerShell 5.1 module import: pass.
 - Windows PowerShell 5.1 Pester run: unavailable because installed Pester 3.4 does not support the Pester 5 `Should` operators used by the repository tests.
 - Native `:website:check`: blocked by the JDK/Gradle loopback failure before task execution.
+- PR #1405 CI: dependency review, CodeQL, Java/Kotlin analysis, JavaScript/TypeScript analysis, and Ubuntu, macOS, and Windows build/test all passed. The first Windows attempt failed during Pester Gallery module discovery before build execution; the rerun installed Pester and passed the Windows build/test job.
 - Live SYSTEM status publication/tool switch: not run because the installed task still has its old bundle and requires one approved elevated `auto-install` bootstrap.
 
 ## Evidence
@@ -69,7 +70,8 @@ Both Gradle attempts failed with `java.io.IOException: Unable to establish loopb
 - `git diff --check` â€” passed.
 - `prod.cmd auto-status` â€” output recorded above.
 - `gradlew.bat --no-daemon :website:check` and the private-Gradle-home retry â€” failed before task execution as described above.
+- `gh pr checks 1405` â€” all required checks passed; PR squash-merge confirmed as `9d4929af94a7be916365552fad84d67bb56c4590`.
 
 ## Bugs / Follow-ups
 
-The existing SYSTEM task has not been bootstrapped with the new implementation. An elevated `auto-install` after merge is needed once to activate standard-user status publication and versioned self-refresh. After that, tool refreshes should not require routine elevation. Verify status readability across the tool switch, current release SHA, service/listener/readiness, and public WFL/Cane's freshness after the user approves the bootstrap. Production acceptance is not claimed here.
+The existing SYSTEM task has not been bootstrapped with the merged implementation. One elevated `auto-install` is needed to activate standard-user status publication and versioned self-refresh. After that, tool refreshes should not require routine elevation. Verify status readability across the tool switch, current release SHA, service/listener/readiness, and public WFL/Cane's freshness after the user completes the one-time approval. Production acceptance is not claimed here.
