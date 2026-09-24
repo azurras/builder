@@ -106,3 +106,14 @@ Continued the authorized site bug audit with a focus on deployer robustness and 
 - PR #1417 passed dependency review, CodeQL, and Windows/macOS/Ubuntu checks; squash-merged as `1478029f872d29a27c7a31a37300264dfc2c8544`. Post-merge CI Build and CodeQL passed. PR: https://github.com/azurras/christopherbell.dev/pull/1417.
 - Read-only source review found the operator `logs` and `releases` commands also suppress `Get-ChildItem` failures, misreporting query errors as "no log file" or no releases. The install-root initializer creates both directories. Task 20 is planned to surface those errors while preserving valid empty-directory results.
 - Production remains unchanged. The automatic-deploy status store is uninitialized and one-time SYSTEM task bootstrap still requires elevated approval; avoid prompting while the user is away.
+
+
+## 2026-09-24 06:50 Central Daylight Time - Production log and release query diagnostics merged; service-query follow-up planned
+
+Continued the authorized site bug audit with the user's focus on deployer robustness and observability. The user is away and asked to avoid actions that require an approval prompt; no prompt was opened.
+
+- PR #1418 changed production log and release listing queries to surface directory enumeration failures while preserving successful empty results. The regressions reproduced both suppressed errors before the fix. Operations, command, and automatic-deploy suites passed 163/163 under PowerShell 7/Pester 5.9 and Windows PowerShell 5.1/Pester 5.9. Non-elevated CLI help passed and auto-status reported STORE_NOT_INITIALIZED; git diff --check passed.
+- PR #1418 passed all PR checks, including Windows, macOS, Ubuntu, CodeQL and dependency review, and merged as 3260fe04319914ec3049059906d90e7b683e3d40. Post-merge CI Build and CodeQL were still running at recording time.
+- Source review identified a follow-up: Install-CloudflaredService suppresses all Get-Service query errors and may mistake an inspection failure for service absence. Reproduced the native missing-service FullyQualifiedErrorId in PowerShell 7 and added planned Task 21 to distinguish only that case from unexpected errors.
+- Production remains unchanged. The automatic-deploy store remains uninitialized; the one-time auto-install bootstrap still requires an elevated approval. No display-name changes were included in this PR.
+- Updated Task 20's verification and published the Task 21 contract in the implementation plan. The plan and this activity record are to be refreshed, validated and published together after post-merge checks complete.
