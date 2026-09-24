@@ -161,6 +161,19 @@ Find and fix reproducible bugs in the current christopherbell.dev site, verify e
 - Tests and evidence: Add/retain Pester cases with fixed `Now` values for a valid stale timestamp, a valid fresh timestamp, and a timestamp later than `Now`; first observe the current incorrect classification, then require the correct freshness and `available=false`/`FUTURE_TIMESTAMP` for future data. Run `Production.AutoDeploy.Tests.ps1`, the related operations suite, and applicable deployment script checks.
 - Verification: Pending implementation.
 
+### Task 10 - Compare automatic-deploy backoff timestamps as instants
+- Dependencies: Task 6 automatic deployment failure status and retry behavior.
+- Files: `ops/production/windows/modules/Production.AutoDeploy.psm1` and `ops/production/windows/tests/Production.AutoDeploy.Tests.ps1`.
+- Symbols: `Invoke-AutoDeployOnce`, persisted `failedAt`, and failed-SHA retry backoff.
+- Inspection: The existing `backs off the same failed SHA` regression fails under Windows PowerShell 5.1. The persisted `failedAt` ISO-Z string is cast to `[datetime]`, becoming local-kind wall time; comparing it with the UTC-kind current time compares mismatched clock ticks and incorrectly allows a retry before the 900-second backoff expires. PowerShell 7 and Windows PowerShell 5.1 deserialize/represent the timestamp differently, so both paths need explicit coverage.
+- Required skills: `write-jane-street-style-code` and test-driven development for the regression and fix.
+- Behavior: Parse persisted failure timestamps without losing their offset/UTC instant and suppress a retry only while `Now` is earlier than `failedAt + configured backoff`. Preserve the existing backoff duration, failed-SHA matching, and retry-after-expiry behavior.
+- Invariants: Keep persisted state schema and deployment selection unchanged; do not suppress new SHAs or retries after expiration; compare actual instants consistently across supported PowerShell versions.
+- Boundary/API: Internal automatic-deploy retry timing only; no CLI, status schema, task registration, or web API changes.
+- Effects and failures: A failed same-SHA deployment remains backed off for the configured interval on either PowerShell runtime. Invalid persisted timestamps continue through existing state validation/failure handling.
+- Tests and evidence: First reproduce the existing same-failed-SHA test failure on Windows PowerShell 5.1, then require it to pass under both Windows PowerShell 5.1 and PowerShell 7. Run related automatic-deploy, operations, and command suites; compare any remaining Windows PowerShell 5.1-only staging-test failures with a clean `origin/main` baseline before attributing them to this change.
+- Verification: Pending implementation.
+
 ## Code Changes
 Task 2 is limited to WFL startup catch-up selection, direct unit tests and the owning feature README's scheduling contract. Task 3 extends the existing Cane's weekly collector's startup behavior without changing its persistence schema or API. Task 8 narrows swallowed profile-resolution failures while preserving anonymous fallback behavior. Reinspect all targets before edits.
 
