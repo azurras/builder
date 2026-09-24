@@ -179,3 +179,8 @@ Continued the published Task 25 sensor diagnostics work on `codex/sensor-query-e
 - Changed both queries to stop on query errors while preserving successful empty results. Added regressions for both failures, empty driver inventory, and zero-listener validation. The failure tests were run against the old behavior and failed for the misreported outputs; all four focused tests then passed under PowerShell 7 and Windows PowerShell 5.1/Pester 5.9.
 - PowerShell 7 sensor, operations, and command suites passed 152/152. Windows PowerShell 5.1 passed 146 tests with 6 unrelated compatibility failures involving Path.GetRelativePath, IO.Compression.ZipFile, and Double.IsFinite; the four new tests passed. Non-elevated CLI help and git diff --check passed.
 - PR #1422 post-merge CI Build and CodeQL remain in progress. Task 25 has not yet been published to a PR. No live sensor command, elevation, or production mutation occurred.
+
+
+## 2026-09-24 08:21 Central Daylight Time - Publish sensor query diagnostics PR
+
+Correction and publication update for the prior Task 25 entry: PR #1423 is now open at https://github.com/azurras/christopherbell.dev/pull/1423 and its required checks are running. The complete PowerShell 7 suites passed 152/152, and all 4 new focused cases also passed under Windows PowerShell 5.1. The broader WinPS suite has 6 unrelated compatibility failures involving Path.GetRelativePath, IO.Compression.ZipFile, and Double.IsFinite; prod.cmd requires PowerShell 7, so these failures do not demonstrate a supported-launcher regression. Task 24 post-merge CodeQL passed; CI Build remains in progress.
