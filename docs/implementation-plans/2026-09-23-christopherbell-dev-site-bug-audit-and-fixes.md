@@ -152,13 +152,13 @@ Find and fix reproducible bugs in the current christopherbell.dev site, verify e
 - Dependencies: Task 6 non-elevated status reader and status schema.
 - Files: `ops/production/windows/modules/Production.AutoDeploy.psm1` and `ops/production/windows/tests/Production.AutoDeploy.Tests.ps1`.
 - Symbols: `Get-AutoDeployStatus`, `New-UnavailableAutoDeployStatus`, and status freshness calculation.
-- Inspection: On merged `origin/main` `0028642e712f1e0e1dedd41e0e75bbbc79960dd7`, the reader computes status age as `Now - updatedAt` and labels only ages over 180 seconds stale. A future timestamp therefore produces negative age and is reported `FRESH`, even though freshness cannot be trusted.
+- Inspection: On merged `origin/main` `0028642e712f1e0e1dedd41e0e75bbbc79960dd7`, the reader computes status age as `Now - updatedAt` and labels only ages over 180 seconds stale. A future timestamp therefore produces negative age and is reported `FRESH`, even though freshness cannot be trusted. TDD also exposed a timestamp parsing defect: `ConvertFrom-Json` converts the ISO `updatedAt` string to `[datetime]`, then `[string]` drops its UTC marker before `DateTimeOffset.Parse`, which interprets the wall time in the local zone and shifts freshness by the host UTC offset.
 - Required skills: `write-jane-street-style-code` and test-driven development for the regression and fix.
-- Behavior: A status timestamp later than the reader's UTC clock must be unavailable with an explicit safe `FUTURE_TIMESTAMP` reason; it must never be reported fresh. Valid current timestamps retain existing behavior.
+- Behavior: Preserve the UTC instant when reading `updatedAt`; valid fresh/stale status records must remain correctly classified in any Windows time zone. A status timestamp later than the reader's UTC clock must be unavailable with an explicit safe `FUTURE_TIMESTAMP` reason; it must never be reported fresh.
 - Invariants: Keep status reading non-elevated and independent from protected deployment configuration; do not change deployment control flow, status file permissions, or secret exposure.
 - Boundary/API: Existing local `auto-status` JSON/console result only; no public web endpoint or status-file schema change.
 - Effects and failures: Read-only validation. Invalid clock ordering fails closed for operator status without triggering or blocking a deployment.
-- Tests and evidence: Add a Pester case with a fixed `Now` and a status timestamp later than it; first observe the current incorrect `FRESH` result, then require `available=false` and `reason=FUTURE_TIMESTAMP`. Retain coverage for valid fresh and stale timestamps, run `Production.AutoDeploy.Tests.ps1`, the related operations suite, and applicable deployment script checks.
+- Tests and evidence: Add/retain Pester cases with fixed `Now` values for a valid stale timestamp, a valid fresh timestamp, and a timestamp later than `Now`; first observe the current incorrect classification, then require the correct freshness and `available=false`/`FUTURE_TIMESTAMP` for future data. Run `Production.AutoDeploy.Tests.ps1`, the related operations suite, and applicable deployment script checks.
 - Verification: Pending implementation.
 
 ## Code Changes
