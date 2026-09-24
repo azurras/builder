@@ -53,7 +53,7 @@ Unauthenticated `GET https://www.christopherbell.dev/`, `/actuator/health/livene
 
 ## Bugs / Follow-ups
 
-- Task 38 is implemented in the candidate branch: prevent false `UP_TO_DATE` status when production service/readiness is down; recover only through the existing lock and schema-direction guards; bound retries; and surface sanitized recovery status. Local CI/PR publication and merge remain pending.
+- Task 38 is implemented in PR #1437: prevent false `UP_TO_DATE` status when production service/readiness is down; recover only through the existing lock and schema-direction guards; bound retries; and surface sanitized recovery status. Hosted CI is running; merge and production recovery remain pending.
 - Immediate recovery requires the user to run the documented `prod.cmd restart` from an Administrator PowerShell. The task has already provided the exact command and reason; the current approval policy cannot surface an elevation prompt.
 - Do not restore SCM failure actions or start the service directly until the guarded deployment/migration state is verified. Root cause of the unexpected exits remains unknown because protected app logs/configuration are inaccessible.
 
