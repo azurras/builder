@@ -296,3 +296,8 @@ Read `Read-AutoDeployState` and current tests at PR #1428 head before merge. Its
 ## 2026-09-24 10:14 Central Daylight Time - Task 30 post-merge checks passed
 
 The merge-triggered CI Build and CodeQL workflows for merge SHA `786f500e282c26a348609f00301b60e16b013ab1` both passed. Updated Task 30 verification and Task 31's dependency to start from refreshed `origin/main`. The Task 31 plan remains validated; before-edit implementation has not started. Next refresh `origin/main`, inspect `Read-AutoDeployState` and its tests on that exact baseline, then run the read-versus-parse regression before editing.
+
+
+## 2026-09-24 10:23 Central Daylight Time - Task 31 state reader local verification
+
+Implemented Task 31 on `codex/auto-deploy-state-read-errors-20260924` at merged main baseline `786f500e282c26a348609f00301b60e16b013ab1`. `Read-AutoDeployState` now reads the file with terminating errors before entering the JSON parsing catch, so file access failures remain causal while malformed JSON keeps its sanitized message. The read-error regression failed before the fix for the intended reason. Automatic-deploy tests passed 53/53; automatic-deploy, deployment, common, operations, and command suites passed 301/301 in both PowerShell 7 and Windows PowerShell 5.1/Pester 5.9. `prod.ps1 help`, read-only `prod.ps1 auto-status`, and `git diff --check` passed. Auto-status remains `STORE_NOT_INITIALIZED`; production poller/runtime validation was not run because it reads protected configuration/state and can trigger deployment, and no elevated access is being used. PR #1429 (`67a8607acec10a9134d576fb89f4a473491bb1ba`) is open; dependency review passed and required CI/CodeQL checks are running. The existing untracked `testResults.xml` was preserved and not staged.
