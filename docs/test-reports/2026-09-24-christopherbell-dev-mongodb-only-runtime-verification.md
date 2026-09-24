@@ -61,3 +61,7 @@ Gradle used the isolated cache `A:\Projects\christopherbell.dev-worktrees\.gradl
 ## Bugs / Follow-ups
 
 The disposable empty database cannot satisfy the migration-015 cutover guard. Runtime readiness needs validation against an authorized restored backup in a separate disposable database containing the valid cutover ledger. Do not bypass or synthesize that ledger. No production files, services, or data were changed.
+
+## PR CI Follow-up - 2026-09-24 13:18 Central Daylight Time
+
+PR #1432 initially exposed two CI failures in `DatabaseHealthHttpSecurityIntegrationTest`: the test supplied stub Mongo connectivity and identity probes, but Spring Boot's MongoDB health indicator still contacted MongoDB on CI, causing overall health to return HTTP 503. The first fixture setting used the pre-Spring-Boot-4 key and did not disable it. Updated the test to use `management.health.mongodb.enabled=false`, which is the Spring Boot 4 property. On final source commit `3935d3d735310264ee5e2b7e3eda11b801bdcee7`, all required PR checks passed: Ubuntu, macOS, Windows, CodeQL (Actions, Java/Kotlin, JavaScript/TypeScript), and dependency review. A local targeted Gradle rerun could not start because Gradle reported `Unable to establish loopback connection`; CI executed and passed the full tests on all three operating systems. PR remains draft; no merge or deployment occurred. Runtime readiness remains blocked pending a trusted restored Mongo backup with the valid migration-015 ledger.
