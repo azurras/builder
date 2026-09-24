@@ -53,7 +53,7 @@ Unauthenticated `GET https://www.christopherbell.dev/`, `/actuator/health/livene
 
 ## Bugs / Follow-ups
 
-- Task 38 is planned: prevent false `UP_TO_DATE` status when production service/readiness is down; safely recover only through the existing lock and schema-direction guards; bound retries; and surface the sanitized recovery result.
+- Task 38 is implemented in the candidate branch: prevent false `UP_TO_DATE` status when production service/readiness is down; recover only through the existing lock and schema-direction guards; bound retries; and surface sanitized recovery status. Local CI/PR publication and merge remain pending.
 - Immediate recovery requires the user to run the documented `prod.cmd restart` from an Administrator PowerShell. The task has already provided the exact command and reason; the current approval policy cannot surface an elevation prompt.
 - Do not restore SCM failure actions or start the service directly until the guarded deployment/migration state is verified. Root cause of the unexpected exits remains unknown because protected app logs/configuration are inaccessible.
 
@@ -64,3 +64,11 @@ After PR #1436 merged at 20:41:20 UTC as `e166f7db9334b117f45e43e3bb7978bdcaf70c
 Filtered Application and System events for 2026-09-24 14:55-15:05 CDT show PR #1432 had merged at 14:51 CDT. At 14:59:04, the website service startup type changed from automatic to disabled. At 14:59:05, WinSW failed in `ProcessHelper.GetChildren` / `StopProcessTree` with `Win32Exception (6): The handle is invalid`; Windows recorded a .NET Runtime 1026 and Application Error 1000 for `ChristopherBellDev.exe` 2.12.0. The website launcher process started at 14:59:10; its child exited with code 1 at 14:59:13, and the service terminated. This makes the production transition the likely outage trigger. The launcher child error is not present in the accessible event excerpt. Reading the protected service log directory returned `UnauthorizedAccessException`; no protected log or configuration contents were read.
 
 No production mutation was made. Recovery and exact application-level root cause remain unverified pending the supported guarded restart from an elevated context and access to the protected startup diagnostic.
+
+## Candidate Status Projection and Regression Verification (2026-09-24 21:10 UTC)
+
+The Task 38 candidate from worktree `A:\Projects\christopherbell.dev-worktrees\auto-deploy-live-health-20260924`, based on merged main `e166f7db9334b117f45e43e3bb7978bdcaf70ca3`, was run read-only against the production host. `prod.ps1 auto-status` exited 0 and reported fresh status `SERVICE_UNHEALTHY`, `deploymentStatus=BACKING_OFF`, `reason=SERVICE_STOPPED`, `serviceState=STOPPED`, `siteHealth=UNHEALTHY`, and `siteHealthReason=SERVICE_STOPPED`. It retained sanitized remote/active revisions and poller `UNKNOWN/ACCESS_DENIED`. The production service remained stopped and public readiness returned HTTP 502. This verifies the candidate CLI no longer presents the stored healthy-looking state without live health context; the candidate poller recovery implementation has not been deployed or run against the production service.
+
+Regression verification on the candidate source passed the automatic-deploy (69), deployment (97), operations (102), and command (17) Pester suites under both PowerShell 7.6.6/Pester 5.9 and Windows PowerShell 5.1.26100.9444/Pester 5.9: 285/285 in each runtime. PowerShell parser checks and `git diff --check` passed. These are code checks plus a read-only production CLI probe; they do not prove service recovery or startup.
+
+No production service, listener, configuration, ACL, deployment task, or database state was changed. The outage and root launcher failure remain unresolved; the current host still cannot surface an elevated prompt.
