@@ -170,3 +170,12 @@ Added Task 25 to the implementation plan with behavior and test boundaries. Its 
 
 Correction and delivery update for the prior Task 24 entry: PR #1422 passed dependency review, CodeQL, and Windows/macOS/Ubuntu CI, then merged as `6a669a3c151e3564de607362c8421acce2f7d421`. Its post-merge CI Build and CodeQL runs are still in progress; do not record production acceptance based on this merge. The Builder plan now records the final local results and Task 25's refreshed base SHA.
 - Task 25 implementation is authorized by the existing audit goal and now begins on `codex/sensor-query-errors-20260924` from refreshed `origin/main` at the Task 24 merge.
+
+
+## 2026-09-24 08:19 Central Daylight Time - Surface production sensor inspection failures
+
+Continued the published Task 25 sensor diagnostics work on `codex/sensor-query-errors-20260924`, based on the Task 24 merge.
+- Reproduced two suppressed inspection failures: Win32_SystemDriver CIM errors were reported as a missing PawnIO driver, and Get-NetTCPConnection errors were reported as zero production listeners.
+- Changed both queries to stop on query errors while preserving successful empty results. Added regressions for both failures, empty driver inventory, and zero-listener validation. The failure tests were run against the old behavior and failed for the misreported outputs; all four focused tests then passed under PowerShell 7 and Windows PowerShell 5.1/Pester 5.9.
+- PowerShell 7 sensor, operations, and command suites passed 152/152. Windows PowerShell 5.1 passed 146 tests with 6 unrelated compatibility failures involving Path.GetRelativePath, IO.Compression.ZipFile, and Double.IsFinite; the four new tests passed. Non-elevated CLI help and git diff --check passed.
+- PR #1422 post-merge CI Build and CodeQL remain in progress. Task 25 has not yet been published to a PR. No live sensor command, elevation, or production mutation occurred.
