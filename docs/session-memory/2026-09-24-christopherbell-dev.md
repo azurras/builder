@@ -395,3 +395,14 @@ Hosted merge-triggered checks for PR #1432 (MongoDB-only removal) and PR #1435 (
 ## 2026-09-24 15:27 Central Daylight Time - Verification count correction
 
 Correction to the 15:25 entry: the final full `:website:check` after both test-profile settings passed with 21 actionable tasks, 13 executed and 8 up-to-date. `:website:jsTest` was up-to-date in that final run; 343/343 JS tests were from the earlier full check before the Cane's setting. The final focused run after both settings passed all 37 selected Java tests, and the final Windows production Pester suite passed 75/75.
+
+
+## 2026-09-24 15:50 Central Daylight Time - production outage linked to MongoDB-only rollout
+
+## 2026-09-24 15:45 Central Daylight Time - production outage linked to MongoDB-only rollout
+
+Read-only checks after PR #1436 merged show the production site remains unavailable: `ChristopherBellDev` is stopped, MongoDB and cloudflared are running, and public readiness returns HTTP 502. `prod.ps1 auto-status` now reports `BACKING_OFF`/`DEPLOYMENT` for merge SHA `e166f7db9334b117f45e43e3bb7978bdcaf70ca3`; active SHA remains `4b552a63a08c9333bdaa0d7827b23eb811920f37`. The poller query still reports `UNKNOWN/ACCESS_DENIED`.
+
+Inspected filtered Windows Application/System events for 14:55-15:05 CDT. PR #1432 merged at 14:51 CDT. At 14:59:04 the deploy operation changed website service startup from Automatic to Disabled. At 14:59:05 WinSW 2.12.0 crashed during `StopProcessTree` with `Win32Exception (6): The handle is invalid` (Application Error 1000 and .NET Runtime 1026). The launcher started at 14:59:10; its child exited with code 1 at 14:59:13 and the service terminated. This strongly links the PR #1432 production transition to the outage. The exact app/launcher child failure remains unknown because service logs/configuration are protected; a non-admin listing of the service log directory returned UnauthorizedAccessException, and no protected content was read. No production state or ACL was changed.
+
+Updated Task 37 merge evidence, Task 38 deployment outage timeline, and the blocked production diagnostic report. Task 38 implementation and elevated guarded recovery remain incomplete. The current Codex host cannot surface an elevation prompt.
