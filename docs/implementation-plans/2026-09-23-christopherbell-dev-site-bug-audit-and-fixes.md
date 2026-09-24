@@ -174,6 +174,19 @@ Find and fix reproducible bugs in the current christopherbell.dev site, verify e
 - Tests and evidence: First reproduce the existing same-failed-SHA test failure on Windows PowerShell 5.1, then require it to pass under both Windows PowerShell 5.1 and PowerShell 7. Run related automatic-deploy, operations, and command suites; compare any remaining Windows PowerShell 5.1-only staging-test failures with a clean `origin/main` baseline before attributing them to this change.
 - Verification: The existing same-failed-SHA backoff regression failed under Windows PowerShell 5.1 before the timestamp parser change and passes afterward; the retry-after-expiry regression passes under Windows PowerShell 5.1 and PowerShell 7. The combined automatic-deploy, operations, and command suites pass under PowerShell 7/Pester 5.9 (135 passed, 0 failed). Under Windows PowerShell 5.1, 133 tests pass and the same two staging tests fail on clean `origin/main` as well as the working branch; they pass under PowerShell 7, so they are recorded as baseline compatibility failures, not regressions from this task. Non-elevated CLI help and auto-status pass. No protected task, service, or production state was changed.
 
+### Task 11 - Keep deployment staging regressions within Windows PowerShell path limits
+- Dependencies: Task 10 cross-version suite comparison identified two staging tests that fail on unmodified `origin/main` under Windows PowerShell 5.1 but pass under PowerShell 7.
+- Files: `ops/production/windows/tests/Production.AutoDeploy.Tests.ps1`.
+- Symbols: `stages trusted versioned tools before switching the poller action` and `cleans a partial tools stage and preserves the task action when copying fails`.
+- Inspection: Both failures originate from excessively long synthetic test paths under Pester's Windows temporary root. Windows PowerShell 5.1 cannot copy the synthetic source module from the nested worktree path; cleanup then wraps the original copy error in an `AggregateException`. The product's scheduled task uses PowerShell 7, and these two tests already pass there.
+- Required skills: `write-jane-street-style-code` and test-driven development for test-fixture repair.
+- Behavior: Keep both staging tests deterministic and runnable under Windows PowerShell 5.1 and PowerShell 7 by shortening their unique per-test temporary root without weakening the staging/copy/cleanup assertions.
+- Invariants: Test-only change. Preserve per-test isolation, the real source-to-stage copy path, partial-stage cleanup proof, and task-action preservation assertions.
+- Boundary/API: Pester fixture paths only; no production deployment path, API, ACL, or task behavior change.
+- Effects and failures: Prevent host path-length limits from masking the staging behavior under test and preserve the original simulated copy failure as the reported error.
+- Tests and evidence: Reproduce both failures on clean `origin/main` with Windows PowerShell 5.1/Pester 5.9, then require both to pass under Windows PowerShell 5.1 and PowerShell 7; rerun the three related Pester suites.
+- Verification: Pending implementation.
+
 ## Code Changes
 Task 2 is limited to WFL startup catch-up selection, direct unit tests and the owning feature README's scheduling contract. Task 3 extends the existing Cane's weekly collector's startup behavior without changing its persistence schema or API. Task 8 narrows swallowed profile-resolution failures while preserving anonymous fallback behavior. Reinspect all targets before edits.
 
