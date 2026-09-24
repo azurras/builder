@@ -156,3 +156,11 @@ Continued the authorized christopherbell.dev bug audit with the user's focus on 
 - Refreshed the site worktree from `origin/main` at the merge SHA and created `codex/legacy-postgres-inspection-errors-20260924`.
 - Read-only source review found `Enter-ProductionPostgreSqlLegacyReplacement` suppresses errors from both legacy-service and established-client queries. In particular, a failed TCP inspection becomes an empty result and may cause a running PostgreSQL 16 service to be disabled and stopped. Added Task 24 to the published implementation plan to propagate these inspection errors before any service mutation, preserving genuine service absence and successful empty-connection behavior.
 - Production remains unchanged. The broader audit goal and elevated poller bootstrap/production acceptance remain open.
+
+
+## 2026-09-24 08:07 Central Daylight Time - Plan sensor query failure diagnostics
+
+A second read-only sensor audit identified two query failures that are currently presented as absence:
+- PawnIO's Win32_SystemDriver CIM lookup suppresses every error and reports the driver as Missing; a successful empty query and a failed inventory are indistinguishable.
+- CPU-temperature listener ownership suppresses Get-NetTCPConnection errors and reports zero listeners instead of the actual inspection failure.
+Added Task 25 to the implementation plan with behavior and test boundaries. Its implementation is explicitly dependent on Task 24 merging, then refreshing origin/main. No sensor command or production state was changed.

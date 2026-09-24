@@ -356,6 +356,19 @@ Find and fix reproducible bugs in the current christopherbell.dev site, verify e
 - Tests and evidence: Add regressions for unexpected service lookup failure, native absent-service behavior, and connection enumeration failure; assert no `Set-Service`, `Stop-Service`, or installer process action occurs on inspection failure. Run PostgreSQL tests and related operations/command suites under PowerShell 7 and Windows PowerShell 5.1/Pester 5.9; record the known unrelated Windows PowerShell API failures without attributing them to this change. Run non-elevated CLI help and `git diff --check`. No elevated/live installation is needed or authorized while the user is away.
 - Verification: Begin implementation only after publishing this contract. Record red-before/green-after evidence, both-shell results, PR checks, merge SHA and post-merge CI/CodeQL.
 
+### Task 25 - Surface sensor inventory and listener query failures
+- Dependencies: Task 24 must merge first; create a fresh branch from refreshed `origin/main` after that merge.
+- Files: `ops/production/windows/modules/Production.Sensors.psm1` and `ops/production/windows/tests/Production.Sensors.Tests.ps1`.
+- Symbols: `Get-PawnIoInstallation`'s `Get-CimInstance Win32_SystemDriver` query and `Get-ProductionCpuTemperature`'s production-listener query.
+- Inspection: Read both functions and the sensor status/install/readiness tests in `origin/main` at `97c5a339a03cd21ce95be5e800e036940bd6f1df`. The driver inventory suppresses all CIM failures and returns `Driver='Missing'`, indistinguishable from a successful empty inventory. CPU-temperature ownership suppresses all listener-query errors and reports a misleading listener count of zero instead of the query failure. Other sensor health checks use `-ErrorAction Stop`.
+- Required skill: `write-jane-street-style-code`; use test-driven development for diagnostic failure behavior.
+- Behavior: Surface unexpected driver inventory and listener query failures. Preserve `Driver='Missing'` when the CIM query succeeds with no driver, and preserve the existing listener-count validation for a successful query.
+- Invariants: Do not treat an unobservable driver or listener state as absence; do not alter driver installation, service, sensor enablement, listener ownership, protected file, or production state.
+- Boundary/API: Local operator sensor diagnostics only; no public site routes or production mutation.
+- Effects and failures: Query failures remain causal errors to the caller; successful empty query results retain their existing missing-driver/no-listener outcomes.
+- Tests and evidence: Add focused Pester regressions proving both query errors propagate and asserting sensor/production mutations are not attempted; preserve successful empty-driver and zero-listener cases. Run the sensor, operations, and command suites under PowerShell 7 and Windows PowerShell 5.1/Pester 5.9, non-elevated CLI smoke, and `git diff --check`. No elevated or live production sensor command.
+- Verification: Start only after Task 24 is merged and this contract is published. Record red-before/green-after results, both-shell suites, PR checks, merge SHA, and post-merge CI/CodeQL.
+
 ## Code Changes
 Task 2 is limited to WFL startup catch-up selection, direct unit tests and the owning feature README's scheduling contract. Task 3 extends the existing Cane's weekly collector's startup behavior without changing its persistence schema or API. Task 8 narrows swallowed profile-resolution failures while preserving anonymous fallback behavior. Reinspect all targets before edits.
 
