@@ -241,3 +241,8 @@ Correction to the prior Task 26 status: post-merge CI Build passed on Windows, m
 Read-only `prod.ps1 auto-status` from the isolated worktree returned `available=False`, `reason=STORE_NOT_INITIALIZED`, and exit code 0. Because the root probe suppresses errors, this readback cannot distinguish a genuinely absent store from a failed/inaccessible path query. No protected configuration was read or changed.
 
 Task 28 inspection refinement: the adjacent status-file `Test-Path` is also part of the same failure boundary. It runs inside the catch but does not use `-ErrorAction Stop`, so a non-terminating access/query error can be reported as `STATUS_NOT_PUBLISHED`. The published contract now covers both directory and status-file probes while preserving true absence results.
+
+
+## 2026-09-24 09:00 Central Daylight Time - Merge installer query failure fix and start status-path repair
+
+PR #1425 passed all required checks and merged as `dad7cf9916de3a8381a2ae40016b4ef1f70befb9`. The merge command could not delete the local branch because `main` is checked out in the authoritative worktree; GitHub confirms the merge. Post-merge CI Build and CodeQL are running. Refreshed the isolated worktree to that merge and started Task 28 on `codex/auto-deploy-status-query-errors-20260924`; confirmed both path probes in `Get-AutoDeployStatus` can misclassify failed inspection as missing state. No production status mutation, deployment, or elevation occurred.
