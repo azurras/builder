@@ -145,3 +145,14 @@ Continued the authorized christopherbell.dev deployer robustness work while resp
 ## 2026-09-24 07:42 Central Daylight Time - Plan PostgreSQL service status query fix
 
 Performed a read-only scan of current christopherbell.dev production modules after merging Task 22. Source review found that `Get-ProductionPostgreSqlStatus` runs its bounded PostgreSQL identity/settings probe, then suppresses all errors from the PostgreSQL Windows service query and can return `Service='NotInstalled'` despite an inspection failure. Added Task 23 to the existing implementation plan with the native missing-service exception boundary, failure behavior, focused regression, and both-shell verification requirements. No production command or service query against live production was run.
+
+
+## 2026-09-24 08:00 Central Daylight Time - PostgreSQL status merged and legacy replacement preflight planned
+
+Continued the authorized christopherbell.dev bug audit with the user's focus on robustness and observability. The user is away and explicitly asked not to initiate approval prompts, so no elevation, production mutation, or live deployment was attempted.
+
+- PR #1421 surfaced unexpected PostgreSQL Windows service inspection failures instead of returning a misleading `NotInstalled` status. It merged as `97c5a339a03cd21ce95be5e800e036940bd6f1df`. Focused status cases passed 3/3 under Windows PowerShell 5.1/Pester 5.9; PostgreSQL, operations, and command suites passed 150/150 under PowerShell 7/Pester 5.9. In Windows PowerShell, the focused status cases passed 3/3 and operations/command passed 120/120; the broader PostgreSQL suite had 148 pass and two unrelated failures due to missing .NET APIs `RandomNumberGenerator.Fill` and `Convert.ToHexString`. CLI help and `git diff --check` passed.
+- At recording time post-merge CodeQL and CI Build were still running. PR CI had passed before merge. No production mutation or elevation was performed.
+- Refreshed the site worktree from `origin/main` at the merge SHA and created `codex/legacy-postgres-inspection-errors-20260924`.
+- Read-only source review found `Enter-ProductionPostgreSqlLegacyReplacement` suppresses errors from both legacy-service and established-client queries. In particular, a failed TCP inspection becomes an empty result and may cause a running PostgreSQL 16 service to be disabled and stopped. Added Task 24 to the published implementation plan to propagate these inspection errors before any service mutation, preserving genuine service absence and successful empty-connection behavior.
+- Production remains unchanged. The broader audit goal and elevated poller bootstrap/production acceptance remain open.
