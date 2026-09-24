@@ -194,3 +194,8 @@ Continued read-only robustness review while PR #1423 checks run. The PostgreSQL 
 ## 2026-09-24 08:24 Central Daylight Time - Confirm PostgreSQL preflight post-merge checks
 
 Post-merge completion update: PR #1422's CI Build passed on Windows, macOS, and Ubuntu, and CodeQL passed at merge SHA `6a669a3c151e3564de607362c8421acce2f7d421`. PR #1423's required platform builds remain in progress. No deployment or production mutation occurred.
+
+
+## 2026-09-24 08:31 Central Daylight Time - Sensor diagnostics merged; begin rollback safety review
+
+Correction and delivery update for Task 25: PR #1423 passed all required checks and merged as `30fe9e2c1d60c0bb1cdc606fdb0236822c5f88e5`. Post-merge CI Build and CodeQL are queued/in progress. The refreshed site worktree is on `codex/postgres-rollback-safety-20260924` at that merge SHA for the published Task 26 contract. No live production mutation occurred.
