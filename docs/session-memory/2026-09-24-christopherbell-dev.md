@@ -308,3 +308,8 @@ Implemented Task 31 on `codex/auto-deploy-state-read-errors-20260924` at merged 
 PR #1429 passed all required CI, CodeQL, and dependency checks and merged as `64e1a95ae48f8c1708c0069d4fc389ec93bb9b8e` at 2026-09-24 15:32:56 UTC. Merge-triggered CI Build and CodeQL are running. Task 31 is fully tested locally as recorded above; no production poller run occurred, and auto-status still reports `STORE_NOT_INITIALIZED`.
 
 Inspected the PostgreSQL installer package identity path as the next candidate. `Get-ProductionPostgreSqlPackageIdentity` suppresses all `Get-ItemProperty` inventory errors before checking that exactly one package was found; a partial registry view can therefore conceal an incomplete identity inventory. Both x64 and WOW6432Node uninstall roots exist on this host. Added Task 32 to the Builder plan, dependent on Task 31 post-merge CI and refreshed main. No registry operation or PostgreSQL install was performed.
+
+
+## 2026-09-24 10:42 Central Daylight Time - Task 31 post-merge checks passed
+
+The merge-triggered CI Build and CodeQL for Task 31 merge SHA `64e1a95ae48f8c1708c0069d4fc389ec93bb9b8e` both passed. Updated the Task 31 verification and Task 32 dependency; the PostgreSQL registry work can now start from refreshed main. The public site/runtime remains unmodified by these operations.
