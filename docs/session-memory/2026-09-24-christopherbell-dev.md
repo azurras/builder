@@ -189,3 +189,8 @@ Correction and publication update for the prior Task 25 entry: PR #1423 is now o
 ## 2026-09-24 08:22 Central Daylight Time - Plan PostgreSQL rollback failure handling
 
 Continued read-only robustness review while PR #1423 checks run. The PostgreSQL legacy restore path suppresses inspection/stop failures for the newly installed service and can continue to start the legacy service while the new service may still be running. The installer catch can also replace the original install error if rollback throws. Added Task 26 to the Builder plan for fail-safe rollback and preserving both causes. It depends on Task 25 merging; no code or production state was changed for this follow-up.
+
+
+## 2026-09-24 08:24 Central Daylight Time - Confirm PostgreSQL preflight post-merge checks
+
+Post-merge completion update: PR #1422's CI Build passed on Windows, macOS, and Ubuntu, and CodeQL passed at merge SHA `6a669a3c151e3564de607362c8421acce2f7d421`. PR #1423's required platform builds remain in progress. No deployment or production mutation occurred.
