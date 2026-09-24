@@ -78,3 +78,21 @@ Continued the user's authorized site bug audit with the requested focus on deplo
 - Updated and published the implementation plan through Builder commits `72b1085`, `8ab4be7`, `843e87a`, `7330758`, `9ecd7e1`, `128b335`, `c07de2b`. The plan and CI evidence are in `docs/implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md`.
 
 The broader site-audit goal remains active. Resume source discovery on current `origin/main`; do not claim production deployment or acceptance from merged source and CI alone.
+
+
+## 2026-09-24 06:06 Central Daylight Time - Production status diagnostics merged
+
+## 2026-09-24 06:15 Central Daylight Time - Production status diagnostics merged
+
+Continued the authorized site audit's deployer robustness and observability work. The user asked to avoid any action that requires an approval prompt while away; no prompt was opened.
+
+- Fixed `Get-ProductionStatus` hiding unexpected failures from website/MongoDB/cloudflared service queries and the production listener query. Genuine missing services remain `NotInstalled`, no listener remains a null PID, and a successful listener still reports its owning PID. Existing status object fields are unchanged.
+- Added regressions for service-query failure, listener-query failure, the native missing-service error, absent service/no listener, and listener PID reporting. Operations, command, and automatic-deploy Pester suites passed 158/158 under PowerShell 7/Pester 5.9 and Windows PowerShell 5.1/Pester 5.9. Non-elevated `prod.cmd help` passed; `prod.cmd auto-status` correctly reported `STORE_NOT_INITIALIZED`; `git diff --check` passed.
+- PR #1416 passed dependency review, CodeQL, and Windows/macOS/Ubuntu CI, then merged as `d03a34c2d666c34615c8b20f340a1e0d0c801067`. Post-merge CI Build and CodeQL passed. PR: https://github.com/azurras/christopherbell.dev/pull/1416.
+- No public display-name changes were part of this fix and no production mutation occurred. The automatic-deploy store remains uninitialized; `prod.cmd auto-install` bootstrap and production acceptance require an elevated approval. The user is away, so leave production unchanged and continue non-elevated source audit.
+- Updated Task 18's implementation plan verification; publish the plan and this memory entry together after refreshing and validating Builder indexes.
+
+
+## 2026-09-24 06:06 Central Daylight Time - Correct status diagnostics entry timestamp
+
+Correction: The entry immediately above was recorded at 06:06 Central Daylight Time. Its body accidentally repeated a heading and named 06:15, which was a mistyped future time. Treat the content as one 06:06 activity record; this correction preserves the append-only history.
