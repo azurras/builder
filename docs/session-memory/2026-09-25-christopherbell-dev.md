@@ -13,3 +13,18 @@ Task 42 source changes were in PR #1440, merged as `19c986368396ea45cb8e0467ef7a
 Attempted to deploy merged main. The deployer built in its own clean protected worktree; the build failed before release switch with `gradlew.bat exited with code 1`. The protected Gradle daemon log recorded `Unable to establish loopback connection` and `SocketException: Invalid argument: connect`. Post-failure protected readback showed active+marker SHA still `4b552a...`, service Running, and public routes healthy. This corrects an earlier mistaken attribution to the local dirty `gradlew.bat`; preserve that unrelated edit. Pester created an untracked `testResults.xml`; do not include it in commits.
 
 Runtime details are in [the 2026-09-25 recovery report](../test-reports/2026-09-25-christopherbell-dev-target-release-recovery-and-public-verification.md). Task 42 remains in progress: diagnose the production Gradle loopback failure, deploy merged main, verify the guarded poller once, then enable recurring polling after healthy status readback. Automatic deployment task remains Disabled.
+
+
+## 2026-09-25 11:43 Central Daylight Time - Production deployer KISS pass
+
+The user asked to make a KISS pass on the deployment tooling. Reused the existing Task 42 plan and published Task 43 before the code edit. Narrowed the refactor to the ordinary `TARGET_ACTIVE` path: `Invoke-ProductionDeploy` delegates to one helper that owns candidate activation, marker publication, recovery-policy restoration, and the single guarded prior-release recovery. First Music cutover and reconciliation code remains untouched.
+
+On the original linked site worktree, the deployment suite passed 98/98 before extraction. The readiness failure characterization was then expanded with a marker-publication failure case; both pass. All 14 Windows production Pester suites passed: 814 passed, 0 failed, 28 skipped. Windows PowerShell 5.1 parser checks passed for the edited module and tests; `git diff --check` passed. The Windows, macOS and Ubuntu build jobs, CodeQL analyses and dependency review for PR #1441 all passed.
+
+The clean branch `codex/deployer-kiss-pass-clean` was based on `origin/main`; its implementation commit was `e2dfc1b6`. PR #1441, [Simplify target release deployment path](https://github.com/azurras/christopherbell.dev/pull/1441), merged at 2026-09-25 16:39:37 UTC as `465858d1fe604a9883d31e1e5dc515e27aaa1b2a`. Builder plan Task 43 records the result. Runtime report: [deployer KISS pass](../test-reports/2026-09-25-christopherbell-dev-deployer-kiss-pass.md).
+
+At 16:40:58 UTC, `ChristopherBellDev` was Running and `GET https://www.christopherbell.dev/` returned HTTP 200, page title `CB | Home`, body length 4,348. No production release pointer, application binary, service config, or database was changed by this behavior-preserving deployment-script refactor. This continuity check does not establish that a new production release or protected deployment-tool refresh occurred.
+
+One initial post-edit marker-failure characterization run exposed a faulty test mock: the simulated candidate switch fell through into the prior-release mock behavior and made both junction identities point to the candidate. Added an early return to the candidate branch; both readiness and marker failure cases then passed. Preserved the unrelated modified `gradlew.bat` and untracked `testResults.xml` in the original site worktree.
+
+Task 42 remains open for the separate protected production Gradle build failure and guarded poller verification. The production site was healthy after this KISS pass. The Builder plan and test report should be published after indexes and validation are refreshed.
