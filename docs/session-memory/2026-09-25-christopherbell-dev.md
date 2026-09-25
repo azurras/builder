@@ -55,3 +55,10 @@ Added safe route labels for only the fixed smoke endpoints on approved public ho
 The SYSTEM poller then refreshed tools to `0e20fc6282e42d01fb05f6fdaeb760785f208443` from that source SHA and successfully deployed it without elevation. Non-elevated status at 21:02:11 UTC reported `UP_TO_DATE`, `HEALTHY`, and matching remote/active/successful SHA `375f527...`. The service was Running/Automatic. Post-deployment GET sweep passed all 33 routes (11 local and 22 public across apex/www), maximum observed 1,250 ms; homepage title `CB | Home`. The exact route behind the older failures remains unknown because the prior tool had already persisted only `[redacted]`. Standard-user Scheduler reads remain `ACCESS_DENIED`, but recurring task execution and the successful refresh are observable via status transitions.
 
 Runtime details: [deployer route diagnostics report](../test-reports/2026-09-25-christopherbell-dev-deployer-route-diagnostics.md). Plan follow-up: [site bug audit plan](../implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md).
+
+
+## 2026-09-25 16:08 Central Daylight Time - Production data freshness follow-up
+
+After the deployed release and 33-route smoke sweep, rechecked the live cadence APIs with read-only GET requests. Cane's history has recovered: latest complete week starts 2026-09-21, collected 2026-09-24, with 50/50 successful metros. WFL remains stale: the public API returns HTTP 200 but still reports `lastRefreshedOn=2026-08-02T22:44:50.963Z` and `current=false` for a 45-day window. The public response does not expose the failed import cause, and protected logs were not accessed. Updated the Task 3 production correction and deployer runtime report; overall site audit remains in progress until the WFL freshness issue is resolved or its remaining limitation is explicitly accepted.
+
+Evidence: [deployer route diagnostics report](../test-reports/2026-09-25-christopherbell-dev-deployer-route-diagnostics.md); [site bug audit plan](../implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md).

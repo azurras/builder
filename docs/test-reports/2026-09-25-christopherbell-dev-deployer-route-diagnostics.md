@@ -32,7 +32,7 @@ The AutoDeploy and Command Pester suites passed on PowerShell 7.6.6/Pester 5.9.0
 
 ## Data Sent
 
-Read-only HTTP GET requests to each of the 11 smoke-route paths at `http://127.0.0.1:8080/`, `https://christopherbell.dev/`, and `https://www.christopherbell.dev/`, plus a public homepage request. These requests exercised the running production app without request bodies, database reads/writes, account changes, or protected-log access.
+Read-only HTTP GET requests to each of the 11 smoke-route paths at `http://127.0.0.1:8080/`, `https://christopherbell.dev/`, and `https://www.christopherbell.dev/`, plus a public homepage request. Also queried `https://www.christopherbell.dev/api/whatsforlunch/restaurant/2026-07-26/freshness` and `https://www.christopherbell.dev/api/canes-box-tracker/2026-06-04/history`. These requests exercised public production endpoints without request bodies, database reads/writes, account changes, or protected-log access.
 
 ## Response Received
 
@@ -40,6 +40,7 @@ Read-only HTTP GET requests to each of the 11 smoke-route paths at `http://127.0
 - At `2026-09-25T21:02:11.3627249Z`, a subsequent poll reported `UP_TO_DATE`, `HEALTHY`, no failed SHA, no retry deadline, and the same active/successful SHA. `ChristopherBellDev` was `Running`, startup type `Automatic`.
 - The post-deployment sweep returned HTTP 200 for all 33 requests: 11 local routes and 22 requests across both public hostnames. Maximum observed request time was 1,250 ms. The homepage title was `CB | Home`.
 - Each route response had status code: 200; the homepage returned the expected `CB | Home` title.
+- The WFL freshness API returned status code: 200 with `lastRefreshedOn=2026-08-02T22:44:50.963Z`, `current=false`, and a 45-day freshness window. The Cane's history API returned status code: 200 with latest week `2026-09-21`, collected `2026-09-24T23:58:45.897Z`, and 50/50 successful metros.
 
 ## Pass / Fail
 
@@ -58,4 +59,4 @@ Read-only HTTP GET requests to each of the 11 smoke-route paths at `http://127.0
 
 ## Bugs / Follow-ups
 
-Four automatic attempts to deploy the previous trusted revision `7639e3f1b552013a72cb59f0e32807fc6356daf3` timed out and used guarded rollback to keep the site on `4b552a63a08c9333bdaa0d7827b23eb811920f37`. The earlier installed tool had already redacted the failed URI in its persisted status, so the exact route and historical cause cannot be recovered from non-elevated status. Deployment of the next trusted revision, which included the safe route diagnostic, succeeded and left production `UP_TO_DATE` and healthy. Standard-user Scheduler queries remain `ACCESS_DENIED`; recurring task executions and successful tool refresh were observed through the public-readable status transitions.
+Four automatic attempts to deploy the previous trusted revision `7639e3f1b552013a72cb59f0e32807fc6356daf3` timed out and used guarded rollback to keep the site on `4b552a63a08c9333bdaa0d7827b23eb811920f37`. The earlier installed tool had already redacted the failed URI in its persisted status, so the exact route and historical cause cannot be recovered from non-elevated status. Deployment of the next trusted revision, which included the safe route diagnostic, succeeded and left production `UP_TO_DATE` and healthy. Standard-user Scheduler queries remain `ACCESS_DENIED`; recurring task executions and successful tool refresh were observed through the public-readable status transitions. Cane's data has recovered through the September 21 week. WFL remains stale despite the merged catch-up fix and successful app deployment; its public response exposes the old timestamp but not the import failure cause, and protected logs were not read.
