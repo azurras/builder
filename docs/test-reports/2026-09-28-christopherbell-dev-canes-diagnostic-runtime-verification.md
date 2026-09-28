@@ -77,3 +77,7 @@ No request triggered collection, import, price application, or other production 
 ## Bugs / Follow-ups
 
 The new code is active in production, but its failure text has not yet been observed from a new production collection. The observed read-only official gateway request returned HTTP 403 from this host, so the upstream access failure remains unresolved. The public menu fallback stays disabled to avoid stale third-party prices; no data was fabricated or applied. The next scheduled collection is needed to confirm the improved text in a persisted sample.
+
+### Follow-up read-only source probe
+
+On 2026-09-28, one read-only location-search GraphQL POST to the configured official gateway, one GET to its legacy official `restaurants/byref` endpoint, and one GET to the official ordering page each returned HTTP 403 with `text/html; charset=UTF-8` from a `cloudflare` server response. Each response was 864,550 bytes rather than JSON; no response body was stored. This narrows the failure to an edge denial before this client can parse the API response, but does not identify the provider's specific policy reason. No challenge was solved or bypassed, no credentials were supplied, and no collection/data write was triggered. Restoring automated official-source access requires a permitted route or provider-authorized access; otherwise only explicitly manual verified prices should be used.
