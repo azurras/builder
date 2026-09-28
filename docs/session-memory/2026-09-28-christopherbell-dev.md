@@ -39,3 +39,8 @@ Evidence: [Task 48 plan](../implementation-plans/2026-09-23-christopherbell-dev-
 ## Cane's official source access diagnosis
 
 For the still-empty 2026-09-28 Cane's snapshot, performed three read-only probes from the production host: one location-search GraphQL POST to the configured gateway, one GET to its legacy official `restaurants/byref` endpoint, and one GET to the official order page. Each returned HTTP 403 with `text/html; charset=UTF-8` from a `cloudflare` server and an 864,550-byte body rather than JSON. The evidence narrows the block to an edge response before client parsing, but does not reveal the provider's policy reason. No challenge was solved or bypassed, credentials were not supplied, and no collector or data mutation was run. The fix now depends on a permitted provider route/access or explicit manual price verification; public fallback remains disabled to avoid stale third-party prices. Evidence: [Cane's failure diagnostics runtime verification](../test-reports/2026-09-28-christopherbell-dev-canes-diagnostic-runtime-verification.md).
+
+
+## 2026-09-28 12:54 - Reconfirm production status and tool refresh
+
+Read-only `prod.ps1 auto-status` at 2026-09-28 17:53:12 UTC reported `UP_TO_DATE`, `RUNNING`, `HEALTHY`, and `FRESH`; remote, active, attempted, and successful SHAs all matched production merge `ff60887f6fb914827815fd670f03782bc82286e9`. Trusted deployment tools had refreshed successfully at 17:53:11 UTC from that source SHA. Poller registration still reports `UNKNOWN` / `ACCESS_DENIED`, so this confirms a recent poller run but not whether its scheduled task is enabled. No task, configuration, service, or deployment state was mutated. Updated the Task 48 production runtime report with this read-only evidence.

@@ -69,7 +69,7 @@ Site worktree branch `codex/canes-trend-asof-context-20260928`; candidate source
 ## Production Deployment and Runtime Proof
 
 - PR #1448 passed required CI and merged as `ff60887f6fb914827815fd670f03782bc82286e9`.
-- The supported production status reached `UP_TO_DATE`, `RUNNING`, `HEALTHY`, and `FRESH`; `remoteSha`, `activeSha`, `attemptedSha`, and `successfulSha` all matched the merge SHA. The non-elevated poller-registration detail remains `ACCESS_DENIED`.
+- The supported production status reached `UP_TO_DATE`, `RUNNING`, `HEALTHY`, and `FRESH`; `remoteSha`, `activeSha`, `attemptedSha`, and `successfulSha` all matched the merge SHA. A read-only status check at 2026-09-28 17:53:12 UTC also reported `toolRefreshStatus=SUCCEEDED`, `toolsSha=317aec0832c743c5901de52c2f4dc7d2f9ad9715`, and `toolSourceSha` equal to the merge SHA. The non-elevated poller-registration detail remains `UNKNOWN` / `ACCESS_DENIED`, so task enabled state cannot be confirmed from this account.
 - Production readiness at `http://127.0.0.1:8080/actuator/health/readiness` returned HTTP 200. The public history endpoint `https://www.christopherbell.dev/api/canes-box-tracker/2026-06-04/history` returned HTTP 200.
 - The production browser rendered month-over-month `+0.2%` and `Latest priced week: 2026-09-21. Compared with week of 2026-08-24.` The newest collected snapshot remains week `2026-09-28`, `No data`, 0/50 verified and 50 excluded. No collection was triggered; no production data was changed.
 - A production browser screenshot of the updated tracker was captured after the DOM check.
