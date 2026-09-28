@@ -66,7 +66,16 @@ Site worktree branch `codex/canes-trend-asof-context-20260928`; candidate source
 - Candidate browser inspection used Codex's in-app browser at `127.0.0.1:18081`; visible DOM values are recorded above. No screenshot was captured.
 - Post-stop listener check showed only the existing site listener on 8080 and MongoDB service listener on 27017; candidate listeners were absent.
 
+## Production Deployment and Runtime Proof
+
+- PR #1448 passed required CI and merged as `ff60887f6fb914827815fd670f03782bc82286e9`.
+- The supported production status reached `UP_TO_DATE`, `RUNNING`, `HEALTHY`, and `FRESH`; `remoteSha`, `activeSha`, `attemptedSha`, and `successfulSha` all matched the merge SHA. The non-elevated poller-registration detail remains `ACCESS_DENIED`.
+- Production readiness at `http://127.0.0.1:8080/actuator/health/readiness` returned HTTP 200. The public history endpoint `https://www.christopherbell.dev/api/canes-box-tracker/2026-06-04/history` returned HTTP 200.
+- The production browser rendered month-over-month `+0.2%` and `Latest priced week: 2026-09-21. Compared with week of 2026-08-24.` The newest collected snapshot remains week `2026-09-28`, `No data`, 0/50 verified and 50 excluded. No collection was triggered; no production data was changed.
+- A production browser screenshot of the updated tracker was captured after the DOM check.
+- Production delivery is verified for the caption change. The unresolved 0/50 collector data issue is outside this change; the official gateway's prior HTTP 403 remains unresolved, and the deployed diagnostic's next real collection output has not yet been observed.
+
 ## Bugs / Follow-ups
 
-- Candidate verification is complete. Production deployment and production browser/runtime proof are pending the reviewed site PR merge and supported deployer. No production data or collector was changed or triggered.
+- The candidate-only Mongo data copy remains under `%TEMP%\codex-canes-index-asof-candidate-20260928\mongo-data`: recursive cleanup was rejected by execution policy. It is stopped, isolated, and not connected to production. Candidate ports 18081/27019 are closed; production listeners 8080/27017 remained present.
 - Existing `testResults.xml` in the site worktree was unrelated and preserved.
