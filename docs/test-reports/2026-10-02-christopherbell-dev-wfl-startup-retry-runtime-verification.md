@@ -24,6 +24,7 @@ Built `website/build/libs/website.jar` with the repository Gradle wrapper task `
 2. Load the homepage.
 3. Read public WFL data freshness from the versioned API route.
 4. Confirm candidate cleanup and production listener preservation.
+5. After deployment, check the supported deployer status, local readiness/homepage/WFL freshness, and public homepage/WFL freshness without changing production state.
 
 ## Data Sent
 
@@ -33,7 +34,15 @@ Unauthenticated GET requests only:
 - `GET http://127.0.0.1:18081/`
 - `GET http://127.0.0.1:18081/api/whatsforlunch/restaurant/2026-07-26/freshness`
 
-An initial probe used the wrong, unversioned freshness path and returned 403; the documented API-version path above returned 200. No state-changing request was sent.
+Production unauthenticated GET requests:
+
+- `GET http://127.0.0.1:8080/actuator/health/readiness`
+- `GET http://127.0.0.1:8080/`
+- `GET http://127.0.0.1:8080/api/whatsforlunch/restaurant/2026-07-26/freshness`
+- `GET https://www.christopherbell.dev/`
+- `GET https://www.christopherbell.dev/api/whatsforlunch/restaurant/2026-07-26/freshness`
+
+An initial candidate probe used the wrong, unversioned freshness path and returned 403; the documented API-version path above returned 200. No state-changing request was sent.
 
 ## Response Received
 
@@ -43,11 +52,24 @@ An initial probe used the wrong, unversioned freshness path and returned 403; th
 - Mongo log records Java-driver clients connecting to `127.0.0.1:27019`.
 - After candidate shutdown, candidate ports were absent and the existing production listeners remained present.
 
+
+Production acceptance on 2026-10-02:
+
+- `prod.cmd auto-status`: freshness `FRESH`, status `UP_TO_DATE`, `serviceState=RUNNING`, `siteHealth=HEALTHY`; remote, active, attempted, and successful SHA all equal `71aceeefad5bebf908acdeab82a3a12d4b19c32a`. `toolRefreshStatus=SUCCEEDED`; no deployment failure was recorded.
+- Local readiness returned status code 200, body `{"status":"UP"}`.
+- Local homepage returned status code 200, title `CB | Home`.
+- Local WFL freshness returned status code 200, source `OpenStreetMap`, `current=true`, last refreshed `2026-09-28T15:37:50.362Z`.
+- Public homepage returned status code 200, title `CB | Home`.
+- Public WFL freshness returned status code 200 with the same current source and timestamp.
+- Non-elevated scheduled-task inspection remains `UNKNOWN` / `ACCESS_DENIED`; successful deployment and tool refresh are confirmed by deployer status.
 ## Pass / Fail
 
 - Focused `RestaurantImportWorkflowServiceTest`: 17 tests passed after the fix. The same-day restart regression failed before the fix; the next-Central-day eligibility regression passed after it.
 - `:website:check`: passed on rerun, including JavaScript, Java, Windows production checks, and static verification. One initial full-suite attempt hit a `ConcurrentModificationException` in Spring `MockHttpServletResponse` in the unrelated async streaming integration test; that test passed in isolation and the subsequent complete gate passed.
 - Candidate readiness, homepage, freshness read, and cleanup: passed.
+
+- Required PR CI passed; PR #1451 squash-merged as 71aceeefad5bebf908acdeab82a3a12d4b19c32a.
+- Supported production deployment and post-deployment acceptance passed; active SHA, health, homepage, and WFL freshness were verified.
 
 ## Evidence
 
@@ -59,4 +81,4 @@ An initial probe used the wrong, unversioned freshness path and returned 403; th
 
 ## Bugs / Follow-ups
 
-The confirmed bug is covered by service-level regressions: startup catch-up now suppresses an overdue retry when the latest unresolved failure is already on the current Central calendar date, while a later local date remains eligible. Candidate startup runs with `deploy-smoke`, so it intentionally does not invoke the import workflow. The candidate used read-only HTTP requests; no production data or listeners were changed. Production deployment acceptance remains to be recorded after required PR CI and supported deployment.
+The confirmed bug is covered by service-level regressions: startup catch-up now suppresses an overdue retry when the latest unresolved failure is already on the current Central calendar date, while a later local date remains eligible. Candidate startup runs with `deploy-smoke`, so it intentionally does not invoke the import workflow. The candidate used read-only HTTP requests; no production data or listeners were changed. Production deployment and post-deployment acceptance are recorded above; the remaining non-elevated poller-query limitation is documented.
