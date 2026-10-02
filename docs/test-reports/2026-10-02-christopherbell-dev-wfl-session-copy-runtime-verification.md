@@ -60,4 +60,14 @@ Commands and outputs were observed in the isolated worktree on 2026-10-02. Candi
 
 ## Bugs / Follow-ups
 
-The prior handler allowed a rejected clipboard write to escape and falsely reported success when Clipboard API was absent. The regression now verifies visible live feedback, no unhandled rejection, no false success, and unchanged success behavior. This report covers candidate runtime only; required CI, merge, supported deployment, and production acceptance remain outstanding.
+The prior handler allowed a rejected clipboard write to escape and falsely reported success when Clipboard API was absent. The regression now verifies visible live feedback, no unhandled rejection, no false success, and unchanged success behavior. PR 1455 passed required CI, merged, and deployed successfully; production acceptance is complete.
+
+
+## Production Acceptance
+
+- PR 1455 passed Windows, macOS, Ubuntu, CodeQL Java/Kotlin, JavaScript/TypeScript, Actions analysis, and dependency review. It merged at 2026-10-02 17:55:27 UTC as bd1ede060d6135562230f14baf08d37df3457dcd.
+- The supported production status command reported fresh UP_TO_DATE, RUNNING, and HEALTHY. Remote, active, attempted, and successful SHAs all matched bd1ede060d6135562230f14baf08d37df3457dcd; failure category was NONE.
+- GET https://www.christopherbell.dev/actuator/health/readiness returned HTTP status 200 with JSON body status UP.
+- GET https://www.christopherbell.dev/wfl returned HTTP status 200.
+- GET https://www.christopherbell.dev/js/whats-for-lunch.js?verification=bd1ede0 returned HTTP status 200; the 41,195-byte asset contains the live status region, actionable failure text, and unavailable-API check.
+- The read-only scheduled-poller field remains UNKNOWN / ACCESS_DENIED. No protected state or ACL was changed.
