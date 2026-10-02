@@ -755,16 +755,30 @@ Task 37 follow-up: PR #1436 was squash-merged at 2026-09-24 20:41:20 UTC as `e16
 - Publication and deployment: Pending review, required CI, merge, supported deployment, and production behavior acceptance.
 - Recovery: If deployed page acceptance fails, use the supported deployment rollback. Do not alter production listener, service, or database state manually.
 
+### Task 54 - Report ZIP coordinate copy failures
+- Dependencies: Task 53 has merged as `eefd5da9e0bc6036c927e565314798314bc26145`; start from refreshed `origin/main` after its supported deployment completes.
+- Files: `website/src/main/resources/static/js/zip-coordinates.js`, a new `website/src/test/js/zip-coordinates-browser.test.js` following the inspected VIN decoder browser-test harness, and `website/src/main/resources/static/js/README.md`.
+- Symbols: `copyElementText`, the ZIP API/curl copy button handlers, and `zipCoordinateAlert`.
+- Required skill: `write-jane-street-style-code` before code changes.
+- Inspection: Read `zip-coordinates.js`, its existing pure-function tests, the shared JS README, and the VIN decoder's browser-test harness. Both ZIP copy handlers invoke an async clipboard helper without awaiting or catching rejection; the helper has access to the page alert but currently does not use it.
+- Behavior: A successful copy keeps the existing button confirmation. Clipboard rejection or an unavailable API displays a clear error in the existing ZIP coordinate alert without an unhandled rejection.
+- Invariants: Preserve ZIP input normalization, API requests, copied URL/curl output, and successful button timing. Do not add dependencies, permissions, or fallback writes.
+- Boundary/API: Browser-only behavior on the ZIP coordinate page; no server route, endpoint, or response changes.
+- Effects and failures: Clipboard access remains the only side effect; failure is caught and reported through the existing alert.
+- Tests and evidence: Add a browser-side regression that rejects `navigator.clipboard.writeText` for a copy click and proves visible feedback with no unhandled rejection. Observe it fail before implementation, then run the focused regression, `:website:jsTest`, `node --check`, full `:website:check`, and `git diff --check`; review the diff and required PR CI.
+- Verification: Package and run the candidate on an alternate port with explicit isolated MongoDB database `test` and scheduled jobs disabled. Verify readiness and ZIP page/script responses, then verify the supported deployment status and production page/script after deployment.
+- Recovery: If deployed acceptance fails, use the supported deployment rollback. Do not alter production listener, service, or database state manually.
+
 ## Code Changes
-Task 52 prevents malformed VIN values from reaching the public decode API. Task 53 reports clipboard failures from both VIN decoder copy controls.
+Task 52 prevents malformed VIN values from reaching the public decode API. Task 53 reports clipboard failures from both VIN decoder copy controls. Task 54 reports clipboard failures from both ZIP coordinate copy controls.
 Task 2 is limited to WFL startup catch-up selection, direct unit tests and the owning feature README's scheduling contract. Task 3 extends the existing Cane's weekly collector's startup behavior without changing its persistence schema or API. Task 8 narrows swallowed profile-resolution failures while preserving anonymous fallback behavior. Reinspect all targets before edits. Task 34 adds a read-only distinction between status-file health and scheduled-poller registration; Task 36 corrects its non-elevated access-denied classification. Task 35 strengthens only test coverage for HTML tag case variants. Task 37 disables the observed external WFL and Cane's collectors in the test profile only. Task 45 retries overdue failed WFL imports at most once daily through the existing lease. Task 46 changes only the local readiness route's bounded smoke timeout and its Pester assertions. Task 47 improves public Cane's source-failure diagnostics; Task 48 clarifies the as-of week in public price-trend captions without changing calculations. Task 49 makes workflow action identity assertions independent of action version while preserving full-SHA pin enforcement. Task 50 sanitizes legacy null placeholders only in the public Cane's history projection. Task 51 suppresses repeated overdue WFL startup catch-up on a Central calendar date that already has a failed attempt.
 
 ## Files and Modules
-Task 52 changes the VIN browser module, page template, regression test and frontend README. Task 53 changes the VIN browser module, its regression test and frontend README.
+Task 52 changes the VIN browser module, page template, regression test and frontend README. Task 53 changes the VIN browser module, its regression test and frontend README. Task 54 changes the ZIP coordinate browser module, a browser-side regression test and frontend README.
 Spring services and clients for WFL restaurant imports, Cane's weekly price collection, and public account profiles; workflow configuration tests; Cane's history response projection; their unit tests and owning feature READMEs.
 
 ## Unit Testing
-Task 52 requires the VIN regression, `:website:jsTest`, `node --check`, and required CI. Task 53 requires the clipboard-failure regression, `:website:jsTest`, `node --check`, and required CI.
+Task 52 requires the VIN regression, `:website:jsTest`, `node --check`, and required CI. Task 53 requires the VIN clipboard-failure regression, `:website:jsTest`, `node --check`, and required CI. Task 54 requires the ZIP clipboard-failure regression, `:website:jsTest`, `node --check`, and required CI.
 Run focused WFL workflow/configuration, Cane's service/configuration/client tests, `AccountServiceTest`, and existing JavaScript, Java and Windows production checks through `:website:check`. Task 48 also runs the focused Cane's JavaScript test and `:website:jsTest`. Task 49 runs `GitHubAutomationConfigurationTest` and the full `:website:check`. Task 50 runs focused `CanesBoxTrackerServiceTest` and the full `:website:check`. Do not run database-backed tests without verified database `test` isolation and credentials.
 
 ## Local Testing
