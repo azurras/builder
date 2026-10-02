@@ -91,3 +91,12 @@ Continued Tasks 56-58 of the user-authorized christopherbell.dev bug-finding goa
 - Packaged candidate JAR SHA-256 `2FAB52A81E337E07C7B190F6C131B0DD35A7B27BDC45BFD214942C38B58003E1` started as Java PID 51236 with Boot 4.1.1 on port 18081 and connected to only the copied MongoDB `test` fixture on port 27019 (Mongo PID 50416). Database ping returned 1; readiness was UP; `/` and `/void` each returned HTTP status 200.
 - Stopped both candidate processes and confirmed candidate ports closed while production listeners 8080 and 27017 remained. No production data, service or listener was changed. Candidate fixture remains under ignored worktree build output with no process using it.
 - Saved [candidate runtime report](../test-reports/2026-10-02-spring-boot-4-1-1-candidate-runtime-verification.md). The amended plan and report are pending Builder publication; PR CI, supported deployment and production readiness remain outstanding.
+
+
+## 2026-10-02 15:51 Central Daylight Time - Spring Boot 4.1.1 deployment complete
+
+- PR #1456 passed the required Java 25 Ubuntu, macOS, and Windows builds, dependency review, and CodeQL analyses. It merged to `main` as `4b665913be7356b6d8f6a437899beda0b22cfff6` from source commit `06b0ab76c67719f722a2925e0201043a3a081b55`.
+- The supported automatic deployer refreshed its trusted tool bundle and deployed that exact SHA. Final sanitized status was `SUCCEEDED`, `activeSha=successfulSha=4b665913be7356b6d8f6a437899beda0b22cfff6`, `serviceState=RUNNING`, and `siteHealth=HEALTHY`. It briefly remained stale while building/validating, then published success; no manual or elevated production operation was used.
+- Post-deployment read-only checks returned HTTP 200 from local port 8080, public `/` (`CB | Home`), and public `/void`. Production listeners and service remained healthy.
+- Updated [Task 59 plan](../implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md) to complete and expanded the [Spring Boot runtime report](../test-reports/2026-10-02-spring-boot-4-1-1-candidate-runtime-verification.md) with merge, deployment, and production route evidence.
+- The sanitized status still reports poller registration as `UNKNOWN` / `ACCESS_DENIED` for this standard-user session. Protected config and Scheduler queries were denied; this did not prevent the installed poller from refreshing its tools or successfully deploying. The broader user-authorized bug-finding goal remains active.

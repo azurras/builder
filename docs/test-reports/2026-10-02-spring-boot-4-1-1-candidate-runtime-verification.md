@@ -10,7 +10,7 @@ Task 59 in the christopherbell.dev bug-audit plan. Verify the Spring Boot 4.1.1 
 
 ## Branch
 
-Branch `codex/spring-boot-4-1-1-20261002`, based on deployed `bd1ede060d6135562230f14baf08d37df3457dcd`. Candidate source was uncommitted during verification. JAR SHA-256: `2FAB52A81E337E07C7B190F6C131B0DD35A7B27BDC45BFD214942C38B58003E1`.
+Branch `codex/spring-boot-4-1-1-20261002`, based on deployed `bd1ede060d6135562230f14baf08d37df3457dcd`. Candidate JAR SHA-256: `2FAB52A81E337E07C7B190F6C131B0DD35A7B27BDC45BFD214942C38B58003E1`. PR #1456 merged as `4b665913be7356b6d8f6a437899beda0b22cfff6` from source commit `06b0ab76c67719f722a2925e0201043a3a081b55`.
 
 ## App / Environment
 
@@ -47,9 +47,15 @@ Started MongoDB PID 50416 with `mongod.exe --dbpath website/build/verification/s
 - Startup log reported the Mongo driver version 5.8.1 connected to `127.0.0.1:27019`.
 - Candidate Java PID 51236 was stopped with Ctrl+C; MongoDB PID 50416 was stopped after confirming ownership of candidate port 27019. Ports 18081 and 27019 closed. Production listeners 8080 and 27017 remained present. No production data or listener was changed.
 
+## Production Deployment Acceptance
+
+PR #1456 passed required Ubuntu, macOS, and Windows Java 25 builds, dependency review, and CodeQL analyses, then merged to `main` at 2026-10-02 20:41 UTC. The supported automatic deployer fetched merged SHA `4b665913be7356b6d8f6a437899beda0b22cfff6`, refreshed its trusted tool bundle successfully, built and validated the release, and recorded `SUCCEEDED` at 2026-10-02T20:48:22Z. Its sanitized status reported `activeSha` and `successfulSha` equal to the merged SHA, `serviceState=RUNNING`, `siteHealth=HEALTHY`, and `failureCategory=NONE`.
+
+Read-only HTTP checks after deployment returned `200` for both `GET https://christopherbell.dev/` (title `CB | Home`) and `GET https://christopherbell.dev/void`. Local port 8080 and public port 443 home requests also returned `200`. The status endpoint's Scheduler detail remained `UNKNOWN` / `ACCESS_DENIED` under non-elevated access; direct protected configuration and task queries were denied. No elevated command or manual service/listener change was performed.
+
 ## Pass / Fail
 
-All focused architecture tests, strict full build checks, isolated database ping, readiness, and public-page checks passed. Production deployment and post-deployment acceptance were not part of this candidate runtime report.
+All focused architecture tests, strict full build checks, isolated database ping, readiness, and candidate public-page checks passed. PR CI, supported production deployment, and post-deployment route and health acceptance also passed; see Production Deployment Acceptance.
 
 ## Evidence
 
@@ -57,4 +63,4 @@ Commands and results were observed on 2026-10-02. `:website:check` used strict d
 
 ## Bugs / Follow-ups
 
-The upgrade requires updating the dependency-version assertions in `MongoPersistenceBoundaryRulesTest`. The Spring Data MongoDB and Mongo driver class counts and hashes, audited access-candidate hash, inert-class allowlist, and architecture classifications did not change. Required PR CI and supported production deployment remain pending.
+The upgrade updated only the dependency-version assertions in `MongoPersistenceBoundaryRulesTest`. The Spring Data MongoDB and Mongo driver class counts and hashes, audited access-candidate hash, inert-class allowlist, and architecture classifications did not change. Production auto-status cannot query protected Task Scheduler registration from this standard-user session (`pollerState=UNKNOWN`, `pollerReason=ACCESS_DENIED`); the deployer nevertheless recorded a successful release and healthy service.
