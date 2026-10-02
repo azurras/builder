@@ -73,3 +73,11 @@ Continued Tasks 56-58 of the user-authorized christopherbell.dev bug-finding goa
 - Inspected repository instructions, Gradle build/settings, strict dependency verification metadata and the root README. Added Task 59 to the existing site audit plan for a scoped 4.1.1 bump, checksum review, full `:website:check`, isolated candidate runtime proof, required CI and supported deployment acceptance. Plan structure validates; plan publication is pending before source changes.
 - The source upgrade will use a fresh worktree based on refreshed deployed `origin/main` `bd1ede060d6135562230f14baf08d37df3457dcd`; existing dirty audit worktrees and the authoritative checkout remain untouched.
 - The previously blocked Gradle loopback gate has since passed using the process-only `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:/Windows/Temp` workaround; no machine environment or production state changed.
+
+
+## 2026-10-02 15:08 Central Daylight Time - Mongo dependency snapshot update found
+
+- Published the initial Spring Boot upgrade plan checkpoint in Builder commit `d4c0555` and created the clean upgrade worktree at deployed site SHA `bd1ede060d6135562230f14baf08d37df3457dcd`.
+- Changed the candidate Spring Boot plugin from 4.1.0 to 4.1.1 and ran `:website:check` with Gradle checksum recording. JavaScript and Windows checks passed; 1,974 Java tests produced one failure and 107 skips. `MongoPersistenceBoundaryRulesTest.auditedMongoDependencyJarClassSnapshotsAreExact` expected `spring-data-mongodb-5.1.0.jar`, while Boot 4.1.1 resolves 5.1.1; its other three Mongo boundary tests passed.
+- Expanded Task 59 to require review and precise refresh of the exact JAR snapshot while preserving the Mongo access-candidate hash, inert-class allowlist and classification assertions. The amended plan and this progress entry still need the plan checkpoint publication before the test file is changed.
+- Gradle generated verification entries for the Spring Boot 4.1.1 managed dependency graph. The candidate diff currently adds many checksum records; review is pending, so no PR or production action has occurred.
