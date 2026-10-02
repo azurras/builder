@@ -11,3 +11,13 @@ Work, decisions, events, and evidence for this date.
 - The Cane's tracker still reports 0/50 prices for its 2026-09-28 collection. Direct requests from this machine to the official gateway receive a 403 challenge response; public menu fallback remains disabled because its data can be stale. No code change was made without a trustworthy source-side remedy.
 - Checked whether a Cane's re-collection could erase manually verified prices. Same-week snapshot replacement is documented behavior, so no change was made absent evidence that this violates the intended contract.
 - The ongoing user-authorized bug-finding goal remains active.
+
+
+## 2026-10-02 10:43 Central Daylight Time - VIN decoder input validation progress
+
+- Continued the user-authorized christopherbell.dev bug-finding goal on the clean isolated worktree codex/site-bug-audit-20261002 at deployed base 71aceeefad5bebf908acdeab82a3a12d4b19c32a. The confirmed issue was VIN decoder submission sending a 16-character value to the API although the page contract requires 17 valid characters.
+- Added local submit validation for the exact VIN pattern, native required/minlength/pattern constraints, a regression test, and the page-module README contract. The new test failed before the fix (one fetch) and passed after (zero fetch; local message).
+- Verification: :website:jsTest passed 345/345 using process-only JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:/Windows/Temp; node --check and git diff --check passed; :website:bootJar succeeded. Candidate jar SHA-256: 75E7B3FCD22B9B892243FA095FD59B40F723DB26840D633049F54F432DCAC7C8.
+- Ran the candidate with test,deploy-smoke on 127.0.0.1:18081, connected only to a byte-hash-verified copy of the restored disposable test database on loopback port 27019. Readiness, homepage, VIN page and VIN script returned HTTP 200. Browser submission of the short VIN was blocked by native format validation. Candidate Java and MongoDB stopped; ports 18081/27019 closed and production listeners 8080/27017 remained.
+- Read-only production status remains FRESH / UP_TO_DATE, RUNNING / HEALTHY, active SHA 71aceeefad5bebf908acdeab82a3a12d4b19c32a; no production action or data write occurred.
+- Added Task 52 to the existing site audit plan and saved the candidate evidence report at docs/test-reports/2026-10-02-christopherbell-dev-vin-decoder-runtime-verification.md. The source diff is local and unpublished; complete review, required CI, supported deployment and production acceptance remain.
