@@ -21,3 +21,9 @@ Work, decisions, events, and evidence for this date.
 - Ran the candidate with test,deploy-smoke on 127.0.0.1:18081, connected only to a byte-hash-verified copy of the restored disposable test database on loopback port 27019. Readiness, homepage, VIN page and VIN script returned HTTP 200. Browser submission of the short VIN was blocked by native format validation. Candidate Java and MongoDB stopped; ports 18081/27019 closed and production listeners 8080/27017 remained.
 - Read-only production status remains FRESH / UP_TO_DATE, RUNNING / HEALTHY, active SHA 71aceeefad5bebf908acdeab82a3a12d4b19c32a; no production action or data write occurred.
 - Added Task 52 to the existing site audit plan and saved the candidate evidence report at docs/test-reports/2026-10-02-christopherbell-dev-vin-decoder-runtime-verification.md. The source diff is local and unpublished; complete review, required CI, supported deployment and production acceptance remain.
+
+
+## 2026-10-02 10:52 Central Daylight Time - Full site check for VIN validation
+
+- Completed the full native site gate after candidate runtime proof: :website:check succeeded in 6m34s with 21 tasks. Java result XML totaled 1,975 tests, 0 failures/errors, 108 skipped. Windows PowerShell suites passed 203 tests with 1 skip and 75 tests with no skips; JavaScript suite remained 345/345. The process-only JDK 25 socket-path workaround was required; no system settings changed.
+- Updated Task 52 plan evidence and the candidate runtime report with full-suite results. Required PR CI, supported deployment and deployed acceptance are still pending.

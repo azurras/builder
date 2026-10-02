@@ -43,6 +43,7 @@ The local candidate browser field received `1HGCM82633A00435` and the Decode but
 - Regression before fix: failed as expected; observed 1 fetch instead of 0.
 - Regression after fix: passed; fetch count was 0 and the local message was `VIN must be exactly 17 valid characters.`.
 - `:website:jsTest`: 345 passed, 0 failed.
+- `:website:check`: succeeded in 6m34s; 21 tasks completed. Java result XML totals: 1,975 tests, 0 failures, 0 errors, 108 skipped. Windows Pester suites: 203 passed/1 skipped and 75 passed/0 skipped.
 - `node --check website/src/main/resources/static/js/vin-decoder.js`: passed.
 - `git diff --check`: passed; Git printed only working-tree LF-to-CRLF notices.
 - `:website:bootJar`: succeeded.
@@ -57,7 +58,7 @@ Candidate and local verification passed. PR review, required CI, deployment, and
 
 ## Evidence
 
-The focused regression was observed failing before implementation and passing afterward. The full JS suite output ended with `tests 345, pass 345, fail 0`. Gradle required the process-only JDK 25 socket-path override above; no system configuration was changed. Candidate browser interaction used the hidden Codex in-app browser tab. After shutdown, only production listeners on 8080 and 27017 were present.
+The focused regression was observed failing before implementation and passing afterward. The full JS suite output ended with `tests 345, pass 345, fail 0`. The complete native `:website:check` passed with 21 tasks. Gradle required the process-only JDK 25 socket-path override above; no system configuration was changed. Candidate browser interaction used the hidden Codex in-app browser tab. After shutdown, only production listeners on 8080 and 27017 were present.
 
 ## Bugs / Follow-ups
 
