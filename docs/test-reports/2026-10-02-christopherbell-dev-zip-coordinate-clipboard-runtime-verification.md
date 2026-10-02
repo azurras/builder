@@ -1,6 +1,6 @@
 ## Document Status
 
-draft
+complete
 
 ## Story/Issue
 
@@ -37,10 +37,11 @@ The candidate received unauthenticated requests: `GET /actuator/health/readiness
 - `:website:check` passed all 21 tasks in 5m05s; both Windows PowerShell suites passed.
 - Candidate readiness status 200 with response body `{"status":"UP"}`. Homepage, `/zip-coordinates`, and `/js/zip-coordinates.js` each returned HTTP status 200; the page contained its ZIP form and the served script contained the clipboard error handler.
 - Before Task 54 deployment, production `prod.cmd auto-status` reported `FRESH`, `UP_TO_DATE`, `RUNNING`, and `HEALTHY`, with remote/active/attempted/successful SHA `eefd5da9e0bc6036c927e565314798314bc26145`.
+- After PR #1454 merged and deployed, `prod.cmd auto-status` reported `FRESH`, `SUCCEEDED`, `RUNNING`, and `HEALTHY`, with remote/active/attempted/successful SHA `b5ad92eb4ea8c3beb635643ca8c928bd1a25a1ae`. Production readiness returned HTTP status 200 with `{"status":"UP"}`. Production `/zip-coordinates` and cache-busted `/js/zip-coordinates.js?verification=b5ad92eb` returned HTTP status 200; the page had its ZIP form and the script contained the clipboard failure message.
 
 ## Pass / Fail
 
-Candidate and local checks passed. Review, required CI, merge, supported deployment, and production acceptance remain pending; this report is a draft.
+Candidate checks passed. PR #1454 passed all required CI gates and merged as `b5ad92eb4ea8c3beb635643ca8c928bd1a25a1ae`. The supported deployer reached `SUCCEEDED` with that SHA active and healthy; production readiness, page, and asset acceptance passed.
 
 ## Evidence
 
@@ -48,4 +49,4 @@ The permission-denied regression was observed failing before implementation and 
 
 ## Bugs / Follow-ups
 
-`copyElementText` awaited clipboard access without catching rejection. Denied or unavailable clipboard access left the ZIP page without feedback and emitted an unhandled rejection. The fix reports clipboard errors through the existing ZIP coordinate alert and preserves the successful copy confirmation. Complete diff review, required CI, supported deployment, and production page/asset acceptance before marking this report complete.
+`copyElementText` awaited clipboard access without catching rejection. Denied or unavailable clipboard access left the ZIP page without feedback and emitted an unhandled rejection. The fix reports clipboard errors through the existing ZIP coordinate alert and preserves the successful copy confirmation. PR #1454 and deployed page/asset acceptance completed successfully.
