@@ -739,16 +739,30 @@ Task 37 follow-up: PR #1436 was squash-merged at 2026-09-24 20:41:20 UTC as `e16
 - Publication and deployment: Pending required CI and supported deployment.
 - Recovery: If post-deployment page or asset checks fail, use the supported deployment rollback. Do not alter production listener, service, or database state manually.
 
+### Task 53 - Report VIN decoder clipboard failures
+- Dependencies: Task 52 is merged as `de1e2addc35c2d9ec232fcdb068bc992ce675357`; use its current code while its supported deployment is monitored.
+- Files: `website/src/main/resources/static/js/vin-decoder.js`, `website/src/test/js/vin-decoder.test.js`, and `website/src/main/resources/static/js/README.md`.
+- Symbols: `copyText`, the JSON/curl copy button handlers, and the VIN page module behavior contract.
+- Required skill: `write-jane-street-style-code` before code changes.
+- Inspection: In the clean site worktree `codex/vin-decoder-client-validation-20261002`, whose tree matches `origin/main`, inspected the VIN module and its Node browser-test harness. Both copy handlers invoke an async clipboard write without handling rejection; clipboard access may reject or be unavailable, leaving the user without feedback.
+- Behavior: Successful copy still gives the existing confirmation. If clipboard access rejects or is unavailable, the VIN page displays a clear error in its existing alert region and does not emit an unhandled rejection.
+- Invariants: Keep copied text and button success behavior unchanged. Do not add permissions, dependencies, API calls, or clipboard fallbacks that write elsewhere.
+- Boundary/API: Browser-only behavior on the existing VIN page; no server route, endpoint, or response changes.
+- Effects and failures: Clipboard access remains the only side effect. Its failure is caught locally and reported through the page's existing alert.
+- Tests and evidence: Add a regression that rejects `navigator.clipboard.writeText` for a copy-button click and proves a visible error with no unhandled rejection. Observe it fail before implementation; then run the focused test, `:website:jsTest`, `node --check`, `:website:check`, and `git diff --check`; review the full diff and required PR CI.
+- Verification: Run packaged app behavior on an alternate port without a production database target; verify the VIN page and JS asset, simulate clipboard rejection in browser-side tests, then verify supported deployment status and the production page/asset after the deployer has accepted the candidate.
+- Recovery: If deployed page acceptance fails, use the supported deployment rollback. Do not alter production listener, service, or database state manually.
+
 ## Code Changes
-Task 52 prevents malformed VIN values from reaching the public decode API.
+Task 52 prevents malformed VIN values from reaching the public decode API. Task 53 reports clipboard failures from both VIN decoder copy controls.
 Task 2 is limited to WFL startup catch-up selection, direct unit tests and the owning feature README's scheduling contract. Task 3 extends the existing Cane's weekly collector's startup behavior without changing its persistence schema or API. Task 8 narrows swallowed profile-resolution failures while preserving anonymous fallback behavior. Reinspect all targets before edits. Task 34 adds a read-only distinction between status-file health and scheduled-poller registration; Task 36 corrects its non-elevated access-denied classification. Task 35 strengthens only test coverage for HTML tag case variants. Task 37 disables the observed external WFL and Cane's collectors in the test profile only. Task 45 retries overdue failed WFL imports at most once daily through the existing lease. Task 46 changes only the local readiness route's bounded smoke timeout and its Pester assertions. Task 47 improves public Cane's source-failure diagnostics; Task 48 clarifies the as-of week in public price-trend captions without changing calculations. Task 49 makes workflow action identity assertions independent of action version while preserving full-SHA pin enforcement. Task 50 sanitizes legacy null placeholders only in the public Cane's history projection. Task 51 suppresses repeated overdue WFL startup catch-up on a Central calendar date that already has a failed attempt.
 
 ## Files and Modules
-Task 52 changes the VIN browser module, page template, regression test and frontend README.
+Task 52 changes the VIN browser module, page template, regression test and frontend README. Task 53 changes the VIN browser module, its regression test and frontend README.
 Spring services and clients for WFL restaurant imports, Cane's weekly price collection, and public account profiles; workflow configuration tests; Cane's history response projection; their unit tests and owning feature READMEs.
 
 ## Unit Testing
-Task 52 requires the VIN regression, `:website:jsTest`, `node --check`, and required CI.
+Task 52 requires the VIN regression, `:website:jsTest`, `node --check`, and required CI. Task 53 requires the clipboard-failure regression, `:website:jsTest`, `node --check`, and required CI.
 Run focused WFL workflow/configuration, Cane's service/configuration/client tests, `AccountServiceTest`, and existing JavaScript, Java and Windows production checks through `:website:check`. Task 48 also runs the focused Cane's JavaScript test and `:website:jsTest`. Task 49 runs `GitHubAutomationConfigurationTest` and the full `:website:check`. Task 50 runs focused `CanesBoxTrackerServiceTest` and the full `:website:check`. Do not run database-backed tests without verified database `test` isolation and credentials.
 
 ## Local Testing
