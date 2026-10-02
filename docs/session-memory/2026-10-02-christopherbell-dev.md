@@ -65,3 +65,11 @@ Continued Tasks 56-58 of the user-authorized christopherbell.dev bug-finding goa
 - The full browser-side Node suite passed 363/363. `node --check` on all touched JavaScript and `git diff --check` passed. The Gradle `:website:jsTest` task failed before executing because Gradle could not establish a loopback connection, including with `--no-daemon -Dorg.gradle.jvmargs=`. Direct Node execution of the same 57 test files passed. Java is already configured at 25; this machine runs Temurin 25.0.3.
 - Candidate Spring runtime, `:website:check`, PR/CI, supported deployment, and production acceptance remain pending the Gradle loopback gate. No elevated access, production changes, PR, or deployment occurred. Builder plan amendments were validated and published through commit 4c9ea8e.
 - The authorized bug-finding goal remains active.
+
+
+## 2026-10-02 14:56 Central Daylight Time - Spring Boot upgrade planning
+
+- User requested upgrading to the latest Spring Boot release. Official Spring documentation lists 4.1.1 as latest stable and 4.2.0-M2 as preview; the deployed site base pins Boot 4.1.0 and Java 25.
+- Inspected repository instructions, Gradle build/settings, strict dependency verification metadata and the root README. Added Task 59 to the existing site audit plan for a scoped 4.1.1 bump, checksum review, full `:website:check`, isolated candidate runtime proof, required CI and supported deployment acceptance. Plan structure validates; plan publication is pending before source changes.
+- The source upgrade will use a fresh worktree based on refreshed deployed `origin/main` `bd1ede060d6135562230f14baf08d37df3457dcd`; existing dirty audit worktrees and the authoritative checkout remain untouched.
+- The previously blocked Gradle loopback gate has since passed using the process-only `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:/Windows/Temp` workaround; no machine environment or production state changed.
