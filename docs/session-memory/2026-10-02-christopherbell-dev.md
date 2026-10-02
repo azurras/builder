@@ -53,3 +53,15 @@ Work, decisions, events, and evidence for this date.
 - The older prod.cmd in the authoritative dirty checkout returned the known protected config access denial; no ACL or protected state was changed. The refreshed worktree wrapper returned sanitized status successfully. Standard-user poller registration remains UNKNOWN / ACCESS_DENIED.
 - Evidence: [Task 55 runtime report](../test-reports/2026-10-02-christopherbell-dev-wfl-session-copy-runtime-verification.md), [site bug-audit plan](../implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md), PR https://github.com/azurras/christopherbell.dev/pull/1455.
 - The user-authorized bug-finding goal remains active; continue to the next confirmed defect.
+
+
+## 2026-10-02 14:37 Central Daylight Time - Feed and clipboard bug audit progress
+
+Continued Tasks 56-58 of the user-authorized christopherbell.dev bug-finding goal from isolated worktrees based on deployed SHA bd1ede060d6135562230f14baf08d37df3457dcd. The authoritative checkout remains untouched.
+
+- Task 56 confirms Shared Folder toolbar copy falsely reported failure-prone clipboard access as successful. Added same-origin URL fallback and browser regressions; focused suite passed 35/35.
+- Task 57 confirms the Cane's curl copy path lacked an accessible response when the Clipboard API was unavailable or rejected. Added accessible error feedback and regressions; focused suite passed 18/18.
+- Task 58 fixes feed request errors going unreported, initial loading skeletons persisting after failures, stale alerts remaining after successful recovery, and superseded initial requests overwriting current state. It also surfaces malformed page responses and repeated cursors as retryable errors before they can silently stop pagination or replay pages. Red/green regressions cover recovery, alert ownership, malformed responses, advancing empty-page cursors, repeated cursors, and stale requests.
+- The full browser-side Node suite passed 363/363. `node --check` on all touched JavaScript and `git diff --check` passed. The Gradle `:website:jsTest` task failed before executing because Gradle could not establish a loopback connection, including with `--no-daemon -Dorg.gradle.jvmargs=`. Direct Node execution of the same 57 test files passed. Java is already configured at 25; this machine runs Temurin 25.0.3.
+- Candidate Spring runtime, `:website:check`, PR/CI, supported deployment, and production acceptance remain pending the Gradle loopback gate. No elevated access, production changes, PR, or deployment occurred. Builder plan amendments were validated and published through commit 4c9ea8e.
+- The authorized bug-finding goal remains active.
