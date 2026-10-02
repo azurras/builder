@@ -59,3 +59,7 @@ Observed on 2026-10-02. Test output, sanitized readiness JSON, route responses, 
 ## Bugs / Follow-ups
 
 The change reports initial and scroll-load errors on `/void` and `/u/{username}`, clears empty-feed skeletons after failure, preserves unrelated alerts, keeps failed pages retryable, rejects malformed/repeated cursors, and ignores superseded results. PR CI and supported production acceptance are the remaining delivery gates.
+
+## Supplemental browser attempt - 2026-10-02 16:24 CDT
+
+The isolated in-app browser showed the candidate `/void` page and its empty-feed state. It had no feed items to trigger a scroll retry. To make the first feed request fail deterministically, a one-shot local proxy was planned, but the candidate application could not be restarted against the reused `task58-mongodb-seeded` fixture: migration `015-require-domain-collection-schema` reported an incomplete durable record. The candidate MongoDB process was stopped; ports 18082, 27020, and 18083 were closed, while production listeners 8080 and 27017 remained present. No browser-level failure/retry was exercised; the existing regression suite remains the evidence for those behaviors. Do not treat browser retry acceptance as verified.
