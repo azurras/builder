@@ -1,6 +1,6 @@
 ## Document Status
 
-draft
+complete
 
 ## Story/Issue
 
@@ -27,7 +27,7 @@ Built with the process-only setting `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpd
 
 ## Data Sent
 
-The candidate received only unauthenticated GET requests to `/actuator/health/readiness`, `/`, `/vin-decoder`, and `/js/vin-decoder.js`. The JavaScript regression simulated a rejected clipboard permission for the JSON copy button. No VIN was submitted, no API calls were made, and no production data was read or changed.
+The candidate received only unauthenticated requests: `GET /actuator/health/readiness`, `GET /`, `GET /vin-decoder`, and `GET /js/vin-decoder.js`. The browser-side test harness clicked the JSON copy control with a simulated rejected clipboard permission. No VIN was submitted, no API calls were made, and no production data was read or changed.
 
 ## Response Received
 
@@ -37,10 +37,11 @@ The candidate received only unauthenticated GET requests to `/actuator/health/re
 - `:website:check` passed all 21 tasks in 5m13s. Both Windows PowerShell suites passed; the JS suite passed 346/346.
 - Candidate readiness status 200 with response body `{"status":"UP"}`. Homepage, VIN page, and VIN script each returned HTTP status 200; the served script included the clipboard error handler.
 - Before this new change, production `prod.cmd auto-status` reported `FRESH`, `UP_TO_DATE`, `RUNNING`, and `HEALTHY`, with remote/active/attempted/successful SHA `de1e2addc35c2d9ec232fcdb068bc992ce675357`. The production VIN page and script returned 200 with Task 52's input pattern and local format guard.
+- After PR #1453 merged and deployed, `prod.cmd auto-status` reported `FRESH`, `UP_TO_DATE`, `RUNNING`, and `HEALTHY`, with remote/active/attempted/successful SHA `eefd5da9e0bc6036c927e565314798314bc26145`. Production `/vin-decoder` and the cache-busted `/js/vin-decoder.js?verification=eefd5da9` returned HTTP status 200; the page had the VIN input and the script contained the clipboard failure message and catch handler.
 
 ## Pass / Fail
 
-Candidate and local checks passed. Review, required CI, merge, supported deployment, and deployed clipboard-failure behavior remain pending; this report is a draft.
+Candidate checks passed. PR #1453 passed all required CI gates and merged as `eefd5da9e0bc6036c927e565314798314bc26145`. The supported deployer reached `UP_TO_DATE` with that SHA active and healthy; production page and script acceptance passed.
 
 ## Evidence
 
@@ -48,4 +49,4 @@ The permission-denied regression failed before implementation and passed after. 
 
 ## Bugs / Follow-ups
 
-The VIN copy helper awaited `navigator.clipboard.writeText` without handling rejection. When browser permission was denied or the clipboard API was unavailable, the event handler produced an unhandled rejection and gave no page feedback. The fix catches clipboard failures and reports them in the existing alert region while preserving the success confirmation. Complete diff review, required CI, supported deployment, and post-deployment acceptance before marking this report complete.
+The VIN copy helper awaited `navigator.clipboard.writeText` without handling rejection. When browser permission was denied or the clipboard API was unavailable, the event handler produced an unhandled rejection and gave no page feedback. The fix catches clipboard failures and reports them in the existing alert region while preserving the success confirmation. PR #1453 and deployed page/asset acceptance completed successfully.
