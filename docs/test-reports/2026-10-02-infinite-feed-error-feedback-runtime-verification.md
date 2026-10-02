@@ -63,3 +63,13 @@ The change reports initial and scroll-load errors on `/void` and `/u/{username}`
 ## Supplemental browser attempt - 2026-10-02 16:24 CDT
 
 The isolated in-app browser showed the candidate `/void` page and its empty-feed state. It had no feed items to trigger a scroll retry. To make the first feed request fail deterministically, a one-shot local proxy was planned, but the candidate application could not be restarted against the reused `task58-mongodb-seeded` fixture: migration `015-require-domain-collection-schema` reported an incomplete durable record. The candidate MongoDB process was stopped; ports 18082, 27020, and 18083 were closed, while production listeners 8080 and 27017 remained present. No browser-level failure/retry was exercised; the existing regression suite remains the evidence for those behaviors. Do not treat browser retry acceptance as verified.
+
+## Production acceptance - 2026-10-02 16:54 CDT
+
+- PR #1458 passed required CI and merged as `31338a604808d29372189b2d13ace99ea2c2b806`.
+- Public readiness returned HTTP 200. `/void`, `/u/Chris`, `/canes-box-tracker`, and `/shared?path=reports` each returned HTTP 200.
+- The active versioned asset prefix was `/a4f67dec0c5bf947a767/js/`. `home-feed.js` (8,790 bytes), `user-feed.js` (7,957 bytes), `lib/infinite.js` (3,268 bytes), `canes-box-tracker.js` (18,685 bytes), and `shared-folder.js` (35,897 bytes) returned HTTP 200. Feed scripts contained their error handlers, the infinite scroller contained `onError`, and clipboard scripts contained their failure messages.
+- `prod.cmd auto-status` could not read `C:\ProgramData\christopherbell.dev\config\deploy.json` as the standard user. No elevated access was used, so exact deployer status and active SHA could not be read. Public versioned assets and expected code markers provide runtime deployment evidence.
+- The final listener check found only production ports 8080 and 27017 among ports 8080, 18081, 18082, 18083, 27017, 27019, and 27020. The Java listener had rotated from PID 72856 to 71540; MongoDB remained PID 5016.
+
+The deployed feed behavior is verified at the page and asset level. Live browser failure/retry remains unverified; focused regressions cover error, recovery, malformed cursor, and stale-request handling.
