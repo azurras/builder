@@ -1,6 +1,6 @@
 ## Document Status
 
-draft
+complete
 
 ## Story/Issue
 
@@ -47,19 +47,20 @@ The local candidate browser field received `1HGCM82633A00435` and the Decode but
 - `node --check website/src/main/resources/static/js/vin-decoder.js`: passed.
 - `git diff --check`: passed; Git printed only working-tree LF-to-CRLF notices.
 - `:website:bootJar`: succeeded.
-- Candidate readiness: HTTP 200, body `{"status":"UP"}`.
+- Candidate readiness status 200 with response body `{"status":"UP"}`.
 - Candidate homepage, VIN page, and VIN script: HTTP 200. Rendered template included `minlength="17"` and the 17-character VIN pattern; delivered script included the client validation guard.
 - Browser submission: accessibility tree showed `Please match the requested format.`; the form remained on `/vin-decoder`.
-- Production read-only `prod.cmd auto-status`: `FRESH`, `UP_TO_DATE`, `RUNNING`, `HEALTHY`, matching active/remote/attempted/successful SHA `71aceeefad5bebf908acdeab82a3a12d4b19c32a`. Non-elevated poller lookup remained `UNKNOWN` / `ACCESS_DENIED`.
+- Production read-only `prod.cmd auto-status` after PR #1452: `FRESH`, `UP_TO_DATE`, `RUNNING`, `HEALTHY`, matching remote/active/attempted/successful SHA `de1e2addc35c2d9ec232fcdb068bc992ce675357`; tool refresh succeeded. Non-elevated poller lookup remained `UNKNOWN` / `ACCESS_DENIED`.
+- After deployment, production readiness, `/`, `/vin-decoder`, and `/js/vin-decoder.js` returned HTTP 200. The page included the 17-character VIN pattern and the delivered script included the local validation guard.
 
 ## Pass / Fail
 
-Candidate and local verification passed. PR review, required CI, deployment, and deployed acceptance remain pending; this report is therefore a draft.
+Candidate and local verification passed. PR #1452 passed the required CI gates and merged as `de1e2addc35c2d9ec232fcdb068bc992ce675357`. The supported deployer reached `UP_TO_DATE` with the merged SHA active and healthy; deployed page and asset acceptance passed.
 
 ## Evidence
 
-The focused regression was observed failing before implementation and passing afterward. The full JS suite output ended with `tests 345, pass 345, fail 0`. The complete native `:website:check` passed with 21 tasks. Gradle required the process-only JDK 25 socket-path override above; no system configuration was changed. Candidate browser interaction used the hidden Codex in-app browser tab. After shutdown, only production listeners on 8080 and 27017 were present.
+The focused regression was observed failing before implementation and passing afterward. The full JS suite output ended with `tests 345, pass 345, fail 0`. The complete native `:website:check` passed with 21 tasks. Gradle required the process-only JDK 25 socket-path override above; no system configuration was changed. Candidate browser interaction used the hidden Codex in-app browser tab. After shutdown, only production listeners on 8080 and 27017 were present. Deployed acceptance was read-only and did not submit a VIN to NHTSA.
 
 ## Bugs / Follow-ups
 
-The confirmed defect was that short VIN input passed the client-side empty check and reached the API. The fix adds a 17-character VIN pattern guard and native HTML form constraints. No backend/API behavior changed. Complete diff review, full CI, supported production deployment, and deployed page/asset acceptance before marking this report complete.
+The confirmed defect was that short VIN input passed the client-side empty check and reached the API. The fix adds a 17-character VIN pattern guard and native HTML form constraints. No backend/API behavior changed. PR #1452 and deployed acceptance completed successfully.
