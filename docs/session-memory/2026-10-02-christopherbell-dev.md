@@ -81,3 +81,13 @@ Continued Tasks 56-58 of the user-authorized christopherbell.dev bug-finding goa
 - Changed the candidate Spring Boot plugin from 4.1.0 to 4.1.1 and ran `:website:check` with Gradle checksum recording. JavaScript and Windows checks passed; 1,974 Java tests produced one failure and 107 skips. `MongoPersistenceBoundaryRulesTest.auditedMongoDependencyJarClassSnapshotsAreExact` expected `spring-data-mongodb-5.1.0.jar`, while Boot 4.1.1 resolves 5.1.1; its other three Mongo boundary tests passed.
 - Expanded Task 59 to require review and precise refresh of the exact JAR snapshot while preserving the Mongo access-candidate hash, inert-class allowlist and classification assertions. The amended plan and this progress entry still need the plan checkpoint publication before the test file is changed.
 - Gradle generated verification entries for the Spring Boot 4.1.1 managed dependency graph. The candidate diff currently adds many checksum records; review is pending, so no PR or production action has occurred.
+
+
+## 2026-10-02 15:27 Central Daylight Time - Spring Boot 4.1.1 candidate passed
+
+- Reviewed Gradle's additive dependency metadata: 164 new component records cover Boot 4.1.1 and its managed graph; no existing component records were removed. The strict verification run after metadata recording passed.
+- Updated only the three version-coupled filename assertions in `MongoPersistenceBoundaryRulesTest` for Spring Data MongoDB 5.1.1 and Mongo driver 5.8.1. Class counts/hashes, audited access-candidate hash, allowlist and classification checks remain unchanged; focused test passed 4/4.
+- Strict `:website:check` passed all 21 tasks. Java suite: 1,975 tests, 0 failures/errors, 108 skipped. Windows Pester target reported 75/75 passed.
+- Packaged candidate JAR SHA-256 `2FAB52A81E337E07C7B190F6C131B0DD35A7B27BDC45BFD214942C38B58003E1` started as Java PID 51236 with Boot 4.1.1 on port 18081 and connected to only the copied MongoDB `test` fixture on port 27019 (Mongo PID 50416). Database ping returned 1; readiness was UP; `/` and `/void` each returned HTTP status 200.
+- Stopped both candidate processes and confirmed candidate ports closed while production listeners 8080 and 27017 remained. No production data, service or listener was changed. Candidate fixture remains under ignored worktree build output with no process using it.
+- Saved [candidate runtime report](../test-reports/2026-10-02-spring-boot-4-1-1-candidate-runtime-verification.md). The amended plan and report are pending Builder publication; PR CI, supported deployment and production readiness remain outstanding.
