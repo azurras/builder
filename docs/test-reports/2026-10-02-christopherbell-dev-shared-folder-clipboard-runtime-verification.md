@@ -53,3 +53,9 @@ Observed 2026-10-02. Production page and content-hashed asset prove the updated 
 ## Bugs / Follow-ups
 
 The browser-level clipboard failure interaction remains unverified. Regression tests verify rejected and unavailable clipboard behavior and success-only confirmation. Standard-user deployer status remains unavailable because the protected configuration ACL denies access.
+
+## Verification correction - candidate database isolation - 2026-10-02
+
+The two failed candidate launches were recorded with `--spring.data.mongodb.uri`. Inspection of the packaged Spring Boot 4.1.1 configuration metadata shows that property is deprecated since 4.0 and replaced by `spring.mongodb.uri`; the active `MongoProperties` prefix is `spring.mongodb`. The failed candidate MongoDB logs contain no application connections. Therefore those launches were not proven to use the isolated copies, and the earlier statement that no production database was configured as a target is superseded for these failed starts. They may have used Boot's default `mongodb://localhost/test` on the host MongoDB listener.
+
+A read-only query on 2026-10-02 found 15 migration records in that local `test` database. Migration 015 was already `FAILED` with a start time of 2026-09-24, and the latest migration start time was 2026-09-24. This matches the candidate startup failure and shows no migration-ledger change from the October 2 attempts. This does not prove whether any other test-database writes occurred. No evidence indicates the application's production database was accessed or changed. Future Boot 4 candidate runs must use `SPRING_MONGODB_URI` or `--spring.mongodb.uri` and confirm a connection to the isolated port before treating runtime evidence as isolated. See [Spring Boot MongoDB configuration](https://docs.spring.io/spring-boot/api/java/org/springframework/boot/mongodb/autoconfigure/MongoProperties.html).

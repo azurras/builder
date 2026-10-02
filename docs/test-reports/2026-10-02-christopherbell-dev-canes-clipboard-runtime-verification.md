@@ -53,3 +53,9 @@ Observed 2026-10-02. The production page and content-hashed asset prove the upda
 ## Bugs / Follow-ups
 
 The browser-level clipboard-unavailable interaction remains unverified. Focused regressions verify unavailable and rejected clipboard behavior and success confirmation. Standard-user deployer status remains unavailable because the protected configuration ACL denies access.
+
+## Verification correction - adjacent candidate database isolation - 2026-10-02
+
+Task 57 did not start a candidate application. The adjacent Task 56 failed starts used `--spring.data.mongodb.uri` with a Spring Boot 4.1.1 JAR. Boot 4.1.1 configuration metadata marks that key deprecated since 4.0 and replaces it with `spring.mongodb.uri`; the active Mongo properties prefix is `spring.mongodb`. The candidate MongoDB logs show no application connections. Those failed starts therefore were not proven to use the isolated fixture copies, superseding the earlier statement that no production database was configured as a target for those attempts. They may have used the host MongoDB listener's default `test` database.
+
+The read-only migration-ledger query on 2026-10-02 found 15 records; migration 015 had already been `FAILED` since 2026-09-24, and no migration start time was later than that date. This matches the observed startup failure and shows no migration-ledger change from the October 2 attempts, but does not rule out other writes to the `test` database. No evidence indicates the application's production database was accessed or changed. Future Boot 4 candidate runs must use `SPRING_MONGODB_URI` or `--spring.mongodb.uri` and confirm a connection to the isolated port. See [Spring Boot MongoDB configuration](https://docs.spring.io/spring-boot/api/java/org/springframework/boot/mongodb/autoconfigure/MongoProperties.html).
