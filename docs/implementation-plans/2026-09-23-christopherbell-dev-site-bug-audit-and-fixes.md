@@ -1041,7 +1041,7 @@ Task 63 is complete: the regression failed before and passed after moving `#home
 ### Task 69 - Remove the placeholder post from the public Blog
 - Dependencies: Task 68 is merged and deployed; production is healthy at merge `682f50e568036c5db282fc9384c715cfaceac5f0`.
 - Branch: Create fresh worktree `codex/blog-placeholder-cleanup-20261003` from refreshed `origin/main` at `682f50e568036c5db282fc9384c715cfaceac5f0`.
-- Files: `website/src/main/resources/application.yml`, `website/src/main/resources/static/js/components/blog.js`, and new `website/src/test/js/blog-empty-state.test.js`; inspected the existing Node `node:test` patterns in `public-content.test.js` and `site-media-player-component.test.js`.
+- Files: `website/src/main/resources/application.yml`, `website/src/main/resources/static/js/components/blog.js`, `website/src/main/java/dev/christopherbell/blog/README.md`, and new `website/src/test/js/blog-empty-state.test.js`; inspected the existing Node `node:test` patterns in `public-content.test.js` and `site-media-player-component.test.js`.
 - Symbols: `blog-properties.posts`, `BlogPosts.updatePosts`, and the blog component's empty-state rendering.
 - Inspection: On 2026-10-03, production `/blog` visibly rendered `test blog`, author `Test`, and `Test Content`; anonymous `GET /api/blog/v1/posts` returned the same post. The only repository definition is the base `application.yml` placeholder; no `application*.yml` overrides exist. The Blog README says content is config-backed. `BlogPosts.updatePosts` currently clears its container and renders nothing for an empty response.
 - Required skill: `write-jane-street-style-code` before code changes.
