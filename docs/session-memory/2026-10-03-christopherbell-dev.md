@@ -155,3 +155,13 @@ Work, decisions, events, and evidence for this date.
 - During candidate build, status stayed `DEPLOYING` past its three-minute freshness threshold and showed `STALE`; unprivileged process inspection confirmed the deployment and Java processes were still active while production remained healthy. The deployment completed without intervention, and the next poll reported fresh success. This confirms a progress-observability follow-up: stale status alone cannot distinguish a long-running deployment from a stuck poller.
 - Post-deployment local liveness/readiness returned HTTP 200 with `status=UP`; local and public apex/`www` homepages returned HTTP 200. Local and public `/js/home.js` both contained the sequence guard and had SHA-256 `2D902DBF670A23C61F6A0BF8083C8406AB1F3C65F80F24F353F2EBF790B3DD07`. The public active-post feed returned HTTP 200 with valid JSON. No production write or elevated access was used.
 - Task 67 is complete. Its full candidate and production evidence is in [the runtime report](../test-reports/2026-10-03-christopherbell-dev-task-67-homepage-stale-response-runtime-verification.md). The broad bug-finding goal remains active; continue with the deployment-status observability follow-up and the next site bug audit.
+
+
+## 2026-10-03 16:37 Central Daylight Time - Task 68 deployment status heartbeat plan
+
+## Task 68 - Confirmed stale status during an active production deployment
+
+- Task 67 closeout was pushed to Builder main as `0d7623a3c2b5548973460fee4c575e99e0fef26e`.
+- Rechecked production after Task 67: `auto-status` was fresh `UP_TO_DATE`, all four SHAs matched `a3f0bed2dc97439bb58591d4d42d64c5b0833101`, service `RUNNING`, site `HEALTHY`.
+- During deployment, status `DEPLOYING` last updated at 21:23:33Z became `STALE` after 180 seconds while read-only process evidence still showed the live PowerShell and Java deployment chain. Production stayed healthy; the run completed and published fresh `UP_TO_DATE` at 21:30:10Z. Source inspection confirms status is written before the blocking deployment call and not refreshed during long waits; the status reader marks any timestamp older than 180 seconds stale.
+- Added Task 68 to the existing bug-audit plan before code changes. It scopes synchronous, best-effort sanitized progress heartbeats to active deployment waits, preserving the stale rule after progress stops and avoiding detached workers or protected ACL changes.
