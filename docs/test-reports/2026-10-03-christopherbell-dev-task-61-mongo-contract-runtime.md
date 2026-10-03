@@ -55,7 +55,7 @@ The process was PID 3532. Startup logs identified Spring Boot 4.1.1, the `test` 
 
 ## Pass / Fail
 
-All listed candidate HTTP, database-connection, focused-contract, and default-check cases passed. The first default-check process was interrupted mid-suite with Windows exit `0x40010004`; its rerun completed successfully with exit code 0. Two preliminary candidate starts were rejected by the site's schema guard: the reused test fixture failed migration 009 and a blank database lacked the required active cutover ledger at migration 015. The final candidate used a fresh isolated database with the repository's deterministic valid ledger fixture and started successfully.
+All listed candidate HTTP, database-connection, focused-contract, and default-check cases passed. During final review, a temporary `createdOn` assertion failed for a restaurant with an explicit ID because auditing correctly treats it as existing and does not set the creation timestamp; the stale assertion was removed while retaining the `lastUpdatedOn` and cursor-order checks. The final focused Mongo run then passed all 34 tests. The first default-check process was interrupted mid-suite with Windows exit `0x40010004`; its rerun completed successfully with exit code 0. Two preliminary candidate starts were rejected by the site's schema guard: the reused test fixture failed migration 009 and a blank database lacked the required active cutover ledger at migration 015. The final candidate used a fresh isolated database with the repository's deterministic valid ledger fixture and started successfully.
 
 ## Evidence
 
