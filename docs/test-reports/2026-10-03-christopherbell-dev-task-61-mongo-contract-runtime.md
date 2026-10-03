@@ -68,4 +68,10 @@ All listed candidate HTTP, database-connection, focused-contract, and default-ch
 
 ## Bugs / Follow-ups
 
-No runtime failure remains for this candidate. The first two startup failures were test-fixture setup issues and were not repaired by bypassing the schema guard. Production was not modified or redeployed. The fix branch still requires review, required PR CI, and the supported deployment/production verification path before the bug batch is delivered.
+No runtime failure remains for this candidate. The first two startup failures were test-fixture setup issues and were not repaired by bypassing the schema guard.
+
+PR #1462 passed Dependency Review, CodeQL, and Java 25 builds on Ubuntu, macOS, and Windows. It was squash-merged as `df3a1e0143e2f909c7c9ced389fbea4a3ea73fbf`. The supported SYSTEM auto-deployer activated that exact SHA. During candidate build/validation, `auto-status` reported `DEPLOYING` and later `STALE` while the previous release continued to serve healthy responses; it subsequently refreshed to `SUCCEEDED`, then `UP_TO_DATE`, with `activeSha` and `successfulSha` equal to the merge SHA. The transient stale period cleared without manual intervention.
+
+Post-deployment proof on 2026-10-03: `ChristopherBellDev`, `MongoDB`, and `cloudflared` were Running/Automatic; port 8080 was owned by the website process and MongoDB listened on 127.0.0.1:27017. Local liveness and readiness returned HTTP 200 with `{"status":"UP"}`. Local and public `https://www.christopherbell.dev/` home requests returned HTTP 200 with title `CB | Home`. No manual deploy, restart, production database write, or migration command was issued.
+
+The deployment is complete. Follow-up: assess whether the long-running deployment status should publish progress heartbeats so operators can distinguish a slow active candidate validation from a hung deploy without treating a recoverable stale interval as terminal.
