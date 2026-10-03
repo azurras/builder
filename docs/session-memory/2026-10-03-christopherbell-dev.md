@@ -102,3 +102,14 @@ Work, decisions, events, and evidence for this date.
 - Production GET /canes-box-tracker returned HTTP 200. At outer viewport 375x812, document viewport and scroll width both measured 360px; the two cards stacked and fit. At desktop width the cards remained in two columns. Browser console had no errors or warnings.
 - Standard-user auto-status still reports pollerState UNKNOWN/ACCESS_DENIED, and protected deploy configuration blocks direct release listing. No ACL changes or elevated access were used.
 - Full verification: ../test-reports/2026-10-03-christopherbell-dev-task-65-canes-mobile-layout-runtime-verification.md. Task 65 is complete; the broad site bug-finding goal remains active.
+
+
+## 2026-10-03 15:11 Central Daylight Time - Task 66 candidate verification
+
+## Task 66 - Photography usage heading candidate
+
+- Rechecked production `/photos/usage`: HTTP 200 but no h1; its main landmark contained only the restriction paragraph. Added a visible `Photography Usage` h1 and an exact MVC assertion in a fresh worktree at `codex/photos-usage-heading-20261003`, based on deployed `origin/main` 02cc854e0642efd3dbd8bc9091edc01b57b09a88.
+- The MVC test failed before the edit at the new h1 assertion and passed afterward (43/43). `:website:check` passed: 1,975 Java tests, 0 failures/errors, 108 skipped; 374 JavaScript tests; native Windows check tasks completed.
+- First candidate startup on a blank isolated database was rejected by the intentional migration 015 schema guard. A second isolated MongoDB 8.3.2 instance on 27029 was seeded with only a synthetic valid `TARGET_ACTIVE` ledger matching the current manifest digest. The packaged Spring Boot 4.1.1 candidate on 18092 connected only to `127.0.0.1:27029/test`; readiness, liveness, and anonymous `/photos/usage` returned 200. Response had exactly one main h1 and preserved the terms/title; Chrome accessibility tree identified it as level one.
+- Stopped the candidate app and both task-owned MongoDB processes; ports 18091, 18092, 27028, and 27029 closed. Production listeners 8080 and 27017 remained present. No production data or service was touched.
+- Builder plan was published in bd76688; candidate evidence is in [Task 66 runtime report](../test-reports/2026-10-03-christopherbell-dev-task-66-photography-usage-heading-runtime-verification.md). Required PR CI, supported deployment, and public page acceptance remain pending. The broad site bug-finding goal remains active.
