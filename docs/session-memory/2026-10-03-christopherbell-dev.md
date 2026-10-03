@@ -32,3 +32,16 @@ Work, decisions, events, and evidence for this date.
 - On 2026-10-03, read-only GETs for `/`, `/void`, `/u/Chris`, `/wfl/top-liked`, `/canes-box-tracker`, and `/shared?path=reports` all returned HTTP 200 (3,112 to 6,812 bytes).
 - Every same-origin CSS/JavaScript asset referenced by those pages returned HTTP 200: `/02685ad8daaa748bfcfb/css/main.css`, `app.js`, `home.js`, `home-feed.js`, `user-feed.js`, `wfl-list.js`, `canes-box-tracker.js`, `shared-folder.css`, `shared-folder.js`, and Bootstrap 5.3.8 bundle.
 - This smoke pass found no broken route or referenced static asset; no production writes were made.
+
+
+## 2026-10-03 12:13 - Task 62 Spring Boot BOM deployment
+
+## Task 62 - cbell-lib Spring Boot BOM alignment deployed
+
+- The user's request to update to the latest stable Spring Boot release authorized Task 62 of the active site bug audit. Official Spring release information confirmed 4.1.1 as the latest stable release; the root plugin and website already used it while `cbell-lib` used BOM 4.1.0.
+- Changed only `cbell-lib/build.gradle.kts` to import Spring Boot dependency BOM 4.1.1. Dependency verification metadata and unrelated versions remained unchanged. Pre/post `dependencyInsight` showed the mismatch resolved to Boot 4.1.1 and Spring Data MongoDB 5.1.1 across cbell-lib configurations.
+- Verification passed: `:cbell-lib:check`, full `:website:check` (1,975 tests, 0 failures/errors, 108 skipped), `:website:bootJar`, `git diff --check`, and packaged candidate runtime against isolated loopback MongoDB `test`; candidate readiness/liveness/home were HTTP 200. The first candidate attempt failed before binding due the known Windows Java loopback issue; retry with process-only `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:/Windows/Temp` succeeded.
+- PR #1463 passed Dependency Review, CodeQL, and Java 25 CI on Ubuntu, macOS, and Windows; squash-merged as `dd87087f4d9c6f43cb6730408a315cd640820e69`.
+- Supported automatic deployment status reported `UP_TO_DATE` with `remoteSha`, `activeSha`, `attemptedSha`, and `successfulSha` equal to the merge SHA; trusted deployment-tool refresh succeeded. Production readiness/liveness and local/public homepage returned HTTP 200; title `CB | Home`; `ChristopherBellDev`, `MongoDB`, and `cloudflared` remained Running/Automatic.
+- `prod.cmd auto-status` itself could not read the protected `C:\ProgramData\christopherbell.dev\config\deploy.json` without elevation. The deliberately readable read-only status store provided exact deployment proof; no elevated access or manual deploy/restart was used. Retain the wrapper access limitation as an observability follow-up.
+- Detailed candidate and production evidence: `docs/test-reports/2026-10-03-christopherbell-dev-task-62-cbell-lib-spring-boot-bom-runtime-verification.md`. Task 62 is complete; continue the user-authorized site bug-finding goal.

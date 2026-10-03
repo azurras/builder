@@ -59,7 +59,14 @@ The first candidate launch (PID 17524) exited before binding because Java could 
 
 ## Pass / Fail
 
-All dependency resolution, library checks, site checks, packaged-candidate, HTTP, database-isolation, and cleanup cases passed. The initial candidate start failed before binding due the known Windows JDK Unix-domain socket issue; the process-scoped temp-directory setting resolved it without changing project configuration. No production process, listener, or database was touched.
+All dependency resolution, library checks, site checks, packaged-candidate, HTTP, database-isolation, and cleanup cases passed. The initial candidate start failed before binding due the known Windows JDK Unix-domain socket issue; the process-scoped temp-directory setting resolved it without changing project configuration. No production process, listener, or database was touched during candidate testing.
+
+## Production Deployment
+
+- PR #1463 passed Dependency Review, CodeQL, and Java 25 Ubuntu/macOS/Windows CI, then squash-merged as `dd87087f4d9c6f43cb6730408a315cd640820e69`.
+- The readable automatic-deployment status record at `C:\ProgramData\christopherbell.dev-status\auto-deploy.json` reported `UP_TO_DATE`; `remoteSha`, `activeSha`, `attemptedSha`, and `successfulSha` all matched the merge SHA. `toolRefreshStatus` was `SUCCEEDED`, `failureCategory` was `NONE`, and the record was fresh at read time. This status store grants Users read-only access; no elevated access or protected configuration access was used.
+- After deployment, local readiness and liveness each returned HTTP 200 with `{"status":"UP"}`. Local and public homepage requests returned HTTP 200 with title `CB | Home`. `ChristopherBellDev`, `MongoDB`, and `cloudflared` remained Running/Automatic, and listeners remained on 8080 and 127.0.0.1:27017.
+- The wrapper command `prod.cmd auto-status` could not read `C:\ProgramData\christopherbell.dev\config\deploy.json` from this non-elevated session. Deployment state was verified through the designed read-only status store instead. Scheduled-task registration details were not required to confirm the active merge SHA and successful deployment.
 
 ## Evidence
 
@@ -70,4 +77,4 @@ All dependency resolution, library checks, site checks, packaged-candidate, HTTP
 
 ## Bugs / Follow-ups
 
-Candidate verification is complete. The change is not yet merged or deployed; required PR CI and supported production delivery remain outstanding.
+Task 62 is complete. The only product source change aligns the `cbell-lib` BOM to Spring Boot 4.1.1; the merged SHA is deployed and production health checks passed.
