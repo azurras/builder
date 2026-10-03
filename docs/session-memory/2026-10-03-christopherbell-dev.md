@@ -54,3 +54,16 @@ Work, decisions, events, and evidence for this date.
 - The earlier Task 62 note that `prod.cmd auto-status` could not read the protected deploy config described an invocation from `A:\Projects\christopherbell.dev`, a dirty checkout 87 commits behind `origin/main`. That checkout's stale script failed at `C:\ProgramData\christopherbell.dev\config\deploy.json`.
 - Reproduced with the current `origin/main` `prod.cmd auto-status` at 2026-10-03 12:19 CDT. It succeeded without elevation and reported `available=True`, `freshness=FRESH`, `UP_TO_DATE`, matching active/successful SHA `dd87087f4d9c6f43cb6730408a315cd640820e69`, service `RUNNING`, and site `HEALTHY`. Scheduled-task registration remains `UNKNOWN` / `ACCESS_DENIED` under the non-elevated account, consistent with the previously recorded limitation.
 - This is stale-checkout behavior, not a newly confirmed defect in current main. The Task 62 report was corrected; there is no auto-status code change from this observation.
+
+
+## 2026-10-03 12:58 - Task 63 signed-out feed error fix deployed
+
+### Task 63 - Signed-out Void feed errors
+
+- Confirmed the public `/void` bug with a read-only production browser session: first feed GET was injected as HTTP 503; the error text was set and skeletons cleared, but the alert was invisible because `#homeAlert` was nested inside auth-hidden `#composer`.
+- Added a DOM-structure regression in `website/src/test/js/home-feed.test.js`; it failed before the template change. Moved the shared alert just outside `#composer` in `website/src/main/resources/templates/void/index.html`, preserving composer auth behavior and existing alert handlers.
+- `:website:jsTest` passed 373/373. Full `:website:check` passed: 1,975 Java tests, 0 failures/errors, 108 skipped, and native Windows checks. Local Chrome candidate used only isolated MongoDB `test` at 127.0.0.1:27028 and app port 18089; first feed GET 503 displayed the alert while signed out, scroll retry 200 cleared it. Candidate and MongoDB processes were stopped.
+- PR #1465 passed Dependency Review, CodeQL, and Java 25 Ubuntu/macOS/Windows CI. It squash-merged at `9730446890122f72ab640a58abd9b958b706b433`.
+- Supported automatic deployment initially reported `DEPLOYING`; its status became stale during long validation while the existing service remained healthy, then recovered without intervention. Final fresh status was `SUCCEEDED`, with remote/active/attempted/successful SHAs all matching the merge SHA; failure category `NONE`; tool refresh `SUCCEEDED`. Readiness/liveness and local/public `/void` returned 200. Browser checks at both URLs confirmed `#homeAlert` outside the signed-out-hidden composer. No elevated access, manual restart, or production data writes were used.
+- Non-elevated status still reports scheduled-task registration as `UNKNOWN` / `ACCESS_DENIED`; deployment proof itself is readable, fresh, and successful. This remains an observability limitation.
+- Detailed evidence: [Task 63 runtime and deployment report](../test-reports/2026-10-03-christopherbell-dev-task-63-void-feed-error-runtime-verification.md); [active site audit plan](../implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md). Task 63 is complete. The broad authorized site bug-finding goal remains active.
