@@ -80,3 +80,11 @@ Work, decisions, events, and evidence for this date.
 - Production local readiness/liveness, local/public `/`, and local/public `/void` returned HTTP 200. Local and public CSP headers allow the exact Cloudflare host and preserve the existing connection directive. Chrome on the public homepage observed one integrity-protected Cloudflare beacon script as a loaded resource and no warning/error console records.
 - User asked whether Spring Boot can be updated. The app was already fully aligned to stable 4.1.1 after Task 62 (root plugin, website, and cbell-lib BOM); the available 4.2.0-M2 is a milestone prerelease, so no version change was made. Stable-release and CI/runtime compatibility checks confirm Java 25 and Gradle 9.6.1 remain compatible.
 - Full evidence: [Task 64 runtime and deployment report](../test-reports/2026-10-03-christopherbell-dev-task-64-cloudflare-analytics-csp-runtime-verification.md); [active site audit plan](../implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md). Task 64 is complete; the user's broad site bug-finding goal remains active.
+
+
+## 2026-10-03 13:48 Central Daylight Time - Post-deployment public route sweep
+
+## 2026-10-03 - Post-deployment public route sweep
+
+- After Task 64 deployment, read-only Chrome checks revisited `/void` and loaded `/u/Chris`, `/wfl/top-liked`, `/canes-box-tracker`, and `/void/explore`. Each page loaded with its expected title, a populated body, Cloudflare beacon resource observed, and no console warnings or errors. The Explore route also has one native `<main>` landmark; an initial accessibility-snapshot substring check was a false alarm, not a page defect.
+- No new site bug was confirmed by this sweep. Task 64 remains complete; the broad bug-finding goal remains active.
