@@ -133,3 +133,14 @@ Work, decisions, events, and evidence for this date.
 - Inspected `home.js`: its five-second interval starts a new request regardless of earlier requests; any completion writes `innerHTML`.
 - A controlled module reproduction held the initial request, fired the interval to start a second request, resolved the second with newer content, then resolved the first. Both requests were concurrent and the older result overwrote the newer content, confirming an asynchronous stale-render bug without changing production state.
 - Added Task 67 to the active implementation plan with a response-order regression, request-generation guard, full JS/native/candidate/CI/deployment verification, and rollback criteria. The existing site worktree is isolated; keep the unrelated `gradlew.bat` change intact.
+
+
+## 2026-10-03 16:09 Central Daylight Time - Task 67 homepage signal rail candidate verification
+
+## Task 67 - Homepage signal-rail stale response fix candidate
+
+- Implemented a monotonically increasing refresh sequence in `home.js`; only the latest request can update success or error UI. The five-second timer, endpoint, ranking, and markup remain unchanged.
+- Added `home-active-post-refresh.test.js`. It failed before the production edit when the first response completed last and rendered stale content. It passes with the sequence guard, including stale success and stale failure cases.
+- Focused checks passed. Full `:website:jsTest` passed 375/375; `:website:check` succeeded with 1,975 Java tests, 0 failures/errors, 108 skipped; PowerShell deployment checks passed 203 with 1 skipped under both PowerShell 7 and Windows PowerShell 5.1; shared-folder worker checks passed 75/75.
+- Candidate ran as PID 36668 on port 18093 against isolated MongoDB PID 32368 on 127.0.0.1:27030/test using the verified synthetic TARGET_ACTIVE fixture. Candidate readiness/home/fingerprinted JS returned 200; Chrome showed the expected empty feed UI. Only MongoDB port 27030 was used; candidate also performed the local read-only host-metrics probe on port 8080. No candidate connection to production MongoDB port 27017 occurred.
+- Candidate processes were stopped. Ports 18093 and 27030 closed; production listeners 8080 and 27017 remained. Detailed evidence is in [Task 67 runtime report](../test-reports/2026-10-03-christopherbell-dev-task-67-homepage-stale-response-runtime-verification.md), currently draft because PR CI/deployment remain pending.
