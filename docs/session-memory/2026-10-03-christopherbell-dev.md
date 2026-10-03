@@ -177,3 +177,12 @@ Work, decisions, events, and evidence for this date.
 - SYSTEM refreshed its tools from the merge SHA, then published six fresh `DEPLOYING` records at 22:27:10Z, 22:28:10Z, 22:29:11Z, 22:30:11Z, 22:31:12Z, and 22:32:12Z (302 seconds across the first and last), beyond the former 180-second stale threshold. Service stayed RUNNING and site HEALTHY. At 22:33:08Z the terminal record was fresh UP_TO_DATE with remote, active, attempted, successful, and tool-source SHA matching the merge; final 22:35:11Z status remained fresh and healthy.
 - Public `GET /` on apex and www returned HTTP 200, title `CB | Home`, and 4,348 bytes. No manual service restart or application-data write was made.
 - Full evidence: [Task 68 runtime report](../test-reports/2026-10-03-task-68-auto-deploy-progress-heartbeat-runtime-verification.md) and [active site audit plan](../implementation-plans/2026-09-23-christopherbell-dev-site-bug-audit-and-fixes.md). Task 68 is complete. Continue the broad bug-finding goal with the next confirmed site issue.
+
+
+## 2026-10-03 17:50 - Task 69 blog placeholder reproduction and plan
+
+- Current production is healthy: standard-user `prod.cmd auto-status` returned `FRESH` / `UP_TO_DATE`, service `RUNNING`, site `HEALTHY`, and all active/attempted/successful SHAs matched `682f50e568036c5db282fc9384c715cfaceac5f0`.
+- Reconciled and published Task 68 Builder closeout as `2026d5f`. The site worktree is clean; refreshed `origin/main` is the deployed heartbeat merge.
+- Production read-only checks found no open GitHub issues and no console errors on the sampled public pages. WFL returned three picks for generic covered ZIP `78701`; an Austin/Bay Area/New Orleans/Dallas-uncovered `10001` returned no local picks, consistent with configured metro coverage. Selected Cane's metro loaded its trend.
+- Confirmed a public content defect: `/blog` and anonymous `/api/blog/v1/posts` show a fabricated `test blog` (`Author: Test`, `Test Content`). Source trace found it only in base `application.yml`, with no application profile override; Blog README confirms config-backed content. `BlogPosts.updatePosts` renders no message for empty posts.
+- Added Task 69 to the existing bug-audit plan before edits: clear the sample post from configuration and render an explicit empty state without inventing replacement content. Plan validation passed. Continue from refreshed `origin/main` `682f50e568036c5db282fc9384c715cfaceac5f0` in a fresh isolated worktree; no production data has been modified.
