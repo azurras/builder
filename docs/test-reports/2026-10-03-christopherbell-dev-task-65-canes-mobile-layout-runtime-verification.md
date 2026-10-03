@@ -2,7 +2,7 @@
 
 ## Document Status
 
-draft
+complete
 
 ## Story/Issue
 
@@ -10,7 +10,7 @@ Task 65 in [the site bug audit plan](../implementation-plans/2026-09-23-christop
 
 ## Branch
 
-Repository branch: `codex/canes-box-mobile-overflow`; source under verification was based on `origin/main` at `979d7f3b10e89b9749870f679797daf88c0495bd`. The fix and regression assertion were uncommitted during this preview.
+Repository branch: `codex/canes-box-mobile-overflow`, commit `d2ea1add339645bcf9d044307e090035557a1ab9`; merged PR [#1467](https://github.com/azurras/christopherbell.dev/pull/1467) as `02cc854e0642efd3dbd8bc9091edc01b57b09a88`.
 
 ## App / Environment
 
@@ -19,13 +19,14 @@ Repository branch: `codex/canes-box-mobile-overflow`; source under verification 
 - The preview removed module scripts and inserted the Bootstrap-compatible global `box-sizing: border-box` reset because it was not running the Spring Boot WebJar server. A 720px SVG fixture was inserted into the chart to exercise its internal scrolling.
 - No application database or external integrations were used by the preview.
 - Production baseline captured earlier on 2026-10-03: at a 360px document viewport, the live page's document scroll width was 387px.
+- Deployed production application: `https://www.christopherbell.dev/canes-box-tracker`, active release SHA `02cc854e0642efd3dbd8bc9091edc01b57b09a88`.
 
 ## Local Run Details
 
 - Preview source: checked-out Thymeleaf template and candidate stylesheet from the Task 65 worktree.
 - Start command: `python -m http.server 18891 --directory <temporary preview directory>`.
 - Browser viewport overrides: 375x812 (document viewport 360px) and 1280x900 (document viewport 1265px, accounting for the browser scrollbar).
-- Cleanup: temporary preview server was stopped; browser viewport reset; preview tab closed. No application process was started.
+- Cleanup: temporary preview server was stopped; browser viewport reset; preview tab closed. The supported production auto-deployer built and validated the merged release, then reached fresh `UP_TO_DATE`; the application service remained healthy.
 
 ## Test Cases
 
@@ -34,10 +35,11 @@ Repository branch: `codex/canes-box-mobile-overflow`; source under verification 
 3. **Desktop compatibility** — inspect card columns and document width at outer viewport 1280x900.
 4. **Source regression** — run the focused markup test before the CSS change (expected failure) and after (pass), then run all browser-side JavaScript tests directly with Node.
 5. **Gradle-native test task** — attempt `:website:jsTest` with the Gradle wrapper.
+6. **Production smoke** — request the public route and inspect the deployed page at mobile and desktop widths, including browser console errors.
 
 ## Data Sent
 
-No form input, mutation request, database operation, or external integration call. The local preview made only GET requests to its own static server.
+The isolated preview received a read-only `GET /` at `http://127.0.0.1:18891/`. After deployment, the public route received a read-only `GET /canes-box-tracker` at `https://www.christopherbell.dev/canes-box-tracker`. No form input, mutation request, database operation, or external integration call occurred.
 
 ## Response Received
 
@@ -46,6 +48,13 @@ No form input, mutation request, database operation, or external integration cal
 - Regression test: 14/14 tests passed after the CSS change. Before the change the new assertion failed because the existing 720px media rule omitted `.canes-box-index-grid`.
 - Full browser-side suite: 374/374 tests passed with `node --test website/src/test/js/*.test.js`.
 - Gradle `:website:jsTest`: did not reach task execution. Gradle 9.6.1 failed while establishing its Windows loopback connection (`java.io.IOException: Unable to establish loopback connection`; Java NIO reported `SocketException: Invalid argument: connect`). Retries with `--no-daemon`, empty `org.gradle.jvmargs`, and `-Djava.net.preferIPv4Stack=true` failed the same way.
+- Required CI: Java 25 builds on Ubuntu, macOS, and Windows; CodeQL Actions, Java/Kotlin and JavaScript analyses; and Dependency Review all passed.
+- Production GET `/canes-box-tracker`: HTTP 200, 6,943 response bytes, title `Raising Canes Box Index`, tracker grid markup present.
+- The running production app returned HTTP/1.1 200 OK for `/canes-box-tracker`; the page UI rendered the tracker title, hero, and index cards.
+- Production mobile (outer viewport 375x812): document viewport and scroll width both 360px, one 278px grid column, both cards within x=41..319, no page-level horizontal overflow. The stylesheet URL was the deployed release asset under `/0db8dcd2b6cfeed37877/css/main.css`.
+- Production desktop (outer viewport 1280x900): document viewport and scroll width both 1265px, two 489px columns, cards side by side.
+- Production chart panel retained `overflow-x:auto`; it had no wide SVG at the time of the production check. A 720px SVG fixture in the isolated browser preview confirmed internal scrolling (`clientWidth=272`, `scrollWidth=720`).
+- Production browser console error/warning check returned no entries. Site and service health were healthy after deployment.
 - `git diff --check` passed.
 
 ## Pass / Fail
@@ -53,7 +62,9 @@ No form input, mutation request, database operation, or external integration cal
 - Mobile and desktop CSS behavior in the isolated browser preview: **PASS**.
 - Regression and full Node browser-side test suites: **PASS**.
 - Gradle-native `:website:jsTest`: **BLOCKED** before task execution by the local Java loopback failure.
-- Full Spring Boot candidate startup and production deployment: **NOT RUN**. The visual preview does not substitute for a Spring Boot candidate; required CI and the supported deployment path remain pending.
+- Required CI build, CodeQL, and dependency checks: **PASS**.
+- Supported automatic Spring Boot candidate validation and production deployment: **PASS**; final status was fresh `UP_TO_DATE` with active, attempted, successful, and remote SHAs matching.
+- Public route and deployed mobile/desktop behavior: **PASS**.
 
 ## Evidence
 
@@ -61,10 +72,13 @@ No form input, mutation request, database operation, or external integration cal
 - Focused red/green command: `node --test website/src/test/js/a11y-markup.test.js` (14 tests; failed 1 before the fix, passed 14 after).
 - Full suite command: `node --test website/src/test/js/*.test.js` (374 passed, 0 failed).
 - Gradle command: `./gradlew.bat :website:jsTest --no-daemon --console=plain`; failed before task startup as described above.
+- CI checks passed for PR #1467 before merge.
+- Deployer command: `prod.cmd auto-status`; final values were `FRESH`, `UP_TO_DATE`, service/site `RUNNING`/`HEALTHY`, and remote/active/attempted/successful SHA `02cc854e0642efd3dbd8bc9091edc01b57b09a88`.
+- Production response and DOM measurements were collected after deployment. Mobile screenshot was visually checked; no image artifact was retained.
 - Patch adds `.canes-box-index-grid` to the existing 720px media selector group, setting a shrinkable `minmax(0, 1fr)` column.
-- Preview measurements were read from the rendered browser DOM. No screenshot artifact was retained.
+- Preview and production measurements were read from rendered browser DOMs.
 
 ## Bugs / Follow-ups
 
-- Re-run the Gradle-native task and full `:website:check` in a functioning local Gradle environment or required CI.
-- Start and inspect a Spring Boot candidate on an isolated port, then require CI, use the supported auto-deployer, and verify the mobile layout on production before marking this report complete.
+- Local Gradle remains unable to establish its Windows loopback connection; required CI provides the build/test evidence for this release.
+- `auto-status` continues to report poller state as `UNKNOWN/ACCESS_DENIED` to this standard user, although the sanitized deployment state is fresh and up to date. This is an existing observability limitation, not a deployment failure.

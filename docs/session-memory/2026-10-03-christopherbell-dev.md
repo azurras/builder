@@ -88,3 +88,17 @@ Work, decisions, events, and evidence for this date.
 
 - After Task 64 deployment, read-only Chrome checks revisited `/void` and loaded `/u/Chris`, `/wfl/top-liked`, `/canes-box-tracker`, and `/void/explore`. Each page loaded with its expected title, a populated body, Cloudflare beacon resource observed, and no console warnings or errors. The Explore route also has one native `<main>` landmark; an initial accessibility-snapshot substring check was a false alarm, not a page defect.
 - No new site bug was confirmed by this sweep. Task 64 remains complete; the broad bug-finding goal remains active.
+
+
+## 2026-10-03 14:30 Central Daylight Time - Task 65 mobile overflow fix
+
+## 2026-10-03 14:30 Central Daylight Time - Task 65 mobile layout fix deployed
+
+## Task 65 - Cane tracker mobile overflow fixed and deployed
+
+- Reproduced a 387px document width on a 360px mobile viewport. Added the Cane index grid to the existing 720px responsive selector so its cards use one shrinkable column; kept the weekly chart panel internally scrollable.
+- Added a failing-then-passing stylesheet regression. All 374 browser-side tests passed with Node. Local Gradle could not establish its Windows loopback connection; required PR CI passed on Java 25 Linux/macOS/Windows, CodeQL, and Dependency Review.
+- PR #1467 squash-merged as 02cc854e0642efd3dbd8bc9091edc01b57b09a88. Supported automatic deployment reached fresh UP_TO_DATE with remote, active, attempted, and successful SHAs matching; the service and site were healthy.
+- Production GET /canes-box-tracker returned HTTP 200. At outer viewport 375x812, document viewport and scroll width both measured 360px; the two cards stacked and fit. At desktop width the cards remained in two columns. Browser console had no errors or warnings.
+- Standard-user auto-status still reports pollerState UNKNOWN/ACCESS_DENIED, and protected deploy configuration blocks direct release listing. No ACL changes or elevated access were used.
+- Full verification: ../test-reports/2026-10-03-christopherbell-dev-task-65-canes-mobile-layout-runtime-verification.md. Task 65 is complete; the broad site bug-finding goal remains active.
