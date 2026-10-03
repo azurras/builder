@@ -2,7 +2,7 @@
 
 ## Document Status
 
-draft
+complete
 
 ## Story/Issue
 
@@ -10,7 +10,7 @@ Builder implementation plan Task 67: prevent older homepage active-post feed res
 
 ## Branch
 
-Branch `codex/home-active-post-stale-response-20261003`, based on merged `origin/main` `bde35ffae5d23e7754bd49ee00fc940f19123c2`. Candidate source commit: `bde35ffae5d23e7754bd49ee00fc940f19123c2`, with local Task 67 changes. Candidate JAR SHA-256: `5B2152476655CD9A0CDFD6FCFCD6B45C4DE710C1D53CE90A23F59453D168D318`.
+Branch `codex/home-active-post-stale-response-20261003`, based on `origin/main` `bde35ffae5d23e7754bd49ee00fc940f19123c2`. Source commit `f78e7c721e33416ed13fe9595d2fe4290da157c2` was merged by PR #1469 as `a3f0bed2dc97439bb58591d4d42d64c5b0833101`. Candidate JAR SHA-256: `5B2152476655CD9A0CDFD6FCFCD6B45C4DE710C1D53CE90A23F59453D168D318`.
 
 ## App / Environment
 
@@ -41,6 +41,7 @@ Windows 11; Java 25.0.3; Spring Boot 4.1.1; MongoDB 8.3.2. Candidate profile `te
 - GET `http://127.0.0.1:18093/actuator/health/readiness` and `GET http://127.0.0.1:18093/` with no authentication.
 - GET the fingerprinted candidate JavaScript URL `/f4b9c94c387688cbe513/js/home.js`.
 - The application database URI pointed only to `mongodb://127.0.0.1:27030/test`.
+- After deployment, read-only GETs checked local liveness/readiness, the local and public homepage, `/js/home.js`, and the public active-post feed. No write or production database mutation was performed.
 
 ## Response Received
 
@@ -50,6 +51,10 @@ Windows 11; Java 25.0.3; Spring Boot 4.1.1; MongoDB 8.3.2. Candidate profile `te
 - Candidate readiness returned status code 200 with `{"status":"UP"}`. Candidate homepage returned status code 200 with title `CB | Home`, one page h1, and the `homeActivePost` mount. The fingerprinted `home.js` returned status code 200 and contained the refresh sequence guard.
 - Chrome accessibility tree showed the expected intentional empty-feed state, `No active posts yet.`; the isolated API had no post fixture.
 - Candidate shutdown left no listeners on ports 18093 or 27030. Production service on 8080 and MongoDB on 27017 remained listening.
+- PR #1469 passed Java 25 Ubuntu, macOS, and Windows builds; CodeQL Java/Kotlin, JavaScript/TypeScript, and Actions analyses; and Dependency Review. It squash-merged as `a3f0bed2dc97439bb58591d4d42d64c5b0833101`.
+- The supported SYSTEM auto-deployer refreshed its tools from that merge, deployed it, and returned to fresh `UP_TO_DATE`. Remote, active, attempted, and successful SHAs all matched `a3f0bed2dc97439bb58591d4d42d64c5b0833101`; the service was `RUNNING` and the site `HEALTHY`.
+- During candidate build/validation, status remained `DEPLOYING` beyond the three-minute freshness threshold and displayed `STALE`. Read-only process inspection confirmed the deployment process and its Java children were alive, while production remained healthy. The deployer completed without intervention and status returned to fresh `UP_TO_DATE` after cutover. This is an observability follow-up: stale status does not distinguish an active long deployment from a stuck poller.
+- Post-deployment local liveness/readiness returned HTTP 200 with `status=UP`. Local, public apex, and public `www` homepages returned HTTP 200. The local and public `/js/home.js` assets both contained the sequence guard and had matching SHA-256 `2D902DBF670A23C61F6A0BF8083C8406AB1F3C65F80F24F353F2EBF790B3DD07`. The public feed returned HTTP 200 with valid JSON.
 
 ## Pass / Fail
 
@@ -59,7 +64,10 @@ Windows 11; Java 25.0.3; Spring Boot 4.1.1; MongoDB 8.3.2. Candidate profile `te
 - PASS: The packaged candidate started against only the isolated `test` database; readiness, homepage, and fingerprinted asset returned HTTP 200.
 - PASS: Chrome exposed the expected home page and empty-feed state; this state matched the isolated empty feed response.
 - PASS: Candidate resources were stopped and production listeners remained intact.
-- PENDING: Required PR CI, merge, supported production deployment, and post-deployment homepage acceptance.
+- PASS: Required PR CI, CodeQL, and dependency review completed successfully; PR #1469 merged as `a3f0bed2dc97439bb58591d4d42d64c5b0833101`.
+- PASS: Supported automatic deployment made the merge SHA active and reported fresh `UP_TO_DATE`, service `RUNNING`, and site `HEALTHY`.
+- PASS: Local liveness/readiness returned HTTP 200 and `status=UP`; local, public apex, and public `www` homepages returned HTTP 200.
+- PASS: The deployed local/public homepage JavaScript asset contained the stale-response guard, with matching local/public SHA-256 `2D902DBF670A23C61F6A0BF8083C8406AB1F3C65F80F24F353F2EBF790B3DD07`; the public feed returned HTTP 200 and valid JSON.
 
 ## Evidence
 
@@ -70,4 +78,4 @@ Windows 11; Java 25.0.3; Spring Boot 4.1.1; MongoDB 8.3.2. Candidate profile `te
 
 ## Bugs / Follow-ups
 
-The request-order defect is fixed in the candidate. Required PR CI, supported deployment, and public post-deployment verification remain pending. The public production feed was empty during inspection; this is an expected data state, not a second defect.
+The request-order defect is fixed and deployed. The production feed returned valid JSON; the observed empty-feed UI remains an expected data state, not a second defect. Follow up on the confirmed deploy-status observability gap: a long deployment can remain active after its published status becomes `STALE`, with no progress heartbeat to distinguish it from a stuck task. The production service stayed healthy and this deployment completed without intervention. Standard-user poller registration remains `UNKNOWN/ACCESS_DENIED`; protected task/configuration ACLs were not changed.
