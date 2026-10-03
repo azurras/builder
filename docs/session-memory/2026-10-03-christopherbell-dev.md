@@ -45,3 +45,12 @@ Work, decisions, events, and evidence for this date.
 - Supported automatic deployment status reported `UP_TO_DATE` with `remoteSha`, `activeSha`, `attemptedSha`, and `successfulSha` equal to the merge SHA; trusted deployment-tool refresh succeeded. Production readiness/liveness and local/public homepage returned HTTP 200; title `CB | Home`; `ChristopherBellDev`, `MongoDB`, and `cloudflared` remained Running/Automatic.
 - `prod.cmd auto-status` itself could not read the protected `C:\ProgramData\christopherbell.dev\config\deploy.json` without elevation. The deliberately readable read-only status store provided exact deployment proof; no elevated access or manual deploy/restart was used. Retain the wrapper access limitation as an observability follow-up.
 - Detailed candidate and production evidence: `docs/test-reports/2026-10-03-christopherbell-dev-task-62-cbell-lib-spring-boot-bom-runtime-verification.md`. Task 62 is complete; continue the user-authorized site bug-finding goal.
+
+
+## 2026-10-03 12:19 - Correct Task 62 auto-status observation
+
+## Correction - Task 62 auto-status observation
+
+- The earlier Task 62 note that `prod.cmd auto-status` could not read the protected deploy config described an invocation from `A:\Projects\christopherbell.dev`, a dirty checkout 87 commits behind `origin/main`. That checkout's stale script failed at `C:\ProgramData\christopherbell.dev\config\deploy.json`.
+- Reproduced with the current `origin/main` `prod.cmd auto-status` at 2026-10-03 12:19 CDT. It succeeded without elevation and reported `available=True`, `freshness=FRESH`, `UP_TO_DATE`, matching active/successful SHA `dd87087f4d9c6f43cb6730408a315cd640820e69`, service `RUNNING`, and site `HEALTHY`. Scheduled-task registration remains `UNKNOWN` / `ACCESS_DENIED` under the non-elevated account, consistent with the previously recorded limitation.
+- This is stale-checkout behavior, not a newly confirmed defect in current main. The Task 62 report was corrected; there is no auto-status code change from this observation.
