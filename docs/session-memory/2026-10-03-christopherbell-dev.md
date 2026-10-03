@@ -123,3 +123,13 @@ Work, decisions, events, and evidence for this date.
 - Fresh `prod.cmd auto-status` reports `FRESH`, `UP_TO_DATE`, reason `NONE`, service `RUNNING`, site `HEALTHY`; remote, active, attempted, and successful SHAs match the merge. Trusted deploy-tool refresh succeeded. Poller registration is still `UNKNOWN` / `ACCESS_DENIED` for the standard user.
 - Independently checked local readiness and public `GET /photos/usage`: both returned status 200. Public main text is `Photography Usage Usage of the images on this site is forbidden without written consent from the owner.`; exactly one h1; title is `CB | Photography Usage`. The accessibility tree exposed the heading at level one. No manual restart, elevation, or production data write.
 - Updated the Task 66 runtime report and implementation-plan result; report schema validation passed. No source GitHub issue existed to close. The broad site bug-finding goal remains active.
+
+
+## 2026-10-03 15:42 Central Daylight Time - Task 67 homepage signal-rail race plan
+
+## Task 67 - Homepage signal-rail stale response reproduction
+
+- Fresh public UI reads confirmed the homepage's active-post module starts with a loading state and resolves to the intentional empty state while the public feed API returns an empty payload. This is not itself a defect.
+- Inspected `home.js`: its five-second interval starts a new request regardless of earlier requests; any completion writes `innerHTML`.
+- A controlled module reproduction held the initial request, fired the interval to start a second request, resolved the second with newer content, then resolved the first. Both requests were concurrent and the older result overwrote the newer content, confirming an asynchronous stale-render bug without changing production state.
+- Added Task 67 to the active implementation plan with a response-order regression, request-generation guard, full JS/native/candidate/CI/deployment verification, and rollback criteria. The existing site worktree is isolated; keep the unrelated `gradlew.bat` change intact.

@@ -35,6 +35,7 @@ Task 47 merged as PR #1447 at `a9b01063fc7ac086ee8ae43c2c4ff9344a7ec4d4` and is 
 Task 59 uses a fresh `codex/spring-boot-4-1-1-20261002` worktree from refreshed `origin/main` at deployed base `bd1ede060d6135562230f14baf08d37df3457dcd`; keep Tasks 56-58's dirty worktrees and the authoritative checkout untouched.
 
 Task 66 uses a fresh `codex/photos-usage-heading-20261003` worktree from refreshed `origin/main` at `02cc854e0642efd3dbd8bc9091edc01b57b09a88`; preserve the Task 65 worktree and authoritative checkout.
+Task 67 uses the existing isolated site worktree `A:\Projects\christopherbell.dev-worktrees\photos-usage-heading-20261003`, on new branch `codex/home-active-post-stale-response-20261003` from refreshed `origin/main` at `bde35ffae5d23e7754bd49ee00fc940f19123c2`. Preserve its unrelated unstaged `gradlew.bat` change.
 
 ## Non-Goals
 - No destructive or mutating production actions during discovery or local verification.
@@ -1003,6 +1004,21 @@ Task 63 is complete: the regression failed before and passed after moving `#home
 - Rollback: Use the documented supported deployment rollback only if post-deployment acceptance fails; no application data or schema changes are in scope.
 - Risks: A heading can alter page spacing; inspect the rendered candidate at mobile and desktop widths and retain the current paragraph verbatim.
 - Result (complete): The MVC regression failed before the template edit and passed after; all 43 `ViewControllerTest` cases passed. `:website:check` passed (1,975 Java tests, 0 failures/errors, 108 skipped; 374 JavaScript tests). A first blank-database launch correctly failed the migration 015 schema guard. A second packaged candidate used a clean isolated MongoDB `test` database with the exact synthetic active ledger; readiness, liveness, and anonymous `/photos/usage` returned HTTP 200, with one main h1 and unchanged terms/title. Chrome accessibility tree exposed the level-one heading. PR #1468 passed Java 25 Ubuntu/macOS/Windows builds, CodeQL Java/JavaScript/Actions analyses, and Dependency Review; it squash-merged as `bde35ffae5d23e7754bd49ee00fc940f19123c2`. Fresh supported `prod.cmd auto-status` reports `UP_TO_DATE`, service `RUNNING`, site `HEALTHY`, and matching remote/active/attempted/successful SHAs. Post-deployment readiness and public `/photos/usage` returned HTTP 200; production main contains exactly one `Photography Usage` h1, retains the original restriction text and title, and Chrome exposes it as a level-one heading. Poller registration remains `UNKNOWN/ACCESS_DENIED` without elevation; deployment state is readable and fresh. Full evidence: [Task 66 runtime report](../test-reports/2026-10-03-christopherbell-dev-task-66-photography-usage-heading-runtime-verification.md).
+
+### Task 67 - Prevent stale homepage signal-rail responses from overwriting newer results
+- Dependencies: Task 66 is merged and deployed; start from current `origin/main` at `bde35ffae5d23e7754bd49ee00fc940f19123c2`.
+- Files: `website/src/main/resources/static/js/home.js`; new `website/src/test/js/home-active-post-refresh.test.js`, following `home-active-post.test.js` and existing Node test conventions.
+- Symbols: `loadActivePost`, its request/render sequence, and the homepage `setInterval` callback.
+- Inspection: Production and current `origin/main` use a 5,000 ms interval to call `loadActivePost`; each completion immediately assigns `homeActivePost.innerHTML`. A controlled live-module reproduction left the first public-feed request pending, started a second on the interval, then resolved the second with newer content; when the first completed last, the older content overwrote it. Public `/` and its feed endpoint otherwise behaved normally (the current public feed is empty), so the timing defect is demonstrated with controlled response order rather than misattributing empty data.
+- Required skill: `write-jane-street-style-code` before code changes.
+- Before-Edit Brief — Behavior: Only the newest-started homepage active-post refresh may update the signal rail or its error state; preserve the existing five-second refresh cadence.
+- Invariants: Preserve feed URL and limit, activity ranking, markup, error/retry presentation, and current empty-feed behavior; do not alter API or persisted data.
+- Boundary/API: Client-side asynchronous responses for the homepage signal rail; no backend contract change.
+- Effects and failures: No persistence or external writes. Older success or failure completions are ignored after a newer poll starts; the latest request retains current success/error handling and the interval continues.
+- Tests and evidence: First add a deterministic test with two deferred feed responses; require the newer result to remain rendered when the older request completes last, and observe failure before the production edit. Keep the test isolated from other module-level DOM state.
+- Verification: Run the focused Node regression red/green, `node --check` on changed JavaScript, full `:website:jsTest`, `:website:check`, and `git diff --check`. Package and run the candidate on a non-production port using a verified isolated MongoDB `test` target and disabled collectors; verify readiness and the homepage plus signal-rail behavior with controlled out-of-order responses. Require PR CI; deploy only through the supported auto-deployer and verify matching SHA, service health, and public homepage availability.
+- Rollback: No schema or stored-data changes; if deployment acceptance fails, use the supported deployment rollback and verify the prior healthy release.
+- Risks: A request-order guard must cover both success and failure paths so an older failure cannot replace a newer successful result; preserve the 5-second timer.
 
 ## Verification correction - Spring Boot 4 MongoDB URI - 2026-10-02
 
