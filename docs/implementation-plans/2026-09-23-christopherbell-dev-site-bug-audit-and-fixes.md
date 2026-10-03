@@ -34,6 +34,8 @@ Task 47 merged as PR #1447 at `a9b01063fc7ac086ee8ae43c2c4ff9344a7ec4d4` and is 
 
 Task 59 uses a fresh `codex/spring-boot-4-1-1-20261002` worktree from refreshed `origin/main` at deployed base `bd1ede060d6135562230f14baf08d37df3457dcd`; keep Tasks 56-58's dirty worktrees and the authoritative checkout untouched.
 
+Task 66 uses a fresh `codex/photos-usage-heading-20261003` worktree from refreshed `origin/main` at `02cc854e0642efd3dbd8bc9091edc01b57b09a88`; preserve the Task 65 worktree and authoritative checkout.
+
 ## Non-Goals
 - No destructive or mutating production actions during discovery or local verification.
 - No unrelated feature redesign, dependency changes beyond the explicitly requested Spring Boot upgrade, or opportunistic cleanup. Task 49 changes only the brittle CI test lookup exposed by PR #1387; it does not merge or reproduce that action-version update. The separate package-only PR #1388 remains out of scope.
@@ -985,6 +987,21 @@ Task 63 is complete: the regression failed before and passed after moving `#home
 - Rollback: Use the supported release rollback only if production acceptance fails; no data or schema changes are in scope.
 - Risks: A mobile breakpoint must not hide or clip chart data; retain and verify the chart's own horizontal scrolling.
 - Result (complete): Regression failed before and passed after the responsive selector change; all 374 browser-side tests passed. Local Gradle could not establish its Windows loopback connection, but PR #1467 passed Java 25 Linux/macOS/Windows builds, CodeQL, and Dependency Review. It merged as `02cc854e0642efd3dbd8bc9091edc01b57b09a88`; the supported auto-deployer reached fresh `UP_TO_DATE` with remote/active/attempted/successful SHAs matching and service/site healthy. The public route returned HTTP 200. Chrome at 375x812 (360px document viewport) measured page width 360px and a single 278px index column; at desktop width, both 489px cards remained side by side. The chart panel retained internal horizontal scrolling, confirmed with a 720px SVG fixture. Browser console had no errors or warnings. `auto-status` continues to expose `pollerState=UNKNOWN/ACCESS_DENIED` to the standard user. Full evidence: [Task 65 runtime report](../test-reports/2026-10-03-christopherbell-dev-task-65-canes-mobile-layout-runtime-verification.md).
+
+### Task 66 - Add a page heading to photography usage terms
+- Dependencies: Task 65 is merged and deployed; start from refreshed `origin/main` at `02cc854e0642efd3dbd8bc9091edc01b57b09a88`.
+- Files: `website/src/main/resources/templates/photo/usage.html`, `website/src/test/java/dev/christopherbell/view/ViewControllerTest.java`.
+- Symbols: the `/photos/usage` page's `<main>` contents and `getPhotographyUsagePage_rendersUsageContract`.
+- Inspection: The production GET returned HTTP 200 on 2026-10-03 but contains zero `<h1>` elements; its `<main>` contains only the usage restriction paragraph. Source template matches this output. `ContentViewController.getPhotoUsagePage` maps the route to this template. The current MVC test checks the title string and gallery link but does not assert a main landmark heading. `photo/photography.html` demonstrates the site's visible `<h1>` pattern.
+- Required skill: `write-jane-street-style-code` before code changes.
+- Behavior: Render a visible `<h1>Photography Usage</h1>` before the existing terms paragraph inside the page's main landmark.
+- Invariants: Preserve the existing terms wording, route, title/social metadata, navigation/footer, and all unrelated page behavior.
+- Boundary/API: Server-rendered HTML at the existing public route; no endpoint, dependency, data, or persistence change.
+- Effects and failures: No side effects beyond rendered markup. Anonymous requests continue to return HTTP 200; a missing heading must fail the focused MVC regression.
+- Tests and evidence: Strengthen the existing MVC test to require the exact visible h1, first run it against the unmodified template to observe the expected assertion failure, then run the focused test, `:website:check`, and `git diff --check`. In an isolated candidate, GET `/photos/usage` anonymously and verify one `<h1>` inside `<main>`, the existing restriction paragraph, and no other response changes of concern.
+- Verification: Package/start on a non-production port using a verified isolated MongoDB `test` fixture with external scheduled collectors disabled. Inspect candidate GET and browser accessibility tree. Require PR CI. After merge, deploy only through the supported auto-deployer and verify matching active SHA, healthy service, public HTTP 200, and one visible main h1.
+- Rollback: Use the documented supported deployment rollback only if post-deployment acceptance fails; no application data or schema changes are in scope.
+- Risks: A heading can alter page spacing; inspect the rendered candidate at mobile and desktop widths and retain the current paragraph verbatim.
 
 ## Verification correction - Spring Boot 4 MongoDB URI - 2026-10-02
 
