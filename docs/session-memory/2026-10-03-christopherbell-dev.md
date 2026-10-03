@@ -23,3 +23,12 @@ Work, decisions, events, and evidence for this date.
 - Dependency inspection on the current `origin/main` source found a Spring Boot alignment gap: root plugin is 4.1.1, while `cbell-lib` imports BOM 4.1.0 and its own `runtimeClasspath` selects Boot 4.1.0 / Spring Data MongoDB 5.1.0. The `website` runtime graph resolves Boot 4.1.1 / Spring Data MongoDB 5.1.1, including the `cbell-lib` project dependency. The requested library BOM alignment is still pending design approval; no dependency file was changed.
 - A first Gradle dependencyInsight invocation failed on the known Windows loopback socket error. Re-running with only process-scoped `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:/Windows/Temp` succeeded; it ran dependency inspection only, not tests.
 - The auto-deploy status freshness went `STALE` during Task 61 candidate validation and later recovered to `UP_TO_DATE`; retain the code-path and runtime observation for a decision on progress reporting.
+
+
+## 2026-10-03 11:24 Central Daylight Time - Public route smoke verification
+
+## Public route and asset smoke check
+
+- On 2026-10-03, read-only GETs for `/`, `/void`, `/u/Chris`, `/wfl/top-liked`, `/canes-box-tracker`, and `/shared?path=reports` all returned HTTP 200 (3,112 to 6,812 bytes).
+- Every same-origin CSS/JavaScript asset referenced by those pages returned HTTP 200: `/02685ad8daaa748bfcfb/css/main.css`, `app.js`, `home.js`, `home-feed.js`, `user-feed.js`, `wfl-list.js`, `canes-box-tracker.js`, `shared-folder.css`, `shared-folder.js`, and Bootstrap 5.3.8 bundle.
+- This smoke pass found no broken route or referenced static asset; no production writes were made.
