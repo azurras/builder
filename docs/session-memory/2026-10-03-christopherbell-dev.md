@@ -113,3 +113,13 @@ Work, decisions, events, and evidence for this date.
 - First candidate startup on a blank isolated database was rejected by the intentional migration 015 schema guard. A second isolated MongoDB 8.3.2 instance on 27029 was seeded with only a synthetic valid `TARGET_ACTIVE` ledger matching the current manifest digest. The packaged Spring Boot 4.1.1 candidate on 18092 connected only to `127.0.0.1:27029/test`; readiness, liveness, and anonymous `/photos/usage` returned 200. Response had exactly one main h1 and preserved the terms/title; Chrome accessibility tree identified it as level one.
 - Stopped the candidate app and both task-owned MongoDB processes; ports 18091, 18092, 27028, and 27029 closed. Production listeners 8080 and 27017 remained present. No production data or service was touched.
 - Builder plan was published in bd76688; candidate evidence is in [Task 66 runtime report](../test-reports/2026-10-03-christopherbell-dev-task-66-photography-usage-heading-runtime-verification.md). Required PR CI, supported deployment, and public page acceptance remain pending. The broad site bug-finding goal remains active.
+
+
+## 2026-10-03 15:35 Central Daylight Time - Task 66 photography usage heading deployment closeout
+
+## Task 66 - Photography usage heading deployed
+
+- Revalidated PR #1468 as `MERGED`; required Java 25 builds on Ubuntu/macOS/Windows, CodeQL Java/JavaScript/Actions, and Dependency Review all succeeded. Merge commit: `bde35ffae5d23e7754bd49ee00fc940f19123c2`.
+- Fresh `prod.cmd auto-status` reports `FRESH`, `UP_TO_DATE`, reason `NONE`, service `RUNNING`, site `HEALTHY`; remote, active, attempted, and successful SHAs match the merge. Trusted deploy-tool refresh succeeded. Poller registration is still `UNKNOWN` / `ACCESS_DENIED` for the standard user.
+- Independently checked local readiness and public `GET /photos/usage`: both returned status 200. Public main text is `Photography Usage Usage of the images on this site is forbidden without written consent from the owner.`; exactly one h1; title is `CB | Photography Usage`. The accessibility tree exposed the heading at level one. No manual restart, elevation, or production data write.
+- Updated the Task 66 runtime report and implementation-plan result; report schema validation passed. No source GitHub issue existed to close. The broad site bug-finding goal remains active.

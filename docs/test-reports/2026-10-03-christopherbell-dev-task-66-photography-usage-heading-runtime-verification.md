@@ -2,7 +2,7 @@
 
 ## Document Status
 
-draft
+complete
 
 ## Story/Issue
 
@@ -10,7 +10,7 @@ Builder implementation plan Task 66: add a visible page heading to photography u
 
 ## Branch
 
-Branch codex/photos-usage-heading-20261003, based on origin/main 02cc854e0642efd3dbd8bc9091edc01b57b09a88. Candidate source changes add the heading and its MVC regression. Candidate JAR SHA-256: 49E2968CFE585271BDF9EB51650EF1A3AD6CD1F459A5D59B5F7EAFF10624E130.
+Branch codex/photos-usage-heading-20261003, based on origin/main 02cc854e0642efd3dbd8bc9091edc01b57b09a88. Candidate source changes add the heading and its MVC regression. PR #1468 was merged with squash as `bde35ffae5d23e7754bd49ee00fc940f19123c2`; required CI passed. Candidate JAR SHA-256: 49E2968CFE585271BDF9EB51650EF1A3AD6CD1F459A5D59B5F7EAFF10624E130.
 
 ## App / Environment
 
@@ -48,6 +48,7 @@ Windows 11; Java 25.0.3; Spring Boot 4.1.1; MongoDB 8.3.2. Candidate profile tes
 - Liveness: HTTP 200, body {"status":"UP"}.
 - Usage page: HTTP 200; one h1 inside main, exact visible text "Photography Usage"; the existing restriction paragraph and CB | Photography Usage title remained present.
 - Chrome accessibility tree exposed "Photography Usage" as a level-one heading, followed by the unchanged usage restriction paragraph.
+- After deployment, local readiness returned status code 200 with `{"status":"UP"}`; public `GET https://www.christopherbell.dev/photos/usage` returned status code 200 with title `CB | Photography Usage`. Its `<main>` text was `Photography Usage Usage of the images on this site is forbidden without written consent from the owner.` and contained exactly one h1. The production browser accessibility tree exposed that h1 as a level-one heading.
 - MongoDB inspection confirmed database test, 16 migration records, zero failed migrations, and TARGET_ACTIVE cutover state.
 - Candidate TCP inspection showed connections owned by app PID 36192 to isolated MongoDB port 27029.
 
@@ -60,7 +61,10 @@ Windows 11; Java 25.0.3; Spring Boot 4.1.1; MongoDB 8.3.2. Candidate profile tes
 - PASS: The rendered page contains one main h1 and preserves the terms and title.
 - PASS: Candidate cleanup closed its app and MongoDB listeners; production listeners remained present.
 - NOTE: The first candidate attempt used a blank database and was correctly rejected by migration 015; the second used the verified synthetic ledger fixture and started successfully.
-- NOTE: Required pull request CI and post-merge production deployment/verification remain pending.
+- PASS: PR #1468 required checks passed: Java 25 builds on Ubuntu, macOS, and Windows; CodeQL Java, JavaScript/TypeScript, and Actions analyses; and Dependency Review. The PR merged as `bde35ffae5d23e7754bd49ee00fc940f19123c2` at 2026-10-03 20:22 UTC.
+- PASS: Fresh `prod.cmd auto-status` reported `FRESH`, `UP_TO_DATE`, reason `NONE`, service `RUNNING`, site `HEALTHY`; remote, active, attempted, and successful SHA all matched `bde35ffae5d23e7754bd49ee00fc940f19123c2`; trusted deploy-tool refresh succeeded. Poller registration remains `UNKNOWN` / `ACCESS_DENIED` for the standard user.
+- PASS: Post-deployment local readiness returned HTTP 200 with `{"status":"UP"}`. Public `GET https://www.christopherbell.dev/photos/usage` returned HTTP 200; the main landmark contains exactly one h1, `Photography Usage`, followed by the existing text, `Usage of the images on this site is forbidden without written consent from the owner.`; document title remains `CB | Photography Usage`. The production Chrome accessibility tree also exposed the level-one heading.
+- PASS: The production Java service and MongoDB listeners remained running; no manual restart, elevated access, or production data write was used.
 
 ## Evidence
 
@@ -71,4 +75,4 @@ Windows 11; Java 25.0.3; Spring Boot 4.1.1; MongoDB 8.3.2. Candidate profile tes
 
 ## Bugs / Follow-ups
 
-The verified accessibility defect is fixed in the candidate. This report remains a draft until required PR CI, supported deployment, and public production page verification complete. No GitHub issue was open for this item.
+The verified accessibility defect is fixed, merged, deployed, and verified on the public route. No GitHub issue was open for this item. The non-elevated scheduled-poller registration query remains `UNKNOWN` / `ACCESS_DENIED`, while deployment status itself is fresh and successful.
