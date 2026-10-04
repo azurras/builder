@@ -2,7 +2,7 @@
 
 ## Document Status
 
-ready-for-execution
+in-progress
 
 Semantic self-review found no blocking ambiguity: fixed public content, one free resource, no buyer data or purchase flow. Demand and price remain unvalidated.
 
@@ -49,7 +49,7 @@ None blocking this phase. Demand, conversion, and future payment/fulfillment wil
 - Inspection: Read all named existing handlers, public matcher patterns, sitemap count/shard contracts, navigation sorting tests, template layout, and product inventory on current main. Content routing already owns static pages; no new domain subsystem is required.
 - Behavior: Anonymous visitors can read /software-handoff-kit and download /software-handoff-kit/preview. Product page includes audience, contents, sample explanation, planned price, purchase availability, usage permission, AI assistance disclosure, and no guarantees. Public Tools navigation and sitemap link to the page.
 - Invariants: Fixed classpath sample only; do not expose full package or secrets; no collection, database writes, new dependencies, fabricated endorsements, scarcity, or ongoing support promises. Preserve existing authentication and private routes.
-- Boundary/API: Exact GET public page and preview routes; preview response text/markdown;charset=UTF-8 with attachment filename software-project-handoff-preview.md. Neighboring routes and mutation methods remain protected. Existing clients unaffected.
+- Boundary/API: Exact GET public page and preview routes; preview response text/markdown;charset=UTF-8 with attachment filename software-project-handoff-preview.md. Neighboring paths remain unmapped (404 under the existing public HTML fallback); mutation methods remain protected. Existing clients unaffected.
 - Effects and failures: Read packaged immutable sample; no dynamic path or network IO. A missing packaged resource is a server failure, never a misleading successful empty download. Existing Spring resource handling owns streaming/errors.
 - Tests and evidence: Failing route/download/navigation/sitemap contracts before implementation; passing focused and full native Java/JS checks afterward. Verify package contents against current source, rendered page, anonymous download, real responsive navigation, and effective isolated Mongo test target.
 - Verification: node --test website/src/test/js/nav-messages-link.test.js; node --check website/src/main/resources/static/js/components/nav.js; :website:check and :website:bootJar using private WSL Gradle cache when native Windows loopback prevents startup; git diff --check. Candidate on 18090 and isolated Mongo test on 27029, test/deploy-smoke profiles, scheduling/mail disabled; verify actual connection log and anonymous GETs. Check desktop/mobile rendering and preview bytes/header; stop only owned candidate processes.
