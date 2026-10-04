@@ -71,6 +71,10 @@ None blocking this phase. Demand, conversion, and future payment/fulfillment wil
 
 Thin content handlers, static honest product page and sample, exact GET permissions, existing sorted Tools menu and canonical sitemap. No checkout or analytics subsystem.
 
+### Build prerequisite found during Task 1
+
+Inspected website/build.gradle.kts staticAssetFingerprint and ProcessResources filter. Live WSL Gradle PID637 stack repeatedly reads every asset from the filter for each application.yml line; a previous check took33m16s. The provider does not memoize its source. Resolve this scoped delivery blocker by wrapping the same provider in a String property finalized on first read. Preserve the exact sorted path/content digest and lazy first evaluation. Expand Task1 Files/Symbols to include website/build.gradle.kts, staticAssetFingerprint, and existing verifyStaticAssetFingerprintSerialization. Required skill: write-jane-street-style-code. Before-Edit Brief: Behavior computes the same fingerprint once per invocation; Invariants preserves digest bytes and task input/invalidation; Boundary/API is Gradle build only; Effects and failures remain file reads and propagated errors; Tests and evidence include observed live repeated reads, native serialization gate, independent packaged digest comparison, and repeated processResources across invocations (same input stable; changed input changes). Verification adds :website:verifyStaticAssetFingerprintSerialization and timed :website:processResources --rerun-tasks, then full checks/package. Stop only the confirmed inefficient owned build before re-running revised code; do not restart merely from a poll timeout.
+
 ## Files and Modules
 
 View owns HTML/download presentation; configuration owns permission and sitemap boundaries; shared nav owns discovery. Paid artifacts remain outside the site.
