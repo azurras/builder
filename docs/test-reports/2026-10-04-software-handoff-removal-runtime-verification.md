@@ -2,9 +2,9 @@
 
 ## Document Status
 
-draft
+complete
 
-Candidate verified; PR/CI/merge/deployment pending.
+Candidate, reviewed PR/full platform CI, merge, supported deployment and public acceptance verified. Final main CI also passes on all three platforms. Earlier pending observations remain historical.
 
 ## Story/Issue
 
@@ -20,7 +20,7 @@ Native Windows Java25.0.3, http://127.0.0.1:18092, profiles test/deploy-smoke. E
 
 ## Local Run Details
 
-Worktree A:/Projects/christopherbell.dev-worktrees/blog-placeholder-cleanup-20261003. Owned Mongo9380 started hidden with C:/Program Files/MongoDB/Server/8.3/bin/mongod.exe --dbpath website/build/runtime-handoff-kit-20261003/mongo-data --port27031 --bind_ip127.0.0.1 --logpath website/build/runtime-remove-handoff-20261004/mongo.log. Existing fixture recovered normally after previous owned process shutdown; no live database use. Candidate5544 started06:49CDT:
+Worktree A:/Projects/christopherbell.dev-worktrees/blog-placeholder-cleanup-20261003. Owned Mongo9380 started hidden with C:/Program Files/MongoDB/Server/8.3/bin/mongod.exe --dbpath "A:/Projects/christopherbell.dev-worktrees/blog-placeholder-cleanup-20261003/website/build/runtime-handoff-kit-20261003/mongo-data" --port 27031 --bind_ip 127.0.0.1 --logpath website/build/runtime-remove-handoff-20261004/mongo.log. Existing fixture recovered normally after previous owned process shutdown; no live database use. Candidate5544 started06:49CDT:
 
 ```powershell
 & 'C:\Program Files\Eclipse Adoptium\jdk-25.0.3.9-hotspot\bin\java.exe' '-Djdk.net.unixdomain.tmpdir=C:/Windows/Temp' -jar website/build/libs/website.jar --spring.profiles.active=test,deploy-smoke --spring.mongodb.uri=mongodb://127.0.0.1:27031/test --app.scheduling.enabled=false --app.mail.enabled=false --app.shared-folder.root=website/build/runtime-remove-handoff-20261004/shared --app.shared-folder.system-root=website/build/runtime-remove-handoff-20261004/system --app.music.root=website/build/runtime-remove-handoff-20261004/shared/Music --app.music.artwork-cache-root=website/build/runtime-remove-handoff-20261004/system/artwork --app.music.metadata.private-root=website/build/runtime-remove-handoff-20261004/system/metadata --app.music.media-tools.root=website/build/runtime-remove-handoff-20261004/system/tools --server.address=127.0.0.1 --server.port=18092 --app.browser-security.public-base-url=http://127.0.0.1:18092
@@ -61,3 +61,11 @@ website/build/remove-handoff-red.log, remove-handoff-nav-red.log, remove-handoff
 ## Bugs / Follow-ups
 
 CI, supported deployment and public acceptance pending. No browser rendering/keyboard/console proof because prior refused actions remain respected; this deletion has native HTTP/template/JS proof. Existing external caches/search results may persist until refresh; new former-URL GETs return410. Exact legacy route strings remain solely to retire URLs, with no offer/download assets. No database/deployer/monitor behavior changes.
+
+### 07:07CDT live delivery readback
+
+PR1476 all eight checks passed (Windows7m26s, macOS4m16s, Linux3m2s), exact reviewed head995745e539f87957ee5a79f3d12e6e0bc78059c0 squash merged76681a5ca5abd418e8ab5dc4f166a0da8563bb9b at2026-10-04T12:00:45Z. Fresh supported observer12:07:10Z FRESH/UP_TO_DATE, remote/active/attempted/successful76681a5c,RUNNING/HEALTHY,failureNONE. No elevated/manual service operation.
+
+Native HTTPS and listener acceptance: GET former page/preview status410 Gone, empty response body, no attachment,no-store/noindex; sitemap200 without offer and with monitor; monitor200 Free pilot/Daily checks; current fingerprint920968b64c790818ce4f navigation200 without offer label/URL; readiness200UP. Evidence runtime-remove-handoff-20261004/production-proof.log and production-proof.json, production_probe.ps1. Application8080PID38056/Mongo27017PID5192 present; candidate18092/27031 remain stopped. Main CodeQL37200650176 passed; main CI37200650155 Linux/macOS passed, Windows still running at this observation.
+
+Final07:08CDT readback: main CI Build37200650155 completed success for Windows/macOS/Linux; CodeQL37200650176 success. Fresh12:08:10Z production remains UP_TO_DATE/RUNNING/HEALTHY with identical76681a5c release SHAs and failureNONE. Earlier Windows-pending observation is historical. Functional removal delivery and cleanup are complete; no source issue for external closure.

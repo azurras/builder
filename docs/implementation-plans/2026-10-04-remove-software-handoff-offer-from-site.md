@@ -1,7 +1,7 @@
 # Remove software handoff offer from the site
 
 ## Document Status
-in-progress
+complete
 
 ## Plan Format
 task-contract-v1
@@ -78,3 +78,9 @@ Cached old content or external search results may persist until refresh; new req
 
 ## Completion Criteria
 Offer and preview removed from artifact/navigation/sitemap; exact old URLs410, monitor/readiness remain healthy; reviewed patch and passing native/CI evidence, supported deployed SHA verified, owned helpers stopped, final Builder report/plan/session published.
+
+## Completion Audit
+
+Offer/checklist/fictional-example template and worksheet removed from source/JAR; Tools/sitemap entries removed. Exact old GET URLs retire with empty410/no-store/noindex/no attachment; POST protection and unknown-page404 behavior retained. Website Monitor unaffected. Regression-first removal tests observed fail before changes, then pass; final corrected security/JS380/380/bootJar pass, independent immutable patch review no blockers. Native candidate and real public HTTPS/listener acceptance passed with explicit browser verification limitation. Both owned helpers stopped and production dependencies preserved.
+
+PR1476 merged76681a5c after all eight full platform/security checks passed. Fresh supported deployed observer12:07:10Z matches trusted main/RUNNING/HEALTHY/failureNONE; real production removal checks pass. [Runtime report](../test-reports/2026-10-04-software-handoff-removal-runtime-verification.md) records inputs/output/artifacts/failures/cleanup. No data/schema/deployer changes, production fixtures or elevation. Separate product archives and historical records outside site-removal scope. Dated session publication and final readback complete delivery closure; no source issue.
