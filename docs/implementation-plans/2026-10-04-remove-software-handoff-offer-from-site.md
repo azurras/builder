@@ -1,7 +1,7 @@
 # Remove software handoff offer from the site
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Plan Format
 task-contract-v1
@@ -10,7 +10,7 @@ task-contract-v1
 Remove the Software Handoff Kit offer, guidance and sample from the live site as requested on2026-10-04.
 
 ## Goals
-No Tools or sitemap promotion; no packaged offer/checklist/fictional example or worksheet download. Exact former page and preview URLs return empty410 Gone with no-store/noindex; mutations/neighboring routes remain protected. Existing Website Monitor remains usable. Verify and deploy through supported automatic delivery.
+No Tools or sitemap promotion; no packaged offer/checklist/fictional example or worksheet download. Exact former page and preview URLs return empty410 Gone with no-store/noindex; mutations remain protected and neighboring page URLs retain content-free404. Existing Website Monitor remains usable. Verify and deploy through supported automatic delivery.
 
 ## Inputs
 User removal request; current main1fbb84a1 and fresh healthy production11:39Z; inspected site AGENTS/README, ContentViewController, view/configuration/JS READMEs, SecurityConfig GET rules, PublicSitemapService and corresponding Java/JS tests. Prior dated delivery records identify original product files; local product archive is outside site scope.
