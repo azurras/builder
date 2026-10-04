@@ -20,3 +20,9 @@ Work, decisions, events, and evidence for this date.
 ## 2026-10-04 07:08 - Removal final main CI and service health readback
 
 - Final main CI37200650155 completed success for all three Java25 platforms; CodeQL37200650176 success. Fresh2026-10-04T12:08:10Z production remains UP_TO_DATE/RUNNING/HEALTHY, matching76681a5c release SHAs and failureNONE. This supersedes the earlier pending-Windows observation. Delivery evidence is complete and ready for final Builder publication; no source issue or goal status change required.
+
+
+## 2026-10-04 07:09 - Software handoff removal publication and closure readback
+
+- Builder final closeout2ff5b2a pushed successfully; local HEAD/origin/main both2ff5b2afebee46090441abc3edbacffc4b1c1641. PR1476 read back MERGED76681a5c. Fresh12:09:10Z production still UP_TO_DATE/RUNNING/HEALTHY, all release SHAs76681a5c,failureNONE. Removal delivery is complete with public/native proof and all PR/main CI passed.
+- Published only this task's dated session index link; unrelated unpublished Builder session/index delta was restored exactly after scoped publication. Unrelated skill rename/doc edits and site gradlew.bat preserved. No source issue to close; this records actual publication and closure readback on2026-10-04.
