@@ -2,9 +2,9 @@
 
 ## Document Status
 
-draft
+complete
 
-Candidate proof complete. CI, supported production deploy and healthy live demo pending.
+Candidate, healthy public demo, full CI, supported deployment and cleanup verified. Earlier pending observations below remain historical evidence. Browser execution remains unverified.
 
 ## Story/Issue
 
@@ -55,7 +55,7 @@ GET readiness/shell/private API. Existing account create/login POST with random 
 
 ## Response Received
 
-Real packaged demo pages HTTP200; old production versioned assets HEAD403. Baseline remained empty and report INCOMPLETE. Independent production listener /1a08c0e07629ed51549c/js/app.js and css/main.css GET200/HEAD403 reproduced defect. Candidate /a57ce69853a0cdadcb36/ CSS/app/site-monitor assets GET/HEAD200. Private HEAD403 and asset POST403. Restart retained report ID and identical text; helper explicitly reads UTF-8 to avoid Windows default file decoding.
+Real packaged demo pages returned HTTP status 200 OK; old production versioned assets returned status 403 Forbidden to HEAD. Baseline remained empty and report INCOMPLETE. Independent production listener /1a08c0e07629ed51549c/js/app.js and css/main.css GET200/HEAD403 reproduced defect. Candidate /a57ce69853a0cdadcb36/ CSS/app/site-monitor assets GET/HEAD200. Private HEAD403 and asset POST403. Restart retained report ID and identical text; helper explicitly reads UTF-8 to avoid Windows default file decoding.
 
 Real-Mongo lifecycle test uses controlled gateway/clock (not real HTTP change/failure): healthy owned baseline, title CHANGES, due daily check/not-due suppression, failed500 capture preserves baseline, nested records reload, generation-safe slot reuse, stale save/delete rejected, owner cleanup isolated and preexisting indexes unchanged. Native driver connected127.0.0.1:27031/test. No actual customer ownership-file deployment or browser interactions claimed.
 
@@ -82,3 +82,9 @@ Main CodeQL37177189114 passed; main CI37177189246 macOS failed existing RateLimi
 ### 23:39CDT healthy baseline restart and fixture cleanup
 
 Restart candidate PID34100: owner workspace200 retained all three healthy baseline pages and same report ID; private export200 retained exact UTF-8 body/no-store. DELETE owned demo200. Evidence restart-postdeploy.log and app-healthy-restart.log. Stopped only candidate PID34100 and Mongo26780 after executable/port/database-path identity checks. Candidate18092/Mongo27031 no longer listening; production8080 PID38308 and27017 PID5192 remain. This completes actual healthy demo/restart/remove proof. No production fixture records were created. Follow-up test-only PR1475 commit1cb5e636 opened; full CI pending.
+
+### Final delivery readback - 23:55CDT
+
+PR1475 all eight checks passed (Windows7m34s, macOS3m47s, Linux2m25s); squash merged1fbb84a146bb0f433af81036f13791f53013b2ab at2026-10-04T04:47:01Z. Final main CI Build37177992226 completed success for all three Java25 platforms; main CodeQL37177992194 completed success. These fresh runs include the corrected upload fixture; the prior main macOS failure remains recorded above.
+
+Supported automatic deploy succeeded04:52:21Z; fresh04:55:10Z observer FRESH/UP_TO_DATE, remote/active/attempted/successful1fbb84a1, RUNNING/HEALTHY,failureNONE. Final native HTTPS and listener acceptance at23:53CDT: pilot200 with one h1/free limits/email exclusion/canonical, fingerprint15ad359e610f046d364b CSS/app/site-monitor JS GET/HEAD200, sitemap200 includes pilot, readiness200UP, anonymous monitorAPI403. Saved production-final-proof.json. Application8080 PID22456; Mongo27017 PID5192. Owned candidate18092/Mongo27031 remain stopped. Functional pilot delivery is complete with explicitly unperformed browser rendering/keyboard/console checks, deferred payments/email and unvalidated acquisition/price/demand. No source issue to close and no revenue claim.

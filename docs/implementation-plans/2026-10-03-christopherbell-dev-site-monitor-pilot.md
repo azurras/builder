@@ -1,7 +1,7 @@
 # Agency website monitor pilot
 
 ## Document Status
-in-progress
+complete
 
 ## Plan Format
 task-contract-v1
@@ -101,3 +101,12 @@ Working bounded pilot through verified production delivery, private saved state 
 ### Post-merge CI test stabilization
 
 Main macOS CI37177189246 failed existing RateLimitFilterTest.sharedFolderUploadRequestsConsumeTheFirstMatchingDedicatedBucket at line238; PR CI had passed. Inspection shows241 requests against240/minute greedy refill; elapsed250ms can refill another token. Before-edit brief: change only this test to configure the dedicated upload capacity1, use two requests and still assert ordinary mutations have independent allowance; separate default-rule assertions retain240/minute contract. No production rate-limit behavior changes. Native focused rate-limit tests, independent review and full PR CI required. Existing packaged runtime evidence remains valid because only the test fixture changes; no additional runtime behavior to verify.
+
+## Completion Audit - 2026-10-03
+
+- Private owner-scoped sites, ownership token policy, strict public HTTPS/DNS-pinned fetch, explicit healthy baseline, comparison/report retention and deletion coordination implemented. Generation-safe fixed slots and durable lease/throttle validated with two native real-Mongo lifecycle tests; cutover manifest/indexes unchanged.
+- Daily due behavior, failure preservation, changes and not-due suppression proved using controlled clock/gateway with real Mongo/lease. No24-hour production soak claimed. Actual fixed public demo captured three healthy baseline pages, exported report, retained state across app restart and removed successfully using isolated test accounts only.
+- Public dashboard, tools navigation, canonical sitemap, clear caps and private report attachment delivered. Actual HTTP/template/native JS proof passed; previously refused browser/download actions were respected, so browser visual/keyboard/console evidence is explicitly absent.
+- Independent source review findings resolved, final review no Critical/Important issues. Runtime-discovered static HEAD defect corrected with failing/passing regression and real candidate/production proof. Main macOS timing failure corrected only in test fixture; independent review and full PR CI passed.
+- PR1474 merged57b04c5c; test-only PR1475 merged1fbb84a1, both after all eight PR checks passed. Final main CI37177992226 and CodeQL37177992194 success. Supported automatic deployment verified fresh04:55:10Z UP_TO_DATE/RUNNING/HEALTHY, all release SHAs1fbb84a1,failureNONE; final public/listener acceptance passed. No elevation/manual service operation or production fixtures. Owned candidate/Mongo stopped; unrelated work preserved.
+- [Runtime report](../test-reports/2026-10-03-website-monitor-pilot-runtime-verification.md) records actual inputs, outputs, failures, retests and cleanup. Pilot delivery acceptance is met with documented browser limits. Payments/email/acquisition and profitable revenue remain future business outcomes, consistent with plan scope; no validated $29 price or income claim.
