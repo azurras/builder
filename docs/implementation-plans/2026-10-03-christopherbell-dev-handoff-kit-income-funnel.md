@@ -2,7 +2,7 @@
 
 ## Document Status
 
-in-progress
+complete
 
 Semantic self-review found no blocking ambiguity: fixed public content, one free resource, no buyer data or purchase flow. Demand and price remain unvalidated.
 
@@ -99,6 +99,16 @@ No data/schema changes. Reject candidate before merge if any acceptance fails. I
 
 Demand is unknown; the page cannot be represented as sales. A planned price and availability statement must agree. Preview should be useful while the paid full kit stays private. Shared navigation/security require regression coverage.
 
+### Current market evidence
+
+On October 3, inspected [Smartsheet's free handover templates](https://www.smartsheet.com/content/project-handover-templates), including its software-project template. Free alternatives exist; their availability does not establish demand or willingness to pay for our kit. The inspected original kit offers six editable Markdown worksheets, a complete fictional worked example, and a printable companion. These are factual product attributes, not evidence of superior results. Keep the planned $15 price experimental. The next useful income step is targeted, original handoff guidance that leads readers to the free sample, followed by evidence of real interest before expanding the paid inventory. Payment processing remains deferred by the user.
+
 ## Completion Criteria
 
 This phase completes only after reviewed source, full checks, candidate proof, required CI, merge, healthy automatic deployment, and public page/download/navigation/sitemap proof plus published Builder artifacts. The larger income goal remains active: no revenue is yet verified and checkout is explicitly deferred.
+
+## Delivery Outcome
+
+Tasks1-2 delivered through [PR1472](https://github.com/azurras/christopherbell.dev/pull/1472), merge0f90854b45ee258521be22c23dc500ccedeb44c6. All PR Java25 platform builds, CodeQL checks, and Dependency Review passed. Existing SYSTEM automatic deployment activated that exact revision and reports FRESH/UP_TO_DATE, service RUNNING and site HEALTHY with all release SHAs matching. Anonymous production page/readiness/sitemap and preview response metadata passed, as did desktop/mobile navigation and layout. Candidate preview bytes matched source before the browser denied download permission; no subsequent download workaround was attempted. Browser-managed download completion remains explicitly unverified. [Detailed runtime evidence](../test-reports/2026-10-03-handoff-kit-income-funnel-runtime-verification.md) records the limitation, corrected local test assumption, focused native results, full PR CI, build-fingerprint regression and production proof.
+
+The first original-product discovery path is live at https://www.christopherbell.dev/software-handoff-kit. Paid artifacts stay local, purchases remain unavailable, and no revenue or market demand is claimed. The active income goal continues toward original guidance and evidence of audience interest; payment processing stays deferred.
