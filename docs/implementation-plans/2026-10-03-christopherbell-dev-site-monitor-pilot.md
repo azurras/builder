@@ -1,7 +1,7 @@
 # Agency website monitor pilot
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Plan Format
 task-contract-v1
@@ -30,7 +30,7 @@ Demand, sustainable acquisition, operating costs at scale and willingness to pay
 ## Task Breakdown
 
 ### Task 1 - Implement private bounded monitoring
-Required skill: write-jane-street-style-code
+Required skill: chris-street-style
 Dependencies: Published reviewed plan.
 Files: New website/src/main/java/dev/christopherbell/sitemonitor/{model,fetch,monitor,persistence,api}/ and README.md; inspected configuration/mongo/domain/DomainMongoOperationsFactory.java, DomainAccountDeletionStore.java; new account/api/MonitorAccountAccess.java; architecture/LegacyModuleDependencyRules.java; new sitemonitor tests and runtime-kind tests.
 Symbols: Verified origin/page policy, DNS-pinned fetch, site snapshots/comparison, workspace repository, run service and daily scheduler, owner-only API; exact runtime-kind approval and account deletion cleanup.
@@ -43,7 +43,7 @@ Tests and evidence: Regression-first tests for validation/SSRF/pinning/redirect/
 Verification: Focused :website:test classes then required broader native/CI checks with inspected test-only Mongo target; actual candidate requests and report content.
 
 ### Task 2 - Deliver usable pilot UI and reports
-Required skill: write-jane-street-style-code
+Required skill: chris-street-style
 Dependencies: Task 1 API contracts.
 Files: Inspected view/tools/ToolsViewController.java, configuration/security/SecurityConfig.java, PublicMetadataController.java, static/js/lib/api.js, components/nav.js, templates/zip-coordinates.html and shared frontend helpers; new templates/site-monitor.html and static/js/site-monitor.js; owning README files; affected view/security/frontend tests.
 Symbols: Public data-free /site-monitor page, account-aware dashboard, accessible setup/verification/baseline/check/delete/report controls, text report export, Tools navigation and canonical metadata.
@@ -72,6 +72,9 @@ Add the isolated site-monitor feature and narrowly necessary shared integration 
 
 ## Files and Modules
 New sitemonitor business area with published model/API contracts; narrow account published facade; fixed runtime-kind extension in configuration; native tool view/frontend; existing security/navigation metadata and test ownership.
+
+### Bounded persistence refinement
+Inspection confirmed application_runtime has only its existing global identity index for this new kind. Use exactly ten fixed pilot workspace identities and direct indexed point reads rather than repeatedly scanning/counting unrelated runtime history. Each workspace stores a separate accountId; slot selection and writes remain under the fixed durable lease. Account deletion performs bounded point reads/removes for these identities. This preserves the historical schema and avoids a new index/migration while enforcing the ten-account capacity at the storage identity boundary.
 
 ## Unit Testing
 User AGENTS.md requires appropriate native tests. Use smallest meaningful tests first and expand for shared security/persistence changes. Keep all database targets explicitly test; no database-backed execution without proving profile/URI first.
