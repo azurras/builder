@@ -97,3 +97,7 @@ Demand remains unproven. Pilot is deliberately capped and requires customer DNS/
 
 ## Completion Criteria
 Working bounded pilot through verified production delivery, private saved state and report export, honest limits and repeat scheduling, published evidence and clean selected commits. This completes pilot delivery only; acquisition, paid conversion and a profitable revenue stream remain open business outcomes.
+
+### Post-merge CI test stabilization
+
+Main macOS CI37177189246 failed existing RateLimitFilterTest.sharedFolderUploadRequestsConsumeTheFirstMatchingDedicatedBucket at line238; PR CI had passed. Inspection shows241 requests against240/minute greedy refill; elapsed250ms can refill another token. Before-edit brief: change only this test to configure the dedicated upload capacity1, use two requests and still assert ordinary mutations have independent allowance; separate default-rule assertions retain240/minute contract. No production rate-limit behavior changes. Native focused rate-limit tests, independent review and full PR CI required. Existing packaged runtime evidence remains valid because only the test fixture changes; no additional runtime behavior to verify.
