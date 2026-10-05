@@ -1,7 +1,7 @@
 # Preserve Command Center Launch Failure Causes
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -100,7 +100,12 @@ Before merge, revert only this isolated correction if public handling or rollbac
 | Runtime proof remains blocked | High | Do not open a PR until supported database fixture/recovery support is available. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record launch failure correction and runtime blocker
+
+- **Change:** Candidate `ad758de` narrows `executeNow()` to declared `IOException` and preserves the failure cause behind the existing safe request message. Both regressions failed on baseline; all 33 focused tests and full module checks passed. Packaged startup is blocked at migration 015.
+- **Reason:** The command executor declares `IOException`, so other exceptions indicate unexpected defects. Required application runtime proof cannot complete until a supported isolated test fixture/recovery procedure is available.
+- **Impact:** AC-1 through AC-3 passed and AC-4 is blocked. See [candidate test report](../test-reports/2026-10-05-01-07-christopherbell-dev-preserve-command-center-launch-failure-causes.md). No database repair or PR was made.
 
 ## Outcome
 Pending.

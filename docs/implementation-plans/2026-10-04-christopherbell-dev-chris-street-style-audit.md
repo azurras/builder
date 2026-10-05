@@ -192,3 +192,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Completed a separately planned correction on candidate `eb8e7bc`: email normalization now names each materially different representation, and invalid IPv6/IDN translation retains its low-level cause while preserving safe messages. Both new cause regressions failed on baseline; all 32 focused sanitizer tests and full module checks pass.
 - **Reason:** Abbreviated/reused names obscured transformations, and broad catches discarded precise parse failures. User requires one plan and report for every independent correction.
 - **Impact:** The sanitizer plan and blocked candidate report are published separately. Runtime startup on database `test` failed before readiness at migration 015; no PR was created. Continue the wider code review, but keep runtime-dependent PR delivery blocked until supported isolated provisioning is available. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Preserve command-center launch causes
+
+- **Change:** Completed a separate command-center correction on candidate `ad758de`: expected launch `IOException` retains its cause behind the safe request message; unexpected runtime failure propagates, and accepted action state rolls back. Both new regressions failed on baseline; all 33 focused tests and full module checks passed.
+- **Reason:** `CommandExecutor` declares `IOException`; catching every `Exception` obscured programming defects and discarded the cause.
+- **Impact:** Its own plan and blocked runtime report are published. Packaged startup again stopped before readiness at migration 015 on database `test`; no PR was opened. Continue the repository-wide review and hold runtime-gated PRs pending supported test database provisioning. Draft PR #1477 remains excluded.
