@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-complete
+in-progress
 
 ## Objective
 Make write-chris-street-style-code explain what Jane Street-inspired style means in depth, give many more paired good and bad examples, and give each supported language its own deep guide of idioms, smells, and good/bad pairs, while the shared rules stay language-neutral.
@@ -100,6 +100,19 @@ Boundary/API: Builder memory, hub, and commit helpers.
 Effects and failures: Commit and push; a failed push keeps the commit for push-only recovery.
 Tests and evidence: Full checks above, hub refresh, diff check, remote readback.
 Verification: python .agents/skills/maintain-builder-hub/scripts/maintain_builder_hub.py refresh --root .; git diff --check; publisher dry run and publish; git ls-remote origin refs/heads/main.
+
+### Task 6 - Add Kotlin, C, and C++ guides
+Dependencies: Tasks 1-5 published in ae6cbad; follow-up user request 2026-10-04.
+Files: new references/kotlin.md, references/c.md, references/cpp.md in the style skill folder; SKILL.md routing table; references/language-adaptation.md mechanism map and dedicated-guide list.
+Symbols: Per-guide idiom table, smells, good/bad pairs, recipe, testing, evidence; SKILL.md routing rows; adaptation note listing languages without dedicated guides.
+Inspection: Read go.md and rust.md as the pattern for guides whose compiler is absent; language-adaptation.md currently routes Kotlin to the Java guide and C/C++ to the map. No gcc, clang, MSVC, or kotlinc is installed and no Kotlin compiler jar is cached.
+Required skill: write-chris-street-style-code before writing code-bearing examples.
+Behavior: Kotlin, C, and C++ readers get the same depth as the other dedicated guides.
+Invariants: Examples are original, small, and reviewed; each guide states its examples were not compiled here; guidance defers to repository versions and tooling.
+Boundary/API: New routing rows; Kotlin guide cross-links Java for shared JVM and Spring guidance.
+Effects and failures: Documentation only; no toolchain installation.
+Tests and evidence: Link and anchor check, routing check, diff check, and careful semantic review of every example; disclose that compilation was not possible.
+Verification: Scratch link checker; git diff --check; hub refresh; publisher and remote readback.
 
 ## Code Changes
 Skill documentation and original code-bearing examples only.
