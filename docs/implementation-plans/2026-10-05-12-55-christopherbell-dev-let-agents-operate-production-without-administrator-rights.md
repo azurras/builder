@@ -1,7 +1,7 @@
 # Let Agents Operate christopherbell.dev Without Administrator Rights
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -229,7 +229,16 @@ Required skill: write-chris-street-style-code
 | The expiry header is absent or in a new format | Medium | Tolerant parse; absence leaves the watch check passing with a detail |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Tests followed implementation
+
+- **Change:** Implementation was written before its Pester tests rather than test-first. The first test run still failed on three real defects:
+  - `$script:autoDeployGitHubTokenExpiresAt` was uninitialized under strict mode, which broke deployment records.
+  - The request-only detection test exercised a Describe-level mock instead of the function; it was moved to its own Describe.
+  - Production Watch read deployment payloads through an array nested by `@()`, which hid them; the result is now flattened.
+  The final suites pass: AutoDeploy 148, watch, request and command 49, full build 3,256 with 0 failures.
+- **Reason:** Order of work; the defects were real and are fixed.
+- **Impact:** Evidence order for Tasks 1-3; ACs unchanged.
 
 ## Outcome
 Pending.
