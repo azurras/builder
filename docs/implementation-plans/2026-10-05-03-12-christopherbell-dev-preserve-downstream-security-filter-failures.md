@@ -1,7 +1,7 @@
 # Preserve Downstream Security Filter Failures
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -99,7 +99,12 @@ Revert only the filter boundary/test change if established credential rejection 
 | Runtime remains blocked before readiness | High | Record exact migration blocker and do not create a PR without local runtime acceptance. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin isolated implementation
+
+- **Change:** Started the isolated candidate from `origin/main` at `695a3ed8617f9b4ab07abb7413baf369c58acf6c` in `codex/preserve-downstream-filter-failures-20261005`.
+- **Reason:** The reviewed plan is published and authentication API inspection confirmed credential failures are unchecked while servlet-chain failures are checked.
+- **Impact:** Task 1 begins as designed; no acceptance criteria or scope changed.
 
 ## Outcome
 Pending.
