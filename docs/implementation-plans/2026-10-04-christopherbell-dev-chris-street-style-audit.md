@@ -310,3 +310,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Candidate `d86dd03` renames five unvalidated BSON values to `rawFieldValue`; the V014 migration suite passed 29/29 before and after, and full checks passed with 2,164 Java tests, 110 skipped, and no failures/errors.
 - **Reason:** Distinguish raw persisted field data from typed values after validation, consistent with neighboring raw/parsed names in the strict migration codec.
 - **Impact:** The eighteenth independently planned code correction has a [dedicated implementation plan](2026-10-05-04-49-christopherbell-dev-name-raw-migration-field-values.md) and [blocked runtime report](../test-reports/2026-10-05-04-55-christopherbell-dev-name-raw-migration-field-values.md). Startup preflight could not verify isolated MongoDB `test` because port 27018 refused connections; no PR occurred. Continue the style review; draft PR #1477 remains excluded.
+
+### 2026-10-05 - Clarify FFprobe metadata parsing names
+
+- **Change:** Candidate `fc33aad` names the process outcome `probeResult` and makes raw tag, duration, date and number parsing stages explicit; focused tests passed 2/2 before and after, and the full native gate passed with 2,164 Java tests, 110 skipped, and no failures/errors.
+- **Reason:** Generic `result` and `value` names obscured the raw-to-parsed boundary without changing any parsing rules.
+- **Impact:** This is the nineteenth independently planned correction. Its [plan](2026-10-05-04-57-christopherbell-dev-clarify-ffprobe-metadata-parsing-names.md) is blocked only on runtime proof; the [candidate report](../test-reports/2026-10-05-05-04-christopherbell-dev-clarify-ffprobe-metadata-parsing-names.md) records that read-only test DB identity preflight returned `ECONNREFUSED`, so startup was not attempted. No PR was created. PR #1477 remains excluded; continue the remaining audit.

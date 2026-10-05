@@ -1,7 +1,7 @@
 # Clarify FFprobe metadata parsing names
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -98,10 +98,31 @@ Revert the single naming-only commit if existing tests detect a behavior change.
 | Runtime verification remains blocked by unavailable MongoDB or migration 015 | High based on current audit evidence | Record actual preflight outcome; do not bypass database isolation or migration checks. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin implementation with baseline characterization
+
+- **Change:** Began the published parser-naming correction in an isolated worktree and captured the current focused FFprobe test suite before editing.
+- **Reason:** The planned change preserves behavior; characterize the current metadata and rejection contracts first.
+- **Impact:** Task 1 is in progress; ACs remain unchanged.
+
+### 2026-10-05 - Record candidate verification and runtime blocker
+
+- **Change:** Candidate `fc33aad` committed the planned FFprobe parsing-name correction; focused characterization and the full native gate passed, while local startup preflight was blocked by refused MongoDB connection on `127.0.0.1:27018`. The candidate-specific report records the evidence.
+- **Reason:** The read-only preflight could not establish that the configured database was isolated test data; app startup and PR publication remain gated on runtime proof.
+- **Impact:** AC-1 and AC-2 are met; AC-3 is blocked. No PR was created, and PR #1477 remains excluded.
 
 ## Outcome
-Pending.
+
+> [!CAUTION]
+> The naming correction is committed and its focused and full native checks pass; runtime verification and delivery remain blocked by unavailable isolated MongoDB.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Candidate `fc33aad` clarifies probe result, raw metadata, parsed duration, number, and year-prefix names. |
+| AC-2 | ✅ Met | Focused suite passed 2/2 on baseline and candidate; full check/package gate passed (2,164 Java tests, 110 skipped, 0 failures/errors). |
+| AC-3 | ⏸️ Blocked | [Candidate test report](../test-reports/2026-10-05-05-04-christopherbell-dev-clarify-ffprobe-metadata-parsing-names.md): database identity preflight refused connection; startup was not attempted and no PR was created. |
+
+Follow-up: resume only when the supported isolated test database can be read and verified; then perform committed runtime verification before considering PR publication.
 
 ## Project
 christopherbell-dev
