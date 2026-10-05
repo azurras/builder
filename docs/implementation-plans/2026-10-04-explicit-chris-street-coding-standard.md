@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 Expand write-chris-street-style-code into an explicit house standard, adapting Jane Street engineering and review principles across languages with concrete good and bad examples.
@@ -88,6 +88,8 @@ Application runtime verification does not apply: these are repository instructio
 
 ## Validation
 Acceptance requires explicit shared rules, sentence-like parameter/argument guidance, good/bad examples with explanations, coverage for unlisted languages, preserved read-only review limits, source attribution, valid reference links, valid metadata, and passing native example checks.
+
+Implementation and semantic review are complete. Skill validation and discovery checks pass. Native Python, JavaScript, and Java examples compile/parse; behavioral checks exercise documented valid, invalid, absence, cause, and time-boundary contracts. Resource-ownership fragments compile and were semantically reviewed; no claim of resource-failure runtime coverage is made. The Python preservation assertion was corrected to use an independent snapshot and demonstrated to reject a mutating selector. Both independent reviewers report no remaining actionable gaps. Final selected-file publication and remote readback remain to finish delivery.
 
 ## Rollback or Recovery
 Restore prior task files via a reviewed follow-up commit if the expanded guidance causes a demonstrated conflict. Preserve unrelated working state. Retain a successful local commit if push fails, then retry publication through the checked-in helper.
