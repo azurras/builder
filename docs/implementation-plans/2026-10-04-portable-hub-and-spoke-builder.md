@@ -1,7 +1,7 @@
 # Portable Hub and Spoke Builder
 
 ## Document Status
-complete
+in-progress
 
 ## Plan Format
 task-contract-v1
@@ -29,7 +29,7 @@ Builder main, origin https://github.com/azurras/builder.git, through the exact-f
 - Changing christopherbell.dev or any other spoke.
 - Duplicating spoke build/run commands in Builder; each spoke's own instructions own them.
 - Rewriting historical plans, reports or dated memory that mention old paths.
-- Symlink-based skill sharing (unreliable on Windows checkouts).
+- Generated or copied skill entrypoints (superseded by Task 5 at the user's request).
 
 ## Assumptions
 - Spokes are usually cloned beside the Builder checkout; other layouts use an environment variable or an ignored local override file.
@@ -92,8 +92,21 @@ Effects and failures: None beyond text.
 Tests and evidence: SkillDiscoveryTests link and command checks; hub validation.
 Verification: maintain_builder_hub.py refresh --root .; git diff --check.
 
+### Task 5 - One shared skills folder for Claude and Codex
+Dependencies: Task 3 delivered generated entrypoints; the user rejected keeping skills in two places, so this task replaces them.
+Files: .claude/skills (becomes a Git symlink to ../.agents/skills); .agents/skills/maintain-builder-hub/scripts/sync_claude_skills.py (removed); maintain_builder_hub.py; validate_hub_state.py; maintain-builder-hub SKILL.md; .agents/tests/test_skill_consolidation.py; AGENTS.md; CLAUDE.md; README.md.
+Symbols: maintain_builder_hub command list; validate_claude_skills_link in validate_hub_state; SkillDiscoveryTests Claude tests; AGENTS.md shared-agent paragraph; README Agents and setup sections.
+Inspection: Official Claude Code skill docs (code.claude.com/docs/en/skills) list only fixed .claude/skills locations and state there is no custom skill path setting; Codex reads .agents/skills. On this Windows machine a native directory symlink was created successfully and Git reports core.symlinks=true from the system gitconfig.
+Required skill: write-chris-street-style-code.
+Behavior: Skills exist only in .agents/skills; Claude Code reads the same files through the .claude/skills symlink. Nothing is generated or copied.
+Invariants: Codex discovery and skill content unchanged; relative links inside skills still resolve; hub check stays read-only.
+Boundary/API: maintain_builder_hub check/refresh lose the sync step; validate_hub_state reports a checkout whose .claude/skills is not a link to .agents/skills, with the fix.
+Effects and failures: Windows checkouts without symlink support materialize the link as a text file; validation fails and README gives the one-time Developer Mode and core.symlinks setup.
+Tests and evidence: Repository test asserts .claude/skills is a symlink resolving to .agents/skills; validation test covers a non-link .claude/skills in a temp root.
+Verification: python -B -m unittest discover -s .agents/tests; maintain_builder_hub.py check --root .; git ls-files -s .claude/skills shows mode 120000.
+
 ## Code Changes
-Registry is JSON so both agents and stdlib Python parse it without dependencies. Local paths never enter tracked files: precedence is spokes.local.json, BUILDER_SPOKES_ROOT, then sibling of the Builder checkout. Claude skills use small generated delegating entrypoints instead of symlinks or copies so Windows checkouts work and content cannot drift.
+Registry is JSON so both agents and stdlib Python parse it without dependencies. Local paths never enter tracked files: precedence is spokes.local.json, BUILDER_SPOKES_ROOT, then sibling of the Builder checkout. Claude skills initially used generated delegating entrypoints; Task 5 replaces them with a single Git symlink .claude/skills -> ../.agents/skills so there is exactly one skills folder. Windows needs symlink support (Developer Mode and core.symlinks=true), checked by hub validation.
 
 ## Files and Modules
 Tasks 1-4 list inspected targets. This plan, generated indexes and docs/session-memory/2026-10-04-builder.md carry planning and delivery evidence.
