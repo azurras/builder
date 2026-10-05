@@ -1,7 +1,7 @@
 # Harden christopherbell.dev CI/CD Robustness and Observability
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -271,7 +271,42 @@ Required skill: None (repository settings; no code)
 | `automationPester` flaky on hosted runners | Medium | Run locally under the same PowerShell first; failures fixed or logged |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Token install placement and status field
+
+- **Change:** `Install-AutoDeployGitHubToken` lives in `Production.AutoDeploy.psm1` instead of `Production.Install.psm1`. `prod.ps1` routes `github-token-install`, covered by a new `Production.Command.Tests.ps1` case. The Makefile is unchanged. `auto-status` gains no `githubReporting` field; the install command verifies the token against GitHub before storing it. The runbook `docs/operations/windows-production.md` is also updated.
+- **Reason:** The token loader, shape check and API helper all live in the auto-deploy module, so a second module would only re-export them. Makefile targets take no arguments, but the install needs a path. `auto-status` runs as a standard user who cannot read the protected config directory, so a status field there would misreport. Install-time verification proves the token works.
+- **Impact:** Task 5 Files and Boundary/API; Expected Changes rows for Install, Makefile and docs. AC-6 is unchanged.
+
+### 2026-10-05 - Production Watch timestamp bug found in live run
+
+- **Change:** A live read-only run of `Test-ProductionSite.ps1` against production reported "passed CI -281 minutes ago". `Invoke-RestMethod` decodes `updated_at` into a UTC `DateTime`, and stringifying it drops the zone. Added `ConvertTo-UtcTimestamp` and a regression that uses the decoded `DateTime`; the regression fails on the old parse and passes now.
+- **Reason:** Mocks returned strings, so only the real API exposed the conversion.
+- **Impact:** Task 3 evidence; AC-7 lag detection is now correct.
+
+### 2026-10-05 - Automation Pester wiring and local Gradle socket path
+
+- **Change:** The `automationPester` task joins `check` through its own Windows-guarded dependency rather than `windowsPesterVerification`. The baseline auto-deploy suite passed 75/75 without elevation in 12 seconds before it was wired in. Gradle runs on this host need the README's short `jdk.net.unixdomain.tmpdir`, or they fail with "Unable to establish loopback connection".
+- **Reason:** `windowsPesterVerification` also feeds the shared-folder-only `sharedFolderVerification` task.
+- **Impact:** Task 1 Symbols. The local verification environment matches README guidance.
+
+### 2026-10-05 - Nested test configuration captured slice tests
+
+- **Change:** `ActuatorInfoHttpSecurityIntegrationTest` uses a nested plain `@Configuration` with `@EnableAutoConfiguration` instead of `@SpringBootConfiguration`.
+- **Reason:** The first full build failed 4 tests (`AsyncDispatcherSecurityIntegrationTest` x3 and `SharedFolderWorkerStaticResourceTest`) with `UnreachableFilterChainException`. `@WebMvcTest` slices in `configuration.security` search parent packages for a `@SpringBootConfiguration`, found the new nested one in `configuration`, and combined its any-request chain with `SecurityConfig`.
+- **Impact:** Task 4 test only; behavior and acceptance criteria unchanged. Full build rerun.
+
+### 2026-10-05 - Build info version was unspecified
+
+- **Change:** `website/build.gradle.kts` `springBoot.buildInfo` now sets `version` from `rootProject.version`, guarded by the new `BuildAutomationConfigurationTest.packagedBuildInfoCarriesTheCommitDerivedReleaseVersion`. Committed as `b5f7f5c`.
+- **Reason:** Local runtime verification of `64cd652` and `1a00621` showed `/actuator/info` returning `build.version: "unspecified"`. The root project's commit-derived version never reached the `website` subproject. The plan assumed `build.version` was already `0.0.0-dev.<commit>`, and that assumption was false. The test failed before the fix and passed after; Mission Control's version display also had the unset value.
+- **Impact:** Task 4 Files and the plan's version Assumption. AC-8 and AC-7 now hold at runtime.
+
+### 2026-10-05 - Actuator responses arrive as bytes
+
+- **Change:** `Test-ProductionSite.ps1` decodes byte responses (`ConvertTo-ResponseText`), with a regression that fails on `64cd652` and passes on `1a00621`.
+- **Reason:** `Invoke-WebRequest` returns `application/vnd.spring-boot.actuator.v3+json` bodies as `byte[]`, as a live production readiness request confirmed. Stringifying them yields "123 34 ...", so the live commit would never have parsed in production.
+- **Impact:** Task 3; AC-7 build-info check is correct against real actuator responses.
 
 ## Outcome
 Pending.
