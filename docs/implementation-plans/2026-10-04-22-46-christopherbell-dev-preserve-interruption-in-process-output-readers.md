@@ -1,7 +1,7 @@
 # Preserve Interruption in Process Output Readers
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -27,7 +27,7 @@ Two bounded process-output readers catch `Exception` around `Future.get`. That a
 
 | ID | Done when |
 |---|---|
-| AC-1 | An interruption during either output wait reaches the owner, restores the interrupt flag, terminates the process, and returns the existing interrupted/timed-out result |
+| AC-1 | An interruption during either output wait cancels the reader and propagates to the existing owner handler, which restores the interrupt flag, terminates the process, and returns the existing interrupted/timed-out result |
 | AC-2 | Timeout, execution failure, and cancellation still return empty truncated output and the existing callers retain their current behavior |
 | AC-3 | The change is merged through the required spoke PR/CI flow and its supported deployment/runtime state is read back |
 
@@ -87,7 +87,7 @@ Required skill: write-chris-street-style-code
 
 | AC | Native check | Local runtime check |
 |---|---|---|
-| AC-1 | Deterministic interrupted-future tests assert propagation; owner paths assert interrupt restoration and termination | Run committed candidate on isolated test profile; readiness and home page return 200 |
+| AC-1 | Deterministic interrupted-`FutureTask` tests assert `InterruptedException` propagation and reader cancellation; inspect existing owner handlers for interrupt restoration and process termination | Run committed candidate on isolated test profile; readiness and home page return 200 |
 | AC-2 | Timeout, failed, and cancelled future tests assert empty truncated fallback; run full website and library checks | Same candidate returns readiness 200 and home page 200 with integrations and scheduling disabled |
 | AC-3 | Required PR checks and merge readback | Read supported deployment status and revision; no manual process rotation |
 
@@ -114,6 +114,12 @@ Before merge, revert this focused change if tests or candidate verification fail
 - **Change:** The design allows a package-private future-wait seam only if existing construction seams cannot directly exercise the interruption case.
 - **Reason:** The production JDK process wrappers are private and start OS processes, while the defect is specifically the checked exception contract of `Future.get`; a tiny seam makes interruption deterministic without changing public APIs or invoking a real child process in unit tests.
 - **Impact:** Public process contracts and runtime behavior remain unchanged except that interruption now reaches existing owner handling.
+
+### 2026-10-04 - Verify interruption propagation on the committed candidate
+
+- **Change:** Added deterministic direct-boundary tests and package-private `awaitOutput` helpers; interruption is rethrown after reader cancellation, while `ExecutionException`, `TimeoutException`, and `CancellationException` keep the empty/truncated fallback. The focused regressions failed on clean baseline and passed on candidate `d1d8b79c`.
+- **Reason:** The original broad catches swallowed `InterruptedException`; deterministic `FutureTask` tests exposed the defect without OS-specific process timing and verified the existing ordinary-failure contract.
+- **Impact:** Task 1 implementation and Test Plan now describe the package-private test boundary; AC-1 and AC-2 are locally verified in [the candidate test report](../test-reports/2026-10-04-23-15-christopherbell-dev-preserve-interruption-in-process-output-readers.md). PR, merge and deployment acceptance remain pending.
 
 ## Outcome
 
