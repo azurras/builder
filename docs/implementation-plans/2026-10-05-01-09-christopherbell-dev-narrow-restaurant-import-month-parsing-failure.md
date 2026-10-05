@@ -1,7 +1,7 @@
 # Narrow Restaurant Import Month Parsing Failure
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -96,7 +96,12 @@ Revert only this isolated change if month retry behavior differs from the curren
 | Runtime proof remains blocked | High | Do not create a PR without supported isolated fixture/recovery and a successful candidate run. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record precise month parse boundary and runtime blocker
+
+- **Change:** Candidate `137bcec` narrows persisted-month parsing to `DateTimeParseException` and names the stored input. Existing month-only workflow tests passed before editing; the new malformed-month characterization passes on baseline and candidate. Full module checks passed; runtime startup is blocked at migration 015.
+- **Reason:** Malformed legacy text retains the established empty-state behavior, while unrelated runtime defects are no longer swallowed as parse failures. Required candidate runtime proof remains incomplete.
+- **Impact:** AC-1 and AC-2 are met; AC-3 is partly met pending runtime proof. See [candidate test report](../test-reports/2026-10-05-01-17-christopherbell-dev-narrow-restaurant-import-month-parsing-failure.md). No database repair or PR was made.
 
 ## Outcome
 Pending.

@@ -198,3 +198,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Completed a separate command-center correction on candidate `ad758de`: expected launch `IOException` retains its cause behind the safe request message; unexpected runtime failure propagates, and accepted action state rolls back. Both new regressions failed on baseline; all 33 focused tests and full module checks passed.
 - **Reason:** `CommandExecutor` declares `IOException`; catching every `Exception` obscured programming defects and discarded the cause.
 - **Impact:** Its own plan and blocked runtime report are published. Packaged startup again stopped before readiness at migration 015 on database `test`; no PR was opened. Continue the repository-wide review and hold runtime-gated PRs pending supported test database provisioning. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Narrow persisted restaurant month parsing
+
+- **Change:** Candidate `137bcec` renames the stored month input and catches only `DateTimeParseException`. Existing workflow characterization passed before editing; the new malformed month fallback test also passed on baseline and candidate. Full module checks passed.
+- **Reason:** Broad exception handling converted every defect into missing historic month data even though `YearMonth.parse()` has a precise format failure.
+- **Impact:** The separate plan and blocked report are published. Packaged startup on isolated `test` failed before readiness at migration 015, so no PR was created. Continue the wide code review and keep delivery runtime-gated; draft PR #1477 remains excluded.
