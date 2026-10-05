@@ -36,7 +36,7 @@ The Chris Street Style codebase audit requested in this task. Individual plan: [
 
 ## Local Run Details
 - **Local command:** `java -jar website/build/libs/website.jar --server.port=8081 --app.scheduling.enabled=false --command-center.enabled=false --app.federation.discovery-enabled=false --app.federation.inbound-enabled=false --app.federation.outbound-enabled=false --app.shared-folder.enabled=false`
-- **Environment:** `SPRING_PROFILES_ACTIVE=test`; `SPRING_MONGODB_URI` targeted the isolated copied candidate database on `127.0.0.1:27018`; `APP_MAIL_ENABLED=false`; the host-local `JAVA_TOOL_OPTIONS` set `-Djdk.net.unixdomain.tmpdir` to a short temporary directory (host path omitted).
+- **Environment:** `SPRING_PROFILES_ACTIVE=test`; `SPRING_MONGODB_URI=mongodb://127.0.0.1:27018/cbell_candidate_76681a5ca5ab_d3f08074f6e54200aa366ad5`; `APP_MAIL_ENABLED=false`; the host-local `JAVA_TOOL_OPTIONS` set `-Djdk.net.unixdomain.tmpdir` to a short temporary directory (host path omitted).
 - **Working directory:** Repository root of the isolated spoke worktree (`.`).
 - **Candidate process:** PID 47540; started 2026-10-04 23:10 local; Spring reported ready in 4.333 seconds.
 - **Logs:** `%TEMP%\chris-style-interruption-d1d8b79\candidate.out.log` and `candidate.err.log`.
@@ -123,7 +123,7 @@ SHA-256: 1B903B323E177E2074E856C33B16AA4F373CF5DF9C96433AC73BD810A862B508
 - Candidate artifact hash recorded above; worktree was clean at `d1d8b79c` during runtime proof.
 
 ## Bugs / Follow-ups
-No correction-specific follow-up remains. PR [#1478](https://github.com/azurras/christopherbell.dev/pull/1478) passed all checks and merged as `695a3ed8617f9b4ab07abb7413baf369c58acf6`; automatic production status reports that SHA `SUCCEEDED` and `HEALTHY`.
+PR [#1478](https://github.com/azurras/christopherbell.dev/pull/1478) passed all checks and merged as `695a3ed8617f9b4ab07abb7413baf369c58acf6`; automatic production status reports that SHA `SUCCEEDED` and `HEALTHY`. This earlier runtime exercise used the isolated copied candidate database named above. Subsequent verification follows the Builder rule to use the database named `test` only; that fresh database currently lacks the target migration ledger required for startup, as recorded in the later blocked report.
 
 ## Document Status
 complete
