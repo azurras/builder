@@ -1,4 +1,0 @@
-interface:
-  display_name: "Commit Push Builder Main"
-  short_description: "Commit and push builder main"
-  default_prompt: "Use $commit-push-builder-main for reviewed selected Builder files or push-only recovery; preserve unrelated state and verify publication."

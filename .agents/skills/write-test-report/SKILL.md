@@ -16,4 +16,4 @@ The helper validates before writing and refuses duplicates unless --overwrite in
 For read-only validation:
 python .agents/skills/write-test-report/scripts/validate_test_report.py docs/test-reports/YYYY-MM-DD-title.md
 
-Structural validity does not prove the evidence supports the claim. AGENTS.md defines when runtime proof is required. Publish report-mode changes through the [phase finalizer](../commit-push-builder-main/references/phase-finalization.md); validation alone does not write, commit or close work.
+Structural validity does not prove the evidence supports the claim. AGENTS.md defines when runtime proof is required. Publish report-mode changes through the [phase finalizer](../publish-builder-changes/references/phase-finalization.md); validation alone does not write, commit or close work.

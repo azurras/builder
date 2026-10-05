@@ -17,4 +17,4 @@ The plan owns change-specific requirements, design, deviations, discoveries, dec
 
 Review/validation are read-only unless edits were requested. Planning-only scope ends at the published plan. Read existing content before intentional full replacement with --overwrite.
 
-Follow AGENTS.md publication checkpoints using the [phase finalizer](../commit-push-builder-main/references/phase-finalization.md).
+Follow AGENTS.md publication checkpoints using the [phase finalizer](../publish-builder-changes/references/phase-finalization.md).

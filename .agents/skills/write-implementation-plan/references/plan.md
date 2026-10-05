@@ -61,7 +61,7 @@ For any change in an application repository, the Test Plan must use verify-local
 2. Draft the plan. Use draft or blocked when inspection or execution prerequisites remain unresolved.
 3. Run review mode and correct blockers. Mechanical validation checks structure; it cannot prove that a symbol was inspected or that a proposed change is correct.
 4. Save with the helper, which validates before writing. Do not mark ready-for-execution until validation and review pass.
-5. Use the [phase finalizer](../../commit-push-builder-main/references/phase-finalization.md) with the exact saved plan and intended indexes at the AGENTS.md publication checkpoint.
+5. Use the [phase finalizer](../../publish-builder-changes/references/phase-finalization.md) with the exact saved plan and intended indexes at the AGENTS.md publication checkpoint.
 6. From here on, keep the plan current with [update mode](update.md).
 
 See the [complete example](example.md).

@@ -14,4 +14,4 @@ python .agents/skills/save-session-memory/scripts/save_session_memory.py --root 
 
 Read the relevant dates/sections using targeted searches. Do not load an entire project history or create a permanent project file. Closure results belong on their actual date, linked to earlier proposals when needed.
 
-Use the [phase finalizer](../commit-push-builder-main/references/phase-finalization.md) for authorized persistence. Review/inspection-only requests do not write memory without authorization. For auditing the completed historical migration only, see [migration audit](references/migration-audit.md).
+Use the [phase finalizer](../publish-builder-changes/references/phase-finalization.md) for authorized persistence. Review/inspection-only requests do not write memory without authorization. For auditing the completed historical migration only, see [migration audit](references/migration-audit.md).

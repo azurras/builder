@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 The Builder publication skill is named `publish-builder-changes`. The new name describes what it does: persist a phase of Builder work and keep the hub valid. Its SKILL.md holds only guidance that its helper does not already enforce.
@@ -118,7 +118,23 @@ Revert the task commit to restore the old folder and references together. If a p
 - Trimming SKILL.md could drop guidance the helper does not enforce. Mitigation: Task 2 compares each step with the helper code.
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Generated index keeps this plan title
+
+- Change: The AC-2 search finds the old name once more, in the generated plans index. The index lists this plan by its title.
+- Reason: The index is generated from dated plan titles, and the plan keeps its historical title.
+- Impact: AC-2 holds for maintained files; the generated index is treated like the dated docs it lists. No task changes.
+
+### 2026-10-04 - Helper rejects already-staged deletions
+
+- Change: Unstaged the `git mv` renames before publishing. The helper then staged both the old and new paths.
+- Reason: The helper checks a missing file with `git ls-files`, which reads the index. A deletion that is already staged is gone from the index, so the helper rejected it. Changing the helper is a non-goal here.
+- Impact: Publication only; no AC change. Follow-up: the helper should also accept deletions already staged in the index.
 
 ## Outcome
-Pending.
+- AC-1: Met. `git mv` moved the folder to `.agents/skills/publish-builder-changes/`, the helper to `scripts/publish_builder_changes.py` and the test to `test_publish_builder_changes.py`. The old folder is gone. SKILL.md and openai.yaml carry the new name, display name and description.
+- AC-2: Met for maintained files. `git grep` outside dated docs finds only this plan's title in the generated index (see log). Discovery lists seven skills through `.agents/skills` and the `.claude/skills` symlink.
+- AC-3: Met. 69 of 69 tests pass before and after. `check_hub.py check` and `refresh` pass from the new path. This change was published with the renamed helper.
+- AC-4: Met. SKILL.md went from 47 to 37 lines. It keeps operation choice, file selection and ownership, outgoing-commit review, dry run, push-failure recovery, the hub check and checkpoints. It drops the restated helper validation steps.
+- AC-5: Met when the delivery commit's push succeeds and remote readback matches; see [session memory](../session-memory/2026-10-04-builder.md).
+- Shipped as planned, plus one retargeted link in the 2026-09-06 session memory. Follow-ups: sessions with a cached skill list must reload to see the new name; the helper should accept deletions already staged in the index (see log).

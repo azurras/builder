@@ -23,7 +23,7 @@ Register a new spoke in [spokes.json](spokes.json).
 
 ## Agents
 
-[AGENTS.md](AGENTS.md) is the shared policy: Codex and ChatGPT read it directly, and Claude Code imports it through [CLAUDE.md](CLAUDE.md). Skills live in one folder, `.agents/skills`. `.claude/skills` is a symlink to it, so both agents read the same files; the hub check (`commit-push-builder-main/scripts/check_hub.py`) reports a checkout where the link is missing.
+[AGENTS.md](AGENTS.md) is the shared policy: Codex and ChatGPT read it directly, and Claude Code imports it through [CLAUDE.md](CLAUDE.md). Skills live in one folder, `.agents/skills`. `.claude/skills` is a symlink to it, so both agents read the same files; the hub check (`publish-builder-changes/scripts/check_hub.py`) reports a checkout where the link is missing.
 
 ## Documents
 
@@ -45,7 +45,7 @@ Append same-day project work; create another file for another date. Preserve dec
 | write-test-report | Save or validate runtime evidence |
 | verify-local-app | Run any application locally before its PR; authorized deployment |
 | write-chris-street-style-code | Implementation standards and read-only code review |
-| commit-push-builder-main | Hub index refresh and document validation, scoped selected-file publication and push recovery |
+| publish-builder-changes | Hub index refresh and document validation, scoped selected-file publication and push recovery |
 
 [AGENTS.md](AGENTS.md) owns shared workflow policy. Skills contain only task-specific guidance, with conditional details in references. Reuse verified plans and progress, load relevant memory sections, and ask for input only when a consequential decision or authority is actually missing.
 

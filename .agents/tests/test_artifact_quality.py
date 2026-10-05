@@ -116,7 +116,7 @@ Verification: `./gradlew test --tests AppTest`
 """ + VALID_PLAN[end:]
 
     def test_hub_validates_new_plans_without_literal_code_edits(self) -> None:
-        script = ROOT / ".agents/skills/commit-push-builder-main/scripts/validate_hub_state.py"
+        script = ROOT / ".agents/skills/publish-builder-changes/scripts/validate_hub_state.py"
         spec = importlib.util.spec_from_file_location("hub_validation", script)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)

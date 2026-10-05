@@ -75,7 +75,7 @@ class RepositoryInspectionTests(unittest.TestCase):
 
 class MaintenanceModeTests(unittest.TestCase):
     def test_check_read_only_and_refresh_only_three_folders(self):
-        script = SKILLS / "commit-push-builder-main/scripts/check_hub.py"
+        script = SKILLS / "publish-builder-changes/scripts/check_hub.py"
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             def snapshot():
@@ -109,7 +109,7 @@ class SkillDiscoveryTests(unittest.TestCase):
     def test_discovery_is_exact_and_active_links_resolve(self):
         expected = {"complete-builder-work", "write-implementation-plan",
                     "write-test-report",
-                    "commit-push-builder-main", "verify-local-app", "write-chris-street-style-code",
+                    "publish-builder-changes", "verify-local-app", "write-chris-street-style-code",
                     "save-session-memory"}
         self.assertEqual({p.name for p in SKILLS.iterdir() if p.is_dir()}, expected)
         self.assertEqual({p.parent.name for p in SKILLS.glob("*/SKILL.md")}, expected)
@@ -132,7 +132,7 @@ class SkillDiscoveryTests(unittest.TestCase):
         self.assertIn("@AGENTS.md", (ROOT / "CLAUDE.md").read_text(encoding="utf-8"))
 
     def test_validation_rejects_claude_skills_that_are_not_the_shared_link(self):
-        validate = SKILLS / "commit-push-builder-main/scripts/validate_hub_state.py"
+        validate = SKILLS / "publish-builder-changes/scripts/validate_hub_state.py"
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             (root / ".agents/skills").mkdir(parents=True)

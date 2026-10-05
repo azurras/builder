@@ -42,4 +42,4 @@ The helper appends at the end of Implementation Log (replacing the `No entries y
 
 ## Publication
 
-Publish plan updates with the next phase checkpoint through the [phase finalizer](../../commit-push-builder-main/references/phase-finalization.md); an individual log entry does not need its own commit. The completed plan is published with the delivery memory before closure.
+Publish plan updates with the next phase checkpoint through the [phase finalizer](../../publish-builder-changes/references/phase-finalization.md); an individual log entry does not need its own commit. The completed plan is published with the delivery memory before closure.

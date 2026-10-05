@@ -11,11 +11,11 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / ".agents" / "skills" / "commit-push-builder-main" / "scripts" / "commit_push_builder_main.py"
+SCRIPT = ROOT / ".agents" / "skills" / "publish-builder-changes" / "scripts" / "publish_builder_changes.py"
 
 
 def load_module():
-    spec = importlib.util.spec_from_file_location("commit_push_builder_main", SCRIPT)
+    spec = importlib.util.spec_from_file_location("publish_builder_changes", SCRIPT)
     if spec is None or spec.loader is None:
         raise AssertionError(f"Unable to load {SCRIPT}")
     module = importlib.util.module_from_spec(spec)
@@ -23,7 +23,7 @@ def load_module():
     return module
 
 
-class CommitPushBuilderMainTests(unittest.TestCase):
+class PublishBuilderChangesTests(unittest.TestCase):
     def test_uses_builder_remote(self) -> None:
         module = load_module()
 

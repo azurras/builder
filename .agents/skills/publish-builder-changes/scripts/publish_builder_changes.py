@@ -15,7 +15,7 @@ EXPECTED_BRANCH = "main"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Commit and push the builder repository to origin main."
+        description="Publish selected Builder changes to origin main."
     )
     parser.add_argument(
         "--root",

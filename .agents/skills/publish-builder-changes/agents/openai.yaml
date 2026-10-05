@@ -1,0 +1,4 @@
+interface:
+  display_name: "Publish Builder Changes"
+  short_description: "Validate the hub and publish selected Builder files"
+  default_prompt: "Use $publish-builder-changes for reviewed selected Builder files or push-only recovery; preserve unrelated state and verify publication."
