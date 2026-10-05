@@ -210,3 +210,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Continued the repository-wide style audit with a separately planned naming correction for four browser feed modules, committed as `b25cf6c8`. Syntax checks, all 380 JS tests and packaged build passed; packaged runtime stopped at migration 015 before readiness.
 - **Reason:** The task requires small, reviewed corrections with their own plans/reports, and runtime verification is mandatory before PRs. The required test database still has an incomplete migration record; direct repairs and bypasses are prohibited.
 - **Impact:** The browser-feed plan and blocked candidate report are recorded; no PR was opened. Continue source audit in subsequent independent changes while runtime delivery waits for supported fixture/provisioning or recovery.
+
+### 2026-10-05 - Expose host probe defects
+
+- **Change:** Continued the audit with a separate host-metrics failure-boundary correction on `5a2bece4`. The baseline regression failed as expected; 17 focused metrics tests, full native module checks and packaged build passed. Runtime again stopped before readiness at migration 015.
+- **Reason:** The host provider's catch hid runtime defects even though its collector owns failure isolation and diagnostic alerts. Project policy also requires successful local readiness before PR creation.
+- **Impact:** The dedicated plan and blocked report capture the change and evidence. No PR was opened. Continue remaining code groups; runtime-gated delivery still awaits supported test fixture/provisioning or recovery.

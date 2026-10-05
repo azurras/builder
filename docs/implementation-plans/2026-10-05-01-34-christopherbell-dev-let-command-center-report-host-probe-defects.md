@@ -1,7 +1,7 @@
 # Let Command Center Report Host Probe Defects
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -97,10 +97,22 @@ Revert this single provider-boundary change if any expected absence or provider-
 | Required candidate runtime remains blocked | High | Record the attempt and withhold PR creation until a supported fixture/provisioning or recovery procedure is available. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record runtime block
+
+- **Change:** Removed the catch that turned every `RuntimeException` from the host operational probe into ordinary unavailable values; added `propagatesUnexpectedProbeDefects()`. Baseline regression failed as expected. Focused metrics tests, full project checks and packaging passed. Candidate startup against isolated `test` stopped at migration 015 before readiness; see the [blocked test report](../test-reports/2026-10-05-01-36-christopherbell-dev-let-command-center-report-host-probe-defects.md).
+- **Reason:** The metrics collector already isolates provider failures, logs the original cause and emits `PROVIDER_ERROR`; the inner catch hid that signal and treated a defect as ordinary absence.
+- **Impact:** AC-1 and AC-2 are met; AC-3 is partly met and blocked at runtime. No PR was opened. A supported test fixture/provisioning or recovery procedure is needed.
 
 ## Outcome
-Pending.
+> [!WARNING]
+> Provider behavior and all source-level checks are verified. Required packaged runtime proof is blocked before readiness by migration 015, so no PR was opened.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Existing empty-result characterization passed in focused provider suite. [Test report](../test-reports/2026-10-05-01-36-christopherbell-dev-let-command-center-report-host-probe-defects.md). |
+| AC-2 | ✅ Met | New defect-propagation regression failed before and passed after; collector isolation/alert tests passed. [Test report](../test-reports/2026-10-05-01-36-christopherbell-dev-let-command-center-report-host-probe-defects.md). |
+| AC-3 | ⏸️ Blocked | Full checks and package passed; candidate exited at migration 015 before readiness. No PR opened. [Test report](../test-reports/2026-10-05-01-36-christopherbell-dev-let-command-center-report-host-probe-defects.md). |
 
 ## Project
 christopherbell-dev
