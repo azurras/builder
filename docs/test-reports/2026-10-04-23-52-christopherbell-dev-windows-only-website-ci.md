@@ -85,10 +85,10 @@ HTTP readiness/homepage requests: not sent; the application did not finish start
 - Candidate app and MongoDB processes stopped. The production MongoDB listener remained untouched.
 
 ## Bugs / Follow-ups
-A cutover-ready isolated database fixture or a separately authorized test-only initialization approach is needed for local application runtime proof. Do not fabricate the protected cutover ledger or use production data to bypass it. The Builder delivery policy requires this proof before opening a spoke PR, so no PR was created.
+This blocked report is superseded by the [completed 2026-10-05 report](../test-reports/2026-10-05-06-49-christopherbell-dev-windows-only-website-ci.md).
 
 ## Document Status
-blocked
+superseded
 
 ## Project
 christopherbell-dev

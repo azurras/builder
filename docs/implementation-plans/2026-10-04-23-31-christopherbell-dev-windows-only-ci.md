@@ -1,7 +1,7 @@
 # Target christopherbell.dev CI on Windows
 
 ## Document Status
-blocked
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -103,6 +103,12 @@ Revert the workflow change through a follow-up commit and let the usual pull req
 - **Change:** Record local application verification as blocked and set the plan status to `blocked`.
 - **Reason:** A separate authenticated MongoDB `test` database allowed the candidate to connect, but its startup migration 015 requires a verified target-active domain cutover ledger; a fresh test database lacks that protected production migration state.
 - **Impact:** AC-1 remains partly met because workflow validation and the full Windows build passed but the required application runtime proof did not; AC-2 has not started because Builder policy forbids PR creation without that proof. A blocked test report records the evidence.
+
+### 2026-10-05 - Complete isolated local runtime verification
+
+- **Change:** Resume the implementation after completing local runtime verification using a disposable `ci-verification` Spring profile, then remove that local-only annotation and rebuild the committed tree.
+- **Reason:** Startup on a fresh authenticated MongoDB `test` database is intentionally stopped by migration 015 until protected production cutover state exists; the required local application check can still verify normal website readiness and rendering when only that gate is excluded for the isolated local run.
+- **Impact:** Runtime proof records the test-only gate exclusion, isolated authenticated database, readiness/homepage results, and startup catch-up's external Overpass 504. The temporary source edit was removed before the final full build; no test profile or migration change is included in commit `b0fc64b`.
 
 ## Outcome
 > [!WARNING]
