@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 A person who opens a new implementation plan or test report on GitHub can see what it is, where it stands and how it ended at a glance, because the templates present the same content as summary callouts, tables and labeled blocks instead of runs of label lines and paragraphs.
@@ -134,7 +134,12 @@ Revert the change commit. Documents written in the new layout would then fail on
 | Agents keep writing the old layout from habit | Medium | Templates and examples are what agents copy; plan review notes layout |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Wait for the project registry change
+
+- Change: Implementation paused before Task 1.
+- Reason: The concurrent in-progress plan [Builder Hub Model and Project Registry](2026-10-04-builder-hub-model-and-project-registry.md) has uncommitted edits to `artifact_quality.py` and plans to change every file in this plan's Expected Changes, adding a `Project` section to plans and reports. The user chose to wait and build on it.
+- Impact: Status blocked until that plan's change is on origin/main; the new templates and examples will then include its Project section. Tasks unchanged.
 
 ## Outcome
 Pending.
