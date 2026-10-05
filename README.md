@@ -4,7 +4,7 @@ Builder is the AI workflow hub. All work starts here; the repositories it coordi
 
 ## Start on Any Computer
 
-1. Clone Builder anywhere. Nothing depends on its location.
+1. Clone Builder anywhere. Nothing depends on its location. On Windows, first turn on Developer Mode and run `git config --global core.symlinks true` so the shared skills link checks out as a real link (macOS and Linux need nothing).
 2. List spokes and clone any that are missing (by default they go beside the Builder folder):
 
    ```bash
@@ -23,7 +23,7 @@ Register a new spoke in [spokes.json](spokes.json).
 
 ## Agents
 
-[AGENTS.md](AGENTS.md) is the shared policy: Codex and ChatGPT read it directly, and Claude Code imports it through [CLAUDE.md](CLAUDE.md). Canonical skills live in `.agents/skills`; `.claude/skills` holds generated entrypoints that delegate to them and are refreshed by maintain-builder-hub.
+[AGENTS.md](AGENTS.md) is the shared policy: Codex and ChatGPT read it directly, and Claude Code imports it through [CLAUDE.md](CLAUDE.md). Skills live in one folder, `.agents/skills`. `.claude/skills` is a symlink to it, so both agents read the same files; maintain-builder-hub check reports a checkout where the link is missing.
 
 ## Documents
 

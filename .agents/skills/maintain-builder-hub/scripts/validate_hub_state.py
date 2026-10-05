@@ -57,6 +57,20 @@ def validate_skill_frontmatter(root: Path, errors: list[str]) -> None:
             errors.append(f"{skill}: missing description")
 
 
+def validate_claude_skills_link(root: Path, errors: list[str]) -> None:
+    """Claude Code reads .claude/skills; it must be a link to the one canonical .agents/skills folder."""
+    canonical = root / ".agents" / "skills"
+    claude_skills = root / ".claude" / "skills"
+    if not canonical.is_dir():
+        return
+    if not claude_skills.is_symlink() or claude_skills.resolve() != canonical.resolve():
+        errors.append(
+            f"{claude_skills}: must be a symlink to ../.agents/skills so Claude Code and Codex share one skills folder. "
+            "On Windows, enable Developer Mode, run `git config --global core.symlinks true`, then "
+            "`git checkout -- .claude/skills` (or re-clone)."
+        )
+
+
 def validate_links(path: Path, root: Path, errors: list[str]) -> None:
     for link in markdown_links(read_text(path)):
         if "://" in link or link.startswith("#") or link.startswith("mailto:"):
@@ -120,6 +134,7 @@ def main() -> int:
         errors.extend(validate_test_report_text(read_text(path), path))
 
     validate_skill_frontmatter(root, errors)
+    validate_claude_skills_link(root, errors)
 
     if warnings:
         print("Warnings:")
