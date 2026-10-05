@@ -1,7 +1,7 @@
 # Keep Command Center Provider Failures Precise
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -98,10 +98,29 @@ Revert the isolated change before merge if behavior or checks fail. After merge,
 | Deployment takes longer than the code change | Medium | Wait for supported status evidence; report any unresolved gap. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Narrow the provider future failure boundary
+
+- **Change:** Began Task 1 and added an invalid-timeout regression, observing the expected failure on the unmodified broad catch; narrowed the handler to `ExecutionException | CancellationException` and verified the focused service suite, including cancellation fallback.
+- **Reason:** The current broad catch turns a timeout conversion defect into a misleading provider-unavailable result; exact future outcomes belong at the failure boundary.
+- **Impact:** Document Status is now in-progress; implementation stays within the planned two files and existing metric contract.
+
+### 2026-10-04 - Record isolated test database startup blocker
+
+- **Change:** The final native checks pass on candidate `d34d8e78`, but its packaged startup against isolated MongoDB database `test` fails at migration `015-require-domain-collection-schema`; the required domain cutover ledger is absent. The failed attempt and missing runtime proof are recorded in the [candidate test report](../test-reports/2026-10-04-23-58-christopherbell-dev-keep-command-center-provider-failures-precise.md).
+- **Reason:** Repository instructions require the database named `test`, while the target release refuses to start without a previously established domain cutover marker. Direct database writes or bypassing the migration guard would violate the verification constraints.
+- **Impact:** AC-1 and AC-2 are met; AC-3 is blocked until a supported, isolated `test` database with the required ledger is available. No PR was created.
 
 ## Outcome
-Pending.
+
+> [!WARNING]
+> The focused correction is implemented and native checks pass, but local candidate startup and required runtime evidence are blocked by the missing domain cutover ledger in the only permitted database, `test`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Catch boundary names `ExecutionException` and `CancellationException`; timeout overflow regression failed on the original code and passed on candidate `d34d8e78`. |
+| AC-2 | ✅ Met | Provider failure, cancellation, timeout coverage and full native check passed on `d34d8e78`; see [blocked candidate report](../test-reports/2026-10-04-23-58-christopherbell-dev-keep-command-center-provider-failures-precise.md). |
+| AC-3 | ⏸️ Blocked | The candidate exited during migration 015 before readiness. An approved database fixture or provisioning procedure is required before PR creation. |
 
 ## Project
 christopherbell-dev

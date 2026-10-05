@@ -168,3 +168,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Completed the first independent correction: bounded process-output readers now propagate interruption; PR #1478 merged as `695a3ed8617f9b4ab07abb7413baf369c58acf6`, all CI passed, and automatic production status confirmed that SHA active and healthy. Its plan and candidate report are separate records. Published the next focused provider-failure plan before editing.
 - **Reason:** Continue the audit from the fresh main-based branch while preserving the requested per-correction plan and report evidence; PR #1477 remains excluded.
 - **Impact:** The interruption correction is closed; the whole-codebase audit remains in progress, with Java provider future handling as the next reviewed task.
+
+### 2026-10-04 - Block provider correction on required test database fixture
+
+- **Change:** Continued the Java audit with a separately planned provider-failure correction on `d34d8e78`; focused tests and full module checks passed, but packaged startup on the required isolated MongoDB database `test` stopped at migration 015 because its domain cutover ledger is absent. The candidate-specific blocked report records the failed runtime attempt; no PR was opened.
+- **Reason:** The app fails closed on a target-schema release without the published ledger, while repository verification rules require database `test` and prohibit direct database writes or skipping the guard.
+- **Impact:** The provider correction plan is blocked at AC-3; the full audit remains in progress pending a supported isolated test fixture or provisioning procedure.
