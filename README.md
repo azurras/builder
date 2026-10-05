@@ -8,8 +8,8 @@ Builder is the AI workflow hub. All work starts here; the repositories it coordi
 2. List spokes and clone any that are missing (by default they go beside the Builder folder):
 
    ```bash
-   python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py list
-   python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py clone --spoke christopherbell-dev
+   python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py list
+   python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py clone --spoke christopherbell-dev
    ```
 
 3. Keep spokes somewhere else by setting `BUILDER_SPOKES_ROOT`, or map individual spokes in an ignored `spokes.local.json` such as `{"christopherbell-dev": "D:/code/site"}`.
@@ -35,11 +35,11 @@ Register a new spoke in [spokes.json](spokes.json).
 
 Append same-day project work; create another file for another date. Preserve decisions, attempts, discoveries, reviews, verification, blockers and outcomes. Plans and reports hold detailed evidence linked from memory.
 
-## Eight Skills
+## Seven Skills
 
 | Skill | Role |
 |---|---|
-| complete-builder-work | Delivery, coordination, repository inspection and closure |
+| deliver-change | Delivery, coordination, repository inspection and closure |
 | write-implementation-plan | Living plans: creation, updates and implementation log, readiness review and validation |
 | save-session-memory | Dated work records |
 | write-test-report | Save or validate runtime evidence |

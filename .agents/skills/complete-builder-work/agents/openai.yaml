@@ -1,6 +1,0 @@
-interface:
-  display_name: "Complete Builder Work"
-  short_description: "Deliver work and coordinate verified handoffs"
-  default_prompt: "Use $complete-builder-work to resume authorized delivery through verified publication and closure, loading coordination or repository inspection only when needed."
-policy:
-  allow_implicit_invocation: true

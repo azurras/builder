@@ -3,9 +3,9 @@
 Read historical context selectively; reverify path, origin, branch and relevant guardrails before execution.
 
 Registered spokes come from spokes.json at the Builder root. Run from the Builder root:
-python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py list
-python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py locate --spoke <slug>
-python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py inspect --spoke <slug>
+python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py list
+python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py locate --spoke <slug>
+python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py inspect --spoke <slug>
 
 locate prints the resolved path and its source (spokes.local.json, BUILDER_SPOKES_ROOT, or the folder beside Builder) and fails when the checkout is missing or its origin differs from the registry. When a spoke is missing on this machine, clone --spoke <slug> clones its default branch to the resolved path; it refuses an existing path. For a repository that is not registered, use --path <verified-repository> instead of --spoke.
 

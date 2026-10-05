@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT / ".agents/lib"))
 from spoke_registry import (SPOKES_ROOT_ENV, find_spoke, load_spokes, normalize_remote,
                             resolve_spoke_location)
 
-SCRIPT = ROOT / ".agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py"
+SCRIPT = ROOT / ".agents/skills/deliver-change/scripts/manage_spoke_repositories.py"
 REPOSITORY = "https://github.com/example/site.dev.git"
 
 

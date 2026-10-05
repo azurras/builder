@@ -29,7 +29,7 @@ class RepositoryInspectionTests(unittest.TestCase):
         (self.repo / "file.md").write_text("tracked", encoding="utf-8")
         self.git("add", "file.md")
         self.git("commit", "-m", "Fixture")
-        self.script = SKILLS / "complete-builder-work/scripts/manage_spoke_repositories.py"
+        self.script = SKILLS / "deliver-change/scripts/manage_spoke_repositories.py"
 
     def git(self, *args):
         return subprocess.run(["git", *args], cwd=self.repo, text=True, capture_output=True, check=True)
@@ -107,7 +107,7 @@ class MaintenanceModeTests(unittest.TestCase):
 
 class SkillDiscoveryTests(unittest.TestCase):
     def test_discovery_is_exact_and_active_links_resolve(self):
-        expected = {"complete-builder-work", "write-implementation-plan",
+        expected = {"deliver-change", "write-implementation-plan",
                     "write-test-report",
                     "publish-builder-changes", "verify-local-app", "write-chris-street-style-code",
                     "save-session-memory"}

@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 The Builder delivery skill is named `deliver-change`. The name says what it does: take one change from plan to verified closure, in Builder or in any spoke.
@@ -106,4 +106,9 @@ Revert the task commit to restore the old folder and references together. If a p
 No entries yet.
 
 ## Outcome
-Pending.
+Delivered as planned on 2026-10-04. No deviations.
+- AC-1: Met. `git mv` moved all six files to `.agents/skills/deliver-change/`. SKILL.md has `name: deliver-change` and title `Deliver Change`, openai.yaml uses `Deliver Change` and `$deliver-change`, and the old folder is gone.
+- AC-2: Met. `git grep -n complete-builder-work` outside dated docs returns nothing. SkillDiscoveryTests passes with the seven-skill set including deliver-change.
+- AC-3: Met. `python -B -m unittest discover -s .agents/tests` ran 69 tests, all OK. `manage_spoke_repositories.py list` from the new path listed christopherbell-dev. `check_hub.py refresh` passed. `git diff --check` is clean.
+- AC-4: Met. Published with publish-builder-changes and confirmed by `git ls-remote origin refs/heads/main` matching local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md).
+Shipped versus planned: identical, including README's corrected "Seven Skills" heading. Follow-up offered but not authorized: move spoke management into its own skill.

@@ -1,9 +1,9 @@
 ---
-name: complete-builder-work
+name: deliver-change
 description: Deliver authorized work through planning, implementation, verification, publication and closure; also handle coordination or repository inspection without expanding limited scope.
 ---
 
-# Complete Builder Work
+# Deliver Change
 
 AGENTS.md owns shared authority, evidence and publication policy. Resume at the first incomplete gate supported by current evidence.
 
