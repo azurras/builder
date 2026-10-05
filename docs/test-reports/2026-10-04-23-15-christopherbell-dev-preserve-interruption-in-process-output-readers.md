@@ -36,8 +36,8 @@ The Chris Street Style codebase audit requested in this task. Individual plan: [
 
 ## Local Run Details
 - **Local command:** `java -jar website/build/libs/website.jar --server.port=8081 --app.scheduling.enabled=false --command-center.enabled=false --app.federation.discovery-enabled=false --app.federation.inbound-enabled=false --app.federation.outbound-enabled=false --app.shared-folder.enabled=false`
-- **Environment:** `SPRING_PROFILES_ACTIVE=test`; `SPRING_MONGODB_URI=mongodb://127.0.0.1:27018/cbell_candidate_76681a5ca5ab_d3f08074f6e54200aa366ad5`; `APP_MAIL_ENABLED=false`; `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:\tmp\jds`.
-- **Working directory:** `A:\Projects\christopherbell.dev-worktrees\chris-street-style-codebase-20261004`.
+- **Environment:** `SPRING_PROFILES_ACTIVE=test`; `SPRING_MONGODB_URI` targeted the isolated copied candidate database on `127.0.0.1:27018`; `APP_MAIL_ENABLED=false`; the host-local `JAVA_TOOL_OPTIONS` set `-Djdk.net.unixdomain.tmpdir` to a short temporary directory (host path omitted).
+- **Working directory:** Repository root of the isolated spoke worktree (`.`).
 - **Candidate process:** PID 47540; started 2026-10-04 23:10 local; Spring reported ready in 4.333 seconds.
 - **Logs:** `%TEMP%\chris-style-interruption-d1d8b79\candidate.out.log` and `candidate.err.log`.
 - **Cleanup:** Stopped candidate PID 47540 and child PID 43556 with `taskkill /PID 47540 /T /F`; verified PID 47540 was gone and port 8081 had no listener. The temporary MongoDB listener remained for this audit session. Production ports 8080 (PID 14252) and 27017 (PID 5236) were unchanged.

@@ -36,8 +36,8 @@ The user-requested Chris Street Style codebase audit. Individual plan: [Keep Com
 | Production | Automatic status previously confirmed SHA `695a3ed8617f9b4ab07abb7413baf369c58acf6` active and healthy; port 8080 listener remained PID 45028 during this candidate attempt |
 
 ## Local Run Details
-- **Local command:** Set `SPRING_PROFILES_ACTIVE=test`, `SPRING_MONGODB_URI=mongodb://127.0.0.1:27018/test`, `APP_MAIL_ENABLED=false`, and `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:\tmp\jds`; start `java -jar website/build/libs/website.jar --server.port=8081 --app.scheduling.enabled=false --command-center.enabled=false --app.federation.discovery-enabled=false --app.federation.inbound-enabled=false --app.federation.outbound-enabled=false --app.shared-folder.enabled=false` with hidden `Start-Process` and redirected logs.
-- **Working directory:** `A:\Projects\christopherbell.dev-worktrees\chris-street-style-provider-failures-20261004`.
+- **Local command:** Set `SPRING_PROFILES_ACTIVE=test`, `SPRING_MONGODB_URI=mongodb://127.0.0.1:27018/test`, `APP_MAIL_ENABLED=false`, and host-local `JAVA_TOOL_OPTIONS` with `-Djdk.net.unixdomain.tmpdir` pointed at a short temporary directory; start `java -jar website/build/libs/website.jar --server.port=8081 --app.scheduling.enabled=false --command-center.enabled=false --app.federation.discovery-enabled=false --app.federation.inbound-enabled=false --app.federation.outbound-enabled=false --app.shared-folder.enabled=false` with hidden `Start-Process` and redirected logs.
+- **Working directory:** Repository root of the isolated spoke worktree (`.`).
 - **Candidate process:** PID 47292; process exited during Spring context initialization.
 - **Logs:** `%TEMP%\chris-style-provider-d34d8e78\candidate.out.log` and `candidate.err.log`.
 - **Cleanup:** Confirmed PID 47292 exited and port 8081 had no listener. Kept the session-owned temporary MongoDB process running; no direct database writes or cleanup commands were used.
@@ -67,7 +67,7 @@ Command: ./gradlew.bat :website:test --tests '*CommandCenterMetricsServiceTest'
 ```text
 Command: ./gradlew.bat :website:check :cbell-lib:check
 Environment: GRADLE_USER_HOME=%TEMP%\chris-style-gradle-20261004
-JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:\tmp\jds
+JAVA_TOOL_OPTIONS supplied the host-local JDK Unix-domain socket temporary-directory override; its host-specific path is omitted.
 ```
 
 ### 4. Packaged candidate startup

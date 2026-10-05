@@ -16,13 +16,13 @@ Review and correct all tracked first-party executable code for the website again
 - Add concise, repository-local coding guidance to the website `AGENTS.md` so future work follows this standard.
 
 ## Inputs
-- Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, freshly checked out in `A:\Projects\christopherbell.dev-worktrees\chris-street-style-codebase-20261004` on 2026-10-04. Draft PR #1477 is explicitly excluded as a source of code or verification.
+- Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, freshly checked out in an isolated worktree on 2026-10-04. Draft PR #1477 is explicitly excluded as a source of code or verification.
 - `AGENTS.md`, root and module READMEs, Gradle build files, JavaScript/CSS ownership READMEs.
 - Builder `.agents/skills/write-chris-street-style-code/SKILL.md` and its Java, JavaScript, API/design, configuration, and testing references.
 - Fresh inventory: 1,421 tracked first-party files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration; see the final audit record for the extension counts and reviewed groups.
 
 ## Branch
-Use `codex/chris-street-style-codebase-20261004`, created from the fetched website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`. Keep the dirty authoritative checkout at `A:\Projects\christopherbell.dev` and the separate draft PR worktree untouched.
+Use `codex/chris-street-style-codebase-20261004`, created from the fetched website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`. Keep the dirty authoritative checkout and the separate draft PR worktree untouched.
 
 ## Non-Goals
 - Add or change product features, routes, API payloads, database schemas, deployment semantics, or external side effects.
