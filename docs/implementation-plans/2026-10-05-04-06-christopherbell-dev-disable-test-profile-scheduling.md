@@ -1,7 +1,7 @@
 # Disable scheduled work in the test profile
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -100,10 +100,22 @@ The change only modifies test-profile configuration and its context test. Revert
 | App runtime remains unavailable due incomplete migration 015 | High based on audit evidence | Preserve test DB state and report the runtime gap; no PR. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Disable test profile background jobs
+
+- **Change:** Set `app.scheduling.enabled=false` in `application-test.yml` and added a context regression that loads that exact profile resource through Spring's YAML loader.
+- **Reason:** Missing the shared gate caused unrelated scheduled work and external requests to remain eligible during test-profile sessions.
+- **Impact:** AC-1 and AC-2 pass on candidate `2a24d6c`; AC-3 is blocked because isolated MongoDB `test` stops startup at incomplete migration 015. See the dedicated [test report](../test-reports/2026-10-05-04-13-christopherbell-dev-disable-test-profile-scheduling.md). No PR was created.
 
 ## Outcome
-Pending.
+> [!WARNING]
+> The test profile now disables scheduled work and native checks pass. Local application readiness and the required PR boundary remain blocked by incomplete migration 015 in isolated database `test`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | The regression loads actual `application-test.yml` and verifies no scheduler bean is registered; it failed before the YAML change and passes after. Dedicated context test confirms explicit opt-in remains available. |
+| AC-2 | ✅ Met | Focused configuration tests 5/5; full gate passes with 2,042 Java tests, 110 skipped, zero failures/errors, browser suite 382/382, PowerShell suites, and JAR packaging. |
+| AC-3 | ⚠️ Partly met | Committed candidate used profile `test` without a scheduling override, connected to isolated MongoDB `test`, then stopped at incomplete migration 015 before readiness; process/port cleanup passed. No PR was created. [Test report](../test-reports/2026-10-05-04-13-christopherbell-dev-disable-test-profile-scheduling.md). |
 
 ## Project
 christopherbell-dev
