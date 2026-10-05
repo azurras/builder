@@ -20,11 +20,14 @@ Read the applicable references before editing or reviewing the affected code. An
 | State, validation, API, errors, effects, concurrency, compatibility, or performance | [Design and API](references/design-and-api.md) |
 | Every language; especially one without a dedicated guide | [Language adaptation](references/language-adaptation.md) |
 | Java | [Java](references/java.md) |
+| Kotlin | [Kotlin](references/kotlin.md), plus [Java](references/java.md) for shared JVM and Spring concerns |
 | JavaScript or TypeScript | [JavaScript/TypeScript](references/javascript.md) |
 | Python | [Python](references/python.md) |
 | Go | [Go](references/go.md) |
 | Rust | [Rust](references/rust.md) |
 | C# or .NET | [C#](references/csharp.md) |
+| C | [C](references/c.md) |
+| C++ | [C++](references/cpp.md), plus [C](references/c.md) at C API boundaries |
 | OCaml | [OCaml](references/ocaml.md) |
 | SQL queries, schema, migrations, or document stores such as MongoDB | [SQL and data stores](references/sql.md) |
 | Bash, POSIX shell, or PowerShell scripts | [Shell and PowerShell](references/shell.md) |
