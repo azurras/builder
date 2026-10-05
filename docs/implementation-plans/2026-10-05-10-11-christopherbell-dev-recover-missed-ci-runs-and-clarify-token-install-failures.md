@@ -1,7 +1,7 @@
 # Recover Missed CI Runs and Clarify Token Install Failures
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -148,7 +148,20 @@ Revert the merge through a PR. Without the event change, a missed push again nee
 - **Impact:** Expected Changes gains `gradlew.bat` (line endings only). Wrapper builds rerun green with a clean tree.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Missed CI runs can now be recovered by hand and are reported. The token install explains its failures. Production Watch is registered and passing, and production serves `ca98b1e` after a gated deploy.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `ci.yml` `workflow_dispatch` merged in #1482 (`ca98b1e`), enforced by `GitHubAutomationConfigurationTest.ciCanBeRerunByHandForAMissedPush`. |
+| AC-2 | ✅ Met | Pester event-filter cases, including a manual run recovering a missed push and pull request runs never counting. Live, the gate returned SUCCESS for `a9d2058` and PENDING for `06c3718` ([report](../test-reports/2026-10-05-10-22-christopherbell-dev-recover-missed-ci-runs-and-clarify-token-install-failures.md)). |
+| AC-3 | ✅ Met | Pester stall cases; the live verdict flagged the `06c3718` stall. Production Watch registered by #1483 (`4663692`); manual run [37339944271](https://github.com/azurras/christopherbell.dev/actions/runs/37339944271) passed with no alert ([report](../test-reports/2026-10-05-10-57-christopherbell-dev-register-the-production-watch-workflow.md)). |
+| AC-4 | ✅ Met | Pester elevation and empty-file cases. A real non-elevated `prod.cmd github-token-install` printed "requires elevated PowerShell…" with exit 1. |
+| AC-5 | ✅ Met | #1482 merged as `ca98b1e` with required checks green; its push event arrived, CI passed at 15:47 UTC, and the gate deployed at 15:49. Production `/actuator/info` reports `ca98b1e`, `auto-status` reads `SUCCEEDED`, and GitHub deployment 6863501513 shows `success`. #1483 merged as `4663692` and was at `AWAITING_CI` for its `main` run at closure. |
+
+- **Shipped versus planned:** as planned, plus the workflow registration and the `gradlew.bat` renormalization logged above.
+- **Follow-ups:** none required. `4663692` changes only a workflow comment and line endings and deploys when its CI passes.
 
 ## Project
 christopherbell-dev

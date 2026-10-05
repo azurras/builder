@@ -1,7 +1,7 @@
 # Harden christopherbell.dev CI/CD Robustness and Observability
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -308,8 +308,32 @@ Required skill: None (repository settings; no code)
 - **Reason:** `Invoke-WebRequest` returns `application/vnd.spring-boot.actuator.v3+json` bodies as `byte[]`, as a live production readiness request confirmed. Stringifying them yields "123 34 ...", so the live commit would never have parsed in production.
 - **Impact:** Task 3; AC-7 build-info check is correct against real actuator responses.
 
+### 2026-10-05 - Merge push event was dropped; recovery shipped as follow-ups
+
+- **Change:** #1481 merged as `06c3718` at 14:56 UTC, but GitHub recorded no push event or `pr_merge` activity for it, so no push workflow ran. The new gate correctly held production on `a9d2058` with `AWAITING_CI`, and the poller still refreshed its tools to `06c3718`, because the tools then installed predated the gate. Recovery, a stall alert, clearer token-install errors, workflow registration and a `gradlew.bat` renormalization shipped through the [follow-up plan](2026-10-05-10-11-christopherbell-dev-recover-missed-ci-runs-and-clarify-token-install-failures.md) as #1482 (`ca98b1e`) and #1483 (`4663692`). The first production deploy carrying this plan's code is therefore `ca98b1e`.
+- **Reason:** `CI Build` had no manual trigger, and Production Watch could not register or see the stall.
+- **Impact:** AC-7 and AC-10 are met through the follow-up PRs. The user installed the deployment token from the `06c3718` tooling after two attempts that exposed the elevation and empty-file messages.
+
 ## Outcome
-Pending.
+
+> [!WARNING]
+> Every finding is fixed and live in production on `ca98b1e`. AC-4's Dependabot path has not run yet; it awaits the next Dependabot Gradle PR. AC-9's production JSON log exists but is readable only by administrators, so its contents were verified locally, not on the host.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Ruleset 977691 readback lists `build`, the three `Analyze (...)` checks and `dependency-review` from GitHub Actions (integration 15368), strict policy on, with the four original rules unchanged; GitHub only added the default `required_reviewers: []`. #1481 showed `BLOCKED` until its checks passed. |
+| AC-2 | ✅ Met | Pester gate tests. Live: `06c3718`, with no CI run, held at `AWAITING_CI` while `a9d2058` kept serving; `ca98b1e` deployed at 15:49 UTC only after its `CI Build` push run passed at 15:47. |
+| AC-3 | ✅ Met | Contract test. On the PR and `main` runs the cache missed and `Get-Module -ListAvailable` found the runner image's Pester 5.9.0, so the Gallery was not contacted. The retry path is covered by the workflow script and the contract test. |
+| AC-4 | ⚠️ Partly met | Workflow merged, registered and correctly skipped for non-Dependabot PRs; the regeneration command leaves `verification-metadata.xml` unchanged on current `main` ([report](../test-reports/2026-10-05-09-44-christopherbell-dev-harden-ci-cd-robustness-and-observability.md)). Not yet exercised on a Dependabot PR. |
+| AC-5 | ✅ Met | Every CI run since #1481 shows the test summary; `automation-pwsh7` ran 121 tests in CI. |
+| AC-6 | ✅ Met | GitHub `Production` deployment 6863501513 for `ca98b1e`: `in_progress` at 15:49:14 UTC, then `success` at 15:54:10 with `https://www.christopherbell.dev/`. Token installed by the user via `github-token-install`. |
+| AC-7 | ✅ Met | Registered by #1483. Manual run [37339944271](https://github.com/azurras/christopherbell.dev/actions/runs/37339944271) concluded `success` with no alert issue; the read-only verdict passed all six checks on `ca98b1e`. |
+| AC-8 | ✅ Met | Production `/actuator/info` returns `0.0.0-dev.ca98b1e249b2f91e33ab4286cb32a9036d8deda7`. |
+| AC-9 | ⚠️ Partly met | Production responses carry `X-Request-Id`; `application.json.log` exists in the protected logs folder. ECS lines with `requestId` were verified on the local candidate, not read on the host. |
+| AC-10 | ✅ Met | [Report](../test-reports/2026-10-05-09-44-christopherbell-dev-harden-ci-cd-robustness-and-observability.md) for `b5f7f5c`; #1481 merged as `06c3718` with required checks green. Deployed as part of `ca98b1e`: `auto-status` `SUCCEEDED`, healthy, active `ca98b1e`. |
+
+- **Shipped versus planned:** everything planned, plus fixes found during runtime verification: the commit-derived build version, byte-decoded actuator JSON and UTC timestamps in the watch.
+- **Follow-ups:** watch the next Dependabot Gradle PR for AC-4. Optionally have an administrator read one `application.json.log` line. The user's main checkout `A:\Projects\christopherbell.dev` is 105 commits behind with an untracked snapshot folder, left untouched.
 
 ## Project
 christopherbell-dev
