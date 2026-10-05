@@ -240,6 +240,12 @@ Required skill: write-chris-street-style-code
 - **Reason:** Order of work; the defects were real and are fixed.
 - **Impact:** Evidence order for Tasks 1-3; ACs unchanged.
 
+### 2026-10-05 - Fixed the async streaming test flake blocking CI
+
+- **Change:** Fixed the flaky `AsyncDispatcherSecurityIntegrationTest.authenticatedStreamingRequestCompletesThroughAsyncRedispatch` in this PR (`AsyncDispatcherSecurityIntegrationTest.java`, test only), committed after `406eeaa`.
+- **Reason:** #1484's required `build` check failed twice on it, and the user asked to fix it. The CI XML showed 500 from `ConcurrentModificationException` in `LifecycleHttpServletResponse.flushBuffer`: MockMvc ran the streaming body on the executor while the request thread still wrote headers to the same mock response. The original test failed 21 of 300 local runs. With a deferred executor that releases async work only after the request thread returns, it passed 600 of 600. It had also failed in CI on 2026-09-23/24.
+- **Impact:** Test-only. No production code changes and ACs unchanged; runtime evidence still applies and the report names the new candidate.
+
 ## Outcome
 Pending.
 
