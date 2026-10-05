@@ -12,7 +12,7 @@ Reject the plan when:
 - Targets, dependencies, acceptance checks, risks, or rollback are vague or unresolved for the proposed ready state.
 - A code-changing task omits `Required skill: write-chris-street-style-code` before code edits or its task-specific Before-Edit Brief: Behavior, Invariants, Boundary/API, Effects and failures, Tests and evidence.
 - Claimed inspection is unsupported by the actual files/callers, or the branch has changed in a way that invalidates the contract.
-- Application runtime impact lacks a local verification plan; non-runtime changes lack appropriate native checks or a reason runtime testing is not applicable.
+- Any change in an application repository lacks a plan to run and verify the candidate locally with verify-local-app and publish runtime evidence before PR creation, including draft PRs, regardless of language; runtime-affecting edits lack affected reruns before PR updates. Work with no runnable application lacks appropriate native checks or a concrete reason runtime execution is not applicable.
 - Required verification commands or completion criteria cannot establish the proposed result.
 
 Preserve unversioned historical literal-plan compatibility; when revising one for new execution, prefer the task-contract-v1 format and reinspect the affected scope.

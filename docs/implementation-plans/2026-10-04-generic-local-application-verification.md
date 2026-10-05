@@ -1,7 +1,7 @@
 # Generic Local Application Verification
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Plan Format
 task-contract-v1
@@ -77,6 +77,8 @@ No application runtime exists in this change: these are skill/policy documents, 
 
 ## Validation
 Official skill validation, native tests, hub/schema/link checks and semantic review must pass. Verify that neither a passing build nor CI nor a draft PR bypasses required local execution, and that non-HTTP applications have an appropriate readiness/output check.
+
+Verified results on 2026-10-04: all 45 native Builder tests passed; all four changed skill entrypoints passed official validation; hub validation and git diff --check passed. Eight pre-existing historical-plan schema warnings remain. Independent behavioral review covered eight runtime/scope scenarios and found no remaining issues after embedded-database and report-command classification corrections. Historical prose remains intact. Unrelated coding-style edits in the shared checkout are excluded from this delivery.
 
 ## Rollback or Recovery
 Restore the prior skill paths/content and active callers together through a reviewed follow-up commit. Preserve any successful checkpoint commit if pushing fails and recover using push-only after inspecting outgoing commits.

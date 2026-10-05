@@ -23,7 +23,7 @@ For the preferred task contract, use these labels with a nonempty value on the s
 - Tests and evidence: risk-appropriate starting and final evidence.
 - Verification: concrete commands or observable acceptance checks for this task.
 
-Behavior through Tests and evidence form the five-field Before-Edit Brief. Documentation-only tasks can name headings and documentation checks; they do not require application startup or implementation snippets.
+Behavior through Tests and evidence form the five-field Before-Edit Brief. Documentation-only tasks can name headings and documentation checks rather than implementation snippets. For any change in an application repository, Local Testing must use verify-local-app to run the candidate locally, verify its behavior and publish runtime evidence before creating a PR, including a draft PR, regardless of language. Include affected reruns after runtime-affecting edits. Work with no runnable application records a concrete reason runtime execution does not apply and appropriate native checks.
 
 Unversioned historical literal-patch plans retain their original whole-plan validation, including non-edit delivery tasks. New versioned plans validate each task independently. Legacy `#### Code Edit N.N` blocks remain supported: File, Lines, Action, Current for replace/delete/move, Proposed, fenced code, and Verification. Additions may omit Current. If literal line ranges are supplied, they must be valid; `line range pending file inspection` cannot appear in a ready or completed plan. Prefer converting a task to an inspected contract over maintaining stale line numbers.
 

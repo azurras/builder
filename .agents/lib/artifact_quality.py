@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import re
+import shlex
 
 
 PLAN_STATUSES = {
@@ -67,8 +68,15 @@ UNIT_TEST_ONLY_PATTERNS = (
     r"\bpython\s+-m\s+unittest\b",
     r"\bgo\s+test\b",
     r"\bcargo\s+test\b",
+    r"\bdotnet\s+test\b",
     r"\bjest\b",
     r"\bvitest\b",
+)
+
+LOCAL_COMMAND_PATTERN = (
+    r"(?im)^\s*(?:[-*]\s+)?local\s+"
+    r"(?:(?:app(?:lication)?|cli|worker|desktop|consumer)\s+)?"
+    r"(?:command|invocation|launch|run)\s*:\s*(?P<command>\S[^\n]*)$"
 )
 
 LOCAL_APP_RUN_PATTERNS = (
@@ -89,6 +97,11 @@ LOCAL_APP_RUN_PATTERNS = (
 )
 
 RUNTIME_DATA_PATTERNS = (
+    r"\bcommand arguments?\b",
+    r"\bstdin\b",
+    r"\binput file\b",
+    r"\bqueue message\b",
+    r"\bconsumer input\b",
     r"\b(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+/",
     r"\bcurl\b",
     r"\bhttps?://",
@@ -103,6 +116,10 @@ RUNTIME_DATA_PATTERNS = (
 )
 
 RUNTIME_RESPONSE_PATTERNS = (
+    r"\bexit\s+(code|status)\s*[:=]?\s*-?\d+\b",
+    r"\b(stdout|stderr)\b",
+    r"\boutput (file|artifact)\b",
+    r"\bworker result\b",
     r"\bHTTP/1\.[01]\s+\d{3}\b",
     r"\bstatus\s*(code)?\s*[:=]?\s*\d{3}\b",
     r"\b\d{3}\s+(OK|Created|Accepted|No Content|Bad Request|Unauthorized|Forbidden|Not Found|Conflict|Internal Server Error)\b",
@@ -244,6 +261,32 @@ def validate_implementation_plan_text(markdown: str, path: Path | None = None) -
     return errors
 
 
+def _is_test_command(command: str) -> bool:
+    invocation = command.strip().lstrip("`").split("`", 1)[0]
+    try:
+        tokens = shlex.split(invocation, posix=False)
+    except ValueError:
+        return True  # An unparseable invocation cannot establish application execution.
+    if not tokens:
+        return True
+    executable = re.split(r"[/\\]", tokens[0].strip("\"'"))[-1].lower().removesuffix(".exe")
+    arguments = [token.strip("\"'") for token in tokens[1:]]
+    if executable in {"pytest", "jest", "vitest"}:
+        return True
+    if re.fullmatch(r"python(?:\d+(?:\.\d+)*)?|py", executable):
+        return any(argument == "-m" and arguments[index + 1] in {"unittest", "pytest"}
+                   for index, argument in enumerate(arguments[:-1]))
+    if executable in {"gradle", "gradlew", "gradlew.bat", "mvn", "mvnw", "mvnw.cmd"}:
+        return any(argument.rsplit(":", 1)[-1] == "test" for argument in arguments)
+    if executable in {"cargo", "go", "dotnet", "npm", "pnpm", "yarn", "npx"}:
+        subcommands = [argument for argument in arguments if not argument.startswith("-")]
+        return bool(subcommands) and (
+            subcommands[0] in {"test", "jest", "vitest"}
+            or subcommands[:2] in (["run", "test"], ["exec", "jest"], ["exec", "vitest"])
+        )
+    return False
+
+
 def validate_test_report_text(markdown: str, path: Path | None = None) -> list[str]:
     errors: list[str] = []
     sections = markdown_sections(markdown)
@@ -265,7 +308,12 @@ def validate_test_report_text(markdown: str, path: Path | None = None) -> list[s
     response_received = sections.get("Response Received", "")
     report_body = "\n".join(sections.values())
 
-    has_local_app_run = _matches_any(app_context, LOCAL_APP_RUN_PATTERNS)
+    local_commands = re.finditer(LOCAL_COMMAND_PATTERN, app_context)
+    has_application_command = any(
+        not _is_test_command(command.group("command"))
+        for command in local_commands
+    )
+    has_local_app_run = has_application_command or _matches_any(app_context, LOCAL_APP_RUN_PATTERNS)
     has_runtime_data = _matches_any(data_sent, RUNTIME_DATA_PATTERNS)
     has_runtime_response = _matches_any(response_received, RUNTIME_RESPONSE_PATTERNS)
     mentions_unit_tests = _matches_any(report_body, UNIT_TEST_ONLY_PATTERNS)
@@ -273,15 +321,15 @@ def validate_test_report_text(markdown: str, path: Path | None = None) -> list[s
     if status == "complete":
         if not has_local_app_run:
             errors.append(
-                f"{_label(path)}complete test report must identify the local app runtime, port, or base URL under test"
+                f"{_label(path)}complete test report must identify the local application command, runtime, port, or base URL under test"
             )
         if not has_runtime_data:
             errors.append(
-                f"{_label(path)}complete test report Data Sent must describe an endpoint request, UI input, or other local app interaction"
+                f"{_label(path)}complete test report Data Sent must describe a request, UI input, command arguments, fixture input, or queue message"
             )
         if not has_runtime_response:
             errors.append(
-                f"{_label(path)}complete test report Response Received must describe an HTTP response, UI result, screenshot, redirect, or log output from the running app"
+                f"{_label(path)}complete test report Response Received must describe an application response, UI result, exit status, output artifact, worker result, or log output"
             )
     if status == "complete" and mentions_unit_tests and not (
         has_local_app_run and has_runtime_data and has_runtime_response

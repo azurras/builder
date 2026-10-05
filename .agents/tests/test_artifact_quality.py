@@ -192,6 +192,102 @@ Verification: `./gradlew test --tests AppTest`
 
         self.assertTrue(any("Code Edit" in error for error in errors), errors)
 
+    def local_execution_report(self, run_details: str, inputs: str, results: str) -> str:
+        return f"""# Local Application Report
+
+## Document Status
+complete
+
+## Story/Issue
+Generic application verification
+
+## Branch
+Candidate commit abc1234
+
+## App / Environment
+Candidate checkout with isolated fixture directory.
+
+## Local Run Details
+{run_details}
+
+## Test Cases
+Representative changed application behavior.
+
+## Data Sent
+{inputs}
+
+## Response Received
+{results}
+
+## Pass / Fail
+PASS: expected fixture result observed.
+
+## Evidence
+Captured command, candidate identity, result and owned fixture cleanup.
+
+## Bugs / Follow-ups
+None.
+"""
+
+    def test_complete_reports_accept_non_http_application_execution(self) -> None:
+        scenarios = (
+            ("Local command: `python -m export_tool source.csv result.json`.",
+             "Command arguments: source.csv and result.json; input file contains two rows.",
+             "Exit code: 0; output file result.json contains the two expected records."),
+            ("Local worker launch: `./queue-worker --queue fixture-jobs --once`.",
+             "Queue message: job-42 with isolated destination fixture-output.",
+             "Worker result: job-42 completed; output artifact has the expected contents."),
+            ("Local desktop launch: `./editor fixture.txt`.",
+             "UI input: changed text, clicked Save.",
+             "UI result: saved; output file fixture.txt contains the changed text."),
+            ("Local consumer run: `./examples/library-consumer fixture.json`.",
+             "Consumer input: fixture.json with two representative records.",
+             "Exit status: 0; stdout contains the expected transformed records."),
+        )
+        for run_details, inputs, results in scenarios:
+            with self.subTest(run=run_details):
+                self.assertEqual(validate_test_report_text(
+                    self.local_execution_report(run_details, inputs, results)), [])
+
+    def test_non_http_report_still_requires_execution_input_and_result(self) -> None:
+        complete_fields = (
+            "Local command: `./exporter source.csv result.json`.",
+            "Command arguments: source.csv and result.json.",
+            "Exit code: 0; output file result.json contains expected records.",
+        )
+        for index, replacement in enumerate(("No application was run.", "No input recorded.", "No result recorded.")):
+            with self.subTest(missing=index):
+                incomplete_fields = list(complete_fields)
+                incomplete_fields[index] = replacement
+                self.assertTrue(validate_test_report_text(self.local_execution_report(*incomplete_fields)))
+
+    def test_local_command_labels_do_not_turn_unit_tests_into_application_execution(self) -> None:
+        for command in ("pytest -q", "python -m unittest discover", "python -B -m unittest discover",
+                        "python3 -m unittest discover", "cargo test --lib", "dotnet test"):
+            with self.subTest(command=command):
+                report = self.local_execution_report(
+                    f"Local command: `{command}`.",
+                    "Command arguments: native test options; ran unit tests only.",
+                    "Exit code: 0; stdout: all unit tests passed.",
+                )
+                self.assertTrue(validate_test_report_text(report))
+
+    def test_report_accepts_application_execution_alongside_unit_tests(self) -> None:
+        report = self.local_execution_report(
+            "Local command: `pytest -q`.\nLocal command: `./exporter source.csv result.json`.",
+            "Command arguments: source.csv and result.json.",
+            "Exit code: 0; output file result.json contains expected records.",
+        )
+        self.assertEqual(validate_test_report_text(report), [])
+
+    def test_application_arguments_can_contain_test_runner_names(self) -> None:
+        report = self.local_execution_report(
+            "Local command: `./exporter pytest-results.csv result.json`.",
+            "Command arguments: pytest-results.csv and result.json.",
+            "Exit code: 0; output file result.json contains expected records.",
+        )
+        self.assertEqual(validate_test_report_text(report), [])
+
     def test_test_report_requires_request_response_evidence(self) -> None:
         report = """# Report
 

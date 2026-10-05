@@ -7,11 +7,11 @@ Write test reports as evidence artifacts, not chat transcripts. Every test repor
 - Document Status: draft, complete, blocked, or superseded.
 - Story/Issue: the story, issue, ticket, or work item being verified.
 - Branch: the branch, commit, or build under test.
-- App / Environment: app name, profile, port, base URL, database or fixture context, and relevant environment variables.
-- Local Run Details: exact start command, process details, logs location, and whether the app was stopped or left running.
+- App / Environment: app name, runtime/configuration, database or fixture context, and relevant environment variables; include port and base URL only when applicable.
+- Local Run Details: exact local command, working directory, candidate identity, process details, logs location, and cleanup. For non-HTTP runs, use a label such as `Local command:`, `Local worker launch:` or `Local consumer run:` followed by the actual invocation.
 - Test Cases: the user-visible behaviors, endpoints, or flows exercised.
-- Data Sent: request method, URL, headers that matter, payload/body/form data, query params, or UI input values.
-- Response Received: status code, response headers that matter, body snippets, UI result, redirects, logs, or screenshots.
+- Data Sent: actual request/UI input, command arguments, stdin, input file contents, queue message or consumer input, as applicable.
+- Response Received: actual HTTP/UI response, exit code/status, stdout/stderr, output file/artifact contents, worker result, logs or screenshots, as applicable.
 - Pass / Fail: result per test case and a short reason.
 - Evidence: commands, timestamps, screenshots, curl output files, browser checks, or log excerpts.
 - Bugs / Follow-ups: defects found, retest needs, or gaps intentionally left unverified.
