@@ -17,7 +17,7 @@
 - Missing or malformed restaurant IDs remain content-free `404` responses with `noindex,nofollow` and no Restaurant JSON-LD.
 - Favorites remains private/non-indexable; Top Rated, sitemap, robots policy, profile URL shape, rating rules, selection behavior, import behavior, and database schema remain unchanged.
 - Top Rated and Favorites retain their existing visual design.
-- Every source change follows regression-first TDD and `write-jane-street-style-code`.
+- Every source change follows regression-first TDD and `chris-street-style`.
 - Work only in `A:\Projects\christopherbell.dev-worktrees\restaurant-profile-void-seo`; preserve the dirty authoritative checkout at `A:\Projects\christopherbell.dev`.
 - Validate on a non-8080 port before any production listener action.
 
@@ -101,7 +101,7 @@ Interfaces:
 - Produces: `RestaurantProfilePageService.profile(String) -> RestaurantProfilePage`; nested `RestaurantProfilePage.Address` and `RestaurantProfilePage.Rating`; public methods `addressLine()`, `hasRating()`, `averageRating()`.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke it together with `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before any code edits; invoke it together with `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: A valid ID maps one canonical detail lookup into safe public display/search data; invalid/missing IDs map to the existing not-found contract.
   - Invariants: The page type cannot carry personal/audit fields; ratings exist only for a positive count and valid 1–5 sum; coordinates are either a valid pair or absent; JSON cannot close its script element.
@@ -556,7 +556,7 @@ Interfaces:
 - Produces: model attribute `restaurantProfile`; raw semantic HTML, canonical/social metadata, JSON-LD, member mount `#restaurant-member-controls` with `data-restaurant-id`.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke it together with `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before any code edits; invoke it together with `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: Valid profiles return complete public content and JSON-LD without JavaScript; missing profiles retain the content-free noindex 404.
   - Invariants: One H1 and one main landmark; dynamic text remains escaped; only pre-serialized HTML-safe JSON uses unescaped output; external links are already policy-validated and carry safe rel attributes.
@@ -1120,7 +1120,7 @@ Interfaces:
 - Produces: exported `initializeRestaurantProfile(options)` for behavioral tests and automatic browser initialization; member controls only.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke it together with `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before any code edits; invoke it together with `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: Anonymous visitors make zero detail requests; signed-in visitors receive personal controls; member failures never replace public content; rating/favorite mutations remain functional.
   - Invariants: API response is used only after the existing fetch boundary; untrusted strings are escaped; every promise is awaited; one module-local state object owns the current member detail.
@@ -1592,7 +1592,7 @@ Interfaces:
 - Produces: exclusive scoped stylesheet ownership, two-column desktop/one-column mobile profile, visible focus, inline failure, and reduced-motion behavior.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke it together with `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before any code edits; invoke it together with `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: Profiles render in the approved Void visual language at desktop/mobile sizes without affecting Top Rated, Favorites, or unrelated pages.
   - Invariants: Every feature selector is beneath `.lunch-void-page`; focus stays visible; content remains usable without motion; responsive layout never overflows.
@@ -1971,7 +1971,7 @@ Sequence / dependencies:
 - Runs after Tasks 1–4. No source edits are allowed in this task unless a new failing regression test starts a fresh TDD cycle in the owning task.
 
 Implementation notes:
-- This is verification/review mode; `write-jane-street-style-code` is required if any correction becomes necessary.
+- This is verification/review mode; `chris-street-style` is required if any correction becomes necessary.
 - Before-Edit Brief:
   - Behavior: The integrated candidate proves raw indexable HTML, correct crawler boundaries, Void desktop/mobile presentation, and personal controls.
   - Invariants: Port 8080 is untouched until merge/deployment; isolated test data is used; exact merged/deployed SHA identity is recorded.
@@ -2029,7 +2029,7 @@ Capture representative desktop/mobile screenshots and console/network evidence.
 
 - [ ] **Step 4: Review the final diff against the code standard and spec**
 
-Apply the `write-jane-street-style-code` review rubric:
+Apply the `chris-street-style` review rubric:
 
 - trace public/detail input into the immutable page model;
 - prove invalid optional states cannot enter JSON-LD;

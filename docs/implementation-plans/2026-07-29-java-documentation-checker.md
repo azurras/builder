@@ -88,7 +88,7 @@ None. The broad specification and user approvals fix the JDK syntax-tree archite
 
 ### Task 1: Add the parse-only Java documentation checker
 
-**Required skill:** Invoke `write-jane-street-style-code` in implementation mode and follow `superpowers:test-driven-development`.
+**Required skill:** Invoke `chris-street-style` in implementation mode and follow `superpowers:test-driven-development`.
 
 **Before-Edit Brief:** Use the phase brief above verbatim. If implementation investigation disproves an AST assumption, stop before production edits and update the plan rather than adding source-text heuristics.
 

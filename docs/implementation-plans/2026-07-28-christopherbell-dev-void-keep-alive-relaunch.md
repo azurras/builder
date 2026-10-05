@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Work from refreshed `origin/main` in a new isolated worktree; preserve `A:\Projects\christopherbell.dev` unchanged.
-- Invoke `write-jane-street-style-code` and its Java, JavaScript, template, design/API, and testing references before editing.
+- Invoke `chris-street-style` and its Java, JavaScript, template, design/API, and testing references before editing.
 - Use RED-to-GREEN behavioral tests; retain existing Like API names as compatibility boundaries.
 - Do not change the 24-hour base lifespan, extension calculation, reply synchronization, authorization, or mutation routes.
 - Do not rank posts using keep-alive, reply, follower, or lifespan totals.
@@ -77,7 +77,7 @@ Expected files or modules:
 - Void feed template, feed renderer, home-feed ordering, thread page copy, CSS, JavaScript tests, and view markup tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: `/void` explains all three survival rules; Like is presented as `Keep alive · +24h` and becomes `Kept alive` only after the server confirms; replies explain their whole-thread 24-hour effect; native Share falls back to copying the canonical URL; only Newest and Expiring Soon sorts remain.
   - Invariants: the browser never invents expiration; failed interactions preserve the previous control/count/countdown; server-returned `liked`, `likesCount`, and `expiresOn` remain authoritative; feed ordering never uses engagement totals.

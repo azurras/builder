@@ -28,7 +28,7 @@ AssertJ, Mockito, Gradle, PowerShell 7/Windows PowerShell 5.1, Pester, native Mo
   created from `origin/main` commit `0bcc8a9b83738df9c4adcf076e4be4443090448c` or a
   deliberately refreshed successor reviewed against this plan.
 - Preserve unrelated state in `A:\Projects\christopherbell.dev`.
-- Invoke `write-jane-street-style-code` and `superpowers:test-driven-development` before
+- Invoke `chris-street-style` and `superpowers:test-driven-development` before
   every production-code, test, migration, configuration, or reusable-script edit.
 - Do not change public music endpoints, payloads, authorization, playback, or UI behavior.
 - Keep queue and radio optimistic-lock versions independent.
@@ -108,7 +108,7 @@ Sequence / dependencies:
 - Establishes the document and adapter interfaces consumed by Tasks 2 and 3.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; it requires
+- Required skill: `chris-street-style` before any code edits; it requires
   `superpowers:test-driven-development` for the new storage behavior.
 - Before-Edit Brief:
   - Behavior: queue and radio domain states round-trip through distinct documents in one
@@ -460,7 +460,7 @@ Sequence / dependencies:
 - Runs after Task 1 because the new store must compile before callers switch.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke
+- Required skill: `chris-street-style` before any code edits; invoke
   `superpowers:test-driven-development` and record the existing service tests as the green
   characterization baseline for this behavior-preserving dependency refactor.
 - Before-Edit Brief:
@@ -875,7 +875,7 @@ Sequence / dependencies:
   mapping.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke
+- Required skill: `chris-street-style` before any code edits; invoke
   `superpowers:test-driven-development` and witness the migration test fail before adding V014.
 - Execution correction from real MongoDB evidence: typed `MongoTemplate` reads and inserts are
   not safe for this migration because conversion can normalize malformed BSON and `@Version`
@@ -1118,7 +1118,7 @@ Sequence / dependencies:
   owner names.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before test or documentation edits; invoke
+- Required skill: `chris-street-style` before test or documentation edits; invoke
   `superpowers:test-driven-development` for the architecture policy behavior.
 - Before-Edit Brief:
   - Behavior: catalog validation recognizes the new active collection and the two intentionally
@@ -1295,7 +1295,7 @@ Sequence / dependencies:
   not drop collections and is used only with the website writer stopped.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before script, configuration, test, or runbook
+- Required skill: `chris-street-style` before script, configuration, test, or runbook
   edits; invoke `superpowers:test-driven-development` and read the PowerShell script tests first.
 - Execution safety refinement: the confirmed operation acquires the established `deploy.lock`
   before the first writer-state check and holds it through backup, mutation, validation, failure
@@ -1794,7 +1794,7 @@ Sequence / dependencies:
   escalation limit. No MongoDB collection mutation is authorized.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before script or test edits; invoke
+- Required skill: `chris-street-style` before script or test edits; invoke
   `superpowers:test-driven-development` and preserve Windows PowerShell 5.1 compatibility.
 - User-approved post-merge ACL follow-on (2026-08-10): after five Task 6 review rounds, elevated
   disposable evidence exposed an empty installed-file DACL, and the final review then found the

@@ -13,7 +13,7 @@
 - Work in `A:\Projects\christopherbell.dev-worktrees\unified-music-hub` on branch `codex/unified-music-hub`, based on refreshed `origin/main`.
 - Preserve the dirty production checkout at `A:\Projects\christopherbell.dev`; never implement or commit from it.
 - Use one feature branch and one pull request for the complete Music Hub delivery.
-- Invoke `write-jane-street-style-code` before every production-code, test, executable-template, configuration, migration, or automation edit.
+- Invoke `chris-street-style` before every production-code, test, executable-template, configuration, migration, or automation edit.
 - `MUSIC_READ` and `MUSIC_WRITE` are independent of `SHARED_FOLDER_READ` and `SHARED_FOLDER_WRITE`.
 - `MUSIC_WRITE` implies `MUSIC_READ`; `ADMIN` receives both music capabilities effectively; removing read removes write.
 - Neither music capability grants downloads. Shared-folder download access remains governed only by shared-folder capabilities.
@@ -110,7 +110,7 @@ Expected files or modules:
 - Add Java and JavaScript permission-matrix tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: admins can grant/revoke Music read/write separately from Shared Folder permissions; Music write always entails Music read.
   - Invariants: changing one capability family preserves the other family; admins have effective Music read/write without stored grants; removing Music read removes Music write.
@@ -160,7 +160,7 @@ Expected files or modules:
 - Add deterministic clock-based tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: normal browser login creates an opaque revocable session with seven-day idle and 30-day absolute limits; interactive requests renew and rotate it.
   - Invariants: explicit bearer JWT validation/lifetime is unchanged; raw session tokens are never stored; absolute expiry never moves; background/media requests never extend idle expiry.
@@ -225,7 +225,7 @@ Expected files or modules:
 - Add Mongo index migration and scanner/probe tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: `/music` reads a durable catalog containing path, exact revision, tags, duration, codecs, and artwork for files below `Music/`.
   - Invariants: paths remain rooted and relative; a catalog row is playable only when its revision matches disk; scans are bounded; malformed probe output never becomes trusted metadata.
@@ -287,7 +287,7 @@ Expected files or modules:
 - Add Back Office audit panel and filters.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: Music is visible in nav to everyone; the public shell distinguishes sign-in-required from permission-denied, records the attempt, and authorized listeners can search/stream without downloading.
   - Invariants: access reloads fresh account state; anonymous identity is only a trusted resolved IP; Music responses are private/no-store; no Music route emits attachment disposition.
@@ -328,7 +328,7 @@ Expected files or modules:
 - Retire browser duration-report writes and the shared-folder radio UI entry point.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: all listeners join approximately the same durable station position; queued songs override radio and smart radio resumes when the queue empties.
   - Invariants: duration comes only from the catalog; immediate track repeats are forbidden when alternatives exist; exclusions never play; one transition creates one history event; queue mutations require Music write.
@@ -381,7 +381,7 @@ Expected files or modules:
 - Add authorization and concurrency tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: listeners can view shared playlists/history; writers can create/edit/delete playlists, favorite tracks, and exclude tracks from radio.
   - Invariants: preferences and playlists are global; exclusion affects radio only and does not hide manual playback; mutations use exact version checks; history is append-only and bounded in reads.
@@ -430,7 +430,7 @@ Expected files or modules:
 - Add FFmpeg fixture and failure-injection tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: writers can change approved text tags and embedded artwork without re-encoding audio, and can undo a selected edit while its backup is retained.
   - Invariants: exact observed revision is rechecked before stage and replacement; original is backed up privately before mutation; staged output retains audio codec/duration within tolerance; replacement is atomic; unsupported containers remain read-only.
@@ -479,7 +479,7 @@ Expected files or modules:
 - Add Node tests plus desktop/mobile browser flows.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: everyone sees Music in main nav; authorized listeners get search, Albums/Artists/Songs/Genres/Folders, playlists, queue, history, and an expanded player; elsewhere the same player collapses to the bottom bar.
   - Invariants: one top-document media element owns playback; route changes move/present that element without changing its source/currentTime/paused state; unauthorized shells never fetch catalog or stream data; writer controls remain absent or disabled for readers.
@@ -531,7 +531,7 @@ Expected files or modules:
 - Add or update end-to-end and production smoke tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code/config/test/automation edits.
+- Required skill: `chris-street-style` before any code/config/test/automation edits.
 - Before-Edit Brief:
   - Behavior: a push to `main` deploys the complete Music Hub non-interactively and production serves the expected access/nav/player/radio flows.
   - Invariants: no interactive `Y` prompts or Windows elevation dialogs in deployment; live port 8080 is untouched until alternate-port verification passes; unrelated dirty production checkout state is preserved.

@@ -313,7 +313,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before any code edits; execution must invoke it first.
+- Required skill: `chris-street-style` before any code edits; execution must invoke it first.
 - Before-Edit Brief:
   - Behavior: only the creator replaces restaurants/clears votes; total membership never exceeds 21; unsafe website schemes are rejected on write and suppressed on read.
   - Invariants: creator is always a participant; joins are idempotent; concurrency cannot exceed the cap; only absolute HTTP(S) URLs become active links.
@@ -434,7 +434,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before any code edits; execution must invoke it first.
+- Required skill: `chris-street-style` before any code edits; execution must invoke it first.
 - Before-Edit Brief:
   - Behavior: every initial and redirect connection uses an address from the exact validated DNS answer set while preserving original Host, SNI, and TLS hostname verification; preview images are absolute HTTP(S) only.
   - Invariants: no second unbound DNS resolution, redirects never bypass destination policy, body/time/redirect bounds remain, and non-HTTP(S) image values never become clickable fallbacks.
@@ -502,7 +502,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before any code edits; execution must invoke it first.
+- Required skill: `chris-street-style` before any code edits; execution must invoke it first.
 - Before-Edit Brief:
   - Behavior: each account reads and writes only its own resume record; legacy global state is removed without being displayed; terminal completion/discard clears the scoped record.
   - Invariants: the account identifier is not a secret or authorization control; server upload ownership remains authoritative; unauthenticated/missing identity reads no resume state.
@@ -556,7 +556,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before any code edits; execution must invoke it first.
+- Required skill: `chris-street-style` before any code edits; execution must invoke it first.
 - Before-Edit Brief:
   - Behavior: false/null per-post eligibility never appears in public outboxes; inactive accounts cannot enroll, be discovered, create eligible posts, or deliver; signup defaults unchecked.
   - Invariants: current consent, identity, and `AccountStatus.ACTIVE` remain necessary; dormant approval fields stay removed; explicit user opt-in remains round-trippable; existing transport/signing behavior is unchanged.
@@ -655,7 +655,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before editing workflows, executable build configuration, or reusable verification automation; execution must invoke it first.
+- Required skill: `chris-street-style` before editing workflows, executable build configuration, or reusable verification automation; execution must invoke it first.
 - Before-Edit Brief:
   - Behavior: wrapper, plugins, dependencies, and Actions execute only reviewed immutable bytes.
   - Invariants: exact Gradle 9.6.1 distribution remains; intended Action releases remain visible in comments; strict verification is the default.

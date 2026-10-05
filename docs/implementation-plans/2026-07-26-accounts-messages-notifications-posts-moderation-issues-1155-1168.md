@@ -22,7 +22,7 @@
 - Notification dedupe identity includes actor, action/type, target, recipient, and a configured short window; high-volume rate state is recipient-pair scoped and cannot suppress unrelated recipients.
 - Post author edits require the original author, an active non-expired post, and the configured 15-minute window; administrator moderation stays on the separate report path.
 - Audit reason, before, and after values are bounded and redacted; never store passwords, tokens, request bodies, exception text, or unrelated personal fields in audit metadata.
-- Invoke `write-jane-street-style-code` before every production/test/script/config code edit despite the user's request to waive it, because repository instructions require it.
+- Invoke `chris-street-style` before every production/test/script/config code edit despite the user's request to waive it, because repository instructions require it.
 - Verify the packaged app with a disposable Mongo database on a non-8080 port before merge; production port 8080 remains untouched until guarded post-merge deployment.
 
 ---
@@ -90,7 +90,7 @@ Sequence / dependencies:
 - Runs first because message, notification, and post page APIs consume the same cursor semantics.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: encode and decode a versioned opaque cursor containing an exact UTC instant and bounded string id; expose the new API date constant.
   - Invariants: round trips preserve nanoseconds and id; null/blank means first page; malformed, oversized, wrong-version, or missing-field cursors fail closed.
@@ -165,7 +165,7 @@ Sequence / dependencies:
 - Runs after Task 1 only for the additive version constant; account paging itself is page-number based.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: administrators query page, bounded size, allowlisted sort/direction, optional status/role, and literal-safe text across username/email/first/last name; Back Office renders totals, filters, and previous/next controls.
   - Invariants: ADMIN authorization remains required; text search is escaped and capped; password/reset fields never enter DTO search output; old endpoint returns only a bounded compatibility list.
@@ -260,7 +260,7 @@ Sequence / dependencies:
 - Runs after Task 2 so account administration returns the deletion result without reintroducing whole-collection loads.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: an admin deletion creates/resumes one durable job, moves public posts to `deleted-user`, removes credentials/reset state with the account, removes follows/trust/private messages/notifications/preferences/sessions/private feature state, and pseudonymizes reports/admin audit references.
   - Invariants: the tombstone cannot authenticate; another user's public post/history is untouched; retained report/audit rows contain only `deleted:<12 hex>` and `deleted-user`; each cleanup step can run twice safely.
@@ -350,7 +350,7 @@ Sequence / dependencies:
 - Runs after Task 1 for stable cursor encoding and after Task 3 so deletion cleanup includes archive state.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: Mongo aggregation returns the latest message for every distinct participant pair regardless of one thread's volume; history returns bounded cursor pages; an authenticated user archives only their view and any newer message restores it.
   - Invariants: participant authorization derives from the current account plus resolved username; archive never deletes or mutates the other participant's messages; returned history is chronological within each page while cursor traversal is newest-to-oldest.
@@ -445,7 +445,7 @@ Sequence / dependencies:
 - Runs after Task 1 for cursor semantics and before account deletion completion so new guard/preferences collections join cleanup.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: notification pages use `(createdOn,id)`, UI appends without duplicates, mark-all-read atomically updates only the caller, and delivery claims a dedupe/rate permit before insert.
   - Invariants: recipient ownership scopes every inbox write; dedupe includes actor/type/target/recipient; per actor-recipient rate keys cannot suppress unrelated recipients or event types; preference-disabled events consume no permit.
@@ -564,7 +564,7 @@ Sequence / dependencies:
 - Runs after Task 1; account deletion in Task 3 already owns post tombstone reassignment.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: every global/user/self/following feed page compares timestamp and id; authors edit active posts within 15 minutes; response/UI exposes `editedOn` and an edited label.
   - Invariants: createdOn never changes; edit does not move a feed item; replies obey the same author/window rule; link previews are recomputed from final text; audit holds at most ten bounded before/after revisions per post.
@@ -646,7 +646,7 @@ Sequence / dependencies:
 - Runs after Task 2 so Back Office page state and controls already exist.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: a reporter/target has one open report under concurrency; the admin queue filters by status, report type, target type, reporter, and validated inclusive date range with bounded stable pages.
   - Invariants: resolved reports retain history; sparse open key is cleared on resolution and reclaimed on reopen; existing rows without a key remain readable; raw regex and unbounded dates are rejected.
@@ -728,7 +728,7 @@ Sequence / dependencies:
 - Runs after Tasks 2 and 7 because account/report moderation calls must provide before/after state and reason.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: account status/role changes and report resolve/reopen actions record actor, target, reason, timestamp, and allowlisted bounded before/after maps; authorized moderators page/filter entries.
   - Invariants: audit is append-only; mutation fails before state change when required reason is absent; passwords/email/body text never enter before/after maps; one moderation action creates one primary audit event.
@@ -820,7 +820,7 @@ Sequence / dependencies:
 - Runs after Tasks 2-8 because it integrates every new page/action contract and performs the authoritative gate.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: Back Office, messages, notifications, home/user feeds expose the new controls and metadata accessibly; feature READMEs document pagination, retention, dedupe, edits, and moderation audit.
   - Invariants: mobile-first existing layout remains; buttons have labels/status regions; appended pages contain no duplicate IDs; compatibility endpoints remain bounded; no new npm/CDN dependency.

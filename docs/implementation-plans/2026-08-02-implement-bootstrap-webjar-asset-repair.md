@@ -55,7 +55,7 @@ First task. Run the new test before production edits and retain the RED output.
 
 Implementation notes:
 
-- Required skill: write-jane-street-style-code before any code edits.
+- Required skill: chris-street-style before any code edits.
 - Invoke superpowers:test-driven-development before editing.
 - Before-Edit Brief:
   - Behavior: derive the pin from Gradle and reject another Bootstrap version
@@ -158,7 +158,7 @@ Runs after Task 1 RED; security access follows in Task 3.
 
 Implementation notes:
 
-- Required skill: write-jane-street-style-code before any code edits.
+- Required skill: chris-street-style before any code edits.
 - Before-Edit Brief:
   - Behavior: CSS imports and Bootstrap-loading pages request 5.3.8.
   - Invariants: self-hosting, script order, markup, and custom assets stay fixed.
@@ -425,7 +425,7 @@ Runs after Task 2 so the opened namespace equals the referenced namespace.
 
 Implementation notes:
 
-- Required skill: write-jane-street-style-code before any code edits.
+- Required skill: chris-street-style before any code edits.
 - Before-Edit Brief:
   - Behavior: anonymous GETs to 5.3.8 are public static assets.
   - Invariants: only GET and only Bootstrap 5.3.8 are permitted.
@@ -539,7 +539,7 @@ Runs after Tasks 2-3 so guidance describes implemented behavior.
 
 Implementation notes:
 
-- Required skill: write-jane-street-style-code before editing behavior documentation.
+- Required skill: chris-street-style before editing behavior documentation.
 - Before-Edit Brief:
   - Behavior: guidance names 5.3.8 as the served pin.
   - Invariants: self-hosting and least privilege remain unchanged.

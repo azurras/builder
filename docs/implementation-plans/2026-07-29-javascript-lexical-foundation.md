@@ -1,6 +1,6 @@
 # JavaScript Lexical Foundation Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to implement this plan task-by-task. Each task must also invoke `write-jane-street-style-code` and `superpowers:test-driven-development` before editing production or test code.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to implement this plan task-by-task. Each task must also invoke `chris-street-style` and `superpowers:test-driven-development` before editing production or test code.
 
 **Goal:** Add a pure, JDK-only JavaScript tokenizer that safely separates code from comments, strings, regular-expression bodies, and template raw text and returns an immutable success-or-first-error result for the later documentation recognizer.
 
@@ -98,7 +98,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
+- Required skill: `chris-street-style` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
 - Before-Edit Brief:
   - Behavior: callers can construct only internally consistent tokens, errors, successes, and failures; all exposed token lists are immutable and source ordered.
   - Invariants: token offsets never go backward; EOF is empty and zero-width; non-EOF tokens are nonempty; successful results contain exactly one terminal EOF; failed results contain no EOF and only tokens ending at or before the error offset.
@@ -548,7 +548,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production file.
+- Required skill: `chris-street-style` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production file.
 - Before-Edit Brief:
   - Behavior: `lex(String)` returns a complete immutable token stream ending in EOF for valid source or one immutable failure at the first unsafe lexical position for invalid source.
   - Invariants: inert lexical regions never emit code-looking tokens; emitted extents never overlap; regex/division classification is deterministic; every `${` owns exactly one interpolation-end token; no failure contains EOF; the lexer has no I/O or mutable global state.
@@ -1217,7 +1217,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before any corrective code edits. Invoke it and `superpowers:test-driven-development` if review produces a change.
+- Required skill: `chris-street-style` before any corrective code edits. Invoke it and `superpowers:test-driven-development` if review produces a change.
 - Before-Edit Brief:
   - Behavior: the committed lexical boundary is independently shown to be deterministic, fail-closed, fully documented, and sufficient for the later recognizer.
   - Invariants: no application/runtime behavior, file discovery, policy enforcement, Gradle lifecycle, CI, README, or authoritative-checkout state changes.

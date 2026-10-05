@@ -34,7 +34,7 @@ Dependencies: None.
 Files: `.agents/lib/artifact_io.py`, `.agents/lib/builder_hub.py`, `.agents/skills/start-hub-work/scripts/start_hub_work.py`, the five repeated artifact writers, `.agents/tests`.
 Symbols: `save_dated_markdown`, `slugify`, legacy `main` entrypoints; new shared artifact CLI.
 Inspection: Read shared helpers, repeated save implementations, and artifact save tests on main after commit 3f58c8e.
-Required skill: write-jane-street-style-code before code edits.
+Required skill: chris-street-style before code edits.
 Behavior: Legacy commands save the same artifact types and locations through shared code.
 Invariants: Empty input and accidental overwrite fail; valid filenames/content and intentional overwrite remain compatible; plan/report validators and session append behavior remain intact.
 Boundary/API: Preserve legacy arguments, exit success/failure, returned path, and output artifact; move mode-specific defaults to a shared catalog.
@@ -47,7 +47,7 @@ Dependencies: None; can follow writer characterization.
 Files: `.agents/skills/sync-spoke-state/scripts/sync_spoke_state.py`, `.agents/skills/register-spoke-repo/scripts/register_spoke_repo.py`, new manage-spoke-repositories command, `.agents/tests`.
 Symbols: `git`, `parse_registry`, snapshot rendering and persistence, inspection/register command routing.
 Inspection: Current sync helper ignores Git exit status, substitutes clean for empty output, and always writes a timestamp; registry CLI already accepts explicit root.
-Required skill: write-jane-street-style-code before code edits.
+Required skill: chris-street-style before code edits.
 Behavior: New inspection defaults read-only; explicit snapshots write only on semantic state change; legacy snapshot command remains available.
 Invariants: A failed Git query cannot report clean; missing/broken repositories produce explicit errors and nonzero status; no source repository writes or fetches.
 Boundary/API: Retain legacy --root command behavior; new interface distinguishes inspect, snapshot, and register.
@@ -60,7 +60,7 @@ Dependencies: Task 1 writer behavior understood; existing safety references insp
 Files: `.agents/skills`, `AGENTS.md`, `README.md`, `.agents/tests/test_artifact_commit_checkpoints.py`, `.agents/tests/test_github_trust_boundary.py`, `.agents/tests/test_jane_street_code_style.py`.
 Symbols: Six new SKILL entrypoints/metadata and focused references; retired entrypoints; active skill routing.
 Inspection: Read all 22 Builder skills and metadata plus policy tests; read session history supporting checkpoints, runtime reports, reviews, and continuity.
-Required skill: write-jane-street-style-code before code-bearing edits.
+Required skill: chris-street-style before code-bearing edits.
 Behavior: Exactly 11 skills are discoverable. Spec-only, review-only, closure-only, coordination update, and maintenance check requests stay in their requested mode.
 Invariants: Preserve coding standard, trust boundary, runtime evidence, committed continuity before closure, readback, separate phase commits, and existing authorization. Do not invent delegation or maintenance actions.
 Boundary/API: Keep all legacy Python command paths; retire only old SKILL.md/UI metadata, route old names through a migration reference, and update current instructions/callers.
@@ -73,7 +73,7 @@ Dependencies: Tasks 1-3.
 Files: New maintain-builder-hub command; existing index/validation helpers; completed spec/plan and continuity record.
 Symbols: check/refresh command sequencing and phase-finalization instructions.
 Inspection: Index helper has read-only --check; validator is read-only; existing instructions redundantly create memory after index generation.
-Required skill: write-jane-street-style-code before code edits.
+Required skill: chris-street-style before code edits.
 Behavior: Check performs no writes; refresh updates indexes then validates; neither creates memory or commits. Phase owner writes artifacts first and publishes selected files after successful maintenance.
 Invariants: Failed checks block completion; old helper commands remain usable; phase checkpoints stay separate.
 Boundary/API: New maintenance modes compose existing tools through their public CLI interfaces.

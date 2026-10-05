@@ -19,7 +19,7 @@
 - No vote deletion; an authenticated member may set or change one `UP`/`DOWN` vote.
 - Preserve profile canonical, sitemap, 404/noindex, structured-data, public/private, and anonymous-zero-fetch boundaries.
 - Preserve the dirty authoritative checkout and implement only in a new isolated worktree from refreshed `origin/main`.
-- Invoke `write-jane-street-style-code` before every production-code, test, migration, template, JavaScript, CSS, or executable-documentation edit.
+- Invoke `chris-street-style` before every production-code, test, migration, template, JavaScript, CSS, or executable-documentation edit.
 - Validate on a non-8080 port and disposable database before any production listener action.
 
 ---
@@ -84,7 +84,7 @@ Sequence / dependencies:
 - First task. It establishes the persisted and Java types consumed by every later task.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: valid legacy documents convert 1/2 to DOWN and 3/4/5 to UP while preserving identity and timestamps.
   - Invariants: one document per restaurant/account, stable collection/index, no partial mutation after a validation failure, retry-safe already-converted documents.
@@ -329,7 +329,7 @@ Sequence / dependencies:
 - Runs after Task 1 because repositories and selectors consume `RestaurantVote` and `RestaurantVoteValue`.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: Mongo returns up/down/total summaries and Top 10 Liked order; selection weight rises monotonically with adjusted approval.
   - Invariants: bounded queries, deterministic tie order, unique candidates, sampling without replacement, injected random validation.
@@ -506,7 +506,7 @@ Sequence / dependencies:
 - Runs after Task 2 because service and session enrichment consume the vote repository, summary, and selector.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: members set/change UP or DOWN; details return vote totals/personal vote; Top 10 Liked and both selectors use the same summaries.
   - Invariants: authorization, CSRF, not-found, immutable response copy, timestamps, idempotent same-vote write, bounded leaderboard.
@@ -870,7 +870,7 @@ Sequence / dependencies:
 - Runs after Task 3 because SSR consumes the new `RestaurantDetail` vote fields and the new API/page names.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: profiles render approval/counts and percentage JSON-LD; `/wfl/top-liked` is canonical; `/wfl/top-rated` permanently redirects.
   - Invariants: one canonical, valid-profile indexability, missing-profile 404 noindex/no JSON-LD, no personal/audit exposure, public API/page allowlists.
@@ -1102,7 +1102,7 @@ Sequence / dependencies:
 - Runs after Task 4 because browser code targets final vote JSON fields, endpoints, mount IDs, and canonical list mode.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: shared format returns percentage/counts; logged-in controls send UP/DOWN and update state; anonymous profiles make no personal fetch.
   - Invariants: text sanitization, cookie/CSRF helper use, scoped Void CSS, visible focus, local error ownership, Favorites behavior.
@@ -1473,7 +1473,7 @@ Sequence / dependencies:
 - Runs after Tasks 1–5 because documentation and acceptance evidence describe the final contract.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before documentation edits that contain executable API examples.
+- Required skill: `chris-street-style` before documentation edits that contain executable API examples.
 - Before-Edit Brief:
   - Behavior: repository docs describe only vote semantics, migration, Top 10 Liked, and smoothed approval weighting.
   - Invariants: no historical claims are rewritten; operational commands use isolated port/database and protected deployment.
@@ -1530,7 +1530,7 @@ Verification:
 - [x] Verify V013 documents, migration record/checksum, unique index, up/down totals, Top 10 Liked ordering, selector inputs, old/new API behavior, profiles, JSON-LD, sitemap, redirect, liveness, and readiness.
 - [x] Use browser automation for anonymous, signed-in UP, DOWN, change vote, same-vote idempotence, Favorites, Top 10 Liked, desktop, mobile, keyboard, and console checks.
 - [x] Save and validate the Builder test report; commit/push that checkpoint.
-- [x] Review the complete spoke diff with `write-jane-street-style-code` review rules; resolve all blockers/warnings.
+- [x] Review the complete spoke diff with `chris-street-style` review rules; resolve all blockers/warnings.
 - [x] Push `codex/wfl-thumbs-voting`, open a ready PR, wait for Linux/macOS/Windows, Dependency Review, and CodeQL, and fix in-scope failures.
 - [x] Squash-merge only after all required checks pass and record the merged SHA.
 - [x] Deploy the merged SHA through the protected Windows path; verify listener rotation, local/public health, versioned assets, live migrated vote data, API/UI/SEO behavior, Mongo/service state, and rollback absence.

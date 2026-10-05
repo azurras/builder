@@ -1,6 +1,6 @@
 # christopherbell.dev PostgreSQL Migration Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Use `write-jane-street-style-code` before every production-code, test, migration, script, executable-configuration, or code-bearing-template edit. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Use `chris-street-style` before every production-code, test, migration, script, executable-configuration, or code-bearing-template edit. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace MongoDB as the website's authoritative persistence engine with native PostgreSQL, relational schemas, Flyway migrations, generated jOOQ types, verified data reconciliation, and pgAdmin 4 Desktop access.
 
@@ -124,7 +124,7 @@ Sequence / dependencies:
 - First implementation task. Every later slice depends on this backend-selection and schema-isolation contract.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: provide Flyway, jOOQ, JDBC, PostgreSQL, a pinned local PostgreSQL service, and exact `mongodb`/`postgresql` startup selection.
   - Invariants: one backend active; local and test use database `test`; production credentials have no defaults; tests use unique schemas and reject any other database.
@@ -424,7 +424,7 @@ Sequence / dependencies:
 - Depends on Task 1. Complete all schema/catalog work before implementing domain adapters.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: create an empty database solely from immutable Flyway migrations and produce typed jOOQ sources for every table/key/index.
   - Invariants: ten bounded-context schemas; explicit PK/FK/delete behavior; UTC timestamps; deterministic identifiers; no undocumented JSONB; every manifest kind appears once in the migration catalog.
@@ -723,7 +723,7 @@ Sequence / dependencies:
 - Depends on Tasks 1-2. This is the first port-parity slice and establishes the shared adapter contract harness.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: implement existing ports and Mongo-backed query services with typed jOOQ queries and explicit transactions.
   - Invariants: public/service behavior, stable cursor order, atomic optimistic updates, uniqueness, privacy filters, and foreign-key semantics match Mongo.
@@ -873,7 +873,7 @@ Sequence / dependencies:
 - Depends on Tasks 1-3 for shared adapter contracts and transaction/error mapping.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: preserve music catalog/playlist/runtime/audit behavior and all shared-folder durable work/lease/recovery flows.
   - Invariants: filesystem remains the content authority; database paths are normalized relative paths; playlists preserve order; leases use database time and fencing; recovery/job claims are atomic and idempotent.
@@ -992,7 +992,7 @@ Sequence / dependencies:
 - Depends on Tasks 1-4 and completes PostgreSQL coverage of all runtime ports.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: implement remaining domain adapters and platform stores without changing service behavior.
   - Invariants: VIN and restaurant normalized-name uniqueness, real location integrity, stable session/vote/pick ordering, money precision, scheduled-run atomicity, and admin audit immutability.
@@ -1094,7 +1094,7 @@ Sequence / dependencies:
 - Depends on complete DDL, catalog, and PostgreSQL adapters in Tasks 1-5.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: read each approved kind from Mongo, deterministically transform into staging tables, checkpoint committed batches, reconcile, and transactionally publish complete kinds.
   - Invariants: Mongo is read-only; unknown input fails closed; no incomplete kind is visible; reruns are idempotent; exact-source deletion is allowed only when source-frozen evidence is valid.
@@ -1217,7 +1217,7 @@ Sequence / dependencies:
 - Can begin after Task 2 but must be complete before any production shadow run.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: install/configure native PostgreSQL 18, create least-privilege roles/databases, install pgAdmin 4 Desktop, manage backups/restores, and expose guarded status commands.
   - Invariants: loopback-only listener; SCRAM authentication; app cannot migrate; viewer cannot write; migration role unavailable to normal service; no privileged pgAdmin credential; protected ACLs remain intact.
@@ -1381,7 +1381,7 @@ Sequence / dependencies:
 - Depends on Tasks 1-7. This task produces evidence; it does not transfer production authority.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any needed test/tool correction.
+- Required skill: `chris-street-style` before any needed test/tool correction.
 - Before-Edit Brief:
   - Behavior: repeatedly refresh a non-authoritative PostgreSQL shadow, reconcile it, and run the candidate website against that shadow on a non-8080 port.
   - Invariants: Mongo remains authoritative and unchanged; no production listener, service dependency, or backend marker changes; candidate uses only PostgreSQL after startup.
@@ -1450,7 +1450,7 @@ Sequence / dependencies:
 - Depends on a passing Task 8 test report, merged code, green CI, verified final backup/restore tooling, and an approved maintenance window.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any required correction; do not improvise unreviewed production mutations.
+- Required skill: `chris-street-style` before any required correction; do not improvise unreviewed production mutations.
 - Before-Edit Brief:
   - Behavior: transfer authority once from frozen Mongo to fully reconciled PostgreSQL and restore public service within 30 minutes.
   - Invariants: one protected lock; all writers stopped; final archive dry-restored; frozen-source evidence binds catalog/release/digests; candidate passes before listener rotation; no post-authority Mongo fallback.
@@ -1503,7 +1503,7 @@ Sequence / dependencies:
 - Begins after Task 9. Mongo retirement requires 14 full days of passing PostgreSQL production evidence and a valid 90-day archive-retention marker.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before code/config deletions.
+- Required skill: `chris-street-style` before code/config deletions.
 - Before-Edit Brief:
   - Behavior: prove PostgreSQL stability, remove Mongo runtime/code/tooling/dependencies/service, retain the final archive for 90 days, and finish repository/Builder delivery.
   - Invariants: no Mongo client dependency or source remains; app has one PostgreSQL adapter per port; production service depends only on PostgreSQL; archive deletion remains separately time-gated.

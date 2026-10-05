@@ -17,7 +17,7 @@ Append same-day project activity; use a separate file for each other work date. 
 
 ## Quality and Delivery
 Use complete-builder-work for delivery and closure; plan-builder-work for planning and plan review.
-Apply write-jane-street-style-code before production code, tests, reusable scripts, migrations, code-bearing configuration or executable examples. It also owns read-only code review. Reuse the plan's current Before-Edit Brief rather than writing it again.
+Apply chris-street-style before production code, tests, reusable scripts, migrations, code-bearing configuration or executable examples. It also owns read-only code review. Reuse the plan's current Before-Edit Brief rather than writing it again.
 
 Require appropriate native tests and semantic review. Application runtime changes (including database, configuration and browser behavior) or explicit runtime requests also require actual runtime proof and a test report. Unit tests alone are insufficient. For other work, record the concrete reason runtime verification does not apply. verify-local-spring-app owns safe Spring execution; record-runtime-verification owns reporting existing evidence.
 

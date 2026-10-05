@@ -17,7 +17,7 @@
 - Token rotation preserves the existing one-day interval and two-minute previous-token overlap.
 - Interactive activity writes are coalesced to at most one durable touch per five minutes per session.
 - Do not modify the dirty checkout at `A:\Projects\christopherbell.dev`; create an isolated `codex/` worktree from refreshed `origin/main` at execution time.
-- Invoke `write-jane-street-style-code` and `superpowers:test-driven-development` before every production behavior edit.
+- Invoke `chris-street-style` and `superpowers:test-driven-development` before every production behavior edit.
 - Implementation requires separate explicit user authorization.
 
 ---
@@ -82,7 +82,7 @@ Sequence / dependencies:
 - Runs first because it is an independent hot-path change and establishes the zero-query assertion before session internals change.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke `superpowers:test-driven-development` for the behavior change.
+- Required skill: `chris-street-style` before any code edits; invoke `superpowers:test-driven-development` for the behavior change.
 - Before-Edit Brief:
   - Behavior: requests for recognized public static resources bypass authentication even when they carry a stale or valid cookie/bearer credential.
   - Invariants: protected APIs and viewer-aware public APIs continue to authenticate credentials; worker authorization and media APIs are not static assets.
@@ -251,7 +251,7 @@ Sequence / dependencies:
 - Runs after Task 1. It changes the cookie-authentication trust boundary and must land with legacy-session and snapshot tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before any code edits; invoke `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: a valid current session supplies account id and role from one session read; sessions without a role/fingerprint are deleted and rejected.
   - Invariants: only active accounts create sessions; role is never defaulted; creation still validates the login JWT against the current account.
@@ -444,7 +444,7 @@ Sequence / dependencies:
 - Runs after Task 2 because the activity store operates on the new authoritative session snapshot.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before any code edits; invoke `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: interactive use within five minutes performs no write; a due touch performs one conditional field update; due rotation performs one conditional atomic rotation.
   - Invariants: absolute expiry never moves, idle expiry never exceeds it, previous-token overlap remains two minutes, and a failed conditional write cannot resurrect a revoked session.
@@ -846,7 +846,7 @@ Sequence / dependencies:
 - Runs after Task 2 so the session snapshot is safe only when this invalidation coverage is complete.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits; invoke `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before any code edits; invoke `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: every successful mutation of password hash, role, status, or permissions deletes all browser sessions for that account; account deletion deletes them as private data.
   - Invariants: failed writes do not revoke; non-security profile/follow changes do not revoke; bearer-token fingerprint validation remains unchanged.
@@ -1351,7 +1351,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-4 and is the merge gate for this plan.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits to executable test tooling.
+- Required skill: `chris-street-style` before edits to executable test tooling.
 - Before-Edit Brief:
   - Behavior: the evidence harness reports zero auth Mongo commands for static assets and one session read for normal cookie authentication.
   - Invariants: measurements use the same route/data setup before and after and never target port 8080.

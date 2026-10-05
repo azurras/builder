@@ -1,6 +1,6 @@
 # Deterministic Offline Builds and Bounded Windows CI Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` task-by-task and invoke `write-jane-street-style-code` before every code edit.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` task-by-task and invoke `chris-street-style` before every code edit.
 
 **Goal:** Resolve #1302-#1305 with commit-stable artifact versions, a verified reusable sensor cache, Windows Pester in `check`, and bounded concurrency-aware CI.
 
@@ -51,7 +51,7 @@ Sequence / dependencies:
 - First; establishes RED for all four issues.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: tests require deterministic version/cache markers and parsed CI Pester/concurrency/timeouts.
   - Invariants: read-only, no network, existing immutable-action checks preserved.
@@ -142,7 +142,7 @@ Sequence / dependencies:
 - After Task 1 RED; first implementation commit.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: property/env release override wins; otherwise exact HEAD yields one version.
   - Invariants: no date/run input, full lowercase SHA, bounded safe release syntax.
@@ -226,7 +226,7 @@ Sequence / dependencies:
 - After Task 2 commit; preserve an isolated review unit.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: valid cache avoids network; cold fetch is bounded/atomic; offline missing/corrupt/unavailable fail closed.
   - Invariants: pinned URI/digests, no partial publication, every member verified, cache survives `clean`.
@@ -329,7 +329,7 @@ Sequence / dependencies:
 - After Task 3; final code-changing unit.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: Windows `build` runs three Pester suites; superseded PR work cancels; all platform jobs stay bounded.
   - Invariants: exact Pester 5.9.0, NUnit retained, non-Windows no Windows tools, main pushes not canceled, actions SHA-pinned.
@@ -466,7 +466,7 @@ Sequence / dependencies:
 - After Task 5 mainline checks; required because production retained the prior healthy release when its `LocalSystem` packager could not import user-scoped Pester 5.9.0.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: ordinary Windows and CI builds keep all three Pester dependencies; only the protected deployment build skips them while retaining every other `build` verification.
   - Invariants: explicit marker is exact and validated; bootstrap fallback requires Windows, `LocalSystem`, and the production Gradle-home suffix together; no generic missing-Pester fallback.
@@ -663,7 +663,7 @@ Sequence / dependencies:
 - After Task 6 merge. The August 1 push run for exact merge `c34403fdc7e9bb0dfadd8d278e7b70d62f2c59a7` failed the same two tests on Linux, macOS, and Windows because fixed July 29 fixtures had crossed their 24-hour expiration boundary.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: focused expiration tests use the existing fixed test clock for both interactions and active-post checks, so their meaning is invariant across execution dates.
   - Invariants: production time semantics do not change; no `Instant.now()` timing races; the tested creation, extension, and expiration relationships remain identical.

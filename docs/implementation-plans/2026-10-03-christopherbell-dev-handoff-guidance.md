@@ -42,7 +42,7 @@ Demand and price are unvalidated. No missing answer prevents this bounded delive
 
 ### Task 1 - Add practical original guidance to the offer
 
-Required skill: write-jane-street-style-code before code changes.
+Required skill: chris-street-style before code changes.
 Dependencies: Prior product delivery passed all CI and current production is healthy at0f90854b.
 Files: website/src/main/resources/templates/resources/software-handoff-kit.html; website/src/test/java/dev/christopherbell/view/ViewControllerTest.java; website/src/main/java/dev/christopherbell/view/README.md.
 Symbols: Existing contentsHeading/sampleHeading/termsHeading; new checklistHeading/exampleHeading/fitHeading; handoffKitPageExplainsThePlannedProductWithoutOfferingCheckout and a focused rendered-guidance test.

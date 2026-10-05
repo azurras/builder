@@ -63,7 +63,7 @@ Sequence / dependencies:
 - Runs first because no signing, queue, or scheduler may own a generic unrestricted HTTP client.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: outbound startup requires at least one valid controlled peer; every request connects only to a currently public resolved address for that exact configured HTTPS host.
   - Invariants: discovery is required before outbound; disabled deployments require no peer; redirects/proxies/private addresses remain unavailable; production never accepts the loopback test exception.
@@ -200,7 +200,7 @@ Sequence / dependencies:
 - Runs after Task 1 so the signer output has a single bounded network consumer.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: outbox JSON and delivered Create activity share one factory; the delivery signer emits Date, Digest, and Signature headers for the exact serialized bytes.
   - Invariants: stable post-derived activity/object IDs, public/followers addressing, escaped content, encrypted-at-rest keys, and zero private material in logs/DTOs remain unchanged.
@@ -283,7 +283,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-2 because the queue owns validated peers and signed delivery artifacts.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: only posts marked eligible at creation are reconciled into unique per-peer jobs; one worker claims due jobs, rechecks current consent/flags/post activity, signs/sends, and records success/retry/dead/cancelled.
   - Invariants: no historical backfill, no remote call when outbound is off, no delivery for disabled/suspended authors or expired/deleted posts, stable activity ID across retry, and at-most-one active claim per job.
@@ -459,7 +459,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-3 and blocks PR creation until both enabled and disabled runtime passes are complete.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits to executable acceptance fixtures or configuration.
+- Required skill: `chris-street-style` before edits to executable acceptance fixtures or configuration.
 - Before-Edit Brief:
   - Behavior: a local controlled peer receives one valid signed Create, scripts one transient failure then success, observes stable activity ID on retry, and receives nothing after the kill switch.
   - Invariants: production flags and peer list remain empty/false; no real third party receives test traffic; temporary keys/databases/logs are removed.

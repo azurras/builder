@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Work only in `A:\Projects\christopherbell.dev-worktrees\void-public-discovery`; preserve the dirty authoritative checkout at `A:\Projects\christopherbell.dev`.
-- Invoke `write-jane-street-style-code` and its Java, JavaScript, template/configuration, design/API, and testing references before production edits.
+- Invoke `chris-street-style` and its Java, JavaScript, template/configuration, design/API, and testing references before production edits.
 - Use RED-to-GREEN behavioral tests and one focused commit per task.
 - Never rank by likes, keep-alives, replies, followers, lifespan, or a composite engagement score.
 - Every discovery query must filter active public data before sorting, use bounded sizes, and use an opaque cursor with a stable unique tie key.
@@ -87,7 +87,7 @@ Expected files or modules:
 - Post model/DTOs, topic value/extractor, creation/interaction/expiration services, mappers, tests, and post documentation.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: new posts store normalized unique hashtags; a confirmed keep-alive or reply sets the root's `lastExtendedOn`; undo leaves it unchanged.
   - Invariants: existing 24-hour calculations and shared reply expiration remain authoritative; only roots own revival state; malformed hashtags never reject otherwise-valid post text.
@@ -215,7 +215,7 @@ Expected files or modules:
 - `post/discovery` query/service/DTO/controller files, migration V004, API docs, and repository/controller tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: anonymous callers can page New arrivals, Fading soon, Recently revived, Topics, and one topic's active threads using stable opaque cursors.
   - Invariants: each query filters `expiresOn > now`; post sections return roots only; revived excludes null history; no query uses engagement totals.
@@ -315,7 +315,7 @@ Expected files or modules:
 - Account discovery service/query DTOs, trust repository query, new-account limiter/properties, post/follow service wiring, configuration, and tests.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: signed-in people suggestions use topic overlap; anonymous suggestions rotate recent active accounts deterministically per UTC day; young accounts receive stricter mutation budgets.
   - Invariants: self, followed, blocked in either direction, muted, suspended, and missing accounts are excluded; follower/like/lifespan totals are never inputs; undo/unfollow do not consume add-action budgets.
@@ -407,7 +407,7 @@ Expected files or modules:
 - View routes, Explore/topic templates, discovery JavaScript modules/API constants, navigation, CSS, accessibility/source tests, and docs.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: Explore is a public top-level destination; five sections load independently with local retry/empty/load-more states; topic chips open canonical topic pages.
   - Invariants: one failed request never blanks another section; rendered text uses DOM text nodes/sanitization; media keeps playing through ordinary navigation using the existing global player.

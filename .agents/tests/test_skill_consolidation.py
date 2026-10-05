@@ -109,7 +109,7 @@ class SkillDiscoveryTests(unittest.TestCase):
     def test_discovery_is_exact_and_active_links_resolve(self):
         expected = {"complete-builder-work", "plan-builder-work",
                     "record-runtime-verification", "maintain-builder-hub",
-                    "commit-push-builder-main", "verify-local-spring-app", "write-jane-street-style-code",
+                    "commit-push-builder-main", "verify-local-spring-app", "chris-street-style",
                     "save-session-memory"}
         self.assertEqual({p.name for p in SKILLS.iterdir() if p.is_dir()}, expected)
         self.assertEqual({p.parent.name for p in SKILLS.glob("*/SKILL.md")}, expected)

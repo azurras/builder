@@ -73,7 +73,7 @@ Sequence / dependencies:
 - First; later tasks consume validated action settings.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: invalid input fails context startup; shipped local/prod profiles validate.
   - Invariants: simulated relative defaults remain valid; Windows executable paths are absolute; timing/limit relationships are coherent.
@@ -201,7 +201,7 @@ Sequence / dependencies:
 - After Task 1; before persistence relies on trustworthy launch outcomes.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: every fixed command succeeds only on completed exit zero within the configured bound.
   - Invariants: enum-only direct arguments, no shell/request token, bounded child lifetime.
@@ -290,7 +290,7 @@ Sequence / dependencies:
 - After Task 2; completes the batch.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: one atomic record survives restarts, expires, blocks duplicates, and makes cancel retry-safe.
   - Invariants: reserve before launch, exact clear, no secret persistence, local serialization retained.

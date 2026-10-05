@@ -1,6 +1,6 @@
 # ChristopherBell.dev Suspended Recovery Reset Normalization Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to execute this plan. Every production-code edit and review must use `write-jane-street-style-code` in the appropriate mode.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to execute this plan. Every production-code edit and review must use `chris-street-style` in the appropriate mode.
 
 **Goal:** Align the controlled website-stop recovery mutation and verifier with Windows' canonical empty-action representation so pinned deployment can stop the service safely and restore normal recovery afterward.
 
@@ -71,7 +71,7 @@ None.
 
 ### Task 1 - Normalize suspended recovery test-first
 
-Required skill: `write-jane-street-style-code` in Implementation Mode.
+Required skill: `chris-street-style` in Implementation Mode.
 
 Sequence and dependencies:
 
@@ -249,7 +249,7 @@ Verification:
 
 ### Task 2 - Validate, review, publish, and merge
 
-Required skill: `write-jane-street-style-code` in Review Mode.
+Required skill: `chris-street-style` in Review Mode.
 
 Sequence and dependencies:
 
@@ -280,7 +280,7 @@ Verification:
 
 ### Task 3 - Retry exact-release production acceptance
 
-Required skill: `write-jane-street-style-code` in Implementation Mode for identifier refresh and Review Mode for preflight.
+Required skill: `chris-street-style` in Implementation Mode for identifier refresh and Review Mode for preflight.
 
 Sequence and dependencies:
 

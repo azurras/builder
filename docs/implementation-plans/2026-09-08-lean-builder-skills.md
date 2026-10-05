@@ -21,10 +21,10 @@ None requiring user input.
 ## Task Breakdown
 ### Task 1 - Consolidate instruction ownership and skill routing
 Dependencies: None.
-Files: AGENTS.md, README.md, .agents/skills entrypoints and metadata, complete-builder-work/references, write-jane-street-style-code/references, .agents/tests.
+Files: AGENTS.md, README.md, .agents/skills entrypoints and metadata, complete-builder-work/references, chris-street-style/references, .agents/tests.
 Symbols: Delivery routing, review mode, coordination reference, repository inspection helper path, phase-finalization, discovery expectations.
 Inspection: Current coordination and review skills mostly repeat delivery/review plus persistence; repository inspection is a tested standalone helper; coding references repeat broad instruction tables and examples.
-Required skill: write-jane-street-style-code before code changes.
+Required skill: chris-street-style before code changes.
 Behavior: Eight discoverable skills; complete-builder-work owns coordination/repository context; code skill owns independent read-only review. Short entrypoints load only needed references and reuse verified progress without routine approval questions.
 Invariants: Retain dated append semantics, all runtime/data isolation and publication gates, trusted-comment policy, exact-file Git safety, error visibility, plan review and evidence quality. No broadening external authority.
 Boundary/API: Relocate repository inspection helper under complete-builder-work unchanged; update callers and tests. Remove three obsolete skill folders without wrappers. Keep inspection default read-only and snapshot explicitly requested.

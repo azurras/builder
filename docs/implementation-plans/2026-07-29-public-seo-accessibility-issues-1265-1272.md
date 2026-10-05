@@ -25,7 +25,7 @@ Resolve #1265-#1272 by making crawler policy explicit, returning resource-specif
 - GitHub issues #1265-#1272, authored by `azurras`, with zero comments or attachments.
 - Merged baseline `origin/main` at `e393687d10c40b856f35d669c25bf3ea65c5c083`.
 - Batch 1 production is healthy and its seven issues are closed.
-- Mandatory test-first execution and `write-jane-street-style-code` before code edits.
+- Mandatory test-first execution and `chris-street-style` before code edits.
 
 ## Branch
 
@@ -59,7 +59,7 @@ Sequence / dependencies:
 - Runs first because dynamic pages and sitemap generation must consume the same public/private classification.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: private/auth/admin shells render `noindex,nofollow`; top-rated is canonical and indexable; favorites is self-canonical but non-indexable; every 404 is non-indexable and never canonicalizes to home.
   - Invariants: public pages remain indexable; HTTP status ownership stays in controllers/error handling; social metadata remains escaped by Thymeleaf.
@@ -215,7 +215,7 @@ Sequence / dependencies:
 - Runs after Task 1 so every missing dynamic resource shares the established 404/indexing contract.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: active profiles, live posts, and existing restaurants return resource-specific title/description/canonical metadata; missing/inactive/expired resources return HTTP 404.
   - Invariants: only public-safe DTO fields enter view models; usernames and IDs are encoded as one path segment; no private account or restaurant operator fields appear in metadata.
@@ -326,7 +326,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-2 so eligibility and canonical dynamic routes are settled.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: `/sitemap.xml` represents the current explicit public routes plus active profile/live post/existing restaurant URLs and splits at 50,000 URLs.
   - Invariants: output is valid UTF-8 XML, deterministic and deduplicated; no private route, suspended account, expired post, API route, or favorites route appears.
@@ -454,7 +454,7 @@ Sequence / dependencies:
 - Independent of sitemap data, but runs after route policy so the static accessibility gate can assert all final templates together.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: The Bell pages expose one descriptive H1 inside main and safe new-tab links; every non-submit button declares `type="button"` in templates and generated HTML.
   - Invariants: submit buttons remain submit controls; dialog default buttons retain their intended close/save values; feed action data attributes remain unchanged.
@@ -537,7 +537,7 @@ Sequence / dependencies:
 - Runs last because it is markup-only and shares the final rendered-template/browser verification pass.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Before-Edit Brief:
   - Behavior: browsers/password managers recognize username/email/current-password/new-password/name fields across all four account flows.
   - Invariants: IDs consumed by JavaScript and labels remain unchanged; validation, CSRF, browser-session mode, and request JSON remain unchanged.

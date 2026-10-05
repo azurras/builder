@@ -1,11 +1,13 @@
 ---
-name: write-jane-street-style-code
+name: chris-street-style
 description: Apply the house coding standard to implementation or read-only review of code, tests, scripts, migrations, code-bearing configuration and executable examples.
 ---
 
-# Coding and Review Standard
+# Chris Street Style
 
 Use repository-native conventions and tools. Keep invalid states out of trusted code, interfaces consistent, effects explicit, errors causal, and changes cohesive.
+
+Write code so its names read naturally, like a sentence. Choose method names that describe the action or question in the context of the receiver and argument names, and choose variable names that say what data they hold. When a value changes into data with a materially different meaning or role, prefer a new variable over reusing the old one; keep each name tied to one clear concept.
 
 ## Implementation
 Reuse the current plan's Before-Edit Brief or write a short one: Behavior, Invariants, Boundary/API, Effects and failures, Tests and evidence. Resolve contradictions through inspection before editing; revise only when assumptions change.

@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Develop code changes only in `A:\Projects\christopherbell.dev-worktrees\all-open-issues-20260729` on `codex/all-open-issues-20260729`; publish the reviewed issue-only replay from `A:\Projects\christopherbell.dev-worktrees\issue-1261-true-error-logging` on `codex/issue-1261-true-error-logging`. Preserve `A:\Projects\christopherbell.dev` and unrelated worktree changes (`gradlew.bat`, `.gradle-user-home/`).
-- Invoke and follow `write-jane-street-style-code` before each production or test edit.
+- Invoke and follow `chris-street-style` before each production or test edit.
 - Follow strict RED/GREEN TDD: add or change the behavioral test, run it and observe the intended failure, make the smallest production change, and rerun the same test.
 - Use an isolated task-specific `GRADLE_USER_HOME`; do not use or remove the worktree-local `.gradle-user-home/` directory.
 - Validate the production profile on a non-8080 port before any production listener change.
@@ -81,7 +81,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before test or production edits.
+- Required skill: `chris-street-style` before test or production edits.
 - Before-Edit Brief:
   - Behavior: anonymous initial requests to protected routes are denied, while `ASYNC` and `ERROR` redispatches continue without a second authentication decision.
   - Invariants: URL authorization remains unchanged for `REQUEST`; only the two named dispatcher types receive `permitAll`; the rest of the filter chain and security headers remain active.
@@ -273,7 +273,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before test or production edits.
+- Required skill: `chris-street-style` before test or production edits.
 - Before-Edit Brief:
   - Behavior: ordinary expected 4xx outcomes produce one `DEBUG` record without a throwable; 401/403/429 outcomes produce one bounded `WARN` without a throwable; unexpected 500 and known 503 outcomes produce one `ERROR` retaining the exception.
   - Invariants: response status and envelope shape remain compatible; public descriptions are stable and non-sensitive; logs contain only safe code/status/type fields on expected failures.

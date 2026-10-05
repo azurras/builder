@@ -35,7 +35,7 @@ Dependencies: None.
 Files: `.agents/skills/commit-push-builder-main/scripts/commit_push_builder_main.py`, `.agents/tests/test_commit_push_builder_main.py`
 Symbols: `parse_args`, `main`, Git behavior tests.
 Inspection: Read current helper and tests on Builder main before edits.
-Required skill: write-jane-street-style-code before code edits.
+Required skill: chris-street-style before code edits.
 Before-Edit Brief:
 - Behavior: Commit selected files only; an explicit push-only mode retries an existing commit without staging changes.
 - Invariants: Root, branch, and remote remain pinned; unrelated staged changes cause refusal; invalid paths cannot select outside the repository.
@@ -49,7 +49,7 @@ Dependencies: Task 1 regression evidence captured; implementation may proceed in
 Files: `.agents/lib/artifact_quality.py`, `.agents/tests/test_artifact_quality.py`, plan skill entrypoints and metadata.
 Symbols: `validate_implementation_plan_text`, plan task schema, readiness guidance.
 Inspection: Read shared validator, CLI wrappers, legacy fixture, and all three plan skills on Builder main.
-Required skill: write-jane-street-style-code before code edits.
+Required skill: chris-street-style before code edits.
 Before-Edit Brief:
 - Behavior: Validate plans with inspected file/symbol task contracts and concrete verification without requiring prewritten patches.
 - Invariants: Every task has its own contract or valid legacy Code Edit; empty status, missing required sections, empty task fields, and unresolved execution prerequisites fail.
@@ -63,7 +63,7 @@ Dependencies: Baseline instruction scenarios captured.
 Files: `.agents/skills/complete-story-issue/SKILL.md`, `.agents/skills/close-story-issue/SKILL.md`, `.agents/skills/verify-local-spring-app/SKILL.md`, `.agents/skills/register-spoke-repo/SKILL.md`, their metadata, `AGENTS.md`.
 Symbols: Delivery sequence, runtime classification, deployment scope, root discovery.
 Inspection: Read entrypoints, metadata, and root policy; independent baseline review confirmed contradictory instructions.
-Required skill: write-jane-street-style-code before code-bearing edits.
+Required skill: chris-street-style before code-bearing edits.
 Before-Edit Brief:
 - Behavior: Runtime reports are conditional on runtime impact/request; continuity evidence precedes closure; verification-only requests leave production untouched; registration uses the actual Builder root.
 - Invariants: Required runtime proof cannot be replaced by unit tests; production deployment needs existing authority, isolated candidate validation, an identified deployment mechanism, rollback, and health criteria.
@@ -77,7 +77,7 @@ Dependencies: Tasks 1-3.
 Files: `.agents/tests`, selected skill metadata, Builder docs/indexes.
 Symbols: Test discovery, artifact validators, index generation, commit helper.
 Inspection: Read existing tests, helper entrypoints, and hub validation results on Builder main.
-Required skill: write-jane-street-style-code before code-bearing edits.
+Required skill: chris-street-style before code-bearing edits.
 Before-Edit Brief:
 - Behavior: Publish only the reviewed Builder changes and evidence.
 - Invariants: Existing unrelated state is preserved and no live application is restarted.

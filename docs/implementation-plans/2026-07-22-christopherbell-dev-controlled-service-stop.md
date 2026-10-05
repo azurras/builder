@@ -72,7 +72,7 @@ None.
 
 ## Global Constraints
 
-- Invoke `write-jane-street-style-code` before every code edit and follow `superpowers:test-driven-development` for each behavior change.
+- Invoke `chris-street-style` before every code edit and follow `superpowers:test-driven-development` for each behavior change.
 - Do not edit production code until the focused regression has been run and witnessed failing for the expected missing behavior.
 - Treat service state, port state, recovery state, and release junctions as explicit operational invariants.
 - Do not branch on WinSW exception text; only independent postconditions may convert a thrown stop request into success.
@@ -95,7 +95,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: invoke `write-jane-street-style-code` before any code edits.
+- Required skill: invoke `chris-street-style` before any code edits.
 - Required sub-skill: use `superpowers:test-driven-development` and witness the focused RED test before editing `Production.Deploy.psm1`.
 - Before-Edit Brief:
   - Behavior: a planned stop may continue after `Stop-Service` throws only when `ChristopherBellDev` reaches `Stopped`, port 8080 has no listener, and normal recovery has been restored.
@@ -595,7 +595,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: invoke `write-jane-street-style-code` before any code edits.
+- Required skill: invoke `chris-street-style` before any code edits.
 - Required sub-skill: use `superpowers:test-driven-development` and witness the rollback-specific RED test before editing `Production.Operations.psm1`.
 - Before-Edit Brief:
   - Behavior: `prod.cmd rollback` uses the same controlled stop before both the requested junction swap and any restoration after failed verification.
@@ -783,7 +783,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: invoke `write-jane-street-style-code` in Review Mode for the final production/test diff.
+- Required skill: invoke `chris-street-style` in Review Mode for the final production/test diff.
 - Review boundary: compare `codex/windows-service-stop-recovery` with exact base `4429d11cb3d879315f8c5489909b28b8c70bc37c`.
 
 Verification steps:

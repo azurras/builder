@@ -18,7 +18,7 @@
 - Keep templates, JavaScript, CSS, and other browser assets out of this foundation change.
 - Promote code to `cbell-lib` only after two demonstrated consumers need a domain-neutral contract; this plan adds nothing to `cbell-lib`.
 - Preserve the dirty authoritative checkout at `A:\Projects\christopherbell.dev`; execute from a clean sibling worktree created from refreshed `origin/main`.
-- Before editing production source, tests, reusable scripts, code-bearing configuration, or copy-ready implementation examples, invoke `write-jane-street-style-code` and complete its Before-Edit Brief.
+- Before editing production source, tests, reusable scripts, code-bearing configuration, or copy-ready implementation examples, invoke `chris-street-style` and complete its Before-Edit Brief.
 - Use a task-specific private `GRADLE_USER_HOME`; do not impose short outer timeouts on Gradle, Java tests, Pester, or application startup.
 - Verify runtime candidates on an unused non-8080 port before any production action.
 
@@ -101,7 +101,7 @@ Interfaces:
 - Produces: one central `ModularMonolithArchitectureTest` and the repository-wide `spring.modulith.detection-strategy=explicitly-annotated` contract used by Tasks 3 and 4 and every later module plan.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits. Invoke it before Step 1.
+- Required skill: `chris-street-style` before any code edits. Invoke it before Step 1.
 - Before-Edit Brief:
   - Behavior: `:website:test` discovers only packages explicitly marked as modules and fails when declared modules contain cycles, internal access, or undeclared dependencies.
   - Invariants: the production runtime classpath and boot JAR contain no Spring Modulith artifact; `website` remains the only boot application; no business package is declared a module yet.
@@ -318,7 +318,7 @@ Interfaces:
   - `Set<String> unknownAreas(JavaClasses classes)` for complete top-level package catalog enforcement.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits. Invoke it again and produce the task-specific brief before Step 1.
+- Required skill: `chris-street-style` before any code edits. Invoke it again and produce the task-specific brief before Step 1.
 - Before-Edit Brief:
   - Behavior: inspect compiled production dependencies, normalize the top-level `permission` package to account ownership, ignore external/unknown packages, permit another area's `.api` package, and emit deterministic violations for every other cross-area access.
   - Invariants: a rule never reads source text, never includes source line numbers, never imports test classes for the production baseline, and never treats `dev.christopherbell.libs` as a website business area.
@@ -722,7 +722,7 @@ Interfaces:
 - Produces: two frozen CI gates: legacy internal cross-area access and forbidden business-to-orchestration direction.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits. Invoke it before Step 1.
+- Required skill: `chris-street-style` before any code edits. Invoke it before Step 1.
 - Before-Edit Brief:
   - Behavior: ordinary test runs compare production dependencies with the checked-in baseline and fail on any new normalized violation; explicit maintenance runs may only update a reviewed store.
   - Invariants: store creation/update are disabled by default; baseline messages contain source area, target area, source class, and target class but no source line; test classes and `cbell-lib` are outside the production import set.
@@ -889,7 +889,7 @@ Interfaces:
 - Produces: PlantUML overview and per-module canvas build output plus contributor commands for normal verification and explicit baseline reduction.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits. Invoke it before Step 1.
+- Required skill: `chris-street-style` before any code edits. Invoke it before Step 1.
 - Before-Edit Brief:
   - Behavior: the architecture test emits reviewable module documentation under the build directory, and README instructions tell contributors how to run checks and reduce debt safely.
   - Invariants: generated documentation is not committed; frontend guidance remains unchanged; the normal architecture command cannot create or update the frozen store.

@@ -8,7 +8,7 @@ A plan is the default planning artifact. Include the requirements, explicit acce
 
 Include these document sections: Document Status, Objective, Goals, Inputs, Branch, Non-Goals, Assumptions, Open Questions, Task Breakdown, Code Changes, Files and Modules, Unit Testing, Local Testing, Validation, Rollback or Recovery, Risks, and Completion Criteria. Keep entries concise; explain when a section is not applicable.
 
-For new plans, add `## Plan Format` with value `task-contract-v1`. Use sequential `### Task N - Title` headings. Every task needs its own task contract or a valid legacy Code Edit block. Every code-changing task must state `Required skill: write-jane-street-style-code` before code changes and include a task-specific Before-Edit Brief.
+For new plans, add `## Plan Format` with value `task-contract-v1`. Use sequential `### Task N - Title` headings. Every task needs its own task contract or a valid legacy Code Edit block. Every code-changing task must state `Required skill: chris-street-style` before code changes and include a task-specific Before-Edit Brief.
 
 For the preferred task contract, use these labels with a nonempty value on the same line; bullets are optional:
 

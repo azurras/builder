@@ -23,7 +23,7 @@ Resolve #1290-#1297 with asynchronous bounded catalog generations, post-commit i
 - Focused spec `docs/specs/2026-07-29-shared-folder-integrity-retention-issues-1290-1297.md`.
 - Trusted issues #1290-#1297 by `azurras`; no untrusted comments or attachments.
 - Refreshed `origin/main` commit `b28031d535effef1fcbd547ba8f7dffdd4e76193`.
-- Mandatory test-first execution and `write-jane-street-style-code`.
+- Mandatory test-first execution and `chris-street-style`.
 
 ## Branch
 
@@ -65,7 +65,7 @@ Add validated entry/directory/depth/time/refresh/page limits and one coalescing 
 Sequence / dependencies:
 - First. Tasks 2 and 3 consume the generation/snapshot/invalidation boundary.
 
-Required skill: `write-jane-street-style-code`; invoke it immediately before the first Task 1 test/code edit.
+Required skill: `chris-street-style`; invoke it immediately before the first Task 1 test/code edit.
 
 Before-Edit Brief:
 - Behavior: scans run only on the catalog worker and publish immutable bounded generations.
@@ -110,7 +110,7 @@ Sort by normalized path, exact path, type, and observation token. Encode generat
 Sequence / dependencies:
 - After Task 1 immutable generations and before mutation invalidation acceptance.
 
-Required skill: `write-jane-street-style-code`; invoke it immediately before the first Task 2 test/code edit.
+Required skill: `chris-street-style`; invoke it immediately before the first Task 2 test/code edit.
 
 Before-Edit Brief:
 - Behavior: each page is a deterministic slice of one immutable generation with a bounded successor cursor.
@@ -151,7 +151,7 @@ Advance catalog generation only after successful create, rename, move, recycle, 
 Sequence / dependencies:
 - After Task 1 invalidation exists and Task 2 cursor semantics define the changed-generation response.
 
-Required skill: `write-jane-street-style-code`; invoke it immediately before the first Task 3 test/code edit.
+Required skill: `chris-street-style`; invoke it immediately before the first Task 3 test/code edit.
 
 Before-Edit Brief:
 - Behavior: every committed visible tree change advances generation before the successful HTTP response returns.
@@ -190,7 +190,7 @@ Wrap the actual Resource/InputStream without buffering. Count reads and emit exa
 Sequence / dependencies:
 - Independent of Tasks 1-3; complete before runtime transfer acceptance.
 
-Required skill: `write-jane-street-style-code`; invoke it immediately before the first Task 4 test/code edit.
+Required skill: `chris-street-style`; invoke it immediately before the first Task 4 test/code edit.
 
 Before-Edit Brief:
 - Behavior: audit terminal outcome follows actual stream consumption and byte count.
@@ -231,7 +231,7 @@ Add Mongo versioning and bounded duplicate-key/optimistic-lock retries. Compute 
 Sequence / dependencies:
 - Uses Task 1 catalog track pool; otherwise independent and precedes V012 legacy-field cleanup.
 
-Required skill: `write-jane-street-style-code`; invoke it immediately before the first Task 5 test/code edit.
+Required skill: `chris-street-style`; invoke it immediately before the first Task 5 test/code edit.
 
 Before-Edit Brief:
 - Behavior: one versioned station transition commits across instances; trusted Music metadata owns timing.
@@ -273,7 +273,7 @@ Add a configurable short completion-history window. Set upload `deleteAt` only a
 Sequence / dependencies:
 - After catalog invalidation identifies durable completion; V012 in Task 7 supplies legacy/index state.
 
-Required skill: `write-jane-street-style-code`; invoke it immediately before the first Task 6 test/code edit.
+Required skill: `chris-street-style`; invoke it immediately before the first Task 6 test/code edit.
 
 Before-Edit Brief:
 - Behavior: successfully completed upload metadata expires after a short window.
@@ -315,7 +315,7 @@ Give FAILED, CANCELED, INSUFFICIENT_SPACE, and TIMED_OUT state-specific `cleanup
 Sequence / dependencies:
 - After Task 5 final radio shape and Task 6 upload model; final code task before integration.
 
-Required skill: `write-jane-street-style-code`; invoke it immediately before the first Task 7 test/code edit.
+Required skill: `chris-street-style`; invoke it immediately before the first Task 7 test/code edit.
 
 Before-Edit Brief:
 - Behavior: terminal non-ready artifacts clean on state-specific deadlines, then redacted diagnostics expire.

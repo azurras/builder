@@ -25,7 +25,7 @@ Resolve #1280-#1289 by preserving shared sessions during account deletion, bound
 - Campaign spec `docs/specs/2026-07-29-complete-christopherbell-dev-issues-1258-1307.md`.
 - Trusted GitHub issues #1280-#1289 by `azurras`; all have zero comments and no attachments.
 - Refreshed `origin/main` commit `e3afbf3c9eeb65525f573f299f82287ef8665554`.
-- Mandatory test-first execution and `write-jane-street-style-code`.
+- Mandatory test-first execution and `chris-street-style`.
 
 ## Branch
 

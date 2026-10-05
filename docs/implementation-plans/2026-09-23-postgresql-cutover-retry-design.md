@@ -48,7 +48,7 @@ This avoids overwriting fixed-name sidecars on retries and keeps post-authority 
 ## Task Breakdown
 
 ### Task 1 - Implement attempt-scoped journal/evidence and guarded retry
-Required skill: write-jane-street-style-code.
+Required skill: chris-street-style.
 - Dependencies: this written design must be reviewed and approved; implementation plan must then be reviewed and published.
 - Files: `ops/production/windows/modules/Production.PostgreSqlMigration.psm1`; `ops/production/windows/prod.ps1` only if command wiring must change; `ops/production/windows/modules/Production.Common.psm1` only if an existing protected atomic-file helper proves insufficient; `docs/operations/postgresql-migration.md`; existing `ops/production/windows/tests/Production.PostgreSqlCutover.Tests.ps1` cases only as needed.
 - Symbols: `Get-ProductionPostgreSqlCutoverJournalPath`, journal read/write helpers, `Get-ProductionPostgreSqlCutoverSidecarPath`, sidecar read/write helpers, `Invoke-ProductionPostgreSqlCutover`, and the existing supported `postgres-cutover` command.

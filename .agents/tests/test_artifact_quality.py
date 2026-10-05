@@ -103,7 +103,7 @@ Dependencies: None; first task.
 Files: `src/main/java/App.java`
 Symbols: `App.requiredSecret`
 Inspection: Read implementation and caller at baseline commit abc1234.
-Required skill: write-jane-street-style-code before code edits.
+Required skill: chris-street-style before code edits.
 Behavior: Reject missing configuration at startup.
 Invariants: No fallback secret is accepted.
 Boundary/API: Keep existing startup configuration interface.

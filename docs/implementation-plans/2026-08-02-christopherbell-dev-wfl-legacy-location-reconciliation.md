@@ -60,7 +60,7 @@ Sequence / dependencies:
 - Use the pinned Census rectangle-intersection result; deduplicate California `Mountain View` by canonical city/state.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Invoke the skill before changing configuration or Java defaults.
 - Before-Edit Brief:
   - Behavior: every official Census place intersecting a configured rectangle is a supported canonical locality.
@@ -156,7 +156,7 @@ Sequence / dependencies:
 - Runs after Task 1 so `Fairview`, `Rollingwood`, and `Sunnyvale` expose the cross-state collision.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Invoke the skill before changing client behavior or tests.
 - Before-Edit Brief:
   - Behavior: resolve one canonical location only when city evidence, coordinates, optional state, and optional country agree.
@@ -298,7 +298,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-2 so the service uses the same expanded coverage and rectangle semantics.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Invoke the skill before changing service validation or tests.
 - Before-Edit Brief:
   - Behavior: prepared candidates outside the owning rectangle are counted invalid and never persisted.
@@ -357,7 +357,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-3.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Invoke the skill before editing executable examples or tests.
 - Before-Edit Brief:
   - Behavior: operators understand that coverage is Census-derived and normal imports do not geocode missing locality.

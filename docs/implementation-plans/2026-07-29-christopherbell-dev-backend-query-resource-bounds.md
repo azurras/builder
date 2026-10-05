@@ -17,7 +17,7 @@
 - Lease loss stops subsequent writes; scheduled jobs never rely only on an in-process lock for multi-instance exclusivity.
 - Existing issues #1273-#1279, #1281-#1287, and #1290-#1297 remain the owners of overlapping scaling work.
 - Do not modify the dirty checkout at `A:\Projects\christopherbell.dev`; execute in an isolated `codex/` worktree.
-- Invoke `write-jane-street-style-code` and `superpowers:test-driven-development` before production behavior edits.
+- Invoke `chris-street-style` and `superpowers:test-driven-development` before production behavior edits.
 - Implementation requires separate explicit user authorization.
 
 ---
@@ -84,7 +84,7 @@ Sequence / dependencies:
 - Independent first task; complete it before resource-bound changes so query-count evidence stays reviewable.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before code edits; invoke `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before code edits; invoke `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: summaries retain ordering, archived visibility, display names, and unread semantics while unread counts arrive from one aggregation.
   - Invariants: only unread messages addressed to the current account count; missing senders produce zero.
@@ -268,7 +268,7 @@ Sequence / dependencies:
 - Runs after Task 1; independent of outbound body handling.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before code edits; invoke `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before code edits; invoke `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: VIN capacity and batch-token charging are unchanged while no more than 10,000 client buckets remain resident and inactive entries expire.
   - Invariants: the same key reuses its bucket inside the inactivity window; concurrent access never produces multiple active buckets for one key.
@@ -491,7 +491,7 @@ Sequence / dependencies:
 - Runs after Task 2 so limiter and bulkhead evidence can be tested together; independent of scheduled work.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before code edits; invoke `superpowers:test-driven-development`.
+- Required skill: `chris-street-style` before code edits; invoke `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: each reviewed client rejects an oversized body before string/JSON materialization; at most eight public VIN upstream calls are active per instance.
   - Invariants: status checks, timeouts, parsing, cooldowns, redirects, and safe diagnostic messages remain feature-owned.
@@ -855,7 +855,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-3. It may use the shared lease package at its current website path; the library-boundary plan later moves that package without changing behavior.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before code/config edits; invoke `superpowers:test-driven-development` for lease behavior.
+- Required skill: `chris-street-style` before code/config edits; invoke `superpowers:test-driven-development` for lease behavior.
 - Before-Edit Brief:
   - Behavior: WFL daily picks, Music catalog reconciliation, and Music metadata cleanup have one durable owner; already-safe jobs keep their current claim model; issue-owned jobs are linked.
   - Invariants: lease duration exceeds maximum owned operation or is renewed; loss prevents later writes; manual entry points retain authorization and behavior.
@@ -1152,7 +1152,7 @@ Sequence / dependencies:
 - Final merge gate after Tasks 1-4.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before edits to executable measurement tooling.
+- Required skill: `chris-street-style` before edits to executable measurement tooling.
 - Before-Edit Brief:
   - Behavior: repeatable evidence proves constant query groups and all declared bounds.
   - Invariants: before/after workloads use identical data cardinality; runtime validation uses a non-8080 listener.

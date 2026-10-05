@@ -12,7 +12,7 @@
 
 - Work only in `A:\Projects\christopherbell.dev-worktrees\repository-documentation-coverage-20260729` on `codex/repository-documentation-coverage`, created from refreshed `origin/main`.
 - Preserve `A:\Projects\christopherbell.dev` unchanged.
-- Invoke `write-jane-street-style-code` before every source, test, or configuration edit.
+- Invoke `chris-street-style` before every source, test, or configuration edit.
 - Follow strict RED/GREEN TDD.
 - No npm, runtime service, network dependency, application behavior change, or root `check` integration.
 - Exclude only generated build output, binaries/images, Gradle wrapper internals, and third-party/vendor content.
@@ -106,7 +106,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `write-jane-street-style-code` before edits.
+- Required skill: `chris-street-style` before edits.
 - Before-Edit Brief:
   - Behavior: return every tracked and nonignored new first-party file exactly once in stable normalized order.
   - Invariants: no returned path is absolute or escapes root; only approved categories are excluded; root and relative paths are immutable.

@@ -12,7 +12,7 @@
 
 - Preserve the dirty authoritative checkout at `A:\Projects\christopherbell.dev`; execute code changes only in an isolated worktree refreshed from `origin/main`.
 - Use branch `codex/wfl-import-location-integrity` from `origin/main` commit `0dd388fb096c924453bdbab8b66a3215d3e63452` or a newer explicitly re-inspected `origin/main`.
-- Invoke `write-jane-street-style-code` before every production code, test, or documentation edit described by a code-changing task.
+- Invoke `chris-street-style` before every production code, test, or documentation edit described by a code-changing task.
 - Use test-driven development: run each named regression red before implementation and green afterward.
 - Never use port `8080` for pre-merge validation; use an isolated MongoDB database and a non-production application port.
 - Do not add a reverse-geocoding dependency or infer a city from bounds, ZIP, street, or nearest-city distance.
@@ -87,7 +87,7 @@ Sequence / dependencies:
 - Complete the red/green client cycle before changing the service boundary.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Required skill: `superpowers:test-driven-development` for the regression-first cycle.
 - Before-Edit Brief:
   - Behavior: return only named OSM elements with a supported genuine locality, compatible optional state/country evidence, and finite in-range coordinates; store canonical configured city/state plus `US`.
@@ -97,7 +97,7 @@ Implementation notes:
   - Tests and evidence: replace the fallback test with a red exclusion test, add positive alternate-locality and negative integrity cases, and keep the complete client test class green.
 
 - [ ] Create the isolated worktree through `superpowers:using-git-worktrees`, set a worktree-private `GRADLE_USER_HOME`, and verify branch/base/status.
-- [ ] Invoke `write-jane-street-style-code` and record its Before-Edit Brief before touching the client tests.
+- [ ] Invoke `chris-street-style` and record its Before-Edit Brief before touching the client tests.
 - [ ] Apply Code Edits 1.1, 1.2, and 1.3 only.
 - [ ] Run the missing-locality regression and verify RED because the current client returns one `Imported Metro, TX` restaurant.
 - [ ] Apply Code Edits 1.4, 1.5, and 1.6.
@@ -601,7 +601,7 @@ Sequence / dependencies:
 - Characterizes prepared snapshots that bypass the client before changing service validation.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any code edits.
+- Required skill: `chris-street-style` before any code edits.
 - Required skill: `superpowers:test-driven-development` for the regression-first cycle.
 - Before-Edit Brief:
   - Behavior: preview and apply classify unsupported city/state/country or missing-coordinate candidates as invalid and never query or mutate persistence for them.
@@ -610,7 +610,7 @@ Implementation notes:
   - Effects and failures: invalid values increment existing counts and emit the existing throwable-free debug path; persistence exceptions for valid candidates remain causal.
   - Tests and evidence: add a prepared-snapshot regression that is red because current validation accepts address-bearing invalid locations, then run all service tests green.
 
-- [ ] Invoke `write-jane-street-style-code` and record its Before-Edit Brief before touching the service test.
+- [ ] Invoke `chris-street-style` and record its Before-Edit Brief before touching the service test.
 - [ ] Apply Code Edit 2.1 only.
 - [ ] Run the named service regression and verify RED because current validation reaches repository lookup.
 - [ ] Apply Code Edit 2.2.
@@ -725,7 +725,7 @@ Sequence / dependencies:
 - Runs after Tasks 1 and 2 so documentation describes proven behavior.
 
 Implementation notes:
-- Required skill: `write-jane-street-style-code` before any documentation edit because this package README is part of the production behavior contract.
+- Required skill: `chris-street-style` before any documentation edit because this package README is part of the production behavior contract.
 - Before-Edit Brief:
   - Behavior: maintainers can identify the accepted locality precedence, canonical ownership rule, coordinate requirement, and exclusion behavior.
   - Invariants: scheduler, catch-up, rename-collision, and manual-import documentation remain accurate.
@@ -733,7 +733,7 @@ Implementation notes:
   - Effects and failures: prevents reintroduction of synthetic fallbacks by making the invariant explicit at the feature boundary.
   - Tests and evidence: search for stale fallback language and run documentation/build checks with the final diff.
 
-- [ ] Invoke `write-jane-street-style-code` and record its Before-Edit Brief.
+- [ ] Invoke `chris-street-style` and record its Before-Edit Brief.
 - [ ] Apply Code Edit 3.1.
 - [ ] Search the spoke diff and tracked source for stale synthetic fallback claims.
 - [ ] Commit the task as `Document strict OSM location imports`.
