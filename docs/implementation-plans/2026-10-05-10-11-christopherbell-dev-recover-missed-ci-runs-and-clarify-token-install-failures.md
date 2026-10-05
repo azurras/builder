@@ -141,6 +141,12 @@ Revert the merge through a PR. Without the event change, a missed push again nee
 - **Reason:** After #1482 deployed (`ca98b1e`), `gh workflow run production-watch.yml` returned HTTP 404 and `/actions/workflows` omitted the file. GitHub indexes schedule- and dispatch-only workflows only from a main push that changes them, and the push that added this one (`06c3718`) was dropped.
 - **Impact:** Expected Changes gains `production-watch.yml`. AC-3's live check passes against production, but a scheduled or manual run still waits on this merge.
 
+### 2026-10-05 - Renormalize gradlew.bat for clean checkouts
+
+- **Change:** The registration PR also renormalizes `gradlew.bat` (`git add --renormalize`), committed as `e0728a8`.
+- **Reason:** The spoke preflight refused `0e2bf8a` because `gradlew.bat` showed as modified in a fresh worktree. The `main` blob was CRLF (`i/crlf`) while `.gitattributes` declares `text eol=crlf`, so every checkout reported a phantom line-ending change; the user's main checkout shows the same `M gradlew.bat`. Ignoring CRs, the content is identical.
+- **Impact:** Expected Changes gains `gradlew.bat` (line endings only). Wrapper builds rerun green with a clean tree.
+
 ## Outcome
 Pending.
 
