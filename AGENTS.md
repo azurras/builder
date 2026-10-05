@@ -27,13 +27,15 @@ Only these need the user:
 | Gate | Why |
 |---|---|
 | The next step after a planning-only, review-only, inspection-only or other limited request | The request did not authorize implementation, persistence or deployment |
-| Production deployment or any change to production data the request did not name | Local verification never authorizes production |
+| Production deployment or any change to production data the request did not name, other than a spoke's supported automatic deployment from a verified merge to its default branch | Local verification never authorizes production |
 | Widening scope beyond the request's goals | Scope belongs to the user |
 | Deleting, discarding or overwriting work you do not own, force pushing, or bypassing a required check | The loss cannot be undone or hides a failure |
 | A consequential product or design decision, or conflicting requirements, that the repository and memory cannot settle | The answer is the user's to give |
 | Credentials, access, accounts or payment that only the user holds | You cannot supply them |
 
 No other approval gate exists. Words such as "authorized", "authority" or "existing authority" in a skill refer to this table; they never add a gate.
+
+**Own the PR to merge.** Watching your own pull request through CI and merging it once its gates pass is part of the work, never a hand-off: do not ask whether to merge or wait for the user to merge. Watch without polling by hand: use GitHub auto-merge where the repository allows it, otherwise the host's PR monitor or a bounded `gh pr checks --watch`. Re-run jobs that CI infrastructure cancelled (for example "job was not acquired by Runner"), and treat a failing or flaky test as something you hit. When a spoke deploys automatically from its default branch through its supported, CI-gated pipeline, merging a verified change under a delivery request is that deployment; read back its result. Contact the user only for a gate in the table above.
 
 **Fix what you hit.** A failed check, build, test, startup, push, CI run, helper, tool, dependency, fixture or environment is part of the work. Diagnose its cause, fix it, rerun and continue without waiting to be told. A fix outside the plan's files is still yours: log it in the plan, or deliver an unrelated prerequisite (for example a test environment that cannot start) as its own small change and then resume. When the same failure blocks several changes, fix the shared cause once. Never get past a safeguard by weakening it: repair the isolated setup instead of touching production, writing data directly or faking guarded state. Mark work `blocked` only when the remaining step needs a gate above, or when a real fix attempt fails for a reason outside your reach; record what you tried and exactly what is needed.
 

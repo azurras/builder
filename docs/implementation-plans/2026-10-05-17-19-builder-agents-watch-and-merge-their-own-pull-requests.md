@@ -1,7 +1,7 @@
 # Agents Watch and Merge Their Own Pull Requests
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 
@@ -104,7 +104,18 @@ Revert the commit on Builder `main`.
 No entries yet.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> AGENTS.md and publish-spoke-changes now make watching and merging one's own PR part of the loop, with infrastructure re-runs and auto-merge named, and the production gate excludes a spoke's supported automatic deployment from a verified merge.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `AGENTS.md`: production gate row narrowed; new "Own the PR to merge" paragraph after the gate table |
+| AC-2 | ✅ Met | `publish-spoke-changes/SKILL.md` step 5 names auto-merge, the host monitor, infrastructure re-runs and deterministic flaky-test fixes; step 7 says to merge without asking and to treat an automatic deploy as the deployment |
+| AC-3 | ✅ Met | `check_hub.py refresh` passed; Builder test files `test_spoke_state.py` and `.agents/tests/test_*.py` all OK; published to Builder `main` |
+
+- **Shipped versus planned:** as planned. The local memory note `merge-own-prs` records the same preference for this machine.
+- **Follow-ups:** none.
 
 ## Project
 builder
