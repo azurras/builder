@@ -1,7 +1,7 @@
 # Preserve Mongo Probe Failure Causes
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -99,10 +99,22 @@ Before merge, revert this isolated correction if behavior or checks regress. Aft
 | Test database remains unavailable for runtime proof | High | Keep this candidate unpushed until a supported fixture/recovery procedure is available. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record Mongo probe verification and runtime blocker
+
+- **Change:** The regression tests failed on baseline for lost identity cause and swallowed timeout conversion; the probe now moves conversion before task launch, catches named future outcomes, and retains identity causes. Three probe tests and the existing health configuration test pass; full module checks passed. Candidate `0fb75ef` fails packaged startup on the required `test` database; the [blocked test report](../test-reports/2026-10-05-00-42-christopherbell-dev-preserve-mongo-probe-failure-causes.md) records the evidence.
+- **Reason:** Broad catches hid programming errors and cause loss violated the diagnostic contract. The test database has a failed migration-015 record and no active cutover ledger; repair and guard bypass are prohibited.
+- **Impact:** AC-1 and AC-2 are met. AC-3 and PR creation are blocked pending supported test database provisioning or recovery.
 
 ## Outcome
-Pending.
+> [!WARNING]
+> The Mongo probe correction is implemented and native checks pass. Candidate startup and PR creation are blocked because database `test` has a failed migration-015 record and lacks the active cutover ledger.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Probe catches name expected future outcomes; identity translation keeps the cause chain; timeout conversion precedes task launch in candidate `0fb75ef`. |
+| AC-2 | ✅ Met | Three focused probe tests, the health configuration test and full module checks passed; see the [test report](../test-reports/2026-10-05-00-42-christopherbell-dev-preserve-mongo-probe-failure-causes.md). |
+| AC-3 | ⏸️ Blocked | Candidate startup stopped at migration 015 before readiness. A supported fixture or recovery procedure is required; no PR was opened. |
 
 ## Project
 christopherbell-dev

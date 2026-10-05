@@ -180,3 +180,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Completed a separate targeted correction on `0838538`: public post and restaurant reads now fall back only on `IllegalStateException`, with regressions proving unrelated identity failures propagate. Both focused test classes and full module checks pass. The candidate report records startup failure at migration 015 before readiness.
 - **Reason:** Broad `Exception` catches made programming and operational failures look like normal anonymous reads. The user requires separate plan/report evidence for each correction, so this change has its own records.
 - **Impact:** The Java audit has a second implemented correction, but its AC-3 is blocked and no PR was created. Read-only inspection shows database `test` has no active cutover ledger and has an app-owned failed migration-015 record; do not alter it directly. Continue the source review while awaiting a supported test fixture/recovery procedure.
+
+### 2026-10-05 - Preserve Mongo probe failure causes
+
+- **Change:** Completed a third focused Java correction on candidate `0fb75ef`: the Mongo probe names expected future outcomes, retains identity failure causes, and converts timeout duration before launching work. Focused tests and full module checks pass; its candidate report records startup blocked at migration 015.
+- **Reason:** Broad catches hid invalid timeout conversion and discarded the cause from identity failures. This correction has a distinct plan and report as requested.
+- **Impact:** The Java source review continues with three isolated corrections recorded. The third correction has no PR because required runtime proof is blocked by the existing failed record in database `test`; continue the broader read-only audit while awaiting supported provisioning or recovery.
