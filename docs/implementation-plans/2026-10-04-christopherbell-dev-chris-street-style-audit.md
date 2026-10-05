@@ -204,3 +204,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Candidate `137bcec` renames the stored month input and catches only `DateTimeParseException`. Existing workflow characterization passed before editing; the new malformed month fallback test also passed on baseline and candidate. Full module checks passed.
 - **Reason:** Broad exception handling converted every defect into missing historic month data even though `YearMonth.parse()` has a precise format failure.
 - **Impact:** The separate plan and blocked report are published. Packaged startup on isolated `test` failed before readiness at migration 015, so no PR was created. Continue the wide code review and keep delivery runtime-gated; draft PR #1477 remains excluded.
+
+### 2026-10-05 - Audit browser feed names
+
+- **Change:** Continued the repository-wide style audit with a separately planned naming correction for four browser feed modules, committed as `b25cf6c8`. Syntax checks, all 380 JS tests and packaged build passed; packaged runtime stopped at migration 015 before readiness.
+- **Reason:** The task requires small, reviewed corrections with their own plans/reports, and runtime verification is mandatory before PRs. The required test database still has an incomplete migration record; direct repairs and bypasses are prohibited.
+- **Impact:** The browser-feed plan and blocked candidate report are recorded; no PR was opened. Continue source audit in subsequent independent changes while runtime delivery waits for supported fixture/provisioning or recovery.

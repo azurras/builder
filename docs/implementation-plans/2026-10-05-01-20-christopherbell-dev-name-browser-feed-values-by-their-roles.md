@@ -1,7 +1,7 @@
 # Name Browser Feed Values by Their Roles
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -98,10 +98,22 @@ Revert only the naming correction if output or route behavior differs. Do not ch
 | Runtime proof remains blocked | High | Do not create a PR without a successful candidate run and published report. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record runtime block
+
+- **Change:** Candidate `b25cf6c8` renamed the inspected feed locals in four browser modules. All four syntax checks, the 380-test `:website:jsTest` suite and `:website:bootJar` passed; packaged startup on isolated database `test` exited before readiness at migration 015. See the [blocked test report](../test-reports/2026-10-05-01-25-christopherbell-dev-name-browser-feed-values-by-their-roles.md).
+- **Reason:** Project policy requires successful local application runtime proof before PR creation. Startup is blocked by an incomplete durable migration-015 record; direct database writes and migration bypass are prohibited.
+- **Impact:** AC-1 and AC-2 are met; AC-3 is partly met and blocked at runtime. No PR was opened. A supported test fixture/provisioning or recovery procedure is needed.
 
 ## Outcome
-Pending.
+> [!CAUTION]
+> Implementation is complete for source-level checks; required application runtime proof is blocked before readiness by migration 015.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Four browser modules now use role-specific names; candidate `b25cf6c8`. |
+| AC-2 | ✅ Met | Syntax/browser checks passed and markup-producing diff preserves output operations. |
+| AC-3 | ⏸️ Blocked | Syntax, 380 JS tests and packaging passed; runtime stopped at migration 015 before readiness. [Test report](../test-reports/2026-10-05-01-25-christopherbell-dev-name-browser-feed-values-by-their-roles.md). No PR opened. |
 
 ## Project
 christopherbell-dev
