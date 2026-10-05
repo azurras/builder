@@ -5,7 +5,7 @@ description: Record work, decisions, events and outcomes in separate dated sessi
 
 # Save Session Memory
 
-Use docs/session-memory/YYYY-MM-DD-project.md for the actual work date. Append same-day activity; another date gets another file. Record requests, actions, discoveries, decisions and reasons, attempts/results, reviews, tests, blockers and outcomes. Preserve sufficient context to resume; link primary evidence instead of copying it. Append corrections without erasing history.
+Use docs/session-memory/YYYY-MM-DD-project.md for the actual work date. Append same-day activity; another date gets another file. Record requests, actions, discoveries, decisions and reasons, attempts/results, reviews, tests, blockers and outcomes. Preserve sufficient context to resume; link primary evidence instead of copying it. Change-specific deviations and decisions belong in the implementation plan's log; record a short entry that links the plan. Append corrections without erasing history.
 
 Pass complete entry Markdown on stdin:
 python .agents/skills/save-session-memory/scripts/save_session_memory.py --root . --project builder --date YYYY-MM-DD --title 'Work update'

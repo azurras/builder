@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 import importlib.util
 import subprocess
@@ -113,15 +114,6 @@ Tests and evidence: Regression for absent secret; valid configuration remains ac
 Verification: `./gradlew test --tests AppTest`
 
 """ + VALID_PLAN[end:]
-
-    def test_save_cli_accepts_contract_and_refuses_incomplete_task_before_write(self) -> None:
-        script = ROOT / ".agents/skills/write-implementation-plan/scripts/save_implementation_plan.py"
-        with tempfile.TemporaryDirectory() as directory:
-            for title, content, expected in (("Valid", self.contract_plan(), 0), ("Invalid", self.contract_plan().replace("Symbols: `App.requiredSecret`", "Symbols:"), 1)):
-                result = subprocess.run([sys.executable, str(script), "--root", directory, "--date", "2099-04-05", "--title", title], input=content, text=True, capture_output=True)
-                self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
-                artifact = Path(directory) / "docs/implementation-plans" / f"2099-04-05-{title.lower()}.md"
-                self.assertEqual(artifact.exists(), expected == 0)
 
     def test_hub_validates_new_plans_without_literal_code_edits(self) -> None:
         script = ROOT / ".agents/skills/commit-push-builder-main/scripts/validate_hub_state.py"
@@ -420,6 +412,221 @@ Start the app locally and hit an endpoint before closure.
 """
 
         self.assertEqual(validate_test_report_text(report), [])
+
+
+LIVING_PLAN = """# Sample Living Plan
+
+## Plan Format
+task-contract-v2
+
+## Document Status
+ready-for-execution
+
+## Objective
+Reject startup when the signing secret is missing.
+
+## Background
+The app silently falls back to a shared development secret.
+
+## Goals
+- Startup fails fast without `JWT_SECRET`, measured by AC-1.
+
+## Non-Goals
+- Rotating existing secrets: operations owns rotation.
+
+## Acceptance Criteria
+- AC-1: Starting without `JWT_SECRET` exits with a redacted error.
+- AC-2: Starting with `JWT_SECRET` serves `/health` with 200.
+
+## Inputs
+Issue 42.
+
+## Branch
+`codex/issue-42-require-secret` from `main`.
+
+## Assumptions
+Configuration loads through `App.requiredSecret`.
+
+## Open Questions
+None.
+
+## Design
+Replace the fallback with a required lookup. Rejected: logging a warning, because the app would still run insecurely.
+
+## Expected Changes
+- `src/main/java/App.java`: required secret lookup.
+
+## Task Breakdown
+
+### Task 1 - Reject missing configuration
+Dependencies: None; first task.
+Files: `src/main/java/App.java`
+Symbols: `App.requiredSecret`
+Inspection: Read implementation and caller at baseline commit abc1234.
+Behavior: Reject missing configuration at startup.
+Invariants: No fallback secret is accepted.
+Boundary/API: Keep existing startup configuration interface.
+Effects and failures: Missing input fails startup with a redacted error.
+Tests and evidence: Regression for absent secret; valid configuration remains accepted.
+Verification: `./gradlew test --tests AppTest`
+
+## Test Plan
+- AC-1: `AppTest.rejectsMissingSecret`, then start locally without the variable.
+- AC-2: Start locally with the variable and request `/health`.
+
+## Rollback or Recovery
+Revert the commit.
+
+## Risks
+Developers without `JWT_SECRET` must set one.
+
+## Implementation Log
+No entries yet.
+
+## Outcome
+Pending.
+"""
+
+LOG_ENTRY = """- Change: Read the secret through `Environment` instead of `System.getenv`.
+- Reason: Tests inject configuration through `Environment`.
+- Impact: Task 1 Symbols updated; no acceptance change.
+"""
+
+
+class LivingPlanTests(unittest.TestCase):
+    save_script = ROOT / ".agents/skills/write-implementation-plan/scripts/save_implementation_plan.py"
+    log_script = ROOT / ".agents/skills/write-implementation-plan/scripts/log_plan_change.py"
+
+    def errors_for(self, plan: str) -> list[str]:
+        return validate_implementation_plan_text(plan)
+
+    def without_section(self, section: str) -> str:
+        return re.sub(rf"(?ms)^## {re.escape(section)}\n.*?(?=^## |\Z)", "", LIVING_PLAN)
+
+    def completed_plan(self, outcome: str) -> str:
+        return LIVING_PLAN.replace("ready-for-execution", "complete").replace("## Outcome\nPending.", f"## Outcome\n{outcome}")
+
+    def run_script(self, script: Path, *arguments: str, stdin: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run([sys.executable, str(script), *arguments], input=stdin, text=True, capture_output=True)
+
+    def test_living_plan_passes(self) -> None:
+        self.assertEqual(self.errors_for(LIVING_PLAN), [])
+
+    def test_living_plan_requires_each_section(self) -> None:
+        for section in ("Background", "Non-Goals", "Acceptance Criteria", "Design", "Expected Changes",
+                        "Test Plan", "Implementation Log", "Outcome"):
+            with self.subTest(section=section):
+                errors = self.errors_for(self.without_section(section))
+                self.assertIn(f"missing required section: {section}", errors)
+
+    def test_acceptance_criteria_must_be_sequential(self) -> None:
+        criteria_lines = ("- AC-1: Starting without `JWT_SECRET` exits with a redacted error.\n"
+                          "- AC-2: Starting with `JWT_SECRET` serves `/health` with 200.")
+        for criteria in ("- Starting fails without a secret.", "- AC-1: Fails.\n- AC-3: Serves health."):
+            with self.subTest(criteria=criteria):
+                invalid = LIVING_PLAN.replace(criteria_lines, criteria)
+                self.assertTrue(any("Acceptance Criteria" in error for error in self.errors_for(invalid)))
+
+    def test_test_plan_must_cover_every_criterion(self) -> None:
+        invalid = LIVING_PLAN.replace("- AC-2: Start locally", "- Start locally")
+        self.assertEqual(self.errors_for(invalid), ["Test Plan does not cover AC-2"])
+
+    def test_log_entries_need_date_and_change_reason_impact(self) -> None:
+        without_reason = LOG_ENTRY.replace("- Reason: Tests inject configuration through `Environment`.\n", "")
+        cases = (
+            ("### Switched config source\n" + LOG_ENTRY, "must be titled 'YYYY-MM-DD - Title'"),
+            ("### 2026-10-04 - Switched config source\n" + without_reason, "missing Reason"),
+        )
+        for log, expected in cases:
+            with self.subTest(expected=expected):
+                invalid = LIVING_PLAN.replace("## Implementation Log\nNo entries yet.", f"## Implementation Log\n{log}")
+                errors = self.errors_for(invalid)
+                self.assertTrue(any(expected in error for error in errors), errors)
+
+    def test_complete_plan_reports_every_criterion(self) -> None:
+        self.assertEqual(self.errors_for(self.completed_plan("- AC-1: Met.\n- AC-2: Met.")), [])
+        self.assertIn("complete plan Outcome must not be pending", self.errors_for(self.completed_plan("Pending.")))
+        self.assertEqual(self.errors_for(self.completed_plan("- AC-1: Met.")),
+                         ["complete plan Outcome does not report AC-2"])
+
+    def test_unknown_plan_format_is_still_rejected(self) -> None:
+        unknown = LIVING_PLAN.replace("task-contract-v2", "task-contract-v9")
+        self.assertTrue(any("unsupported Plan Format" in error for error in self.errors_for(unknown)))
+
+    def test_save_cli_requires_current_format_for_new_plans(self) -> None:
+        v1_plan = ArtifactQualityTests().contract_plan()
+        with tempfile.TemporaryDirectory() as directory:
+            plans = Path(directory) / "docs/implementation-plans"
+            cases = (
+                ("Living", LIVING_PLAN, 0),
+                ("Incomplete", LIVING_PLAN.replace("Symbols: `App.requiredSecret`", "Symbols:"), 1),
+                ("Contract", v1_plan, 1),
+            )
+            for title, content, expected in cases:
+                with self.subTest(title=title):
+                    result = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
+                                             "--title", title, stdin=content)
+                    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+                    self.assertEqual((plans / f"2099-04-05-{title.lower()}.md").exists(), expected == 0)
+
+            existing_v1_plan = plans / "2099-04-05-existing.md"
+            existing_v1_plan.write_text(v1_plan, encoding="utf-8")
+            replaced = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
+                                       "--title", "Existing", "--overwrite",
+                                       stdin=v1_plan.replace("Ship the change.", "Ship it."))
+            self.assertEqual(replaced.returncode, 0, replaced.stdout + replaced.stderr)
+            self.assertIn("Ship it.", existing_v1_plan.read_text(encoding="utf-8"))
+
+    def test_log_helper_appends_entries_in_order_and_sets_status(self) -> None:
+        crlf_entry = LOG_ENTRY.strip().replace("\n", "\r\n")
+        with tempfile.TemporaryDirectory() as directory:
+            plan_file = Path(directory) / "plan.md"
+            plan_file.write_bytes(LIVING_PLAN.replace("\n", "\r\n").encode("utf-8"))
+            for title, status in (("Switched config source", "in-progress"), ("Added health retry", None)):
+                status_arguments = ["--status", status] if status else []
+                result = self.run_script(self.log_script, "--plan", str(plan_file), "--date", "2026-10-04",
+                                         "--title", title, *status_arguments, stdin=LOG_ENTRY)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+            updated_plan = plan_file.read_bytes().decode("utf-8")
+            expected_ending = ("## Implementation Log\r\n\r\n"
+                               "### 2026-10-04 - Switched config source\r\n\r\n" + crlf_entry + "\r\n\r\n"
+                               "### 2026-10-04 - Added health retry\r\n\r\n" + crlf_entry + "\r\n\r\n"
+                               "## Outcome\r\nPending.\r\n")
+            self.assertTrue(updated_plan.endswith(expected_ending), updated_plan[-700:])
+            untouched_prefix = LIVING_PLAN[:LIVING_PLAN.index("## Implementation Log")]
+            expected_prefix = untouched_prefix.replace("ready-for-execution", "in-progress").replace("\n", "\r\n")
+            self.assertTrue(updated_plan.startswith(expected_prefix))
+            self.assertEqual(validate_implementation_plan_text(updated_plan), [])
+
+    def test_log_helper_creates_missing_section_before_outcome(self) -> None:
+        v1_plan = ArtifactQualityTests().contract_plan() + "\n## Outcome\nPending.\n"
+        with tempfile.TemporaryDirectory() as directory:
+            plan_file = Path(directory) / "plan.md"
+            plan_file.write_text(v1_plan, encoding="utf-8", newline="\n")
+            result = self.run_script(self.log_script, "--plan", str(plan_file), "--date", "2026-10-04",
+                                     "--title", "Closed out", stdin=LOG_ENTRY)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            updated_plan = plan_file.read_text(encoding="utf-8")
+            self.assertIn("## Implementation Log\n\n### 2026-10-04 - Closed out\n\n- Change:", updated_plan)
+            self.assertLess(updated_plan.index("## Implementation Log"), updated_plan.index("## Outcome"))
+
+    def test_log_helper_leaves_plan_unchanged_when_result_is_invalid(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            plan_file = Path(directory) / "plan.md"
+            plan_file.write_text(LIVING_PLAN, encoding="utf-8", newline="\n")
+            original_bytes = plan_file.read_bytes()
+            cases = (
+                (["--status", "finished"], LOG_ENTRY, 2),
+                ([], "- Change: Something without a reason.", 1),
+                (["--status", "complete"], LOG_ENTRY, 1),
+            )
+            for extra_arguments, entry, expected in cases:
+                with self.subTest(arguments=extra_arguments, entry=entry):
+                    result = self.run_script(self.log_script, "--plan", str(plan_file), "--title", "Attempt",
+                                             *extra_arguments, stdin=entry)
+                    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+                    self.assertEqual(plan_file.read_bytes(), original_bytes)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 interface:
   display_name: "Write Implementation Plan"
-  short_description: "Create, review, or validate implementation plans"
-  default_prompt: "Use $write-implementation-plan for the requested planning, semantic review or validation mode; reuse applicable plans and publish before implementation."
+  short_description: "Create, update, review or validate living plans"
+  default_prompt: "Use $write-implementation-plan to plan, update, review or validate the living implementation plan; keep its log and outcome current through closure."
 policy:
   allow_implicit_invocation: true

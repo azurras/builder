@@ -1,13 +1,21 @@
 # Validate Mode
 
-Run the shared validator against the supplied Markdown. It accepts inspected file/symbol task contracts without requiring line ranges or replacement code, and retains support for legacy Code Edit blocks.
+Run the shared validator against the supplied Markdown:
 
 ```powershell
 python .agents/skills/write-implementation-plan/scripts/validate_implementation_plan.py docs/implementation-plans/YYYY-MM-DD-title.md
 ```
 
-With no filename, the CLI reads stdin. The save helper uses the same validator and refuses invalid artifacts before writing.
+With no filename, the CLI reads stdin. The save and log helpers use the same validator and refuse invalid results before writing.
 
-New plans use `## Plan Format` with value `task-contract-v1`; each task must independently satisfy a supported format. Unversioned historical literal-patch plans retain their former whole-plan checks so existing non-edit delivery tasks remain compatible. Unversioned plans without literal edits use the new contract checks. Contract fields and required document sections must be nonempty; task numbers must be sequential. An empty/invalid status fails. Unresolved task prerequisites such as pending inspection cannot appear in ready-for-execution, in-progress, or complete contracts. Legacy blocks retain their field and line-range checks.
+For `task-contract-v2` plans the validator checks that:
 
-Use `write-implementation-plan` review mode for semantic readiness: structural validation cannot prove that referenced files were inspected, that commands cover the risks, or that scope and authority are correct. Draft plans may record unresolved inspection explicitly; they are not permission to start dependent implementation.
+- Every section listed in [plan mode](plan.md#sections) is present and nonempty, and Document Status is a known status.
+- Acceptance Criteria define sequential IDs from `AC-1`, and every ID appears in Test Plan.
+- Each Implementation Log entry is titled `YYYY-MM-DD - Title` with a valid date and has nonempty Change, Reason and Impact lines.
+- A complete plan's Outcome is not pending and mentions every AC ID.
+- Each task has a complete contract or a valid legacy Code Edit block, task numbers are sequential, and ready, in-progress or complete plans contain no TBD, TODO or pending inspection.
+
+Older formats keep their original checks: `task-contract-v1` plans validate each task and their original sections; unversioned literal-patch plans keep their whole-plan checks; named pre-schema plans are warnings only. Unknown formats fail.
+
+Use review mode for semantic readiness: structural validation cannot prove that referenced files were inspected, that a non-goal's reason is sound, that tests can detect failure, or that the log records every divergence.

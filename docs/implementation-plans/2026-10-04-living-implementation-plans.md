@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 Make the implementation plan the living backbone of each change: what we want, what we do not, what we expect to change, how we will prove it, what actually changed along the way and how it ended.
@@ -46,7 +46,7 @@ Files: `.agents/lib/artifact_quality.py`; `.agents/tests/test_artifact_quality.p
 Symbols: `validate_implementation_plan_text`, `PLAN_REQUIRED_SECTIONS`, new `PLAN_V2_REQUIRED_SECTIONS`, supported Plan Format values, new v2 checks for acceptance IDs, test-plan coverage, log entries and outcome.
 Inspection: Read the full validator and its tests at `33b3965`; v1 dispatch is keyed on `## Plan Format`, unversioned literal plans return early, and hub validation calls the same function for every non-legacy plan.
 Behavior: v2 plans require Plan Format, Document Status, Objective, Background, Goals, Non-Goals, Acceptance Criteria, Inputs, Branch, Assumptions, Open Questions, Design, Expected Changes, Task Breakdown, Test Plan, Rollback or Recovery, Risks, Implementation Log and Outcome, all nonempty. Acceptance Criteria must define sequential `AC-1..n` IDs; every ID must appear in Test Plan. Implementation Log entries use `### YYYY-MM-DD - Title` headings with Change, Reason and Impact labels. A complete v2 plan must mention every AC ID in Outcome and must not leave Outcome pending. Task contracts keep the v1 fields.
-Invariants: v1, unversioned literal and legacy plans produce exactly the same errors as today; unknown formats are still rejected.
+Invariants: v1, unversioned literal and legacy plans produce exactly the same validator errors as today; unknown formats are still rejected. The save CLI test that saved a new v1 plan is replaced by one that expects v2 (Task 2 changes that behavior on purpose).
 Boundary/API: `validate_implementation_plan_text(markdown, path)` signature and error-string style unchanged.
 Effects and failures: Pure text validation; returns error strings and performs no I/O.
 Tests and evidence: New tests for a valid v2 plan, each missing v2 section, missing or non-sequential AC IDs, an AC absent from Test Plan, malformed log entry, complete plan with pending Outcome or a missing AC result; all existing v1 and legacy tests unchanged.
@@ -55,7 +55,7 @@ Verification: `python -B -m unittest discover -s .agents/tests`
 ### Task 2 - Require v2 for new saves and add the plan log helper
 Required skill: write-chris-street-style-code
 Dependencies: Task 1 validator.
-Files: `.agents/skills/write-implementation-plan/scripts/save_implementation_plan.py`; new `.agents/skills/write-implementation-plan/scripts/log_plan_change.py` beside it, following save_implementation_plan.py's argparse, LIB import and exit-code pattern; `.agents/tests/test_artifact_quality.py`
+Files: `.agents/skills/write-implementation-plan/scripts/save_implementation_plan.py`; `.agents/lib/artifact_io.py` (new `dated_markdown_file`, used by `save_dated_markdown`); new `.agents/skills/write-implementation-plan/scripts/log_plan_change.py` beside it, following save_implementation_plan.py's argparse, LIB import and exit-code pattern; `.agents/tests/test_artifact_quality.py`
 Symbols: save CLI `main`; new log CLI with `--plan`, `--title`, `--date`, optional `--status`, entry body on stdin.
 Inspection: Read save helper and `artifact_io.save_dated_markdown` at `33b3965`; save validates then writes, refusing existing files without `--overwrite`.
 Behavior: Saving a new plan rejects any format other than task-contract-v2; `--overwrite` of an existing file accepts any currently valid format so in-flight v1 plans can still be replaced. The log helper inserts a dated entry at the end of `## Implementation Log` (creating that section before `## Outcome`, or at the end, when absent), optionally sets Document Status, validates the result and writes only when valid.
@@ -130,7 +130,30 @@ Revert this change's commits; v1 plans never depended on v2 code, so reverting r
 - Rename plan closed; this plan's log and outcome filled in; full suite and hub check pass; changes published to origin main with readback.
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Shared dated path helper
+
+- Change: Added `dated_markdown_file` to `.agents/lib/artifact_io.py` and made `save_dated_markdown` use it.
+- Reason: The save helper must know whether `--overwrite` targets an existing plan before choosing which format to accept, and duplicating the slug rules would let the two paths drift.
+- Impact: Task 2 Files updated; other `save_dated_markdown` callers unchanged and covered by the full suite.
+
+### 2026-10-04 - Replaced the v1 save CLI test
+
+- Change: `test_save_cli_accepts_contract_and_refuses_incomplete_task_before_write` was replaced by `LivingPlanTests.test_save_cli_requires_current_format_for_new_plans`.
+- Reason: The old test saved a new v1 plan and expected success, which Task 2 deliberately refuses. The plan said existing tests would stay unchanged, which was wrong for this one.
+- Impact: Task 1 Invariants corrected; the replacement also covers v1 overwrite of an existing plan.
+
+### 2026-10-04 - CRLF heading bug found by tests
+
+- Change: Heading matches in `log_plan_change.py` use a `(?=\r?$)` lookahead.
+- Reason: The CRLF test showed `$` stopping before `\r`, so the helper missed an existing log and added a second one; consuming `\r` instead left a stray `\r\r\n`.
+- Impact: No plan section changed; the CRLF regression test guards it, and closing the CRLF rename plan exercised it on a real file.
 
 ## Outcome
-Pending.
+- Goal 1 met: `task-contract-v2` validates required sections, sequential AC IDs, Test Plan coverage, log entry shape and complete-plan Outcome; see `LivingPlanTests`.
+- Goal 2 met: AGENTS.md, write-implementation-plan, complete-builder-work and save-session-memory make the plan own change decisions, with memory linking to it.
+- Goal 3 met: update mode and `log_plan_change.py`; used on real CRLF and LF plans to close the rename plan and to log this plan.
+- Goal 4 met: new saves require v2; v1 overwrite still works; the hub check validates every existing plan unchanged.
+- Goal 5 met: the rename plan is complete with a log entry explaining its deviation.
+- Evidence: `python -B -m unittest discover -s .agents/tests` (69 tests pass), hub check passes, v2 example validates, `git diff --check` is clean.
+- Shipped as planned except the three logged deviations. Follow-up: none required; v1 plans stay as historical records.

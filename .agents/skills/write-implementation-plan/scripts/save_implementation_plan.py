@@ -10,8 +10,8 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from artifact_io import parse_optional_date, save_dated_markdown
-from artifact_quality import validate_implementation_plan_text
+from artifact_io import dated_markdown_file, parse_optional_date, save_dated_markdown
+from artifact_quality import CURRENT_PLAN_FORMAT, plan_format_of, validate_implementation_plan_text
 
 
 def parse_args() -> argparse.Namespace:
@@ -72,6 +72,19 @@ def main() -> int:
         print("Implementation plan quality checks failed:", file=sys.stderr)
         for error in errors:
             print(f"- {error}", file=sys.stderr)
+        return 1
+
+    # Existing plans may be replaced in their own format; new plans use the current one.
+    plan_file = dated_markdown_file(
+        root=Path(args.root),
+        directory=args.plan_dir,
+        title=title,
+        fallback_slug="implementation-plan",
+        artifact_date=plan_date,
+    )
+    is_replacing_existing_plan = args.overwrite and plan_file.exists()
+    if plan_format_of(body) != CURRENT_PLAN_FORMAT and not is_replacing_existing_plan:
+        print(f"New implementation plans must use Plan Format {CURRENT_PLAN_FORMAT}", file=sys.stderr)
         return 1
 
     try:

@@ -1,86 +1,92 @@
-# Example Implementation Plan
+# Require the JWT Signing Secret
+
+## Plan Format
+task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
-Replace an unsafe fallback secret with required configuration.
+The application refuses to start without an explicit JWT signing secret.
+
+## Background
+Example issue 42: `SecurityConfig` falls back to a hard-coded `dev-secret` when `JWT_SECRET` is unset, so a misconfigured deployment signs tokens with a public value.
 
 ## Goals
-- Remove the insecure default.
-- Fail startup when the secret is absent.
-- Cover the behavior with a focused test.
+- No code path signs tokens with a built-in secret (AC-1).
+- Correctly configured environments are unaffected (AC-2).
+
+## Non-Goals
+- Rotating existing production secrets: owned by operations and unaffected by this code change.
+- Moving secrets to a vault: a separate infrastructure decision with its own issue.
+
+## Acceptance Criteria
+- AC-1: Starting without `JWT_SECRET` fails at startup with an error that names the variable and not its value.
+- AC-2: Starting with `JWT_SECRET` set serves `/actuator/health` with 200.
+- AC-3: The change is merged to `main` and issue 42 is closed with the test report linked.
 
 ## Inputs
 - Story: Example issue 42.
-- Repository: `example-app`.
+- Repository `example-app` at `main` `abc1234`; read `SecurityConfig`, its callers and `SecurityConfigTest`.
 
 ## Branch
-`codex/issue-42-require-secret` from `main`
-
-## Non-Goals
-- Rotating existing production secrets.
+`codex/issue-42-require-secret` from `main`.
 
 ## Assumptions
-- Configuration is loaded through `SecurityConfig`.
+- All configuration loads through Spring's `Environment`, so one lookup covers every entry point.
 
 ## Open Questions
 None.
 
+## Design
+Replace the fallback with a required lookup that fails during context startup.
+
+Alternatives considered:
+- Log a warning and keep the fallback: rejected because the app would still run insecurely.
+- Generate a random secret per start: rejected because tokens would break across restarts and instances.
+
+## Expected Changes
+- `src/main/java/example/SecurityConfig.java`: `jwtSecret()` requires `JWT_SECRET`.
+- `src/test/java/example/SecurityConfigTest.java`: regression for the missing secret.
+- Local run configuration documents the required variable.
+
 ## Task Breakdown
 
-### Task 1 - Replace fallback secret handling
+### Task 1 - Require the signing secret
+Required skill: write-chris-street-style-code
+Dependencies: None.
+Files: `src/main/java/example/SecurityConfig.java`; `src/test/java/example/SecurityConfigTest.java`
+Symbols: `SecurityConfig.jwtSecret`, `SecurityConfig.validateSecret`
+Inspection: Read `SecurityConfig`, its two callers and `SecurityConfigTest` at `abc1234`.
+Behavior: Missing `JWT_SECRET` fails context startup; a present value is used unchanged.
+Invariants: No built-in secret remains; the secret value never appears in errors or logs.
+Boundary/API: `jwtSecret()` signature unchanged; environment variable name unchanged.
+Effects and failures: Startup throws `IllegalStateException` naming the variable.
+Tests and evidence: Failing regression for the missing secret first, then passing; existing tests still pass.
+Verification: `./gradlew test --tests SecurityConfigTest`
 
-Sequence / dependencies:
-- First task because runtime behavior depends on the configuration source.
-
-Implementation notes:
-- Replace the hard-coded fallback with a required lookup.
-
-#### Code Edit 1.1
-- File: `src/main/java/example/SecurityConfig.java`
-- Lines: 42-48
-- Action: replace
-
-Current:
-```java
-String jwtSecret() {
-    return env.getProperty("JWT_SECRET", "dev-secret");
-}
-```
-
-Proposed:
-```java
-String jwtSecret() {
-    return Objects.requireNonNull(env.getProperty("JWT_SECRET"), "JWT_SECRET is required");
-}
-```
-
-Verification:
-- `./gradlew test --tests SecurityConfigTest`
-
-## Code Changes
-- Code Edit 1.1 replaces fallback secret handling in `SecurityConfig`.
-
-## Files and Modules
-- `src/main/java/example/SecurityConfig.java`
-- `src/test/java/example/SecurityConfigTest.java`
-
-## Unit Testing
-- Add a test that missing `JWT_SECRET` fails startup.
-
-## Local Testing
-- Start the app with `JWT_SECRET=local-test-secret`.
-- Confirm `/actuator/health` returns 200.
-
-## Validation
-- Focused test and local health check pass.
+## Test Plan
+- AC-1: `SecurityConfigTest.rejectsMissingSecret`; then start locally without `JWT_SECRET` with verify-local-app and capture the startup error.
+- AC-2: Start locally with `JWT_SECRET=local-test-secret` and request `/actuator/health`; expect 200.
+- AC-3: CI passes on the PR; merge and closure readback.
+- Regression: full `./gradlew test`.
 
 ## Rollback or Recovery
-- Revert the commit and restore the previous configuration behavior.
+Revert the merge commit; no data or schema changes.
 
 ## Risks
-- Local developers without `JWT_SECRET` will need to set one.
+- Developers without `JWT_SECRET` cannot start the app locally: mitigated by the run configuration and a clear error.
 
-## Completion Criteria
-- Test passes, local app starts with explicit secret, and issue is closed.
+## Implementation Log
+
+### 2026-10-04 - Fail in the bean, not at first use
+
+- Change: The check moved from `jwtSecret()` callers into a `@PostConstruct` validation on `SecurityConfig`.
+- Reason: One caller is lazy, so a missing secret only failed on the first login instead of at startup (AC-1).
+- Impact: Task 1 Symbols now include `SecurityConfig.validateSecret`; Expected Changes unchanged.
+
+## Outcome
+- AC-1: Met. Startup fails with "JWT_SECRET is required"; see test report `2026-10-04-require-jwt-secret.md`.
+- AC-2: Met. Health returned 200 with the secret set; same report.
+- AC-3: Met. Merged in PR 43; issue 42 closed with the report linked.
+- Shipped as planned except the startup validation hook recorded in the log. No follow-ups.

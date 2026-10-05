@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 import re
 import shlex
@@ -42,6 +43,33 @@ PLAN_REQUIRED_SECTIONS = (
     "Risks",
     "Completion Criteria",
 )
+
+# task-contract-v2 plans are living records of one change.
+CURRENT_PLAN_FORMAT = "task-contract-v2"
+
+PLAN_V2_REQUIRED_SECTIONS = (
+    "Plan Format",
+    "Document Status",
+    "Objective",
+    "Background",
+    "Goals",
+    "Non-Goals",
+    "Acceptance Criteria",
+    "Inputs",
+    "Branch",
+    "Assumptions",
+    "Open Questions",
+    "Design",
+    "Expected Changes",
+    "Task Breakdown",
+    "Test Plan",
+    "Rollback or Recovery",
+    "Risks",
+    "Implementation Log",
+    "Outcome",
+)
+
+PLAN_LOG_ENTRY_FIELDS = ("Change", "Reason", "Impact")
 
 REPORT_REQUIRED_SECTIONS = (
     "Document Status",
@@ -208,26 +236,10 @@ def _validate_legacy_code_edits(
             errors.append(f"{_label(path)}Code Edit {ordinal} must include fenced code")
 
 
-def validate_implementation_plan_text(markdown: str, path: Path | None = None) -> list[str]:
-    errors: list[str] = []
-    sections = markdown_sections(markdown)
-    _require_sections(sections, PLAN_REQUIRED_SECTIONS, errors, path)
-    status = _plain_status(sections.get("Document Status", ""))
-    if status not in PLAN_STATUSES:
-        errors.append(f"{_label(path)}invalid or empty plan status {status!r}")
-
-    breakdown = sections.get("Task Breakdown", "")
-    plan_format = sections.get("Plan Format", "").strip()
-    if plan_format and plan_format != "task-contract-v1":
-        errors.append(f"{_label(path)}unsupported Plan Format {plan_format!r}")
-    # Unversioned literal-patch plans keep their original whole-plan checks.
-    # Their non-edit delivery tasks predate the per-task contract format.
-    if not plan_format and "#### Code Edit" in breakdown:
-        if not re.search(r"(?m)^###\s+Task\s+\d+\b", breakdown):
-            errors.append(f"{_label(path)}Task Breakdown must include ordered task headings")
-        _validate_legacy_code_edits(breakdown, status, path, errors)
-        return errors
-
+def _validate_task_contracts(
+    breakdown: str, status: str, path: Path | None, errors: list[str]
+) -> bool:
+    """Validate each ordered task; return whether any task uses a contract."""
     headings = list(re.finditer(r"(?m)^###[ \t]+Task[ \t]+(\d+)\b[^\n]*", breakdown))
     if not headings:
         errors.append(f"{_label(path)}Task Breakdown must include ordered task headings")
@@ -253,6 +265,95 @@ def validate_implementation_plan_text(markdown: str, path: Path | None = None) -
                 r"(?i)\b(TBD|TODO)\b|pending file inspection|line range pending", value
             ):
                 errors.append(f"{label} unresolved {field} in {status} plan")
+    return has_contract
+
+
+def plan_format_of(markdown: str) -> str:
+    return markdown_sections(markdown).get("Plan Format", "").strip()
+
+
+def validate_implementation_plan_text(markdown: str, path: Path | None = None) -> list[str]:
+    sections = markdown_sections(markdown)
+    if sections.get("Plan Format", "").strip() == CURRENT_PLAN_FORMAT:
+        return _validate_living_plan(sections, path)
+    return _validate_task_contract_v1_plan(sections, path)
+
+
+def _validate_living_plan(sections: dict[str, str], path: Path | None) -> list[str]:
+    errors: list[str] = []
+    _require_sections(sections, PLAN_V2_REQUIRED_SECTIONS, errors, path)
+    for section in PLAN_V2_REQUIRED_SECTIONS:
+        if section in sections and not sections[section].strip():
+            errors.append(f"{_label(path)}{section} must not be empty")
+    status = _plain_status(sections.get("Document Status", ""))
+    if status not in PLAN_STATUSES:
+        errors.append(f"{_label(path)}invalid or empty plan status {status!r}")
+
+    _validate_task_contracts(sections.get("Task Breakdown", ""), status, path, errors)
+    criterion_ids = _acceptance_criterion_ids(sections.get("Acceptance Criteria", ""), path, errors)
+    test_plan = sections.get("Test Plan", "")
+    for criterion_id in criterion_ids:
+        if not re.search(rf"\b{criterion_id}\b", test_plan):
+            errors.append(f"{_label(path)}Test Plan does not cover {criterion_id}")
+    _validate_log_entries(sections.get("Implementation Log", ""), path, errors)
+
+    outcome = sections.get("Outcome", "")
+    if status == "complete":
+        if re.match(r"(?i)\s*pending\b", outcome):
+            errors.append(f"{_label(path)}complete plan Outcome must not be pending")
+        for criterion_id in criterion_ids:
+            if not re.search(rf"\b{criterion_id}\b", outcome):
+                errors.append(f"{_label(path)}complete plan Outcome does not report {criterion_id}")
+    return errors
+
+
+def _acceptance_criterion_ids(criteria: str, path: Path | None, errors: list[str]) -> list[str]:
+    numbers = [int(number) for number in re.findall(r"(?m)^[ \t]*(?:[-*][ \t]*)?\**AC-(\d+)\b", criteria)]
+    if not numbers:
+        errors.append(f"{_label(path)}Acceptance Criteria must define AC-1 and onward")
+    elif numbers != list(range(1, len(numbers) + 1)):
+        errors.append(f"{_label(path)}Acceptance Criteria IDs must be sequential starting at AC-1")
+    return [f"AC-{number}" for number in numbers]
+
+
+def _validate_log_entries(log: str, path: Path | None, errors: list[str]) -> None:
+    headings = list(re.finditer(r"(?m)^###[ \t]+(.*)$", log))
+    for index, heading in enumerate(headings):
+        title = heading.group(1).strip()
+        label = f"{_label(path)}Implementation Log entry {title!r}"
+        date_match = re.match(r"(\d{4}-\d{2}-\d{2}) - \S", title)
+        try:
+            dt.date.fromisoformat(date_match.group(1) if date_match else "")
+        except ValueError:
+            errors.append(f"{label} must be titled 'YYYY-MM-DD - Title'")
+        end = headings[index + 1].start() if index + 1 < len(headings) else len(log)
+        entry = log[heading.end():end]
+        for field in PLAN_LOG_ENTRY_FIELDS:
+            match = re.search(rf"(?mi)^[ \t]*(?:-[ \t]*)?{field}:[ \t]*(.*)$", entry)
+            if not match or not match.group(1).strip():
+                errors.append(f"{label} missing {field}")
+
+
+def _validate_task_contract_v1_plan(sections: dict[str, str], path: Path | None) -> list[str]:
+    errors: list[str] = []
+    _require_sections(sections, PLAN_REQUIRED_SECTIONS, errors, path)
+    status = _plain_status(sections.get("Document Status", ""))
+    if status not in PLAN_STATUSES:
+        errors.append(f"{_label(path)}invalid or empty plan status {status!r}")
+
+    breakdown = sections.get("Task Breakdown", "")
+    plan_format = sections.get("Plan Format", "").strip()
+    if plan_format and plan_format != "task-contract-v1":
+        errors.append(f"{_label(path)}unsupported Plan Format {plan_format!r}")
+    # Unversioned literal-patch plans keep their original whole-plan checks.
+    # Their non-edit delivery tasks predate the per-task contract format.
+    if not plan_format and "#### Code Edit" in breakdown:
+        if not re.search(r"(?m)^###\s+Task\s+\d+\b", breakdown):
+            errors.append(f"{_label(path)}Task Breakdown must include ordered task headings")
+        _validate_legacy_code_edits(breakdown, status, path, errors)
+        return errors
+
+    has_contract = _validate_task_contracts(breakdown, status, path, errors)
 
     if has_contract or plan_format == "task-contract-v1":
         for section in PLAN_REQUIRED_SECTIONS:

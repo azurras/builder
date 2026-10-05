@@ -40,7 +40,7 @@ Append same-day project work; create another file for another date. Preserve dec
 | Skill | Role |
 |---|---|
 | complete-builder-work | Delivery, coordination, repository inspection and closure |
-| write-implementation-plan | Plan creation, readiness review and validation |
+| write-implementation-plan | Living plans: creation, updates and implementation log, readiness review and validation |
 | save-session-memory | Dated work records |
 | write-test-report | Save or validate runtime evidence |
 | verify-local-app | Run any application locally before its PR; authorized deployment |

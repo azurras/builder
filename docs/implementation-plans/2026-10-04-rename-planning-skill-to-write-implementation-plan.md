@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 Rename the planning skill to `write-implementation-plan` and align every maintained reference.
@@ -78,3 +78,12 @@ A stale helper path breaks discovery or execution; tests and complete identifier
 
 ## Completion Criteria
 Canonical folder and metadata use write-implementation-plan; all maintained references updated; native checks and semantic review pass; completed plan and dated delivery evidence published; remote main readback confirms publication.
+
+## Implementation Log
+
+### 2026-10-04 - Delivered without updating dated plans
+
+- Change: Delivered in `726787e`. The four dated implementation plans listed under Task 1 Files were left with the old skill name, and this plan was not marked complete at delivery.
+- Reason: Dated plans and session memory are historical records under AGENTS.md, so they keep the name in force when written. The close-out was missed because the delivering session did not find this plan; it was found while planning living implementation plans.
+- Impact: Task 1 scope narrowed to maintained files; Completion Criteria met except the hub refresh, which ran with the next checkpoint. Closed by the living implementation plans work.
+
