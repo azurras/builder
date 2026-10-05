@@ -246,6 +246,12 @@ Required skill: write-chris-street-style-code
 - **Reason:** #1484's required `build` check failed twice on it, and the user asked to fix it. The CI XML showed 500 from `ConcurrentModificationException` in `LifecycleHttpServletResponse.flushBuffer`: MockMvc ran the streaming body on the executor while the request thread still wrote headers to the same mock response. The original test failed 21 of 300 local runs. With a deferred executor that releases async work only after the request thread returns, it passed 600 of 600. It had also failed in CI on 2026-09-23/24.
 - **Impact:** Test-only. No production code changes and ACs unchanged; runtime evidence still applies and the report names the new candidate.
 
+### 2026-10-05 - First request exposed a stale startup task contract
+
+- **Change:** The first real request, [#1485](https://github.com/azurras/christopherbell.dev/pull/1485) (`71848dd`), ran once from a request-only commit with no redeploy. Production stayed on `a98e8cd` and `auto-status` read `UP_TO_DATE`, but `verify-startup` reported FAILED: 'ChristopherBellAutoDeploy must run the installed production auto-deploy command hidden and noninteractive.' A follow-up PR on `claude/task-contract-versioned-tools-20261005` (`fb8e0bb`) fixes `Assert-AutoDeployTaskContract` and adds a second `verify-startup` request.
+- **Reason:** Since tool versioning (#1405, 2026-09-23), tool refresh points the task at `tools\versions\<tree sha>\prod.ps1`, while the contract accepted only `tools\prod.ps1`. So `verify-startup` failed on every refreshed host; this was its first run since then. The fix accepts exactly those two paths under the configured root. With tool refresh's exact argument string, the old contract rejects the task and the new one accepts it.
+- **Impact:** AC-9 completes after the follow-up deploys and the second request reports SUCCEEDED. Expected Changes gains `Production.Operations.psm1` and its tests.
+
 ## Outcome
 Pending.
 
