@@ -16,13 +16,13 @@ Review and correct all tracked first-party executable code for the website again
 - Add concise, repository-local coding guidance to the website `AGENTS.md` so future work follows this standard.
 
 ## Inputs
-- Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, fetched 2026-10-04.
+- Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, freshly checked out in `A:\Projects\christopherbell.dev-worktrees\chris-street-style-codebase-20261004` on 2026-10-04. Draft PR #1477 is explicitly excluded as a source of code or verification.
 - `AGENTS.md`, root and module READMEs, Gradle build files, JavaScript/CSS ownership READMEs.
 - Builder `.agents/skills/write-chris-street-style-code/SKILL.md` and its Java, JavaScript, API/design, configuration, and testing references.
-- Initial inventory: 1,421 tracked files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration. The execution re-count is 1,416; see the final audit record for extension counts and reviewed groups.
+- Fresh inventory: 1,418 tracked first-party files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration; see the final audit record for the extension counts and reviewed groups.
 
 ## Branch
-Use `codex/chris-street-style-audit-20261004`, created from the fetched website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`. Keep the dirty authoritative checkout at `A:\Projects\christopherbell.dev` untouched.
+Use `codex/chris-street-style-codebase-20261004`, created from the fetched website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`. Keep the dirty authoritative checkout at `A:\Projects\christopherbell.dev` and the separate draft PR worktree untouched.
 
 ## Non-Goals
 - Add or change product features, routes, API payloads, database schemas, deployment semantics, or external side effects.
@@ -51,7 +51,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - Invariants: Feature-first package ownership, published Modulith APIs, repository boundaries, constructor injection, Mongo compatibility, explicit transaction/task ownership, interruption propagation, and existing auth checks remain intact.
 - Boundary/API: Keep route, DTO, library, module and persisted-document contracts compatible; pass per-operation data explicitly and keep absence, domain rejection, programming defects and infrastructure failure distinct.
 - Effects and failures: Retain current I/O and side-effect owners; catch only to recover or translate, preserve causes, redact secrets, and do not turn infrastructure failures into success-shaped values.
-- Tests and evidence: Capture clean baseline results before edits. Add or amend focused tests only for changed behavior or invariants; use characterization evidence for behavior-preserving refactors. Run full native checks after all code changes.
+- Tests and evidence: Capture clean baseline results before edits. Add or amend focused tests only for changed behavior or invariants; use characterization evidence for behavior-preserving refactors. Every independent correction must first have its own reviewed, published implementation plan, then its own test report naming the exact candidate commit with focused native checks and local application runtime proof. Run full native checks after all code changes.
 - Verification: `./gradlew.bat :website:check :cbell-lib:check`; inspect test failures and reports. If any website runtime behavior/configuration changes, also use an isolated packaged candidate and produce the required runtime report.
 
 ### Task 2 - Review browser JavaScript and tests
@@ -64,7 +64,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - Invariants: Validate untrusted runtime data; keep null meanings stable; await/own promises; prevent stale responses; clean up listeners/timers; use context-safe DOM, URL and HTML rendering.
 - Boundary/API: Preserve exported module shapes, endpoint contracts, selectors used by templates, and shared/page ownership.
 - Effects and failures: Keep network, clipboard, storage and browser APIs explicit; report failures through current UI conventions and do not swallow rejected work.
-- Tests and evidence: Establish the existing browser test baseline; extend focused tests only when a rule or behavior changes. Run syntax checks for all tracked JavaScript and `:website:jsTest`.
+- Tests and evidence: Establish the existing browser test baseline; extend focused tests only when a rule or behavior changes. Run syntax checks for all tracked JavaScript and `:website:jsTest`. Each independent correction receives its own plan and commit-specific test report.
 - Verification: `node --check` for every tracked first-party `.js` file under website, then `./gradlew.bat :website:jsTest`; browser/runtime proof is required if rendered or interaction behavior changes.
 
 ### Task 3 - Review templates, styles, and application configuration
@@ -77,7 +77,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - Invariants: Escape for the actual output context, keep shared class contracts stable, fail clearly for missing required security/production configuration, and avoid unscoped CSS/config fallbacks.
 - Boundary/API: Template model names, shared fragments, CSS classes consumed by JS/templates, and supported profile/property names remain compatible.
 - Effects and failures: Keep rendering/configuration deterministic; do not add implicit external calls or unsafe fallback values.
-- Tests and evidence: Use relevant rendered/template/controller tests and configuration validators. Review all changed snapshots/output semantically. Run the full native checks in Task 5.
+- Tests and evidence: Use relevant rendered/template/controller tests and configuration validators. Review all changed snapshots/output semantically. Run the full native checks in Task 5. Each independent correction receives its own plan and commit-specific test report.
 - Verification: `./gradlew.bat :website:check`; verify rendered/interactive browser behavior and write a runtime report if any browser behavior or application configuration changes.
 
 ### Task 4 - Review operational scripts, Gradle, and CI configuration
@@ -90,7 +90,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - Invariants: Validate inputs at boundaries, make mutation and privilege explicit, bound waits/retries, preserve causal errors, avoid secret disclosure and command-string execution.
 - Boundary/API: Keep task names, CLI switches, result records, service/API contracts, and workflow trigger/permission contracts compatible.
 - Effects and failures: No live production maintenance. Test against disposable or `test` resources; retain tested rollback/recovery for any executable operational change.
-- Tests and evidence: Use the repository's Pester/Gradle tests and native PowerShell parsing/analysis where available; run only scope-relevant checks while editing and full gates in Task 5.
+- Tests and evidence: Use the repository's Pester/Gradle tests and native PowerShell parsing/analysis where available; run only scope-relevant checks while editing and full gates in Task 5. Each independent correction receives its own plan and commit-specific test report.
 - Verification: Run `./gradlew.bat :website:check :cbell-lib:check` and the relevant Pester suites; inspect workflow/script diffs and `git diff --check`. Any production operation/configuration change requires the documented safe runtime proof and report.
 
 ### Task 5 - Complete the whole-code audit and deliver verified results
@@ -103,8 +103,8 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - Invariants: No in-scope style blocker remains; each accepted warning has a concrete reason and does not violate the standard; all repo-native required gates pass.
 - Boundary/API: CI, PR, deployment and reporting follow the current Builder/website instructions; no dirty authoritative checkout is overwritten.
 - Effects and failures: Publish reviewed, focused PR(s), wait for required CI, resolve in-scope failures, merge after gates pass, and verify automatic production activation through supported status/evidence. Do not manually restart or rotate production.
-- Tests and evidence: Full `:website:check` and `:cbell-lib:check`, JavaScript syntax and tests, relevant PowerShell tests, diff/semantic review; isolated candidate and actual runtime report for runtime-affecting changes.
-- Verification: All changed files pass `git diff --check`; full required checks and PR CI are green; merged revision and supported deployment/runtime state are read back; publish the verified dated delivery memory before any external closure.
+- Tests and evidence: Full `:website:check` and `:cbell-lib:check`, JavaScript syntax and tests, relevant PowerShell tests, diff/semantic review; every independent correction has a separately reviewed and published plan and a separately saved test report naming the commit exercised. Candidate startup and a representative application flow are required for every report before PR creation or update.
+- Verification: All changed files pass `git diff --check`; each correction has a distinct plan/report pair; full required checks and PR CI are green; merged revision and supported deployment/runtime state are read back; publish the verified dated delivery memory before any external closure. Do not update or merge draft PR #1477 based on its prior contents or checks.
 
 ## Code Changes
 - Add a concise Chris Street Style section to the website `AGENTS.md`, adapted to repository languages and native conventions.
@@ -146,5 +146,13 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - All in-scope tracked files have been covered by the source-group inventory/review, and the website agent guide captures the adapted standard for future changes.
 - All confirmed in-scope style violations are corrected with focused diffs and appropriate regression evidence; no unsupported blanket refactor remains.
 - Full module tests, JavaScript syntax/tests, relevant PowerShell checks, semantic diff review and required CI pass.
-- Any runtime-affecting change has isolated candidate and production runtime proof plus a test report; pure non-runtime changes document why runtime evidence does not apply.
+- Every code correction has a separately published implementation plan and candidate-specific test report with local runtime evidence; this is an application repository, so startup is required even when an individual change appears behavior-preserving.
 - Required PR(s) are merged and supported deployment is read back; dated session memory and Builder publication are complete.
+
+## Implementation Log
+
+### 2026-10-04 - Restart audit from current main
+
+- **Change:** Restarted the audit in a new clean worktree at current `origin/main` commit `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`; the worktree for draft PR #1477 is not used as a source of code or verification.
+- **Reason:** The user instructed not to trust that draft because it predates extensive code-style changes, and the current standard requires sentence-like names and precise argument roles.
+- **Impact:** Branch and Inputs now identify the fresh audit baseline. Each confirmed independent code correction must have its own reviewed and published implementation plan and its own test report before PR creation or update; no correction is inferred from the draft PR.
