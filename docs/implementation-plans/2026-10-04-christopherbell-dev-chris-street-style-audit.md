@@ -252,3 +252,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Added a separate archive-resolution correction on committed candidate `a880cfd1`: all online/offline calls name their mode, I/O remains translated, and an injected programming defect now propagates unchanged after partial cleanup. Focused and full checks passed; startup remains blocked at migration 015.
 - **Reason:** Positional booleans hid cache/download behavior, while catching every exception mislabeled programming errors as upstream availability failures.
 - **Impact:** The tenth independently planned correction has its own blocked candidate report. No PR was created; continue the whole-codebase review while runtime-gated delivery awaits supported database recovery/provisioning. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Bound production process setup cleanup
+
+- **Change:** Continued the audit with a separately planned production candidate setup cleanup on commit `2be74499`; the real-child failure regression and full native gate passed, while packaged startup remains blocked at migration 015.
+- **Reason:** `Start-ProductionJar` started Java before process-log setup completed, leaving an unreturned process handle and no caller able to clean up if attachment failed.
+- **Impact:** The eleventh planned correction has its own blocked candidate report. No PR was opened; continue the audit while runtime-gated delivery waits for supported test DB recovery/provisioning. Draft PR #1477 remains excluded.

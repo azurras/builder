@@ -1,7 +1,7 @@
 # Bound Production Jar Setup Failure Cleanup
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -99,10 +99,31 @@ Revert only the process-setup helper and its test if normal deployment logging o
 | Runtime remains blocked before readiness | High | Save blocked runtime report; do not create PR without required application proof. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin production jar setup cleanup
+
+- **Change:** Started implementation from `695a3ed8`; the existing deployment Pester suite passed all 99 tests before edits.
+- **Reason:** Existing coverage proves successful bounded logging but does not cover a process whose post-start log setup fails before the caller receives its handle.
+- **Impact:** AC-1/AC-2 implementation begins with a real-child regression for the post-start failure boundary.
+
+### 2026-10-05 - Record process setup runtime blocker
+
+- **Change:** Committed candidate `2be74499` passed the real-child setup-failure regression and full native checks/package, but packaged startup exited before readiness at migration 015; the candidate report records it.
+- **Reason:** Isolated database `test` contains an incomplete durable migration record; direct repair or guard bypass is prohibited.
+- **Impact:** AC-1 and AC-2 pass; AC-3 is blocked by runtime acceptance. No PR was created; supported test fixture provisioning or recovery is required.
 
 ## Outcome
-Pending.
+
+> [!WARNING]
+> Candidate process ownership and native checks are complete; application delivery remains runtime-blocked because startup cannot pass migration 015 on isolated database `test`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | A real sleeping child was stopped, bounded and disposed after injected post-start writer setup failure. |
+| AC-2 | ✅ Met | The original `InvalidOperationException` object was rethrown unchanged after successful cleanup; code aggregates the primary first when cleanup also fails. |
+| AC-3 | ⚠️ Partly met | Targeted and full checks/package pass; [candidate report](../test-reports/2026-10-05-03-11-christopherbell-dev-bound-production-jar-setup-failure-cleanup.md) records startup blocked before readiness. |
+
+The change is committed on its isolated spoke branch. No PR was opened. Resume runtime verification after supported isolated test fixture provisioning or recovery is available; do not modify migration records directly or bypass the guard.
 
 ## Project
 christopherbell-dev
