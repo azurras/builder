@@ -12,9 +12,10 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from artifact_quality import validate_implementation_plan_text, validate_test_report_text
+from artifact_quality import project_of, validate_implementation_plan_text, validate_test_report_text
 from project_memory import PROJECT_RE
 from builder_hub import list_markdown, markdown_links, parse_dated_file, read_text
+from spoke_registry import REGISTRY_FILE, ProjectStatus, project_statuses_of
 
 
 # Historical pre-schema plans remain warnings; all other plans must validate.
@@ -84,6 +85,18 @@ def validate_links(path: Path, root: Path, errors: list[str]) -> None:
             errors.append(f"{path}: broken local link {link}")
 
 
+def validate_record_project(path: Path, project: str | None, project_statuses: dict[str, ProjectStatus],
+                            errors: list[str]) -> None:
+    """A labeled plan or report names a registered project, and its filename carries that project."""
+    if project is None:
+        return
+    if project not in project_statuses:
+        errors.append(f"{path}: Project {project!r} is not builder, a registered spoke or a project in {REGISTRY_FILE}")
+    filename_title = path.stem[len("YYYY-MM-DD-"):]
+    if filename_title != project and not filename_title.startswith(f"{project}-"):
+        errors.append(f"{path}: filename must start with YYYY-MM-DD-{project}- to match its Project section")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate Builder hub state.")
     parser.add_argument("--root", default=".")
@@ -91,6 +104,11 @@ def main() -> int:
     root = Path(args.root).expanduser().resolve()
     errors: list[str] = []
     warnings: list[str] = []
+    try:
+        project_statuses = project_statuses_of(root)
+    except ValueError as error:
+        errors.append(f"Project registry: {error}")
+        project_statuses = None
 
     docs = root / "docs"
     allowed = {Path(directory).name for directory in ARTIFACT_DIRS}
@@ -115,6 +133,9 @@ def main() -> int:
                     valid = False
                 if not valid:
                     errors.append(f"{path}: memory filename must use YYYY-MM-DD-project.md")
+                elif project_statuses is not None and path.stem[11:] not in project_statuses:
+                    errors.append(f"{path}: memory project {path.stem[11:]!r} is not builder, "
+                                  f"a registered spoke or a project in {REGISTRY_FILE}")
             elif not parse_dated_file(path):
                 errors.append(f"{path}: filename must use YYYY-MM-DD-title.md")
             validate_links(path, root, errors)
@@ -127,11 +148,16 @@ def main() -> int:
             warnings.append(f"{path}: historical implementation plan predates the quality schema")
         else:
             errors.extend(validate_implementation_plan_text(content, path))
+        if project_statuses is not None:
+            validate_record_project(path, project_of(content), project_statuses, errors)
 
     for path in list_markdown(root, "docs/test-reports"):
         if path.name == "index.md":
             continue
-        errors.extend(validate_test_report_text(read_text(path), path))
+        content = read_text(path)
+        errors.extend(validate_test_report_text(content, path))
+        if project_statuses is not None:
+            validate_record_project(path, project_of(content), project_statuses, errors)
 
     validate_skill_frontmatter(root, errors)
     validate_claude_skills_link(root, errors)

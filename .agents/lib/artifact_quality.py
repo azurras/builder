@@ -7,6 +7,8 @@ from pathlib import Path
 import re
 import shlex
 
+from spoke_registry import SLUG_RE
+
 
 PLAN_STATUSES = {
     "draft",
@@ -70,6 +72,10 @@ PLAN_V2_REQUIRED_SECTIONS = (
 )
 
 PLAN_LOG_ENTRY_FIELDS = ("Change", "Reason", "Impact")
+
+# Plans and reports name their project here. Documents written before the
+# field existed have no such section and remain valid.
+PROJECT_SECTION = "Project"
 
 REPORT_REQUIRED_SECTIONS = (
     "Document Status",
@@ -171,6 +177,20 @@ def markdown_sections(markdown: str) -> dict[str, str]:
         end = matches[index + 1].start() if index + 1 < len(matches) else len(markdown)
         sections[match.group(1).strip()] = markdown[start:end].strip()
     return sections
+
+
+def project_of(markdown: str) -> str | None:
+    """The Project section's value with formatting removed, or None when the document has no such section."""
+    sections = markdown_sections(markdown)
+    if PROJECT_SECTION not in sections:
+        return None
+    return sections[PROJECT_SECTION].strip().strip("`").strip()
+
+
+def _validate_project_shape(markdown: str, path: Path | None, errors: list[str]) -> None:
+    project = project_of(markdown)
+    if project is not None and not SLUG_RE.fullmatch(project):
+        errors.append(f"{_label(path)}Project must be one lowercase hyphenated project slug, not {project!r}")
 
 
 def _plain_status(value: str) -> str:
@@ -275,8 +295,11 @@ def plan_format_of(markdown: str) -> str:
 def validate_implementation_plan_text(markdown: str, path: Path | None = None) -> list[str]:
     sections = markdown_sections(markdown)
     if sections.get("Plan Format", "").strip() == CURRENT_PLAN_FORMAT:
-        return _validate_living_plan(sections, path)
-    return _validate_task_contract_v1_plan(sections, path)
+        errors = _validate_living_plan(sections, path)
+    else:
+        errors = _validate_task_contract_v1_plan(sections, path)
+    _validate_project_shape(markdown, path, errors)
+    return errors
 
 
 def _validate_living_plan(sections: dict[str, str], path: Path | None) -> list[str]:
@@ -392,6 +415,7 @@ def validate_test_report_text(markdown: str, path: Path | None = None) -> list[s
     errors: list[str] = []
     sections = markdown_sections(markdown)
     _require_sections(sections, REPORT_REQUIRED_SECTIONS, errors, path)
+    _validate_project_shape(markdown, path, errors)
 
     status = _plain_status(sections.get("Document Status", ""))
     if status and status not in REPORT_STATUSES:

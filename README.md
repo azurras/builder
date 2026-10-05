@@ -1,6 +1,12 @@
 # Builder
 
-Builder is the AI workflow hub. All work starts here; the repositories it coordinates are spokes. Builder holds implementation plans, runtime evidence and dated session history for every spoke.
+Builder is the AI workflow hub. All work starts here; the repositories it coordinates are spokes.
+
+## The Model
+
+Builder keeps one record for every project, so any agent on any computer can pick up any of them: implementation plans, runtime evidence and dated session memory, plus the shared skills and helpers. A spoke keeps only its own code and its own build, run and deployment instructions; its plans, reports and memory live here, never in the spoke. Builder code goes straight to `main`; spoke code goes through a pull request, required CI and a merge.
+
+Every record belongs to one project. The valid project slugs are `builder` (the hub itself), each spoke, and each entry under `projects` in [spokes.json](spokes.json), which lists work with no repository and marks it `active` or `retired`. The save helpers and the hub check refuse any other slug.
 
 ## Start on Any Computer
 
@@ -29,11 +35,11 @@ Register a new spoke in [spokes.json](spokes.json) with `manage_spoke_repositori
 
 | Documents | Contents |
 |---|---|
-| [Implementation plans](docs/implementation-plans/index.md) | Requirements, design, inspected tasks and verification |
-| [Test reports](docs/test-reports/index.md) | Actual runtime inputs, outputs and results |
+| [Implementation plans](docs/implementation-plans/index.md) | Requirements, design, inspected tasks and verification, in YYYY-MM-DD-project-title.md files |
+| [Test reports](docs/test-reports/index.md) | Actual runtime inputs, outputs and results, in YYYY-MM-DD-project-title.md files |
 | [Session memory](docs/session-memory/index.md) | Work and events in separate YYYY-MM-DD-project.md files |
 
-Append same-day project work; create another file for another date. Preserve decisions, attempts, discoveries, reviews, verification, blockers and outcomes. Plans and reports hold detailed evidence linked from memory.
+Plans and reports name their project in a `## Project` section, and each index groups records by project. Older plans and reports without the section are listed last and are left as they are. Append same-day project work; create another file for another date. Preserve decisions, attempts, discoveries, reviews, verification, blockers and outcomes. Plans and reports hold detailed evidence linked from memory.
 
 ## Eight Skills
 

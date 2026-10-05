@@ -4,6 +4,8 @@ import sys
 import tempfile
 import unittest
 
+from project_registry_fixture import write_project_registry
+
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / ".agents/skills/save-session-memory/scripts/save_session_memory.py"
 MIGRATION_SCRIPT = ROOT / ".agents/skills/save-session-memory/scripts/consolidate_project_memory.py"
@@ -18,6 +20,7 @@ def run(*args, body="Evidence."):
 class ProjectMemoryTests(unittest.TestCase):
     def test_same_day_appends_and_different_dates_have_separate_files(self):
         with tempfile.TemporaryDirectory() as temp:
+            write_project_registry(Path(temp), active=("sample", "other"))
             first = run("--root", temp, "--project", "sample", "--title", "Start",
                         "--date", "2099-01-01", body="First evidence.")
             self.assertEqual(first.returncode, 0, first.stderr)
@@ -41,8 +44,18 @@ class ProjectMemoryTests(unittest.TestCase):
 
     def test_invalid_or_missing_project_and_empty_body_do_not_write(self):
         with tempfile.TemporaryDirectory() as temp:
+            write_project_registry(Path(temp), active=("sample",), retired=("old-shop",))
             for project in ("../outside", "index", "", "Project Name"):
                 self.assertNotEqual(run("--root", temp, "--project", project, "--title", "Entry").returncode, 0)
+            for project, expected_message in (("stranger", "Unknown project 'stranger'"), ("old-shop", "retired")):
+                refused = run("--root", temp, "--project", project, "--title", "Entry")
+                self.assertNotEqual(refused.returncode, 0)
+                self.assertIn(expected_message, refused.stderr)
+            self.assertEqual(run("--root", temp, "--project", "builder", "--title", "Hub entry",
+                                 "--date", "2099-01-01").returncode, 0)
+            (Path(temp) / "docs/session-memory/2099-01-01-builder.md").unlink()
+            (Path(temp) / "docs/session-memory").rmdir()
+            (Path(temp) / "docs").rmdir()
             self.assertNotEqual(run("--root", temp, "--title", "Entry").returncode, 0)
             self.assertNotEqual(run("--root", temp, "--project", "sample", "--title", "Entry", body=" ").returncode, 0)
             self.assertNotEqual(run("--root", temp, "--project", "sample", "--title", "Entry",

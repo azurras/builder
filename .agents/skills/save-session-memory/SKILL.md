@@ -48,7 +48,7 @@ Pass the entry body on stdin:
 '@ | python .agents/skills/save-session-memory/scripts/save_session_memory.py --root . --project builder --title 'Clarified deliver-change'
 ```
 
-- `--project` (required): `builder` for hub work; the spoke's `slug` from spokes.json for spoke work; otherwise a new lowercase hyphenated slug named for the project (letters, digits and single hyphens, starting with a letter, never `index`). Reuse a slug once it exists.
+- `--project` (required): `builder` for hub work; the spoke's `slug` from spokes.json for spoke work; for work with no repository, an active entry under `projects` in spokes.json (add one there first when the work is new). The helper refuses unknown and retired slugs.
 - `--title` (required): the entry title; it does not change the filename.
 - `--date`: `YYYY-MM-DD`, defaulting to today's local date. Pass it only for retrospective entries.
 - `--time`: 24-hour `HH:MM` local time, passed only when the work happened at a known time other than now. Without it the helper stamps the current time and time zone. For retrospective entries, distinguish the known work date and time from the recording time; never invent chronology.
@@ -65,4 +65,4 @@ Read the relevant dates and sections using targeted searches. Do not load an ent
 
 ## Publication
 
-Publish through the [phase finalizer](../publish-builder-changes/references/phase-finalization.md). Its refresh regenerates `docs/session-memory/index.md`; select that index with a new dated file. For auditing the completed historical migration only, see [migration audit](references/migration-audit.md).
+Publish through the [phase finalizer](../publish-builder-changes/references/phase-finalization.md). Its refresh regenerates `docs/session-memory/index.md`; select that index with a new dated file. The migration tooling (`consolidate_project_memory.py` and its [migration audit](references/migration-audit.md)) is archival: it only audits the completed July 2026 consolidation and is never used to write memory.

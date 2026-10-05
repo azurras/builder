@@ -15,6 +15,14 @@ def parse_optional_date(value: str | None) -> dt.date:
     return dt.datetime.now().astimezone().date()
 
 
+def project_prefixed_title(project: str, title: str) -> str:
+    """Title whose filename slug starts with the project, without doubling a prefix the title already has."""
+    title_slug = slugify(title.strip(), "")
+    if title_slug == project or title_slug.startswith(f"{project}-"):
+        return title
+    return f"{project} {title}"
+
+
 def resolve_artifact_dir(root: Path, directory: str | Path) -> Path:
     artifact_dir = Path(directory).expanduser()
     if not artifact_dir.is_absolute():

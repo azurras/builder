@@ -3,6 +3,9 @@
 ## Document Status
 complete
 
+## Project
+example-app
+
 ## Story/Issue
 Example issue 42: require explicit JWT secret.
 

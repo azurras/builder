@@ -5,6 +5,7 @@
 Write test reports as evidence artifacts, not chat transcripts. Use these sections, in this order, with the exact headings from [the template](template.md):
 
 - Document Status: `draft`, `complete`, `blocked` or `superseded`, defined in the skill's Statuses table.
+- Project: one slug, the spoke whose candidate ran (or `builder`, or an active project from spokes.json). publish-spoke-changes' preflight refuses a report whose Project is not the spoke.
 - Story/Issue: the story, issue, ticket, or work item being verified.
 - Branch: the branch and the candidate commit's short SHA, as the skill's Candidate Identity section requires.
 - App / Environment: app name, runtime/configuration, database or fixture context, and relevant environment variables; include port and base URL only when applicable.

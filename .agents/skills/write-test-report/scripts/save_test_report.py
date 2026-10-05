@@ -10,13 +10,17 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from artifact_io import parse_optional_date, save_dated_markdown
-from artifact_quality import validate_test_report_text
+from artifact_io import dated_markdown_file, parse_optional_date, project_prefixed_title, save_dated_markdown
+from artifact_quality import project_of, validate_test_report_text
+from spoke_registry import require_active_project
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Save a Markdown test report to docs/test-reports/YYYY-MM-DD-title.md."
+        description=(
+            "Save a Markdown test report to docs/test-reports/YYYY-MM-DD-project-title.md. "
+            "The project comes from the report's Project section."
+        )
     )
     parser.add_argument(
         "--root",
@@ -71,11 +75,34 @@ def main() -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
 
+    builder_root = Path(args.root).expanduser().resolve()
+    project = project_of(body)
+    filename_title = title if project is None else project_prefixed_title(project, title)
+    # An existing report may be replaced without a Project section; a new report names its project.
+    report_file = dated_markdown_file(
+        root=builder_root,
+        directory=args.report_dir,
+        title=filename_title,
+        fallback_slug="test-report",
+        artifact_date=report_date,
+    )
+    is_replacing_existing_report = args.overwrite and report_file.exists()
+    if project is None and not is_replacing_existing_report:
+        print("New test reports need a Project section naming builder, a registered spoke "
+              "or an active project from spokes.json", file=sys.stderr)
+        return 1
+    if project is not None:
+        try:
+            require_active_project(builder_root, project)
+        except ValueError as error:
+            print(error, file=sys.stderr)
+            return 1
+
     try:
         report_file = save_dated_markdown(
-            root=Path(args.root),
+            root=builder_root,
             directory=args.report_dir,
-            title=title,
+            title=filename_title,
             body=body,
             fallback_slug="test-report",
             artifact_date=report_date,

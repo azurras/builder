@@ -6,6 +6,8 @@ import sys
 import tempfile
 import unittest
 
+from project_registry_fixture import write_project_registry
+
 ROOT = Path(__file__).resolve().parents[2]
 SKILLS = ROOT / ".agents/skills"
 
@@ -19,6 +21,7 @@ class RepositoryInspectionTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
+        write_project_registry(self.root, active=("sample",))
         self.repo = self.root / "repo"
         self.repo.mkdir()
         self.git("init", "-b", "main")
@@ -70,6 +73,11 @@ class RepositoryInspectionTests(unittest.TestCase):
     def test_snapshot_requires_project_before_any_write(self):
         self.assertNotEqual(self.command("snapshot").returncode, 0)
         self.assertFalse((self.root / "docs").exists())
+        unregistered = self.command("snapshot", "--project", "stranger")
+        self.assertEqual(unregistered.returncode, 2)
+        self.assertIn("Unknown project 'stranger'", unregistered.stderr)
+        self.assertNotIn("Repository:", unregistered.stdout)
+        self.assertFalse((self.root / "docs").exists())
         self.assertNotEqual(self.command("register").returncode, 0)
 
 
@@ -83,6 +91,10 @@ class MaintenanceModeTests(unittest.TestCase):
                         for p in root.rglob("*") if p.is_file()}
             self.assertNotEqual(run(script, "--root", temp).returncode, 0)
             self.assertEqual(list(root.iterdir()), [])
+            registry_missing = run(script, "refresh", "--root", temp)
+            self.assertNotEqual(registry_missing.returncode, 0)
+            self.assertIn("Spoke registry not found", registry_missing.stdout)
+            write_project_registry(root, active=("sample",))
             result = run(script, "refresh", "--root", temp)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertEqual({p.name for p in (root / "docs").iterdir()},
@@ -97,6 +109,12 @@ class MaintenanceModeTests(unittest.TestCase):
             self.assertEqual(run(script, "check", "--root", temp).returncode, 0)
             self.assertEqual(snapshot(), before)
             self.assertIn("Sample", (memory.parent / "index.md").read_text(encoding="utf-8"))
+            unregistered = memory.parent / "2099-01-01-stranger.md"
+            unregistered.write_text("# Stranger\n", encoding="utf-8")
+            unregistered_result = run(script, "refresh", "--root", temp)
+            self.assertNotEqual(unregistered_result.returncode, 0)
+            self.assertIn("memory project 'stranger' is not builder", unregistered_result.stdout)
+            unregistered.unlink()
             undated = memory.parent / "sample.md"
             undated.write_text("# Permanent project history\n", encoding="utf-8")
             self.assertNotEqual(run(script, "refresh", "--root", temp).returncode, 0)

@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Project
 builder
@@ -160,7 +160,24 @@ Revert the commit on `main` with a new commit. Documents saved under the new rul
 - Fixtures across six test files need a registry: some test may be missed. Mitigation: run the full suite.
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Shared registry fixture for tests
+
+- Change: Added `.agents/tests/project_registry_fixture.py`, which writes a spokes.json with sample projects; five test files use it.
+- Reason: Every helper that writes a record now reads the registry, so each temporary Builder root needs one; one helper keeps the fixtures identical.
+- Impact: One new test-support file beyond Expected Changes; no production effect.
+
+### 2026-10-04 - Hub check requires the registry
+
+- Change: The hub check now reports a missing or invalid spokes.json as an error, so `check_hub.py refresh` on an empty folder fails until a registry exists. `test_check_read_only_and_refresh_only_three_folders` now asserts that failure, then writes a registry.
+- Reason: AC-5 makes the registry the source of valid slugs; without it the check cannot validate memory or Project sections.
+- Impact: Only temporary roots without a registry are affected; Builder always has spokes.json.
+
+### 2026-10-04 - Memory slug guidance tightened
+
+- Change: save-session-memory's `--project` guidance no longer says to invent a new slug; work with no repository first gets an active entry under `projects`.
+- Reason: The old sentence contradicted AC-4 once the helper refuses unregistered slugs.
+- Impact: Documentation only; within Task 3's files.
 
 ## Outcome
 Pending.

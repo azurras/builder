@@ -6,6 +6,9 @@ task-contract-v2
 ## Document Status
 complete
 
+## Project
+example-app
+
 ## Objective
 The application refuses to start without an explicit JWT signing secret.
 

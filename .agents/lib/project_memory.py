@@ -5,6 +5,8 @@ import datetime as dt
 from pathlib import Path
 import re
 
+from spoke_registry import require_active_project
+
 PROJECT_RE = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*")
 
 
@@ -19,9 +21,11 @@ def append_entry(root: Path, project: str, title: str, body: str,
                  date: str | None = None, time: str | None = None) -> Path:
     if not title.strip() or not body.strip():
         raise ValueError("Entry title and body must not be blank")
+    builder_root = root.expanduser().resolve()
+    require_active_project(builder_root, project)
     now = dt.datetime.now().astimezone()
     stamp_date = dt.date.fromisoformat(date) if date else now.date()
-    path = project_path(root, project, stamp_date.isoformat())
+    path = project_path(builder_root, project, stamp_date.isoformat())
     stamp_time = dt.time.fromisoformat(time).strftime("%H:%M") if time else now.strftime("%H:%M %Z")
     previous = path.read_bytes() if path.exists() else b""
     prefix = "\n\n" if previous else f"# {stamp_date.isoformat()} - {project} Session Memory\n\nWork, decisions, events, and evidence for this date.\n\n"

@@ -12,8 +12,9 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / ".agents" / "lib"))
 
-from artifact_quality import validate_implementation_plan_text, validate_test_report_text
+from artifact_quality import project_of, validate_implementation_plan_text, validate_test_report_text
 from builder_hub import markdown_links
+from project_registry_fixture import write_project_registry
 
 
 VALID_PLAN = """# Sample Plan
@@ -122,6 +123,7 @@ Verification: `./gradlew test --tests AppTest`
         spec.loader.exec_module(module)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            write_project_registry(root)
             for name in module.ARTIFACT_DIRS:
                 (root / name).mkdir(parents=True, exist_ok=True)
             for name in module.INDEX_FILES:
@@ -422,6 +424,9 @@ task-contract-v2
 ## Document Status
 ready-for-execution
 
+## Project
+builder
+
 ## Objective
 Reject startup when the signing secret is missing.
 
@@ -556,6 +561,7 @@ class LivingPlanTests(unittest.TestCase):
     def test_save_cli_requires_current_format_for_new_plans(self) -> None:
         v1_plan = ArtifactQualityTests().contract_plan()
         with tempfile.TemporaryDirectory() as directory:
+            write_project_registry(Path(directory))
             plans = Path(directory) / "docs/implementation-plans"
             cases = (
                 ("Living", LIVING_PLAN, 0),
@@ -567,7 +573,9 @@ class LivingPlanTests(unittest.TestCase):
                     result = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
                                              "--title", title, stdin=content)
                     self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
-                    self.assertEqual((plans / f"2099-04-05-{title.lower()}.md").exists(), expected == 0)
+                    saved_names = {path.name for path in plans.glob("*.md")} if plans.exists() else set()
+                    self.assertEqual(f"2099-04-05-builder-{title.lower()}.md" in saved_names, expected == 0)
+                    self.assertNotIn(f"2099-04-05-{title.lower()}.md", saved_names)
 
             existing_v1_plan = plans / "2099-04-05-existing.md"
             existing_v1_plan.write_text(v1_plan, encoding="utf-8")
@@ -576,6 +584,49 @@ class LivingPlanTests(unittest.TestCase):
                                        stdin=v1_plan.replace("Ship the change.", "Ship it."))
             self.assertEqual(replaced.returncode, 0, replaced.stdout + replaced.stderr)
             self.assertIn("Ship it.", existing_v1_plan.read_text(encoding="utf-8"))
+
+    def test_save_cli_names_the_project_in_new_plans(self) -> None:
+        unlabeled_plan = LIVING_PLAN.replace("## Project\nbuilder\n\n", "")
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_project_registry(root, active=("home-lab",), retired=("old-shop",))
+            plans = root / "docs/implementation-plans"
+            refusals = (
+                ("Unlabeled", unlabeled_plan, "need a Project section"),
+                ("Unknown", LIVING_PLAN.replace("## Project\nbuilder", "## Project\nstranger"), "Unknown project"),
+                ("Retired", LIVING_PLAN.replace("## Project\nbuilder", "## Project\nold-shop"), "retired"),
+            )
+            for title, content, expected_message in refusals:
+                with self.subTest(title=title):
+                    result = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
+                                             "--title", title, stdin=content)
+                    self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                    self.assertIn(expected_message, result.stderr)
+            self.assertFalse(plans.exists())
+
+            standalone_plan = LIVING_PLAN.replace("## Project\nbuilder", "## Project\n`home-lab`")
+            # The second title already starts with the project, so it names the same file instead of doubling it.
+            for title in ("Router upgrade", "Home lab router upgrade"):
+                with self.subTest(title=title):
+                    result = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
+                                             "--title", title, "--overwrite", stdin=standalone_plan)
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual([path.name for path in plans.glob("*.md")], ["2099-04-05-home-lab-router-upgrade.md"])
+
+            historical_plan = plans / "2099-04-05-historical.md"
+            historical_plan.write_text(unlabeled_plan, encoding="utf-8")
+            replaced = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
+                                       "--title", "Historical", "--overwrite",
+                                       stdin=unlabeled_plan.replace("Pending.", "Still pending."))
+            self.assertEqual(replaced.returncode, 0, replaced.stdout + replaced.stderr)
+            self.assertIn("Still pending.", historical_plan.read_text(encoding="utf-8"))
+
+    def test_project_section_holds_one_slug(self) -> None:
+        self.assertEqual(project_of(LIVING_PLAN), "builder")
+        self.assertIsNone(project_of(LIVING_PLAN.replace("## Project\nbuilder\n\n", "")))
+        invalid = LIVING_PLAN.replace("## Project\nbuilder", "## Project\nBuilder hub")
+        self.assertEqual(self.errors_for(invalid),
+                         ["Project must be one lowercase hyphenated project slug, not 'Builder hub'"])
 
     def test_log_helper_appends_entries_in_order_and_sets_status(self) -> None:
         crlf_entry = LOG_ENTRY.strip().replace("\n", "\r\n")

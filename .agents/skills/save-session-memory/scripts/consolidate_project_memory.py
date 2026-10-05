@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Consolidate the reviewed legacy Builder corpus; dry-run unless --apply is explicit."""
+"""Consolidate the reviewed legacy Builder corpus; dry-run unless --apply is explicit.
+
+Archival: the consolidation finished in July 2026. Only --verify, the read-only
+audit in references/migration-audit.md, still runs. Daily memory goes through
+save_session_memory.py; never rerun --apply on the current repository.
+"""
 from __future__ import annotations
 
 import argparse

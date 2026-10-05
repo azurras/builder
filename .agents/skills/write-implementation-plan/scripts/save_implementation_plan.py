@@ -10,15 +10,17 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from artifact_io import dated_markdown_file, parse_optional_date, save_dated_markdown
-from artifact_quality import CURRENT_PLAN_FORMAT, plan_format_of, validate_implementation_plan_text
+from artifact_io import dated_markdown_file, parse_optional_date, project_prefixed_title, save_dated_markdown
+from artifact_quality import CURRENT_PLAN_FORMAT, plan_format_of, project_of, validate_implementation_plan_text
+from spoke_registry import require_active_project
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Save a Markdown implementation plan to "
-            "docs/implementation-plans/YYYY-MM-DD-title.md."
+            "docs/implementation-plans/YYYY-MM-DD-project-title.md. The project "
+            "comes from the plan's Project section."
         )
     )
     parser.add_argument(
@@ -74,11 +76,15 @@ def main() -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
 
-    # Existing plans may be replaced in their own format; new plans use the current one.
+    builder_root = Path(args.root).expanduser().resolve()
+    project = project_of(body)
+    filename_title = title if project is None else project_prefixed_title(project, title)
+    # Existing plans may be replaced in their own format and without a Project
+    # section; new plans use the current format and name their project.
     plan_file = dated_markdown_file(
-        root=Path(args.root),
+        root=builder_root,
         directory=args.plan_dir,
-        title=title,
+        title=filename_title,
         fallback_slug="implementation-plan",
         artifact_date=plan_date,
     )
@@ -86,12 +92,22 @@ def main() -> int:
     if plan_format_of(body) != CURRENT_PLAN_FORMAT and not is_replacing_existing_plan:
         print(f"New implementation plans must use Plan Format {CURRENT_PLAN_FORMAT}", file=sys.stderr)
         return 1
+    if project is None and not is_replacing_existing_plan:
+        print("New implementation plans need a Project section naming builder, a registered spoke "
+              "or an active project from spokes.json", file=sys.stderr)
+        return 1
+    if project is not None:
+        try:
+            require_active_project(builder_root, project)
+        except ValueError as error:
+            print(error, file=sys.stderr)
+            return 1
 
     try:
         plan_file = save_dated_markdown(
-            root=Path(args.root),
+            root=builder_root,
             directory=args.plan_dir,
-            title=title,
+            title=filename_title,
             body=body,
             fallback_slug="implementation-plan",
             artifact_date=plan_date,

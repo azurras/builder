@@ -7,5 +7,19 @@
       "defaultBranch": "main",
       "description": "Personal website: Java 25, Spring Boot and Gradle. The spoke's own AGENTS.md and README own build, run and deployment commands."
     }
+  ],
+  "projects": [
+    {
+      "slug": "personal-computer-cleanup",
+      "name": "Personal computer cleanup",
+      "status": "active",
+      "description": "Cleanup of the user's own computer; no repository. The 2026-07-09 record holds requirements and planning only, not proof that cleanup ran."
+    },
+    {
+      "slug": "software-handoff-kit",
+      "name": "Software Handoff Kit",
+      "status": "retired",
+      "description": "A downloadable handoff-template product prepared on 2026-09-13; its offer was removed from christopherbell.dev on 2026-10-04."
+    }
   ]
 }

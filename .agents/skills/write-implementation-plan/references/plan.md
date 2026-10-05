@@ -1,6 +1,6 @@
 # Plan Mode
 
-Save Markdown under `docs/implementation-plans/YYYY-MM-DD-title.md` at the active Builder root. Use the user's local date, a concise lowercase slug, and `--overwrite` only after reading an existing file and intentionally replacing its complete contents.
+Save Markdown under `docs/implementation-plans/YYYY-MM-DD-project-title.md` at the active Builder root. The helper takes the project from the plan's Project section and adds it to the filename unless the title already starts with it. Use the user's local date, a concise lowercase slug, and `--overwrite` only after reading an existing file and intentionally replacing its complete contents.
 
 ## What a Plan Is
 
@@ -16,6 +16,7 @@ Write the sections in this order. Keep each short; a small change gets a small p
 |---|---|
 | Plan Format | `task-contract-v2` |
 | Document Status | `draft`, `ready-for-review`, `ready-for-execution`, `in-progress`, `blocked` or `complete` |
+| Project | One slug: `builder` for hub work, the spoke's slug for spoke work, or an active entry under `projects` in spokes.json. The save helper refuses a new plan without it or with an unknown or retired slug. Plans written before this section existed keep their names; do not add it to them |
 | Objective | One or two sentences: the outcome, not the activity |
 | Background | Why now: the problem, its evidence and who asked |
 | Goals | Outcomes we commit to, each with how we will know (point to acceptance criteria) |

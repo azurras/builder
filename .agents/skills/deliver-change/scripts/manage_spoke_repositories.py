@@ -10,7 +10,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "lib"))
 from project_memory import append_entry, project_path
-from spoke_registry import Spoke, find_spoke, load_spokes, register_spoke, resolve_spoke_location
+from spoke_registry import (Spoke, find_spoke, load_spokes, register_spoke, require_active_project,
+                            resolve_spoke_location)
 from spoke_state import inspect_repository, origin_mismatch
 
 
@@ -91,7 +92,10 @@ def main() -> int:
         checkout = resolve_spoke_location(builder_root, spoke).path if spoke else Path(args.path)
         project = args.project or (spoke.slug if spoke else "")
         day = dt.date.today().isoformat()
-        memory_path = project_path(builder_root, project, day) if args.mode == "snapshot" else None
+        memory_path = None
+        if args.mode == "snapshot":
+            memory_path = project_path(builder_root, project, day)
+            require_active_project(builder_root, project)
         content, failed = inspect_repository(checkout)
         if spoke and not failed:
             mismatch = origin_mismatch(spoke, checkout)

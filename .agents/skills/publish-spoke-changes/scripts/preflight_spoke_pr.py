@@ -12,7 +12,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "lib"))
-from artifact_quality import markdown_sections, validate_test_report_text
+from artifact_quality import markdown_sections, project_of, validate_test_report_text
 from spoke_registry import Spoke, find_spoke, normalize_remote, resolve_spoke_location
 from spoke_state import git, origin_mismatch
 
@@ -78,7 +78,16 @@ def builder_report_path_of(raw_report: str) -> PurePosixPath:
     return report_path
 
 
-def check_report(builder_root: Path, report_path: PurePosixPath, candidate_commit: str) -> list[Check]:
+def check_report_project(spoke: Spoke, report_text: str) -> Check:
+    report_project = project_of(report_text)
+    if report_project is None:
+        return Check("report project", True, "report predates the Project section")
+    return Check("report project", report_project == spoke.slug,
+                 f"report Project is {report_project}" if report_project == spoke.slug
+                 else f"report Project is {report_project}, not spoke {spoke.slug}")
+
+
+def check_report(builder_root: Path, spoke: Spoke, report_path: PurePosixPath, candidate_commit: str) -> list[Check]:
     report_file = builder_root / report_path
     try:
         report_text = report_file.read_text(encoding="utf-8")
@@ -89,7 +98,8 @@ def check_report(builder_root: Path, report_path: PurePosixPath, candidate_commi
     status = status_lines[0].strip().lstrip("-* ").strip("`").lower()
     if status != "complete":
         report_errors.append(f"Document Status is {status or 'missing'}, not complete")
-    checks = [Check("report", not report_errors, "; ".join(report_errors) or f"{report_path} is a complete report")]
+    checks = [Check("report", not report_errors, "; ".join(report_errors) or f"{report_path} is a complete report"),
+              check_report_project(spoke, report_text)]
     try:
         published_text = git(builder_root, "show", f"{BUILDER_PUBLISHED_REF}:{report_path}")
     except GIT_FAILURES:
@@ -119,7 +129,7 @@ def preflight(builder_root: Path, spoke: Spoke, checkout: Path, report_path: Pur
         return [checkout_check], ""
     candidate_commit = git(checkout, "rev-parse", "HEAD")
     checks = [checkout_check, check_branch(spoke, checkout), check_tracked_changes(checkout),
-              check_commits_ahead(spoke, checkout), *check_report(builder_root, report_path, candidate_commit)]
+              check_commits_ahead(spoke, checkout), *check_report(builder_root, spoke, report_path, candidate_commit)]
     return checks, candidate_commit
 
 

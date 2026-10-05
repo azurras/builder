@@ -1,4 +1,9 @@
-"""Loss-preserving source sections and link relocation for project memory."""
+"""Loss-preserving source sections and link relocation for project memory.
+
+Archival: used only by consolidate_project_memory.py to audit the completed July
+2026 consolidation (see save-session-memory/references/migration-audit.md).
+Daily memory goes through save_session_memory.py; do not build on this module.
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass

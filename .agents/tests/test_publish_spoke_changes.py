@@ -55,10 +55,11 @@ class PreflightTests(unittest.TestCase):
                                 "defaultBranch": "main", "description": "Sample spoke"}]}
         commit_file(self.builder, "spokes.json", json.dumps(registry), "Register spoke")
 
-    def publish_report(self, *, candidate_text=None, status="complete"):
+    def publish_report(self, *, candidate_text=None, status="complete", project=None):
         sample_text = SAMPLE_REPORT.read_text(encoding="utf-8")
         status_section = sample_text.split("## Document Status", 1)[1].split("##", 1)[0]
-        report_text = sample_text.replace(status_section, f"\n{status}\n\n", 1)
+        project_section = f"## Project\n{project}\n\n" if project is not None else ""
+        report_text = sample_text.replace(status_section, f"\n{status}\n\n{project_section}", 1)
         named_candidate = self.candidate[:7] if candidate_text is None else candidate_text
         commit_file(self.builder, REPORT_PATH, f"{report_text}\nCandidate: {named_candidate}\n", "Report")
         mark_published(self.builder)
@@ -122,6 +123,14 @@ class PreflightTests(unittest.TestCase):
         self.assert_fails_check("report names candidate", f"does not name candidate {self.candidate[:7]}")
         self.publish_report(status="draft")
         self.assert_fails_check("report", "Document Status is draft, not complete")
+
+    def test_report_project_must_be_the_spoke(self):
+        self.publish_report(project="other-site")
+        self.assert_fails_check("report project", "report Project is other-site, not spoke site-dev")
+        self.publish_report(project="site-dev")
+        result = self.preflight()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("[pass] report project: report Project is site-dev", result.stdout)
 
     def test_report_path_outside_test_reports_is_rejected(self):
         result = self.preflight(report="docs/session-memory/2026-10-04-builder.md")

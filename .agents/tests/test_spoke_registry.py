@@ -8,8 +8,9 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / ".agents/lib"))
-from spoke_registry import (SPOKES_ROOT_ENV, find_spoke, is_remote_repository, load_spokes, normalize_remote,
-                            register_spoke, resolve_spoke_location)
+from spoke_registry import (SPOKES_ROOT_ENV, ProjectStatus, find_spoke, is_remote_repository, load_spokes,
+                            normalize_remote, project_statuses_of, register_spoke, require_active_project,
+                            resolve_spoke_location)
 
 SCRIPT = ROOT / ".agents/skills/deliver-change/scripts/manage_spoke_repositories.py"
 REPOSITORY = "https://github.com/example/site.dev.git"
@@ -22,6 +23,12 @@ def spoke_entry(**overrides):
     return entry
 
 
+def project_entry(**overrides):
+    entry = {"slug": "home-lab", "name": "Home lab", "status": "active", "description": "Sample standalone project"}
+    entry.update(overrides)
+    return entry
+
+
 class SpokeRegistryTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -30,12 +37,19 @@ class SpokeRegistryTests(unittest.TestCase):
         self.builder = self.workspace / "builder"
         self.builder.mkdir()
 
-    def write_registry(self, *entries):
-        (self.builder / "spokes.json").write_text(json.dumps({"spokes": list(entries)}), encoding="utf-8")
+    def write_registry(self, *entries, projects=()):
+        document = {"spokes": list(entries)}
+        if projects:
+            document["projects"] = list(projects)
+        (self.builder / "spokes.json").write_text(json.dumps(document), encoding="utf-8")
 
     def test_repository_registry_is_valid_and_has_no_machine_paths(self):
         spokes = load_spokes(ROOT)
         self.assertIn("christopherbell-dev", [spoke.slug for spoke in spokes])
+        statuses = project_statuses_of(ROOT)
+        self.assertEqual(statuses["builder"], ProjectStatus.ACTIVE)
+        self.assertEqual(statuses["personal-computer-cleanup"], ProjectStatus.ACTIVE)
+        self.assertEqual(statuses["software-handoff-kit"], ProjectStatus.RETIRED)
         registry_text = (ROOT / "spokes.json").read_text(encoding="utf-8")
         self.assertNotRegex(registry_text, r"(?<![A-Za-z])[A-Za-z]:[\\/]|/Users/|/home/")
 
@@ -55,6 +69,39 @@ class SpokeRegistryTests(unittest.TestCase):
                 self.write_registry(*entries)
                 with self.assertRaises(ValueError):
                     load_spokes(self.builder)
+
+    def test_project_slugs_are_the_hub_spokes_and_standalone_projects(self):
+        self.write_registry(spoke_entry(), projects=[project_entry(), project_entry(slug="old-shop", status="retired")])
+        self.assertEqual(project_statuses_of(self.builder), {
+            "builder": ProjectStatus.ACTIVE, "site-dev": ProjectStatus.ACTIVE,
+            "home-lab": ProjectStatus.ACTIVE, "old-shop": ProjectStatus.RETIRED})
+        for active_slug in ("builder", "site-dev", "home-lab"):
+            require_active_project(self.builder, active_slug)
+        with self.assertRaisesRegex(ValueError, "retired"):
+            require_active_project(self.builder, "old-shop")
+        with self.assertRaisesRegex(ValueError, "Unknown project 'missing'.*builder, home-lab, site-dev"):
+            require_active_project(self.builder, "missing")
+
+    def test_registry_without_projects_still_loads(self):
+        self.write_registry(spoke_entry())
+        self.assertEqual(set(project_statuses_of(self.builder)), {"builder", "site-dev"})
+
+    def test_rejects_invalid_projects(self):
+        invalid_registries = {
+            "reserved for the Builder hub": ([spoke_entry(slug="builder")], []),
+            "already used": ([spoke_entry()], [project_entry(slug="site-dev")]),
+            "status 'paused'": ([], [project_entry(status="paused")]),
+            "missing nonblank description": ([], [project_entry(description=" ")]),
+            r"projects\[1\] slug":([], [project_entry(), project_entry(slug="Bad Slug")]),
+        }
+        for expected_message, (spokes, projects) in invalid_registries.items():
+            with self.subTest(expected_message=expected_message):
+                self.write_registry(*spokes, projects=projects)
+                with self.assertRaisesRegex(ValueError, expected_message):
+                    project_statuses_of(self.builder)
+        self.write_registry(projects=[project_entry(), project_entry()])
+        with self.assertRaisesRegex(ValueError, "already used"):
+            project_statuses_of(self.builder)
 
     def test_unknown_spoke_names_registered_spokes(self):
         self.write_registry(spoke_entry())
@@ -101,6 +148,17 @@ class SpokeRegistryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, expected_message):
                     register_spoke(self.builder, name="spoke", default_branch="main", description="Spoke", **fields)
                 self.assertEqual((self.builder / "spokes.json").read_bytes(), before)
+
+    def test_register_refuses_a_standalone_project_slug_and_keeps_projects(self):
+        self.write_registry(spoke_entry(), projects=[project_entry()])
+        before = (self.builder / "spokes.json").read_bytes()
+        with self.assertRaisesRegex(ValueError, "already registered as a standalone project"):
+            register_spoke(self.builder, slug="home-lab", name="home-lab", description="Spoke",
+                           repository="https://github.com/example/home-lab.git", default_branch="main")
+        self.assertEqual((self.builder / "spokes.json").read_bytes(), before)
+        register_spoke(self.builder, slug="blog", name="blog", description="Blog spoke",
+                       repository="https://github.com/example/blog.git", default_branch="main")
+        self.assertIn("home-lab", project_statuses_of(self.builder))
 
     def test_remote_forms_exclude_local_paths(self):
         for remote in (REPOSITORY, "ssh://git@github.com/example/site.dev.git", "git@github.com:example/site.dev.git"):
