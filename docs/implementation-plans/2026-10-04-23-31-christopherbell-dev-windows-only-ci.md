@@ -1,7 +1,7 @@
 # Target christopherbell.dev CI on Windows
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -110,15 +110,20 @@ Revert the workflow change through a follow-up commit and let the usual pull req
 - **Reason:** Startup on a fresh authenticated MongoDB `test` database is intentionally stopped by migration 015 until protected production cutover state exists; the required local application check can still verify normal website readiness and rendering when only that gate is excluded for the isolated local run.
 - **Impact:** Runtime proof records the test-only gate exclusion, isolated authenticated database, readiness/homepage results, and startup catch-up's external Overpass 504. The temporary source edit was removed before the final full build; no test profile or migration change is included in commit `b0fc64b`.
 
+### 2026-10-05 - Merge Windows-only website CI
+
+- **Change:** Complete the plan after PR #1479 merged; the branch's Windows build, Dependency Review and all CodeQL checks passed, and GitHub readback shows merge commit `b126b64241737995d9127d0849dcf62c68f987c0` for head `b0fc64bb4a3a0ae8cc0c128fccb12f0955a58534`.
+- **Reason:** The Windows-only workflow and its updated contract test passed local build/runtime verification and all remote CI gates.
+- **Impact:** AC-1 and AC-2 are complete. The local runtime report documents that migration 015 was excluded only for the isolated verification startup; the final committed tree was rebuilt after removing that test-only profile edit. No production deployment is part of this CI configuration change.
+
 ## Outcome
-> [!WARNING]
-> The Windows-only workflow is implemented, the focused configuration tests and full Windows build pass, and candidate `b0fc64b` is committed. Local application runtime proof is blocked by the protected cutover startup requirement, so no spoke PR was opened.
+> [!TIP]
+> The Windows-only website CI change is merged. Pull request [#1479](https://github.com/azurras/christopherbell.dev/pull/1479) merged as `b126b64241737995d9127d0849dcf62c68f987c0` from verified head `b0fc64bb4a3a0ae8cc0c128fccb12f0955a58534`.
 
 | AC | Result | Evidence |
 |---|---|---|
-| AC-1 | ⚠️ Partly met. Workflow YAML validation and all 2,164 JUnit tests passed (110 skipped), but local runtime verification stopped at migration 015 because the isolated fresh database lacks the verified `TARGET_ACTIVE` cutover ledger. | [Test report](../test-reports/2026-10-04-23-52-christopherbell-dev-windows-only-website-ci.md); candidate commit `b0fc64b`. |
-| AC-2 | ❌ Not met. PR creation and merge are deferred until a cutover-ready isolated runtime fixture or authorized test-only initialization path is available. | No PR created; Builder's before-PR runtime proof requirement remains unmet. |
-
+| AC-1 | Met. The website build has one `windows-latest` runner, no OS matrix or Unix Gradle steps, and retains Windows Java 25, Node, Pester, the Gradle wrapper and failure artifacts. The focused workflow contract test passed 10/10; final Windows `gradlew.bat build` passed with 2,164 tests, 0 failures, 0 errors and 110 skipped. Local readiness and homepage returned 200 in an isolated authenticated `test` database; the runtime report discloses that migration 015 was excluded only by a temporary local profile, removed before the final build. | [Runtime report](../test-reports/2026-10-05-06-49-christopherbell-dev-windows-only-website-ci.md); commit `b0fc64b`. |
+| AC-2 | Met. PR #1479 merged after the Windows CI build, Dependency Review and all CodeQL scans passed; GitHub readback confirms the merged state and merge SHA. | [PR #1479](https://github.com/azurras/christopherbell.dev/pull/1479); merge `b126b64241737995d9127d0849dcf62c68f987c0`. |
 ## Project
 christopherbell-dev
 
