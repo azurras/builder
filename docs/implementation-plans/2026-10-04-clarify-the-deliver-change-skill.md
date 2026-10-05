@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 An agent that loads deliver-change can tell which steps the request covers, where it is in the flow, what proves each step is done, where each artifact is published, and what to do when blocked.
@@ -106,4 +106,10 @@ Revert the change commit; the skill returns to the `17ed180` text. If a push fai
 No entries yet.
 
 ## Outcome
-Pending.
+- AC-1: met. SKILL.md opens with Choose the Scope covering full delivery, plan only, review only (code and plan), spoke locate/clone/register/inspect/snapshot, and close only, each with its stopping point.
+- AC-2: met. Seven steps (scope, plan, implement, verify, publish, record, close) each end with a `Done:` line; Resume defines stale evidence.
+- AC-3: met. Where Things Are Published sends the plan, report and memory to Builder through the phase finalizer, Builder code through publish-builder-changes and spoke code through publish-spoke-changes. Step 1 defines the default completion boundary; steps 3 and 6 name the Test Plan, write-chris-street-style-code review mode and save-session-memory.
+- AC-4: met. When Blocked and Report sections added.
+- AC-5: met. 92 tests pass, `check_hub.py refresh --root .` passes, `git diff --check` is clean.
+- AC-6: met by the delivery commit, confirmed with `git ls-remote` (recorded in the 2026-10-04 Builder memory).
+- Shipped as planned. The plan was published at `02be182`. Follow-ups: none.
