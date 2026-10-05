@@ -1,7 +1,7 @@
 # Timestamp Plan and Test Report Filenames
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -139,7 +139,18 @@ Revert the change commit; older-shape names keep working under the old code, but
 No entries yet.
 
 ## Outcome
-Pending.
+> [!TIP]
+> Shipped as planned: new plans and reports are saved as `YYYY-MM-DD-HH-MM-project-title.md`, older names keep working, and the docs describe the new shape. No follow-ups.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `test_saves_test_report_with_project_prefixed_dated_slug`, `test_saving_without_a_time_names_the_report_with_the_current_minute` and the plan save tests; a real save into a temporary root printed `2026-10-04-22-14-builder-smoke-check.md`. |
+| AC-2 | ✅ Met | `test_overwrite_replaces_the_same_day_report_whatever_its_time`, `test_overwrite_replaces_an_older_record_named_without_a_time`, `test_save_refuses_a_malformed_time_and_an_ambiguous_same_day_report`; the temporary-root rerun refused without `--overwrite`, replaced with it and left one file. |
+| AC-3 | ✅ Met | `test_parse_dated_file_reads_an_optional_time`, the index test's `2099-04-08 09:30:` line, the validator's `YYYY-MM-DD-HH-MM-builder-` message; `check_hub.py check` passes on the real hub. |
+| AC-4 | ✅ Met | AGENTS.md, README.md, plan.md, update.md, validation.md and write-test-report SKILL.md updated; `git grep` finds the old shape only in historical records. |
+| AC-5 | ✅ Met | Change commit pushed to Builder `origin/main` with this plan and the dated memory entry. |
+
+`python -B -m unittest discover -s .agents/tests`: 120 tests OK. `git diff --check`: clean.
 
 ## Project
 builder

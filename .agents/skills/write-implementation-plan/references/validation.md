@@ -3,7 +3,7 @@
 Run the shared validator against the supplied Markdown:
 
 ```powershell
-python .agents/skills/write-implementation-plan/scripts/validate_implementation_plan.py docs/implementation-plans/YYYY-MM-DD-title.md
+python .agents/skills/write-implementation-plan/scripts/validate_implementation_plan.py docs/implementation-plans/YYYY-MM-DD-HH-MM-project-title.md
 ```
 
 With no filename, the CLI reads stdin. The save and log helpers use the same validator and refuse invalid results before writing.

@@ -112,9 +112,11 @@ def validate_record_project(path: Path, project: str | None, project_statuses: d
         return
     if project not in project_statuses:
         errors.append(f"{path}: Project {project!r} is not builder, a registered spoke or a project in {REGISTRY_FILE}")
-    filename_title = path.stem[len("YYYY-MM-DD-"):]
-    if filename_title != project and not filename_title.startswith(f"{project}-"):
-        errors.append(f"{path}: filename must start with YYYY-MM-DD-{project}- to match its Project section")
+    dated_file = parse_dated_file(path)
+    if dated_file is None:
+        return
+    if dated_file.slug != project and not dated_file.slug.startswith(f"{project}-"):
+        errors.append(f"{path}: filename must start with YYYY-MM-DD-HH-MM-{project}- to match its Project section")
 
 
 def main() -> int:
@@ -147,7 +149,7 @@ def main() -> int:
             if directory == "docs/session-memory":
                 validate_memory_day(path, project_statuses, errors)
             elif not parse_dated_file(path):
-                errors.append(f"{path}: filename must use YYYY-MM-DD-title.md")
+                errors.append(f"{path}: filename must use YYYY-MM-DD-HH-MM-title.md")
             validate_links(path, root, errors)
 
     for path in list_markdown(root, "docs/implementation-plans"):

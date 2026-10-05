@@ -27,13 +27,18 @@ UNLABELED_GROUP = "Before the Project field"
 
 
 def item_line(index_file: Path, path: Path) -> str:
-    parsed = parse_dated_file(path)
-    date = parsed[0] if parsed else "project"
+    dated_file = parse_dated_file(path)
+    if dated_file is None:
+        filed_at = "project"
+    elif dated_file.time is None:
+        filed_at = dated_file.date
+    else:
+        filed_at = f"{dated_file.date} {dated_file.time}"
     title = first_heading(path)
     status = extract_status(read_text(path)) or ""
     link = path.name
     suffix = f" - `{status}`" if status else ""
-    return f"- {date}: [{title}]({link}){suffix}"
+    return f"- {filed_at}: [{title}]({link}){suffix}"
 
 
 def memory_day_line(path: Path) -> str:

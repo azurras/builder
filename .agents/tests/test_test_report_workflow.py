@@ -44,13 +44,63 @@ class TestReportWorkflowTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             write_project_registry(root)
-            result = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05",
+            result = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05", "--time", "14:07",
                          "--title", "Issue 42 Local App Test", stdin=report_text("Issue 42 Local App Test"))
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            report = root / "docs" / "test-reports" / "2099-04-05-builder-issue-42-local-app-test.md"
+            report = root / "docs" / "test-reports" / "2099-04-05-14-07-builder-issue-42-local-app-test.md"
             self.assertEqual(Path(result.stdout.strip()).name, report.name)
             self.assertIn("## Test Cases", report.read_text(encoding="utf-8"))
+
+    def test_saving_without_a_time_names_the_report_with_the_current_minute(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_project_registry(root)
+            result = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05",
+                         "--title", "Clock", stdin=report_text("Clock"))
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertRegex(Path(result.stdout.strip()).name, r"^2099-04-05-([01]\d|2[0-3])-[0-5]\d-builder-clock\.md$")
+
+    def test_overwrite_replaces_the_same_day_report_whatever_its_time(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_project_registry(root)
+            first = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05", "--time", "09:30",
+                        "--title", "Rerun", stdin=report_text("Rerun"))
+            self.assertEqual(first.returncode, 0, first.stderr)
+
+            refused = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05", "--time", "16:45",
+                          "--title", "Rerun", stdin=report_text("Rerun"))
+            replaced = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05", "--time", "16:45",
+                           "--title", "Rerun", "--overwrite", stdin=report_text("Rerun").replace("PASS", "PASS again"))
+
+            self.assertEqual(refused.returncode, 1, refused.stdout + refused.stderr)
+            self.assertIn("already exists", refused.stderr)
+            self.assertEqual(replaced.returncode, 0, replaced.stdout + replaced.stderr)
+            report_dir = root / "docs" / "test-reports"
+            self.assertEqual([path.name for path in report_dir.glob("*.md")], ["2099-04-05-09-30-builder-rerun.md"])
+            self.assertIn("PASS again", (report_dir / "2099-04-05-09-30-builder-rerun.md").read_text(encoding="utf-8"))
+
+    def test_save_refuses_a_malformed_time_and_an_ambiguous_same_day_report(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_project_registry(root)
+            report_dir = root / "docs" / "test-reports"
+            report_dir.mkdir(parents=True)
+            for name in ("2099-04-05-builder-twin.md", "2099-04-05-10-00-builder-twin.md"):
+                (report_dir / name).write_text(report_text("Twin"), encoding="utf-8")
+
+            malformed = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05", "--time", "9:30",
+                            "--title", "Other", stdin=report_text("Other"))
+            ambiguous = run(SAVE_SCRIPT, "--root", str(root), "--date", "2099-04-05",
+                            "--title", "Twin", "--overwrite", stdin=report_text("Twin"))
+
+            self.assertEqual(malformed.returncode, 2, malformed.stdout + malformed.stderr)
+            self.assertIn("--time must use HH:MM format", malformed.stderr)
+            self.assertEqual(ambiguous.returncode, 2, ambiguous.stdout + ambiguous.stderr)
+            self.assertIn("several records on 2099-04-05 are named 'builder-twin': "
+                          "2099-04-05-10-00-builder-twin.md, 2099-04-05-builder-twin.md", ambiguous.stderr)
 
     def test_new_report_must_name_an_active_project(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -87,6 +137,8 @@ class TestReportWorkflowTests(unittest.TestCase):
             (report_dir / "2099-04-06-home-lab-router-report.md").write_text(
                 report_text("Router Report", "home-lab"), encoding="utf-8")
             (report_dir / "2099-04-07-builder-hub-report.md").write_text(report_text("Hub Report"), encoding="utf-8")
+            (report_dir / "2099-04-08-09-30-builder-timed-report.md").write_text(
+                report_text("Timed Report"), encoding="utf-8")
             for directory in ("docs/session-memory", "docs/implementation-plans"):
                 (root / directory).mkdir(parents=True, exist_ok=True)
 
@@ -95,6 +147,7 @@ class TestReportWorkflowTests(unittest.TestCase):
             index_text = (report_dir / "index.md").read_text(encoding="utf-8")
             group_positions = [index_text.index(heading) for heading in
                                ("## builder\n\n- 2099-04-07: [Hub Report]",
+                                "- 2099-04-08 09:30: [Timed Report]",
                                 "## home-lab\n\n- 2099-04-06: [Router Report]",
                                 "## Before the Project field\n\n- 2099-04-05: [Sample Report]")]
             self.assertEqual(group_positions, sorted(group_positions))
@@ -110,7 +163,8 @@ class TestReportWorkflowTests(unittest.TestCase):
             report_dir.mkdir(parents=True)
             cases = {
                 "2099-04-05-stranger-report.md": ("stranger", "is not builder, a registered spoke"),
-                "2099-04-05-health-report.md": ("builder", "filename must start with YYYY-MM-DD-builder-"),
+                "2099-04-05-health-report.md": ("builder", "filename must start with YYYY-MM-DD-HH-MM-builder-"),
+                "2099-04-05-09-30-timed-report.md": ("builder", "filename must start with YYYY-MM-DD-HH-MM-builder-"),
             }
             for filename, (project, expected_error) in cases.items():
                 with self.subTest(filename=filename):

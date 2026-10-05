@@ -1,6 +1,6 @@
 # Plan Mode
 
-Save Markdown under `docs/implementation-plans/YYYY-MM-DD-project-title.md` at the active Builder root. The helper takes the project from the plan's Project section and adds it to the filename unless the title already starts with it. Use the user's local date, a concise lowercase slug, and `--overwrite` only after reading an existing file and intentionally replacing its complete contents.
+Save Markdown under `docs/implementation-plans/YYYY-MM-DD-HH-MM-project-title.md` at the active Builder root; `HH-MM` is the local time the plan is first saved, so several plans on one day sort in creation order. The helper takes the project from the plan's Project section and adds it to the filename unless the title already starts with it. Use the user's local date and time, a concise lowercase slug, and `--overwrite` only after reading an existing file and intentionally replacing its complete contents. `--overwrite` replaces the plan with the same date and title whatever time its name carries, including older names without one.
 
 ## What a Plan Is
 
@@ -88,4 +88,4 @@ Pass complete Markdown through stdin. For an existing draft file:
 Get-Content -Raw -LiteralPath $draftPath | python .agents/skills/write-implementation-plan/scripts/save_implementation_plan.py --root . --title 'Implementation title'
 ```
 
-Set `$draftPath` to the reviewed draft. The helper refuses accidental overwrite, refuses new plans in an older format and exits nonzero on invalid plan structure. It retains `--date`, `--plan-dir`, and `--overwrite` for explicit requests.
+Set `$draftPath` to the reviewed draft. The helper refuses accidental overwrite, refuses new plans in an older format and exits nonzero on invalid plan structure. It retains `--date`, `--time` (`HH:MM`), `--plan-dir`, and `--overwrite` for explicit requests.

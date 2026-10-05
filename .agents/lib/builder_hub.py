@@ -8,9 +8,12 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+from typing import NamedTuple
 
 
-DATED_FILE_RE = re.compile(r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<slug>.+)\.md$")
+# Plans and reports are named YYYY-MM-DD-HH-MM-slug.md; older records omit the HH-MM time.
+DATED_FILE_RE = re.compile(
+    r"^(?P<date>\d{4}-\d{2}-\d{2})(?:-(?P<time>(?:[01]\d|2[0-3])-[0-5]\d))?-(?P<slug>.+)\.md$")
 
 STATUS_VALUES = (
     "proposed",
@@ -78,11 +81,21 @@ def list_markdown(root: Path, directory: str) -> list[Path]:
     return sorted(path for path in target.glob("*.md") if path.is_file())
 
 
-def parse_dated_file(path: Path) -> tuple[str, str] | None:
+class DatedFile(NamedTuple):
+    """A plan or report filename; time is `HH:MM`, or None for an older name without one."""
+
+    date: str
+    time: str | None
+    slug: str
+
+
+def parse_dated_file(path: Path) -> DatedFile | None:
     match = DATED_FILE_RE.match(path.name)
     if not match:
         return None
-    return match.group("date"), match.group("slug")
+    filename_time = match.group("time")
+    clock_time = filename_time.replace("-", ":") if filename_time else None
+    return DatedFile(match.group("date"), clock_time, match.group("slug"))
 
 
 def relative_link(from_file: Path, to_file: Path) -> str:

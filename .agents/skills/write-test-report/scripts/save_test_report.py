@@ -10,7 +10,8 @@ import sys
 LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
-from artifact_io import dated_markdown_file, parse_optional_date, project_prefixed_title, save_dated_markdown
+from artifact_io import (dated_markdown_file, parse_optional_date, parse_optional_time, project_prefixed_title,
+                         save_dated_markdown)
 from artifact_quality import project_of, validate_test_report_text
 from builder_hub import read_stdin_text
 from spoke_registry import require_active_project
@@ -19,7 +20,7 @@ from spoke_registry import require_active_project
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Save a Markdown test report to docs/test-reports/YYYY-MM-DD-project-title.md. "
+            "Save a Markdown test report to docs/test-reports/YYYY-MM-DD-HH-MM-project-title.md. "
             "The project comes from the report's Project section."
         )
     )
@@ -38,6 +39,10 @@ def parse_args() -> argparse.Namespace:
         help="Report date in YYYY-MM-DD format. Defaults to today's local date.",
     )
     parser.add_argument(
+        "--time",
+        help="Report time in HH:MM format for the filename. Defaults to the current local time.",
+    )
+    parser.add_argument(
         "--title",
         required=True,
         help="Report title to use for the filename slug.",
@@ -45,7 +50,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--overwrite",
         action="store_true",
-        help="Replace an existing report with the same dated title.",
+        help="Replace an existing report with the same date and title, whatever its time.",
     )
     return parser.parse_args()
 
@@ -57,6 +62,11 @@ def main() -> int:
         report_date = parse_optional_date(args.date)
     except ValueError:
         print("--date must use YYYY-MM-DD format", file=sys.stderr)
+        return 2
+    try:
+        report_time = parse_optional_time(args.time)
+    except ValueError:
+        print("--time must use HH:MM format", file=sys.stderr)
         return 2
 
     title = args.title.strip()
@@ -80,13 +90,18 @@ def main() -> int:
     project = project_of(body)
     filename_title = title if project is None else project_prefixed_title(project, title)
     # An existing report may be replaced without a Project section; a new report names its project.
-    report_file = dated_markdown_file(
-        root=builder_root,
-        directory=args.report_dir,
-        title=filename_title,
-        fallback_slug="test-report",
-        artifact_date=report_date,
-    )
+    try:
+        report_file = dated_markdown_file(
+            root=builder_root,
+            directory=args.report_dir,
+            title=filename_title,
+            fallback_slug="test-report",
+            artifact_date=report_date,
+            artifact_time=report_time,
+        )
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        return 2
     is_replacing_existing_report = args.overwrite and report_file.exists()
     if project is None and not is_replacing_existing_report:
         print("New test reports need a Project section naming builder, a registered spoke "
@@ -107,6 +122,7 @@ def main() -> int:
             body=body,
             fallback_slug="test-report",
             artifact_date=report_date,
+            artifact_time=report_time,
             overwrite=args.overwrite,
         )
     except FileExistsError as error:

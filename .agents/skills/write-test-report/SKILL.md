@@ -41,12 +41,12 @@ Save complete Markdown on stdin:
 Get-Content -Raw -LiteralPath $reportDraftPath | python .agents/skills/write-test-report/scripts/save_test_report.py --root . --title 'Require explicit JWT secret'
 ```
 
-`--title` names the change and becomes the filename slug, `docs/test-reports/YYYY-MM-DD-<project>-<slug>.md`; the project comes from the report's Project section and is not repeated when the title already starts with it. A new report must name `builder`, a registered spoke or an active project from spokes.json; the helper refuses anything else. `--date` (`YYYY-MM-DD`) defaults to today's local date. The helper validates before writing and refuses an existing file unless `--overwrite` intentionally replaces a report you have read.
+`--title` names the change and becomes the filename slug, `docs/test-reports/YYYY-MM-DD-HH-MM-<project>-<slug>.md`, where `HH-MM` is the local time the report is first saved; the project comes from the report's Project section and is not repeated when the title already starts with it. A new report must name `builder`, a registered spoke or an active project from spokes.json; the helper refuses anything else. `--date` (`YYYY-MM-DD`) defaults to today's local date and `--time` (`HH:MM`) to the current local time. The helper validates before writing and refuses an existing file unless `--overwrite` intentionally replaces a report you have read; it finds the report with the same date and title whatever time its name carries.
 
 ## Validate
 
 ```powershell
-python .agents/skills/write-test-report/scripts/validate_test_report.py docs/test-reports/YYYY-MM-DD-title.md
+python .agents/skills/write-test-report/scripts/validate_test_report.py docs/test-reports/YYYY-MM-DD-HH-MM-project-title.md
 ```
 
 Structural validity does not prove the evidence supports the claim. AGENTS.md defines when runtime proof is required. Publish report changes through the [phase finalizer](../publish-builder-changes/references/phase-finalization.md); validation alone does not write, commit or close work.

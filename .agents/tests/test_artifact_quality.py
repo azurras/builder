@@ -571,10 +571,10 @@ class LivingPlanTests(unittest.TestCase):
             for title, content, expected in cases:
                 with self.subTest(title=title):
                     result = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
-                                             "--title", title, stdin=content)
+                                             "--time", "09:30", "--title", title, stdin=content)
                     self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
                     saved_names = {path.name for path in plans.glob("*.md")} if plans.exists() else set()
-                    self.assertEqual(f"2099-04-05-builder-{title.lower()}.md" in saved_names, expected == 0)
+                    self.assertEqual(f"2099-04-05-09-30-builder-{title.lower()}.md" in saved_names, expected == 0)
                     self.assertNotIn(f"2099-04-05-{title.lower()}.md", saved_names)
 
             existing_v1_plan = plans / "2099-04-05-existing.md"
@@ -609,9 +609,10 @@ class LivingPlanTests(unittest.TestCase):
             for title in ("Router upgrade", "Home lab router upgrade"):
                 with self.subTest(title=title):
                     result = self.run_script(self.save_script, "--root", directory, "--date", "2099-04-05",
-                                             "--title", title, "--overwrite", stdin=standalone_plan)
+                                             "--time", "09:30", "--title", title, "--overwrite", stdin=standalone_plan)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertEqual([path.name for path in plans.glob("*.md")], ["2099-04-05-home-lab-router-upgrade.md"])
+            self.assertEqual([path.name for path in plans.glob("*.md")],
+                             ["2099-04-05-09-30-home-lab-router-upgrade.md"])
 
             historical_plan = plans / "2099-04-05-historical.md"
             historical_plan.write_text(unlabeled_plan, encoding="utf-8")
@@ -803,17 +804,17 @@ class PresentationFormTests(unittest.TestCase):
             root = Path(directory)
             write_project_registry(root)
             report_with_project = report.replace("## Story/Issue", "## Project\nbuilder\n\n## Story/Issue")
-            saved_plan = root / "docs/implementation-plans/2099-04-05-builder-encoding.md"
+            saved_plan = root / "docs/implementation-plans/2099-04-05-09-30-builder-encoding.md"
             runs = (
                 ("save plan", [scripts / "write-implementation-plan/scripts/save_implementation_plan.py",
-                               "--root", directory, "--date", "2099-04-05", "--title", "Encoding"], plan,
+                               "--root", directory, "--date", "2099-04-05", "--time", "09:30", "--title", "Encoding"], plan,
                  saved_plan),
                 ("log plan change", [scripts / "write-implementation-plan/scripts/log_plan_change.py",
                                      "--plan", str(saved_plan), "--date", "2099-04-06", "--title", "Logged"],
                  f"- **Change:** {marked_text}\n- **Reason:** Probe.\n- **Impact:** None.", saved_plan),
                 ("save report", [scripts / "write-test-report/scripts/save_test_report.py",
-                                 "--root", directory, "--date", "2099-04-05", "--title", "Encoding"],
-                 report_with_project, root / "docs/test-reports/2099-04-05-builder-encoding.md"),
+                                 "--root", directory, "--date", "2099-04-05", "--time", "09:30", "--title", "Encoding"],
+                 report_with_project, root / "docs/test-reports/2099-04-05-09-30-builder-encoding.md"),
                 ("save memory", [scripts / "save-session-memory/scripts/save_session_memory.py",
                                  "--root", directory, "--project", "builder", "--title", "Probe",
                                  "--date", "2099-04-05", "--time", "09:00"],
