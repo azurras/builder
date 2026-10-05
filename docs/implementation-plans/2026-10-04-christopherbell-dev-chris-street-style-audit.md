@@ -1,7 +1,7 @@
 # christopherbell.dev Chris Street Style Audit
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Plan Format
 task-contract-v1
@@ -19,7 +19,7 @@ Review and correct all tracked first-party executable code for the website again
 - Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, fetched 2026-10-04.
 - `AGENTS.md`, root and module READMEs, Gradle build files, JavaScript/CSS ownership READMEs.
 - Builder `.agents/skills/chris-street-style/SKILL.md` and its Java, JavaScript, API/design, configuration, and testing references.
-- Current inventory: 1,421 tracked files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration; re-count at execution.
+- Initial inventory: 1,421 tracked files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration. The execution re-count is 1,416; see the final audit record for extension counts and reviewed groups.
 
 ## Branch
 Use `codex/chris-street-style-audit-20261004`, created from the fetched website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`. Keep the dirty authoritative checkout at `A:\Projects\christopherbell.dev` untouched.

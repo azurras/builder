@@ -49,3 +49,13 @@ Automated checks: pass. Candidate readiness and user-facing runtime proof: block
 ## Bugs / Follow-ups
 
 Do not reset or bypass the incomplete migration record as part of this style audit. Runtime verification and any merge/deployment remain blocked until migration 015 can be exercised against an authorized, healthy disposable database. The temporary Mongo process is stopped; only its temporary data directory remains because the approval review rejected recursive removal.
+
+## Follow-up Review and Checks
+
+The continued source review found three additional exception-contract corrections: command-center action launch catches its declared `IOException` and retains it as the `InvalidRequestException` cause; metrics collection catches only `ExecutionException` or `CancellationException` from provider futures; restaurant import month parsing catches `DateTimeParseException`. `EmailSanitizer` now catches the expected IDN/address parse exceptions and preserves their causes. The email sanitizer test asserts the retained IDN cause.
+
+Focused `EmailSanitizerTest`, `CommandCenterActionServiceTest`, `CommandCenterMetricsServiceTest`, and `RestaurantImportWorkflowServiceTest` passed. The full `:website:check :cbell-lib:check` passed in 4m13s after these edits, including JavaScript, Pester, deployment-context, sensor-runtime, and static-asset checks. The native PowerShell AST parser accepted all 29 tracked PowerShell files; PSScriptAnalyzer is not installed. `git diff --check` passed. The packaged candidate built by the full check has SHA-256 `0FF79B4C532306D467ADA2C665B96334E49B2429E9C5D77D2C6007BE00BA4E68`.
+
+The new follow-up edits have not received isolated application runtime proof. The prior candidate startup evidence remains blocked at Mongo migration 015; no migration record was reset or bypassed. Merge and production activation remain blocked pending runtime proof against an authorized healthy disposable database.
+
+Follow-up source commit `9e8c18db` is pushed to the existing draft PR branch. PR CI is running for that commit; update this report with its readback before the next delivery checkpoint.
