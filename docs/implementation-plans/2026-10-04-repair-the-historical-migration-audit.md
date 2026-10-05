@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 `consolidate_project_memory.py --root . --source-commit 78f0183 --verify` passes on Builder main and keeps passing when later skill renames move files, while still rejecting any unrecorded edit to an imported section.
@@ -107,7 +107,19 @@ Revert the change commit; the audit returns to its failing state with no data ef
 - Future renames will need a retarget entry. Mitigation: the real-repository test fails until one is added, and migration-audit.md says so.
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Ignore retargets for memory files the corpus does not produce
+
+- Change: `apply_later_link_retargets` skips an entry whose memory file the audited corpus does not produce; staleness is checked only for produced files.
+- Reason: the fixture test's small corpus has no 2026-09-06 builder file, and the first version rejected the real entry there as stale.
+- Impact: AC-2 unchanged in intent; the stale-entry unit test uses a produced file.
 
 ## Outcome
-Pending.
+Delivered on 2026-10-04 with one logged refinement.
+- AC-1: Met. `relocate_link` and `transform` take keyword-only `existing_paths`; the audit builds it from `git ls-tree -r` of the source commit with `paths_in_commit`. `test_link_existence_comes_from_the_supplied_source_tree` shows a target present in the set but absent on disk is relocated, and left alone without the set.
+- AC-2: Met. `LATER_LINK_RETARGETS` holds the one recorded retarget (maintain-builder-hub to publish-builder-changes in the 2026-09-06 Builder memory). `test_stale_link_retarget_is_rejected` shows a non-matching entry raises.
+- AC-3: Met. The fixture test now rewrites an imported line after `--apply` and `--verify` fails with "Source preservation failed"; the rest of that test passes unchanged.
+- AC-4: Met. `test_real_repository_passes_migration_audit` failed before the fix with "Source preservation failed: docs/skill-migration.md" and passes now; the audit command prints "Every imported source body matches the full migration transformation." across all 267 sources.
+- AC-5: Met when the delivery commit's `git ls-remote origin refs/heads/main` matches local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md).
+Checks: the full test suite passes, the hub check passes and `git diff --check` is clean. Runtime verification does not apply: no runnable application.
+Shipped versus planned: as planned plus the produced-file refinement. No follow-ups.

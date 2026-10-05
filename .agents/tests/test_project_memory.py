@@ -6,6 +6,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / ".agents/skills/save-session-memory/scripts/save_session_memory.py"
+MIGRATION_SCRIPT = ROOT / ".agents/skills/save-session-memory/scripts/consolidate_project_memory.py"
+MIGRATION_SOURCE_COMMIT = "78f0183"
 
 
 def run(*args, body="Evidence."):
@@ -50,7 +52,7 @@ class ProjectMemoryTests(unittest.TestCase):
 
 class MigrationTransformTests(unittest.TestCase):
     def test_nested_examples_are_preserved_and_unknown_sources_rejected(self):
-        script = ROOT / ".agents/skills/save-session-memory/scripts/consolidate_project_memory.py"
+        script = MIGRATION_SCRIPT
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             def git(*args):
@@ -80,6 +82,13 @@ class MigrationTransformTests(unittest.TestCase):
                                  files[f"docs/templates/examples/{source}-example.md"])
             result = subprocess.run(command + ["--verify"], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
+            memory = root / "docs/session-memory/2026-07-04-builder.md"
+            imported_text = memory.read_text(encoding="utf-8")
+            memory.write_text(imported_text.replace("Preserve me.", "Rewritten history."), encoding="utf-8")
+            result = subprocess.run(command + ["--verify"], capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Source preservation failed", result.stderr)
+            memory.write_text(imported_text, encoding="utf-8")
             unexpected = root / "docs/unclassified.md"
             unexpected.write_text("Unknown history", encoding="utf-8")
             git("add", "docs/unclassified.md")
@@ -117,3 +126,48 @@ class MigrationTransformTests(unittest.TestCase):
             self.assertIn("abc123", section)
             with self.assertRaises(ValueError):
                 transform("[bad](../specs/2099-01-01-same.md#missing)", source, mapping[source], mapping, headings)
+
+    def test_link_existence_comes_from_the_supplied_source_tree(self):
+        sys.path.insert(0, str(ROOT / ".agents/lib"))
+        from memory_migration import Destination, transform
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve()
+            source = root / "docs/old.md"
+            destination = Destination(root / "docs/session-memory/project.md", "source-docs-old-md")
+            retired_reference = root / ".agents/skills/retired/references/guide.md"
+            body = "[guide](../.agents/skills/retired/references/guide.md)\n"
+            mapping = {source: destination}
+            relocated = transform(body, source, destination, mapping, {},
+                                  existing_paths=frozenset({retired_reference}))
+            self.assertEqual(relocated, "[guide](../../.agents/skills/retired/references/guide.md)\n")
+            unrelocated = transform(body, source, destination, mapping, {})
+            self.assertEqual(unrelocated, body)
+
+    def test_stale_link_retarget_is_rejected(self):
+        sys.path.insert(0, str(MIGRATION_SCRIPT.parent))
+        from consolidate_project_memory import apply_later_link_retargets
+        sections = {"docs/old.md": "[guide](../../current/guide.md)\n"}
+        sources = {"docs/old.md": "2026-09-06-builder"}
+        retargeted = apply_later_link_retargets(
+            sections, sources,
+            (("docs/session-memory/2026-09-06-builder.md", "../../current/guide.md", "../../renamed/guide.md"),))
+        self.assertEqual(retargeted["docs/old.md"], "[guide](../../renamed/guide.md)\n")
+        with self.assertRaises(ValueError):
+            apply_later_link_retargets(
+                sections, sources,
+                (("docs/session-memory/2026-09-06-builder.md", "../../missing/guide.md", "../../renamed/guide.md"),))
+
+
+class MigrationAuditTests(unittest.TestCase):
+    def test_real_repository_passes_migration_audit(self):
+        has_source_commit = subprocess.run(
+            ["git", "-C", str(ROOT), "cat-file", "-e", f"{MIGRATION_SOURCE_COMMIT}^{{commit}}"],
+            capture_output=True).returncode == 0
+        if not has_source_commit:
+            self.skipTest(f"source commit {MIGRATION_SOURCE_COMMIT} is not in this clone")
+        result = subprocess.run(
+            [sys.executable, "-B", str(MIGRATION_SCRIPT), "--root", str(ROOT),
+             "--source-commit", MIGRATION_SOURCE_COMMIT, "--verify"],
+            capture_output=True, text=True, timeout=120)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Every imported source body matches", result.stdout)

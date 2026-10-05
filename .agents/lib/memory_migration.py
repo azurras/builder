@@ -54,7 +54,14 @@ def heading_ids(text: str) -> dict[int, str]:
 
 
 def relocate_link(target: str, source: Path, destination: Path,
-                  mapping: dict[Path, Destination], headings: dict[Path, set[str]]) -> str:
+                  mapping: dict[Path, Destination], headings: dict[Path, set[str]],
+                  *, existing_paths: frozenset[Path] | None = None) -> str:
+    """Point a link at its target's new location.
+
+    A target outside `mapping` is relocated only when it exists. `existing_paths`
+    judges existence against a fixed source tree; without it the current
+    filesystem is used.
+    """
     raw = target.strip("<>")
     if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://|^mailto:|^data:", raw):
         return target
@@ -62,7 +69,8 @@ def relocate_link(target: str, source: Path, destination: Path,
     resolved = (source.parent / unquote(path)).resolve() if path else source.resolve()
     new = mapping.get(resolved)
     if new is None:
-        if not resolved.exists():
+        target_exists = resolved in existing_paths if existing_paths is not None else resolved.exists()
+        if not target_exists:
             return target
         new = Destination(resolved)
     anchor = new.anchor
@@ -81,7 +89,8 @@ def relocate_link(target: str, source: Path, destination: Path,
 
 
 def transform(text: str, source: Path, destination: Destination,
-              mapping: dict[Path, Destination], headings: dict[Path, set[str]]) -> str:
+              mapping: dict[Path, Destination], headings: dict[Path, set[str]],
+              *, existing_paths: frozenset[Path] | None = None) -> str:
     ids = heading_ids(text)
     result = []
     for number, (line, active) in enumerate(outside_fences(text)):
@@ -93,13 +102,15 @@ def transform(text: str, source: Path, destination: Destination,
         for i in range(0, len(parts), 2):
             parts[i] = re.sub(
                 r"(!?\[[^\]\n]*\]\()(<[^>]+>|[^\s)]+)([^)]*\))",
-                lambda m: m.group(1) + relocate_link(m.group(2), source, destination.path, mapping, headings) + m.group(3),
+                lambda m: m.group(1) + relocate_link(m.group(2), source, destination.path, mapping, headings,
+                                                     existing_paths=existing_paths) + m.group(3),
                 parts[i],
             )
         line = "".join(parts)
         reference = re.match(r"^(\s*\[[^\]]+\]:\s*)(<[^>]+>|\S+)(.*)$", line)
         if reference:
-            line = reference.group(1) + relocate_link(reference.group(2), source, destination.path, mapping, headings) + reference.group(3) + ("\n" if line.endswith("\n") else "")
+            line = reference.group(1) + relocate_link(reference.group(2), source, destination.path, mapping, headings,
+                                                      existing_paths=existing_paths) + reference.group(3) + ("\n" if line.endswith("\n") else "")
         if destination.anchor and number in ids:
             result.append(f'<a id="{destination.anchor}--{ids[number]}"></a>\n')
             line = re.sub(r"^#{1,6}(?=\s)", lambda m: "#" * min(len(m.group()) + 2, 6), line)

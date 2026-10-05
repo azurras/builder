@@ -23,6 +23,14 @@ BUILDER_JULY9 = {
     "require-runtime-evidence-in-test-reports", "trust-only-azurras-github-comments",
     "update-implementation-plan-skill-template",
 }
+# Links inside imported sections that later renames retargeted on disk so they
+# still resolve. Each entry is (memory file, link as migrated, current link).
+# A rename that changes an imported link adds its entry in the same change.
+LATER_LINK_RETARGETS = (
+    ("docs/session-memory/2026-09-06-builder.md",
+     "../../.agents/skills/maintain-builder-hub/references/phase-finalization.md",
+     "../../.agents/skills/publish-builder-changes/references/phase-finalization.md"),
+)
 
 
 def project_for(path: str, body: str) -> str:
@@ -55,8 +63,42 @@ def git(root: Path, *args: str) -> str:
     return subprocess.check_output(["git", "-C", str(root), *args], text=True, encoding="utf-8")
 
 
+def paths_in_commit(root: Path, commit: str) -> frozenset[Path]:
+    """Every file and folder in the commit's tree, resolved under root."""
+    paths = set()
+    for name in git(root, "ls-tree", "-r", "--name-only", commit).splitlines():
+        file_path = (root / name).resolve()
+        paths.add(file_path)
+        paths.update(parent for parent in file_path.parents if parent != root and root in parent.parents)
+    return frozenset(paths)
+
+
+def apply_later_link_retargets(sections: dict[str, str], sources: dict[str, str],
+                               retargets=LATER_LINK_RETARGETS) -> dict[str, str]:
+    """Expected sections with each recorded retarget applied.
+
+    A retarget for a memory file this corpus does not produce is ignored; one
+    that matches nothing in a produced file is stale.
+    """
+    retargeted_sections = dict(sections)
+    produced_projects = set(sources.values())
+    for memory_file, migrated_link, current_link in retargets:
+        project = Path(memory_file).stem
+        if project not in produced_projects:
+            continue
+        migrated_target, current_target = f"]({migrated_link})", f"]({current_link})"
+        matching_sources = [source for source, owner in sources.items()
+                            if owner == project and migrated_target in retargeted_sections[source]]
+        if not matching_sources:
+            raise ValueError(f"Stale link retarget for {memory_file}: {migrated_link}")
+        for source in matching_sources:
+            retargeted_sections[source] = retargeted_sections[source].replace(migrated_target, current_target)
+    return retargeted_sections
+
+
 def prepare(root: Path, commit: str):
     paths = git(root, "ls-tree", "-r", "--name-only", commit, "--", "docs").splitlines()
+    existing_paths = paths_in_commit(root, commit)
     originals = {path: git(root, "show", f"{commit}:{path}") for path in paths if path.endswith(".md")}
     sources = {}
     mapping = {}
@@ -106,17 +148,20 @@ def prepare(root: Path, commit: str):
         parts.append("\n")
         for path in selected:
             destination = mapping[(root / path).resolve()]
-            converted = transform(originals[path], root / path, destination, mapping, headings)
+            converted = transform(originals[path], root / path, destination, mapping, headings,
+                                  existing_paths=existing_paths)
             section = source_section(path, originals[path], converted, commit)
             sections[path] = section
             parts.append(section + "\n")
         outputs[output] = "".join(parts)
     for path, body in originals.items():
         if Path(path).parent.name in {"implementation-plans", "test-reports"} and Path(path).name != "index.md":
-            outputs[root / path] = transform(body, root / path, Destination(root / path), mapping, headings)
+            outputs[root / path] = transform(body, root / path, Destination(root / path), mapping, headings,
+                                             existing_paths=existing_paths)
     for template, target in templates.items():
         if template in originals:
-            outputs[target] = transform(originals[template], root / template, Destination(target), mapping, headings)
+            outputs[target] = transform(originals[template], root / template, Destination(target), mapping, headings,
+                                        existing_paths=existing_paths)
     removals = set(sources) | generated | (set(templates) & set(originals))
     retained = {path for path in originals if Path(path).parent.name in {"implementation-plans", "test-reports"}}
     retained.add("docs/session-memory/index.md")
@@ -149,7 +194,7 @@ def main() -> int:
     print(f"Source corpus: {len(sources)} documents; projects: {dict(Counter(sources.values()))}")
     if args.verify:
         actual = {path: path.read_text(encoding="utf-8") for path in outputs}
-        verify_sections(root, sources, sections, actual)
+        verify_sections(root, sources, apply_later_link_retargets(sections, sources), actual)
         print("Every imported source body matches the full migration transformation.")
         return 0
     if not args.apply:
