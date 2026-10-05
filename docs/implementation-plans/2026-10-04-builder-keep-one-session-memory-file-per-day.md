@@ -1,7 +1,7 @@
 # Keep One Session Memory File per Day
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -196,7 +196,23 @@ Revert the change commit: the former files and links come back exactly from Git.
 - **Impact:** AC-6 covers links only, as written.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Session memory is one file per date for every project. All acceptance criteria are met, and existing memory is merged into dated files. This shipped as planned, with the refinements recorded in the Implementation Log.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `test_every_project_on_a_date_appends_to_that_date_file`; the helper appended this change's entry to [2026-10-04.md](../session-memory/2026-10-04.md) |
+| AC-2 | ✅ Met | Same test asserts the exact Project line; `test_invalid_or_missing_project_and_empty_body_do_not_write` still refuses unknown and retired slugs |
+| AC-3 | ✅ Met | `test_check_read_only_and_refresh_only_three_folders` rejects `2099-01-03-sample.md` and a `stranger` Project line |
+| AC-4 | ✅ Met | [Session memory index](../session-memory/index.md) lists one line per date with its projects |
+| AC-5 | ✅ Met | Merge readback passed for 44 former files into 37 dated files; no `YYYY-MM-DD-project.md` file remains |
+| AC-6 | ✅ Met | `check_hub.py check` passes with no broken links; 24 documents retargeted |
+| AC-7 | ✅ Met | `--verify` prints "Every imported source body matches"; the fixture test still fails on "Rewritten history." |
+| AC-8 | ✅ Met | AGENTS.md, README.md, SKILL.md, openai.yaml and migration-audit.md updated in `b03ddd9` |
+| AC-9 | ✅ Met | Change commit `b03ddd9` pushed to origin/main; this plan and memory are published in the following commit |
+
+Full suite: 115 tests pass. Follow-up: none.
 
 ## Project
 builder
