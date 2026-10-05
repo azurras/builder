@@ -19,6 +19,7 @@ LOCAL_OVERRIDES_FILE = "spokes.local.json"
 SPOKES_ROOT_ENV = "BUILDER_SPOKES_ROOT"
 SLUG_RE = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*")
 REQUIRED_FIELDS = ("slug", "name", "repository", "defaultBranch", "description")
+REMOTE_REPOSITORY_RE = re.compile(r"(?:https|ssh)://[^\s/]+/\S+|[^@\s/\\]+@[^:\s/\\]+:[^\s\\]+")
 
 
 @dataclass(frozen=True)
@@ -71,23 +72,55 @@ def _spoke_from_entry(entry: object, index: int) -> Spoke:
     return Spoke(slug, entry["name"], entry["repository"], entry["defaultBranch"], entry["description"], directory)
 
 
-def load_spokes(builder_root: Path) -> list[Spoke]:
-    registry_path = builder_root / REGISTRY_FILE
+def _read_registry_document(registry_path: Path) -> dict:
     try:
         document = json.loads(registry_path.read_text(encoding="utf-8"))
     except FileNotFoundError as error:
         raise ValueError(f"Spoke registry not found: {registry_path}") from error
     except json.JSONDecodeError as error:
         raise ValueError(f"{registry_path}: invalid JSON: {error}") from error
-    entries = document.get("spokes") if isinstance(document, dict) else None
-    if not isinstance(entries, list):
+    if not isinstance(document, dict) or not isinstance(document.get("spokes"), list):
         raise ValueError(f"{registry_path}: expected an object with a 'spokes' list")
+    return document
+
+
+def load_spokes(builder_root: Path) -> list[Spoke]:
+    registry_path = builder_root / REGISTRY_FILE
+    entries = _read_registry_document(registry_path)["spokes"]
     spokes = [_spoke_from_entry(entry, index) for index, entry in enumerate(entries)]
     slugs = [spoke.slug for spoke in spokes]
     duplicates = sorted({slug for slug in slugs if slugs.count(slug) > 1})
     if duplicates:
         raise ValueError(f"{registry_path}: duplicate spoke slugs {duplicates}")
     return spokes
+
+
+def is_remote_repository(repository: str) -> bool:
+    """True for https, ssh and scp-style remotes; False for local paths, which the registry must not hold."""
+    return REMOTE_REPOSITORY_RE.fullmatch(repository) is not None
+
+
+def register_spoke(builder_root: Path, *, slug: str, name: str, repository: str, default_branch: str,
+                   description: str) -> Spoke:
+    """Append a validated spoke to spokes.json; the file is unchanged when validation fails."""
+    registry_path = builder_root / REGISTRY_FILE
+    document = _read_registry_document(registry_path)
+    registered_spokes = load_spokes(builder_root)
+    new_entry = {"slug": slug, "name": name, "repository": repository,
+                 "defaultBranch": default_branch, "description": description}
+    if not is_remote_repository(repository):
+        raise ValueError(f"Repository {repository!r} must be an https, ssh or user@host:path remote, not a local path")
+    new_spoke = _spoke_from_entry(new_entry, len(registered_spokes))
+    for registered in registered_spokes:
+        if registered.slug == new_spoke.slug:
+            raise ValueError(f"Spoke slug {slug!r} is already registered")
+        if normalize_remote(registered.repository) == normalize_remote(new_spoke.repository):
+            raise ValueError(f"Repository {repository} is already registered as {registered.slug!r}")
+        if registered.directory.lower() == new_spoke.directory.lower():
+            raise ValueError(f"Checkout folder {new_spoke.directory!r} is already used by {registered.slug!r}")
+    document["spokes"].append(new_entry)
+    registry_path.write_text(json.dumps(document, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return new_spoke
 
 
 def find_spoke(builder_root: Path, slug: str) -> Spoke:

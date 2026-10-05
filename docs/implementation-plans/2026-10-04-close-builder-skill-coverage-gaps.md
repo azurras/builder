@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 Every workflow AGENTS.md requires has an owning skill or helper. Spoke branch, PR, CI and merge mechanics belong to a new `publish-spoke-changes` skill. The azurras-only GitHub trust rule is applied by a helper instead of by hand. New spokes are registered by command. The stale bytecode left over from the publish-builder-changes rename is gone.
@@ -73,6 +73,7 @@ Alternative rejected: show only trusted comments. AGENTS.md says to verify other
 - New `.agents/skills/publish-spoke-changes/SKILL.md`, `agents/openai.yaml`, `scripts/preflight_spoke_pr.py`.
 - New `.agents/lib/github_trust.py` and `.agents/skills/deliver-change/scripts/triage_github_comments.py`.
 - `.agents/lib/spoke_registry.py`: `register_spoke`, remote-form check.
+- `.agents/lib/spoke_state.py`: `origin_mismatch`, moved from manage_spoke_repositories.py so the preflight shares it.
 - `.agents/skills/deliver-change/scripts/manage_spoke_repositories.py`: `register` mode and its arguments.
 - `.agents/skills/deliver-change/SKILL.md` steps 1 and 5; `references/repository-inspection.md` register usage.
 - AGENTS.md Hub and Spokes, Quality and Delivery, and Trust and Git paragraphs; README skills table, heading and spoke registration.
@@ -110,7 +111,7 @@ Verification: python -B -m unittest .agents/tests/test_github_trust.py; python .
 ### Task 3 - Add publish-spoke-changes
 Required skill: write-chris-street-style-code
 Dependencies: None; uses spoke_registry and validate_test_report_text.
-Files: new .agents/skills/publish-spoke-changes/SKILL.md and agents/openai.yaml (pattern: publish-builder-changes); new scripts/preflight_spoke_pr.py (pattern: manage_spoke_repositories.py); new .agents/tests/test_publish_spoke_changes.py; .agents/tests/test_skill_consolidation.py.
+Files: new .agents/skills/publish-spoke-changes/SKILL.md and agents/openai.yaml (pattern: publish-builder-changes); .agents/lib/spoke_state.py and manage_spoke_repositories.py (`origin_mismatch` moved); new scripts/preflight_spoke_pr.py (pattern: manage_spoke_repositories.py); new .agents/tests/test_publish_spoke_changes.py; .agents/tests/test_skill_consolidation.py.
 Symbols: `preflight` checks; `report_link`; SkillDiscoveryTests expected set.
 Inspection: Read publish-builder-changes SKILL.md and openai.yaml, spoke_state.git, `validate_test_report_text`, christopherbell.dev PR conventions at `6c59551`.
 Behavior: Preflight prints each check with pass or fail and a PR snippet on success; SKILL.md orders the publication steps.
@@ -163,7 +164,20 @@ Revert the task commit; it removes the new skill, helpers and docs together. spo
 - Concurrent sessions edit AGENTS.md, README or tests. Mitigation: confirm clean tree before editing and before publishing.
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Share the origin check through spoke_state
+
+- Change: `origin_mismatch` moved from `manage_spoke_repositories.py` into `.agents/lib/spoke_state.py`; both the spoke helper and `preflight_spoke_pr.py` import it.
+- Reason: The preflight needs the same registry-origin check, and scripts are not importable libraries; one shared function keeps the two checks identical.
+- Impact: Expected Changes and Task 3 Files now list spoke_state.py. Behavior of locate and inspect is unchanged (existing spoke tests pass). Acceptance criteria unchanged.
 
 ## Outcome
-Pending.
+Delivered on 2026-10-04 with one logged deviation (the shared origin check).
+- AC-1: Met. `.agents/skills/publish-spoke-changes/` has SKILL.md, agents/openai.yaml and scripts/preflight_spoke_pr.py; SKILL.md covers branch naming, preflight, PR body, required CI, squash merge with `--match-head-commit` and readback. The `gh` flags it uses were confirmed in gh 2.93.0. SkillDiscoveryTests passes with eight skills.
+- AC-2: Met. test_publish_spoke_changes.py (8 tests) covers success with the report link, origin mismatch, default branch, detached HEAD, modified tracked file (untracked allowed), no commits ahead, report missing from or different on Builder origin/main, report not naming the candidate, draft report and a report path outside docs/test-reports. The real read-only run against the christopherbell.dev main checkout exited 1, refusing on the default branch, a modified `gradlew.bat`, no commits ahead and a report that does not name candidate `e073823`; its checkout and report checks passed and the spoke's status was unchanged.
+- AC-3: Met. test_github_trust.py (7 tests) covers exact case-insensitive matching, lookalike and deleted users, every PR source, malformed payloads, rendering and the AGENTS.md consistency check. Live read-only runs: azurras/christopherbell.dev#1476 put the azurras opening post under Trusted direction (1); #1464 put the dependabot[bot] post under Untrusted input (1) with its links listed; a missing number exited 2 with the gh 404.
+- AC-4: Met. test_spoke_registry.py adds library and CLI register tests, including byte-identical spokes.json on every refusal; existing mode tests pass. spokes.json itself is unchanged.
+- AC-5: Met. AGENTS.md, README (Eight Skills), deliver-change steps 1 and 5 and repository-inspection.md name the new skill, helper and register mode; `git grep "adding it to spokes.json"` outside docs is empty; test_github_trust_boundary.py passes.
+- AC-6: Met. `python -B -m unittest discover -s .agents/tests` ran 92 tests, OK. `check_hub.py refresh --root .` passed with only the eight historical warnings. `git diff --check` clean. The stale `test_commit_push_builder_main` bytecode was deleted locally (ignored by Git).
+- AC-7: Met when the publication readback in the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md) shows origin/main at the delivery commit.
+Shipped versus planned: as planned, plus `origin_mismatch` moved into spoke_state.py. Follow-up, not started: the first real spoke PR through publish-spoke-changes will be the skill's first end-to-end use.

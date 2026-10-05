@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""List, locate, clone or inspect spoke repositories; optionally snapshot to project memory."""
+"""List, register, locate, clone or inspect spoke repositories; optionally snapshot to project memory."""
 import argparse
 import datetime as dt
 import hashlib
@@ -10,19 +10,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "lib"))
 from project_memory import append_entry, project_path
-from spoke_registry import Spoke, find_spoke, load_spokes, normalize_remote, resolve_spoke_location
-from spoke_state import git, inspect_repository
-
-
-def origin_mismatch(spoke: Spoke, checkout: Path) -> str | None:
-    """Return a mismatch description, or None when origin matches the registry."""
-    try:
-        origin = git(checkout, "remote", "get-url", "origin")
-    except (ValueError, OSError, subprocess.TimeoutExpired) as error:
-        return f"origin unavailable: {error}"
-    if normalize_remote(origin) != normalize_remote(spoke.repository):
-        return f"origin {origin} does not match registered {spoke.repository}"
-    return None
+from spoke_registry import Spoke, find_spoke, load_spokes, register_spoke, resolve_spoke_location
+from spoke_state import inspect_repository, origin_mismatch
 
 
 def list_spokes(builder_root: Path) -> int:
@@ -58,19 +47,40 @@ def clone_spoke(builder_root: Path, spoke: Spoke) -> int:
     return result.returncode
 
 
+def register_new_spoke(builder_root: Path, arguments: argparse.Namespace) -> int:
+    new_spoke = register_spoke(builder_root, slug=arguments.spoke, name=arguments.name,
+                               repository=arguments.repository, default_branch=arguments.default_branch,
+                               description=arguments.description)
+    location = resolve_spoke_location(builder_root, new_spoke)
+    print(f"Registered `{new_spoke.slug}` ({new_spoke.name}) from {new_spoke.repository} in spokes.json.\n"
+          f"Clone it to {location.path} with: clone --spoke {new_spoke.slug}")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", nargs="?", choices=("inspect", "snapshot", "list", "locate", "clone"), default="inspect")
+    parser.add_argument("mode", nargs="?", choices=("inspect", "snapshot", "list", "register", "locate", "clone"), default="inspect")
     target = parser.add_mutually_exclusive_group()
-    target.add_argument("--spoke", help="Registered spoke slug from spokes.json")
+    target.add_argument("--spoke", help="Registered spoke slug from spokes.json; for register, the new slug")
     target.add_argument("--path", help="Verified repository path when the repository is not a registered spoke")
     parser.add_argument("--root", default=".", help="Builder root containing spokes.json")
     parser.add_argument("--project", help="Memory project slug for snapshot; defaults to the spoke slug")
+    parser.add_argument("--name", help="register: display name, usually the repository name")
+    parser.add_argument("--repository", help="register: https, ssh or user@host:path remote")
+    parser.add_argument("--description", help="register: one sentence; say which instructions own build and run")
+    parser.add_argument("--default-branch", default="main", help="register: default branch (default: main)")
     args = parser.parse_args()
     builder_root = Path(args.root).expanduser().resolve()
     try:
         if args.mode == "list":
             return list_spokes(builder_root)
+        if args.mode == "register":
+            missing = [option for option, value in (("--spoke", args.spoke), ("--name", args.name),
+                                                    ("--repository", args.repository),
+                                                    ("--description", args.description)) if not value]
+            if missing or args.path:
+                parser.error("register requires --spoke, --name, --repository and --description, and not --path")
+            return register_new_spoke(builder_root, args)
         spoke = find_spoke(builder_root, args.spoke) if args.spoke else None
         if args.mode in {"locate", "clone"}:
             if spoke is None:

@@ -19,7 +19,7 @@ Builder is the AI workflow hub. All work starts here; the repositories it coordi
 |---|---|
 | christopherbell-dev | [azurras/christopherbell.dev](https://github.com/azurras/christopherbell.dev) |
 
-Register a new spoke in [spokes.json](spokes.json).
+Register a new spoke in [spokes.json](spokes.json) with `manage_spoke_repositories.py register --spoke <slug> --name <name> --repository <url> --description <text>`.
 
 ## Agents
 
@@ -35,17 +35,18 @@ Register a new spoke in [spokes.json](spokes.json).
 
 Append same-day project work; create another file for another date. Preserve decisions, attempts, discoveries, reviews, verification, blockers and outcomes. Plans and reports hold detailed evidence linked from memory.
 
-## Seven Skills
+## Eight Skills
 
 | Skill | Role |
 |---|---|
-| deliver-change | Delivery, coordination, repository inspection and closure |
+| deliver-change | Delivery, coordination, spoke registration and inspection, GitHub comment triage and closure |
 | write-implementation-plan | Living plans: creation, updates and implementation log, readiness review and validation |
 | save-session-memory | Dated work records |
 | write-test-report | Save or validate runtime evidence |
 | verify-local-app | Run any application locally before its PR; authorized deployment |
 | write-chris-street-style-code | Implementation standards and read-only code review |
 | publish-builder-changes | Hub index refresh and document validation, scoped selected-file publication and push recovery |
+| publish-spoke-changes | Spoke branch, PR preflight against the published runtime report, CI, merge and readback |
 
 [AGENTS.md](AGENTS.md) owns shared workflow policy. Skills contain only task-specific guidance, with conditional details in references. Reuse verified plans and progress, load relevant memory sections, and ask for input only when a consequential decision or authority is actually missing.
 

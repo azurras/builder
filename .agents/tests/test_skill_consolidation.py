@@ -109,7 +109,7 @@ class SkillDiscoveryTests(unittest.TestCase):
     def test_discovery_is_exact_and_active_links_resolve(self):
         expected = {"deliver-change", "write-implementation-plan",
                     "write-test-report",
-                    "publish-builder-changes", "verify-local-app", "write-chris-street-style-code",
+                    "publish-builder-changes", "publish-spoke-changes", "verify-local-app", "write-chris-street-style-code",
                     "save-session-memory"}
         self.assertEqual({p.name for p in SKILLS.iterdir() if p.is_dir()}, expected)
         self.assertEqual({p.parent.name for p in SKILLS.glob("*/SKILL.md")}, expected)

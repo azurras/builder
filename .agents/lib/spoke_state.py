@@ -3,6 +3,9 @@ from pathlib import Path
 import os
 import subprocess
 
+from spoke_registry import Spoke, normalize_remote
+
+
 def git(repo: Path, *args: str) -> str:
     result = subprocess.run(
         ["git", *args], cwd=repo, text=True, capture_output=True,
@@ -28,3 +31,14 @@ def inspect_repository(repo: Path) -> tuple[str, bool]:
                 f"- HEAD: `{head}`\n- Working tree:\n```text\n{status}\n```\n", False)
     except (ValueError, OSError, subprocess.TimeoutExpired) as exc:
         return f"- Repository: `{repo}`\n- Inspection error: {exc}\n", True
+
+
+def origin_mismatch(spoke: Spoke, checkout: Path) -> str | None:
+    """Return a mismatch description, or None when origin matches the registry."""
+    try:
+        origin = git(checkout, "remote", "get-url", "origin")
+    except (ValueError, OSError, subprocess.TimeoutExpired) as error:
+        return f"origin unavailable: {error}"
+    if normalize_remote(origin) != normalize_remote(spoke.repository):
+        return f"origin {origin} does not match registered {spoke.repository}"
+    return None

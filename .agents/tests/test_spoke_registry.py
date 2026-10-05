@@ -8,8 +8,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / ".agents/lib"))
-from spoke_registry import (SPOKES_ROOT_ENV, find_spoke, load_spokes, normalize_remote,
-                            resolve_spoke_location)
+from spoke_registry import (SPOKES_ROOT_ENV, find_spoke, is_remote_repository, load_spokes, normalize_remote,
+                            register_spoke, resolve_spoke_location)
 
 SCRIPT = ROOT / ".agents/skills/deliver-change/scripts/manage_spoke_repositories.py"
 REPOSITORY = "https://github.com/example/site.dev.git"
@@ -75,6 +75,41 @@ class SpokeRegistryTests(unittest.TestCase):
         from_override = resolve_spoke_location(self.builder, spoke, {SPOKES_ROOT_ENV: str(self.workspace / "code")})
         self.assertEqual(from_override.path, override)
 
+    def test_register_appends_validated_entry_in_registry_format(self):
+        self.write_registry(spoke_entry())
+        registered = register_spoke(self.builder, slug="blog", name="blog", description="Blog spoke",
+                                    repository="git@github.com:example/blog.git", default_branch="trunk")
+        self.assertEqual((registered.slug, registered.directory, registered.default_branch), ("blog", "blog", "trunk"))
+        registry_text = (self.builder / "spokes.json").read_text(encoding="utf-8")
+        self.assertEqual(registry_text, json.dumps({"spokes": [spoke_entry(), {
+            "slug": "blog", "name": "blog", "repository": "git@github.com:example/blog.git",
+            "defaultBranch": "trunk", "description": "Blog spoke"}]}, indent=2) + "\n")
+        self.assertEqual([spoke.slug for spoke in load_spokes(self.builder)], ["site-dev", "blog"])
+
+    def test_register_refuses_conflicts_and_local_paths_without_changing_registry(self):
+        self.write_registry(spoke_entry())
+        before = (self.builder / "spokes.json").read_bytes()
+        refusals = {
+            "already registered": dict(slug="site-dev", repository="https://github.com/example/other.git"),
+            "already registered as": dict(slug="copy", repository="git@github.com:Example/site.dev.git"),
+            "Checkout folder": dict(slug="fork", repository="https://github.com/fork/Site.dev.git"),
+            "not a local path": dict(slug="local", repository="C:\\code\\site.dev"),
+            "lowercase hyphenated": dict(slug="Bad Slug", repository="https://github.com/example/bad.git"),
+        }
+        for expected_message, fields in refusals.items():
+            with self.subTest(expected_message=expected_message):
+                with self.assertRaisesRegex(ValueError, expected_message):
+                    register_spoke(self.builder, name="spoke", default_branch="main", description="Spoke", **fields)
+                self.assertEqual((self.builder / "spokes.json").read_bytes(), before)
+
+    def test_remote_forms_exclude_local_paths(self):
+        for remote in (REPOSITORY, "ssh://git@github.com/example/site.dev.git", "git@github.com:example/site.dev.git"):
+            with self.subTest(remote=remote):
+                self.assertTrue(is_remote_repository(remote))
+        for local_path in ("C:\\code\\site", "C:/code/site", "/home/me/site", "../site", "file:///srv/site.git"):
+            with self.subTest(local_path=local_path):
+                self.assertFalse(is_remote_repository(local_path))
+
     def test_normalize_remote_matches_https_ssh_and_scp_forms(self):
         expected = "github.com/example/site.dev"
         for remote in (REPOSITORY, "https://github.com/Example/site.dev", "git@github.com:example/site.dev.git",
@@ -133,6 +168,25 @@ class SpokeCommandTests(unittest.TestCase):
         result = self.command("clone", "--spoke", "site-dev")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("existing path", result.stderr)
+
+    def test_register_command_adds_spoke_that_list_then_shows(self):
+        registered = self.command("register", "--spoke", "blog", "--name", "blog", "--description", "Blog spoke",
+                                  "--repository", "https://github.com/example/blog.git")
+        self.assertEqual(registered.returncode, 0, registered.stdout + registered.stderr)
+        self.assertIn("clone --spoke blog", registered.stdout)
+        self.assertEqual(find_spoke(self.builder, "blog").default_branch, "main")
+        self.assertIn("blog", self.command("list").stdout)
+
+    def test_register_command_rejects_missing_fields_and_conflicts(self):
+        before = (self.builder / "spokes.json").read_bytes()
+        incomplete = self.command("register", "--spoke", "blog", "--repository", "https://github.com/example/blog.git")
+        self.assertEqual(incomplete.returncode, 2)
+        self.assertIn("register requires", incomplete.stderr)
+        duplicate = self.command("register", "--spoke", "site-dev", "--name", "site.dev", "--description", "Again",
+                                 "--repository", "https://github.com/example/again.git")
+        self.assertEqual(duplicate.returncode, 2)
+        self.assertIn("already registered", duplicate.stderr)
+        self.assertEqual((self.builder / "spokes.json").read_bytes(), before)
 
     def test_snapshot_defaults_project_to_spoke_slug(self):
         self.set_origin(REPOSITORY)

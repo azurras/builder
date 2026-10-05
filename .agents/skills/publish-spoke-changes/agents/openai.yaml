@@ -1,0 +1,6 @@
+interface:
+  display_name: "Publish Spoke Changes"
+  short_description: "Branch, PR, CI and merge for a verified spoke change"
+  default_prompt: "Use $publish-spoke-changes to preflight a verified spoke branch against its published runtime report, open the pull request, wait for required CI, merge and read back the result."
+policy:
+  allow_implicit_invocation: true

@@ -7,7 +7,7 @@ python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py list
 python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py locate --spoke <slug>
 python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py inspect --spoke <slug>
 
-locate prints the resolved path and its source (spokes.local.json, BUILDER_SPOKES_ROOT, or the folder beside Builder) and fails when the checkout is missing or its origin differs from the registry. When a spoke is missing on this machine, clone --spoke <slug> clones its default branch to the resolved path; it refuses an existing path. For a repository that is not registered, use --path <verified-repository> instead of --spoke.
+locate prints the resolved path and its source (spokes.local.json, BUILDER_SPOKES_ROOT, or the folder beside Builder) and fails when the checkout is missing or its origin differs from the registry. When a spoke is missing on this machine, clone --spoke <slug> clones its default branch to the resolved path; it refuses an existing path. For a repository that is not registered, use --path <verified-repository> instead of --spoke. To add a spoke, run register --spoke <slug> --name <name> --repository <remote> --description <text> [--default-branch <branch>]; it appends a validated entry to spokes.json and refuses duplicate slugs, repositories or checkout folders and local paths.
 
 inspect is the default mode. It is read-only: no fetch, source modification, memory write or deployment authority. Git failures and registry mismatches remain explicit and nonzero.
 
