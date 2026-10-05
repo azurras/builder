@@ -8,7 +8,7 @@ from spoke_registry import Spoke, normalize_remote
 
 def git(repo: Path, *args: str) -> str:
     result = subprocess.run(
-        ["git", *args], cwd=repo, text=True, capture_output=True,
+        ["git", *args], cwd=repo, text=True, encoding="utf-8", capture_output=True,
         env={**os.environ, "GIT_OPTIONAL_LOCKS": "0"}, timeout=30, check=False,
     )
     if result.returncode:

@@ -100,7 +100,12 @@ Revert the one helper change and its regression test. No repository data or remo
 | A Git error message uses a legacy encoding | Low | Git's supported Windows output is UTF-8 in this repository; retain command and return-code diagnostics, and run the existing helper consumers. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Preserve Git's UTF-8 report output
+
+- **Change:** Added explicit UTF-8 decoding to the shared Git text helper and a temporary-repository unittest that commits and reads back a Unicode report marker.
+- **Reason:** On Windows the helper otherwise decoded Git's UTF-8 bytes as the local ANSI code page, causing a false published-report mismatch.
+- **Impact:** The new unittest passed and the normal spoke preflight command (without a Python UTF-8 mode override) now confirms the published report is identical to Builder origin/main. This Builder helper has no application runtime; native CLI checks cover its behavior.
 
 ## Outcome
 Pending.
