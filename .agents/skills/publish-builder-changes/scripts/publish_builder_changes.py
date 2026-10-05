@@ -53,6 +53,22 @@ def fail(message: str) -> int:
     return 1
 
 
+def is_in_index(root: Path, path: str) -> bool:
+    listed = run_git(root, ["--literal-pathspecs", "ls-files", "-z", "--error-unmatch", "--", path], check=False)
+    return listed.returncode == 0 and listed.stdout.split("\0") == [path, ""]
+
+
+def is_in_head(root: Path, path: str) -> bool:
+    """A file in HEAD but not the index is a deletion already staged, such as the old side of git mv. -r keeps a folder from matching."""
+    listed = run_git(root, ["--literal-pathspecs", "ls-tree", "-r", "-z", "--name-only", "HEAD", "--", path], check=False)
+    return listed.returncode == 0 and listed.stdout.split("\0") == [path, ""]
+
+
+def paths_needing_staging(root: Path, paths: list[str]) -> list[str]:
+    """git add fails on a path whose deletion is already staged, so leave those out."""
+    return [path for path in paths if (root / path).is_file() or is_in_index(root, path)]
+
+
 def selected_paths(root: Path, paths: list[str]) -> list[str]:
     selected: list[str] = []
     for value in paths:
@@ -65,10 +81,8 @@ def selected_paths(root: Path, paths: list[str]) -> list[str]:
         if candidate.is_dir() or candidate.is_symlink() or any(part.lower() in {".git", ".ds_store"} for part in path.parts):
             raise ValueError(f"Directories, symlinks, Git internals, and machine metadata cannot be selected: {value!r}")
         normalized = path.as_posix()
-        if not candidate.is_file():
-            tracked = run_git(root, ["--literal-pathspecs", "ls-files", "-z", "--error-unmatch", "--", normalized], check=False)
-            if tracked.returncode != 0 or tracked.stdout.split("\0") != [normalized, ""]:
-                raise ValueError(f"Selected file does not exist and is not a tracked deletion: {value!r}")
+        if not candidate.is_file() and not is_in_index(root, normalized) and not is_in_head(root, normalized):
+            raise ValueError(f"Selected file does not exist and is not a tracked deletion: {value!r}")
         if normalized not in selected:
             selected.append(normalized)
     return selected
@@ -124,7 +138,9 @@ def main() -> int:
             return 0
 
         if not args.push_only:
-            run_git(root, ["--literal-pathspecs", "add", "--", *paths])
+            paths_to_stage = paths_needing_staging(root, paths)
+            if paths_to_stage:
+                run_git(root, ["--literal-pathspecs", "add", "--", *paths_to_stage])
             staged = set(filter(None, run_git(root, ["diff", "--cached", "--name-only", "--no-renames", "-z"]).stdout.split("\0")))
             if staged - set(paths):
                 return fail("The index changed outside the selected files; refusing to commit. Inspect the index before retrying.")

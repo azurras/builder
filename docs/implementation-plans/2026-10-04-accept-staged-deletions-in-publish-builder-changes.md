@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 `publish_builder_changes.py` publishes a selection that includes a deletion already staged in the index, such as the old side of a `git mv`, without the caller unstaging anything first.
@@ -100,7 +100,13 @@ Revert the task commit; the helper returns to refusing staged deletions, which f
 - `ls-tree` on a repository with no commits fails. The helper already requires an existing main with a remote; the check treats a failed lookup as "not in HEAD".
 
 ## Implementation Log
-No entries yet.
+- 2026-10-04 Discovery: `git ls-tree HEAD -- nested` lists a deleted folder as one entry, so the first `is_in_head` let `--path nested` through and `test_deleted_directory_cannot_expand_selection_or_mutate_index` failed. Decision: add `-r` so a folder lists its files and fails the exact-match check. Reason: the folder guard is a stated invariant; the existing test caught it.
+- 2026-10-04 Discovery: another session's uncommitted spoke-registry edits (plan `3172504`) made seven spoke tests fail in the shared checkout. Decision: run the full suite in a temporary detached worktree at `3172504` with only this change applied, and publish only this change's files. Reason: preserve their work and prove this change in isolation.
 
 ## Outcome
-Pending.
+Delivered on 2026-10-04 with one design correction (`ls-tree -r`, logged above).
+- AC-1: Met. `test_staged_rename_is_committed` (`git mv`, both sides selected; HEAD records `D baseline.md`, `A renamed.md`, clean tree) and `test_staged_removal_is_committed` (`git rm`) failed on the old helper with "not a tracked deletion" and pass now.
+- AC-2: Met. `test_selected_deletion_is_committed` passes unchanged.
+- AC-3: Met. `missing.md` rejection, the unrelated-staged, deleted-directory, dry-run, worktree and push-only tests pass unchanged; `test_dry_run_with_staged_deletion_changes_nothing` passes. All 13 helper tests and all 72 suite tests pass on `3172504` plus this diff; `git diff --check` is clean.
+- AC-4: Met. Published with the fixed helper and confirmed by `git ls-remote origin refs/heads/main` matching local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md).
+Shipped versus planned: as planned plus `-r`. No follow-ups.

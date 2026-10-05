@@ -147,6 +147,26 @@ class CommitPushBehaviorTests(unittest.TestCase):
         self.assertEqual(self.invoke("--message", "Delete selected", "--path", "baseline.md"), 0)
         self.assertEqual(self.git("ls-tree", "--name-only", "HEAD"), "")
 
+    def test_staged_rename_is_committed(self) -> None:
+        self.git("mv", "baseline.md", "renamed.md")
+        result = self.invoke("--message", "Rename selected", "--path", "baseline.md", "--path", "renamed.md")
+        self.assertEqual(result, 0, self.output)
+        self.assertEqual(self.git("diff-tree", "--no-commit-id", "--name-status", "--no-renames", "-r", "HEAD"), "D\tbaseline.md\nA\trenamed.md")
+        self.assertEqual(self.git("status", "--short"), "")
+
+    def test_staged_removal_is_committed(self) -> None:
+        self.git("rm", "-q", "baseline.md")
+        result = self.invoke("--message", "Remove selected", "--path", "baseline.md")
+        self.assertEqual(result, 0, self.output)
+        self.assertEqual(self.git("ls-tree", "--name-only", "HEAD"), "")
+
+    def test_dry_run_with_staged_deletion_changes_nothing(self) -> None:
+        self.git("mv", "baseline.md", "renamed.md")
+        before = (self.git("write-tree"), self.git("rev-parse", "HEAD"), self.git("ls-remote", "origin", "refs/heads/main"))
+        result = self.invoke("--message", "Preview rename", "--path", "baseline.md", "--path", "renamed.md", "--dry-run")
+        self.assertEqual(result, 0, self.output)
+        self.assertEqual((self.git("write-tree"), self.git("rev-parse", "HEAD"), self.git("ls-remote", "origin", "refs/heads/main")), before)
+
     def test_push_only_recovers_committed_change_after_failed_push(self) -> None:
         subprocess.run(["git", "--git-dir", str(self.remote), "config", "receive.denyCurrentBranch", "refuse"], check=True)
         subprocess.run(["git", "--git-dir", str(self.remote), "config", "core.bare", "false"], check=True)
