@@ -1,7 +1,7 @@
 # Recover Missed CI Runs and Clarify Token Install Failures
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
