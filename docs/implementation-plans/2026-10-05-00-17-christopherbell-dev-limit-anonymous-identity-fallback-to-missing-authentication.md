@@ -1,7 +1,7 @@
 # Limit Anonymous Identity Fallback to Missing Authentication
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -99,10 +99,22 @@ Before merge, revert only this isolated correction if behavior or checks regress
 | Candidate runtime remains blocked by the missing ledger | High | Keep the candidate unpushed until a supported `test` fixture is available. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record focused verification and runtime blocker
+
+- **Change:** Added regressions for post and restaurant identity failure propagation, narrowed both fallbacks to `IllegalStateException`, and committed candidate `0838538`. Focused service tests and full module checks pass; the candidate JAR fails startup on the required `test` database at migration 015. The blocked [test report](../test-reports/2026-10-05-00-29-christopherbell-dev-limit-anonymous-identity-fallback-to-missing-authentication.md) records the exact evidence.
+- **Reason:** The `test` database has no active domain cutover ledger and its existing migration-015 record is `FAILED`; the application refuses to retry the incomplete durable record. Direct writes and guard bypass are prohibited.
+- **Impact:** AC-1 and AC-2 are met. AC-3 and PR creation are blocked pending a supported test fixture or recovery procedure.
 
 ## Outcome
-Pending.
+> [!WARNING]
+> The identity fallback correction is implemented and native checks pass. Candidate startup and PR creation are blocked because the required isolated `test` database lacks the active domain cutover ledger and contains a failed migration-015 record.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Both helpers catch only `IllegalStateException` in candidate `0838538`. |
+| AC-2 | ✅ Met | 89 focused tests passed; full module checks passed with 2,166 Java tests, 0 failures/errors and 110 skips. See the [test report](../test-reports/2026-10-05-00-29-christopherbell-dev-limit-anonymous-identity-fallback-to-missing-authentication.md). |
+| AC-3 | ⏸️ Blocked | The committed candidate stopped at migration 015 before readiness; a supported test fixture or recovery procedure is needed. No PR was created. |
 
 ## Project
 christopherbell-dev

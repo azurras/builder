@@ -174,3 +174,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Continued the Java audit with a separately planned provider-failure correction on `d34d8e78`; focused tests and full module checks passed, but packaged startup on the required isolated MongoDB database `test` stopped at migration 015 because its domain cutover ledger is absent. The candidate-specific blocked report records the failed runtime attempt; no PR was opened.
 - **Reason:** The app fails closed on a target-schema release without the published ledger, while repository verification rules require database `test` and prohibit direct database writes or skipping the guard.
 - **Impact:** The provider correction plan is blocked at AC-3; the full audit remains in progress pending a supported isolated test fixture or provisioning procedure.
+
+### 2026-10-05 - Narrow anonymous identity fallbacks
+
+- **Change:** Completed a separate targeted correction on `0838538`: public post and restaurant reads now fall back only on `IllegalStateException`, with regressions proving unrelated identity failures propagate. Both focused test classes and full module checks pass. The candidate report records startup failure at migration 015 before readiness.
+- **Reason:** Broad `Exception` catches made programming and operational failures look like normal anonymous reads. The user requires separate plan/report evidence for each correction, so this change has its own records.
+- **Impact:** The Java audit has a second implemented correction, but its AC-3 is blocked and no PR was created. Read-only inspection shows database `test` has no active cutover ledger and has an app-owned failed migration-015 record; do not alter it directly. Continue the source review while awaiting a supported test fixture/recovery procedure.
