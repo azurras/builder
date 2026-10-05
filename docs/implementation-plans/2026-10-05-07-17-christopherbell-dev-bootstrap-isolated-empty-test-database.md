@@ -1,7 +1,7 @@
 # Bootstrap Empty Isolated Website Test Databases
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -167,8 +167,20 @@ Revert only the test-profile implementation and guide changes on this feature br
 - **Reason:** The prior runtime attempt exposed persistence details that the initial unit fixtures did not model; the final evidence must exercise the real MongoDB representation and the JDK 25 Windows loopback setup documented for future agents.
 - **Impact:** Candidate `dd206c0e` passed 19 focused tests and the full `:website:check :cbell-lib:check :website:bootJar` check (4m11s). A fresh database applied migrations 001–015; readiness and the home page both returned 200; all source and target domain namespaces remained empty and no cutover ledger was written. The candidate and Mongo listeners were stopped and both ports closed. Builder runtime report: [2026-10-05-08-15-christopherbell-dev-bootstrap-empty-isolated-website-test-databases.md](../test-reports/2026-10-05-08-15-christopherbell-dev-bootstrap-empty-isolated-website-test-databases.md). Recursive cleanup of the generated scratch directories was rejected by command safety review; the processes are gone and the leftover temporary files are recorded in the report. PR publication and merge remain pending.
 
+### 2026-10-05 - Merge and close the isolated test bootstrap
+
+- **Change:** PR [#1480](https://github.com/azurras/christopherbell.dev/pull/1480) merged the verified candidate `dd206c0ef2498e0d400eccce519990e8050bd021` into `main` as `a9d20589363ed0ed139ef3c709877cca98d2d602`. Windows build, all three Analyze jobs, CodeQL, and Dependency Review passed.
+- **Reason:** The local runtime proof, final code review, and CI confirmed that the bootstrap contract and the future-agent setup instructions work together on the committed candidate.
+- **Impact:** AC-1 is met by the fresh isolated database applying migrations 001–015 with no synthetic ledger; AC-2 is covered by the fail-closed migration tests and unchanged non-test genuine-ledger gate; AC-3 is met by the documented repeatable setup, full native checks, and local readiness/home-page 200 responses. See the [runtime report](../test-reports/2026-10-05-08-15-christopherbell-dev-bootstrap-empty-isolated-website-test-databases.md). No production deployment was requested or performed. The temporary MongoDB and application processes and ports are closed; generated scratch directories remain because their recursive cleanup was rejected by command safety review.
+
 ## Outcome
-Pending.
+| Criterion | Result | Evidence |
+|---|---|---|
+| AC-1 | Complete | Fresh isolated MongoDB `test` applied migrations 001–015; readiness and `/` returned 200; no `TARGET_ACTIVE` ledger was written. [Runtime report](../test-reports/2026-10-05-08-15-christopherbell-dev-bootstrap-empty-isolated-website-test-databases.md). |
+| AC-2 | Complete | Focused fail-closed tests passed; non-test profiles retain genuine `TARGET_ACTIVE` validation. Full checks passed on candidate `dd206c0e`. |
+| AC-3 | Complete | Setup is documented in spoke `AGENTS.md`, `README.md`, and migration runbook; runtime report records full checks and successful local HTTP proof. PR [#1480](https://github.com/azurras/christopherbell.dev/pull/1480) merged as `a9d20589363ed0ed139ef3c709877cca98d2d602`; all CI checks passed. |
+
+No production deployment was authorized or performed. Runtime processes and listeners were stopped; generated scratch directories remain because command safety review rejected recursive removal.
 
 ## Project
 christopherbell-dev

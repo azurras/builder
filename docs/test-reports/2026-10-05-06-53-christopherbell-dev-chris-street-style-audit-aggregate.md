@@ -1,93 +1,119 @@
 # Chris Street Style Audit Aggregate: Test Report
 
 ## Story/Issue
-Record the final combined candidate checks for the user's repository-wide `christopherbell.dev` Chris Street Style audit. See the [living implementation plan](../implementation-plans/2026-10-04-christopherbell-dev-chris-street-style-audit.md). The obsolete draft PR #1477 was not used.
+Final combined verification for the repository-wide Chris Street Style audit and the isolated test database bootstrap that removed the local runtime blocker. See the [living implementation plan](../implementation-plans/2026-10-04-christopherbell-dev-chris-street-style-audit.md), [bootstrap plan](../implementation-plans/2026-10-05-07-17-christopherbell-dev-bootstrap-isolated-empty-test-database.md), and [PR #1480](https://github.com/azurras/christopherbell.dev/pull/1480). PR #1477 was not used.
 
 ## Branch
-`codex/chris-street-style-audit-20261005` at `dc928832`
+`codex/chris-street-style-audit-20261005` at `dd206c0ef2498e0d400eccce519990e8050bd021`
 
 ## Pass / Fail
 
-> [!CAUTION]
-> **1 of 2 verification cases passed** on candidate `dc928832`; local application runtime is blocked by unavailable isolated MongoDB `test`.
+> [!TIP]
+> **3 of 3 verification cases passed** on candidate `dd206c0e`.
 
 | # | Test case | Result | Why |
 |---|---|---|---|
-| 1 | Combined native checks and packaged build | ✅ PASS | Website and shared library checks passed; 2,186 Java tests, 0 failures, 0 errors, 110 skipped; PowerShell checks passed; browser checks passed; `website.jar` built. |
-| 2 | Isolated test database identity preflight | ⏸️ BLOCKED | Read-only check for `test` on `127.0.0.1:27018` returned `ECONNREFUSED`; candidate startup was not attempted. |
+| 1 | Full native checks and packaged build | ✅ PASS | `:website:check :cbell-lib:check :website:bootJar` succeeded; JavaScript, PowerShell and worker checks passed; the candidate JAR was built. |
+| 2 | Fresh isolated MongoDB test-profile application | ✅ PASS | Migrations 001–015 applied without a cutover ledger; readiness and `/` returned 200; domain namespaces remained empty. |
+| 3 | Merged pull request CI | ✅ PASS | Windows build, all Analyze jobs, CodeQL, and Dependency Review passed; PR #1480 merged with the tested head SHA. |
 
 ## Test Cases
-1. **Combined native checks and packaged build:** run the website and shared-library checks, including JavaScript and PowerShell tasks, and package the committed candidate.
-2. **Isolated test database identity preflight:** confirm that the isolated MongoDB `test` endpoint is available before starting the candidate application.
+1. **Full native checks and packaged build:** Run the website and shared-library native gates, including Java, JavaScript, PowerShell, and worker checks, and package the website JAR.
+2. **Fresh isolated MongoDB test-profile application:** Start a disposable loopback MongoDB instance and the committed candidate, then exercise readiness and the home page and inspect migration/domain state read-only.
+3. **Merged pull request CI:** Confirm the checks on the exact tested PR head and read back merge state and merge commit.
 
 ## App / Environment
 
 | Setting | Value |
 |---|---|
 | App | `christopherbell.dev` Spring Boot website |
-| Candidate | Commit `dc928832d39c1e019483c9aca668e63ba333463d` |
+| Candidate | `dd206c0ef2498e0d400eccce519990e8050bd021` |
 | Runtime | Java 25; Gradle Wrapper 9.6.1; Windows PowerShell |
-| Profile | `test` for the requested isolated database check |
-| Database | MongoDB `test` at `127.0.0.1:27018`; connection refused |
-| Artifact | `website/build/libs/website.jar`; SHA-256 `8664BAFD1C92BCF946271C039EE18B36E81E388DA9D65BB1C070CB720CDF7636` |
+| Profile | `test` |
+| Database | Disposable MongoDB database `test`, bound to `127.0.0.1:49354`; app on `127.0.0.1:49355` |
+| Artifact | `website/build/libs/website.jar`; SHA-256 `1EB9BDB48E33B2AD705318D3C146F3520731E2ACF422CA7869A9C4E20B325799` |
 
 ## Local Run Details
-- **Local command:** `New-Item -ItemType Directory -Force -Path C:\tmp\gradle-sock-chris; $env:JAVA_TOOL_OPTIONS='-Djdk.net.unixdomain.tmpdir=C:\tmp\gradle-sock-chris'; .\gradlew.bat :website:check :cbell-lib:check :website:bootJar`
+- **Local command:** `.\gradlew.bat :website:check :cbell-lib:check :website:bootJar --no-daemon`
+- **Application command:** `java -jar website\build\libs\website.jar --server.address=127.0.0.1 --server.port=49355`
+- **Application environment:** `SPRING_PROFILES_ACTIVE=test`; `SPRING_MONGODB_URI=mongodb://127.0.0.1:49354/test`; transient random `APP_JWT_SECRET` (value omitted); generated short `jdk.net.unixdomain.tmpdir` path.
 - **Working directory:** `A:\Projects\christopherbell.dev-worktrees\chris-street-style-audit-20261005`.
-- **Candidate identity:** `dc928832d39c1e019483c9aca668e63ba333463d`, committed on `codex/chris-street-style-audit-20261005`.
-- **Logs:** Gradle console; Java XML test results under `website/build/test-results/test` and `cbell-lib/build/test-results/test`.
-- **Application startup:** Not attempted after database identity preflight failed. The startup migration preflight requires the genuine active domain-collection cutover ledger; no marker was fabricated and no migration was run.
-- **Cleanup:** No application or MongoDB process was started; no database data was read or written beyond the failed connection attempt.
+- **Candidate identity:** committed HEAD `dd206c0ef2498e0d400eccce519990e8050bd021` on `codex/chris-street-style-audit-20261005`.
+- **Process details:** MongoDB PID 3872 on port 49354 and website PID 22520 on port 49355; each bound to loopback only.
+- **Logs:** `C:\Users\Christopher\AppData\Local\Temp\christopherbell-test-mongo-de81b8651c314dcfbf423aa8d0c2bbf2\`.
+- **Cleanup:** Both processes stopped; PIDs and ports 49354/49355 confirmed gone/closed. Production MongoDB on port 27017 remained untouched. Generated temporary directories remain because recursive cleanup was rejected by command safety review.
 
 ## Data Sent
 
-### 1. Combined native checks and packaged build
+### 1. Full native checks and packaged build
 
 ```text
-New-Item -ItemType Directory -Force -Path C:\tmp\gradle-sock-chris
-JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:\tmp\gradle-sock-chris
-.\gradlew.bat :website:check :cbell-lib:check :website:bootJar
+.\gradlew.bat :website:check :cbell-lib:check :website:bootJar --no-daemon
 ```
 
-### 2. Isolated test database identity preflight
+### 2. Fresh isolated MongoDB test-profile application
+
+```http
+GET http://127.0.0.1:49355/actuator/health/readiness
+GET http://127.0.0.1:49355/
+```
+
+### 3. Merged pull request CI
 
 ```text
-mongosh --quiet --norc mongodb://127.0.0.1:27018/test --eval "db.getName()"
+gh pr view 1480 --repo azurras/christopherbell.dev --json state,headRefOid,mergeCommit
 ```
 
 ## Response Received
 
-### 1. Combined native checks and packaged build
+### 1. Full native checks and packaged build
 
 ```text
-BUILD SUCCESSFUL in 5m 31s
-24 actionable tasks: 24 executed
-Java XML totals: 2,186 tests; 0 failures; 0 errors; 110 skipped
-PowerShell suites: 203 passed, 0 failed, 1 skipped; 76 passed, 0 failed, 0 skipped
-Browser checks: passed
-Packaged artifact: website/build/libs/website.jar
+BUILD SUCCESSFUL in 4m 11s
+24 actionable tasks
+Focused migration tests: 19 passed
+PowerShell suites: 203 passed, 0 failed, 1 existing skip; worker suite: 76 passed, 0 failed, 0 skipped
+Artifact: website/build/libs/website.jar
 ```
 
-### 2. Isolated test database identity preflight
+### 2. Fresh isolated MongoDB test-profile application
+
+```http
+HTTP/1.1 200 OK
+{"status":"UP"}
+
+HTTP/1.1 200 OK
+Content-Length: 3981
+<title>CB | Home</title>
+
+MongoDB test database: migration versions 001-015 APPLIED; 15 migration rows; one released lease in application_runtime; application_leases count 0; all source and target domain collections empty; no cutover ledger.
+```
+
+### 3. Merged pull request CI
 
 ```text
-Exit code: 1
-MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27018
-Application startup: not attempted
+PR #1480: MERGED
+Head: dd206c0ef2498e0d400eccce519990e8050bd021
+Merge commit: a9d20589363ed0ed139ef3c709877cca98d2d602
+Windows build: passed
+Analyze (actions): passed
+Analyze (java-kotlin): passed
+Analyze (javascript-typescript): passed
+CodeQL: passed
+Dependency Review: passed
 ```
 
 ## Evidence
-- Candidate `dc928832d39c1e019483c9aca668e63ba333463d` is a clean commit 24 commits above `origin/main` at `695a3ed8617f9b4ab07abb7413baf369c58acf6c`.
-- `git diff --check` passed; worktree status was clean after the aggregate commit.
-- Gradle completed `:website:check :cbell-lib:check :website:bootJar` successfully in 5m 31s.
-- Java XML results aggregate to 2,186 tests, 0 failures, 0 errors and 110 skipped.
-- The read-only MongoDB preflight returned `ECONNREFUSED`; `V015RequireDomainCollectionSchema` and `DomainCollectionStartupPreflight` require the genuine cutover state before startup.
+- Full native verification completed on the named committed candidate before PR creation; local runtime proof and all observed responses are recorded in the [bootstrap runtime report](2026-10-05-08-15-christopherbell-dev-bootstrap-empty-isolated-website-test-databases.md).
+- PR readback reports `MERGED`, exact head `dd206c0ef2498e0d400eccce519990e8050bd021`, and merge commit `a9d20589363ed0ed139ef3c709877cca98d2d602`.
+- Candidate changes include 23 focused style corrections and repository-local style guidance. Each correction has its own linked Builder plan and candidate report in the plan's implementation log.
+- Candidate `dc928832d39c1e019483c9aca668e63ba333463d` from the former blocked report is superseded: the isolated MongoDB test bootstrap and JDK 25 socket-temp instructions were added and then verified on `dd206c0e`.
 
 ## Bugs / Follow-ups
-Local runtime proof and any spoke PR remain blocked until a supported isolated MongoDB `test` service with a valid genuine cutover state is available. Do not bypass V015 or create a synthetic ledger. PR #1477 remains excluded.
+No application defect remains from this audit. Production deployment was not requested or performed. Runtime processes and ports are closed. Generated scratch directories remain because recursive removal was rejected by command safety review; see the bootstrap runtime report.
 
 ## Document Status
-blocked
+complete
 
 ## Project
 christopherbell-dev

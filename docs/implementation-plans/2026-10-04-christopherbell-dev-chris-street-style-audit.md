@@ -1,7 +1,7 @@
 # christopherbell.dev Chris Street Style Audit
 
 ## Document Status
-blocked
+complete
 
 ## Plan Format
 task-contract-v1
@@ -14,6 +14,15 @@ Review and correct all tracked first-party executable code for the website again
 - Make only evidence-backed corrections: meaningful names, cohesive responsibilities, valid states and boundaries, explicit effects, causal failure handling, consistent APIs, and risk-appropriate tests.
 - Preserve established behavior, public contracts, security boundaries, feature ownership, persistence compatibility, and production operations.
 - Add concise, repository-local coding guidance to the website `AGENTS.md` so future work follows this standard.
+
+## Acceptance Criteria
+| ID | Done when |
+|---|---|
+| AC-1 | All 1,421 tracked first-party code-bearing files in the audited scope have been inventoried and reviewed; every adopted correction has a concrete style or contract reason. |
+| AC-2 | Each independent correction has its own implementation plan and candidate test report; the final combined candidate passes the native repository checks. |
+| AC-3 | The committed candidate starts locally against a fresh isolated test database, passes readiness and a representative page request, and does not fabricate protected migration state. |
+| AC-4 | Spoke-local guidance tells future agents how to apply the standard and how to reproduce the isolated local runtime without requiring production database state. |
+| AC-5 | The verified candidate is merged after green CI, with no production deployment unless separately authorized. |
 
 ## Inputs
 - Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, freshly checked out in an isolated worktree on 2026-10-04. Draft PR #1477 is explicitly excluded as a source of code or verification.
@@ -340,3 +349,21 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** The source audit produced 23 focused code corrections plus concise repository style guidance on fresh branch `codex/chris-street-style-audit-20261005`, based on current trusted `origin/main` `695a3ed`; aggregate candidate `dc928832` passes the combined native gate and packages `website.jar`.
 - **Reason:** The user said the old style draft was made before extensive style changes and must not be trusted; the audit candidate was rebuilt from verified `origin/main` without using PR #1477.
 - **Impact:** The [aggregate candidate report](../test-reports/2026-10-05-06-53-christopherbell-dev-chris-street-style-audit-aggregate.md) records 2,186 Java tests with 0 failures/errors and 110 skipped plus passing browser/PowerShell checks. The plan is blocked at required local runtime proof: isolated MongoDB `test` on port 27018 refused the read-only connection, and V015 requires genuine active cutover state. No database migration, synthetic ledger, PR, or production action was performed; provide a supported isolated test database with valid cutover state to unblock runtime verification and delivery.
+
+### 2026-10-05 - Resolve runtime blocker and complete repository audit
+
+- **Change:** Fixed the isolated `test` profile bootstrap and documented the JDK 25 short socket-temp setup in separate plan [Bootstrap Empty Isolated Website Test Databases](2026-10-05-07-17-christopherbell-dev-bootstrap-isolated-empty-test-database.md). PR [#1480](https://github.com/azurras/christopherbell.dev/pull/1480) merged candidate `dd206c0ef2498e0d400eccce519990e8050bd021` as `a9d20589363ed0ed139ef3c709877cca98d2d602` after all CI checks passed.
+- **Reason:** The audit's earlier report captured a real blocker at that time; the user authorized fixing the blocker so future agents can run the application without fake production state or relying on the discredited PR #1477.
+- **Impact:** The final combined report replaces the blocked aggregate candidate `dc928832` with the committed and merged candidate `dd206c0e`. Full native checks passed; 19 focused bootstrap tests passed; a fresh database applied migrations 001–015, readiness and the home page returned 200, all domain collections remained empty, and no synthetic ledger was written. The 23 independent style corrections and repository-local style guidance are included in the merged code. PR #1477 was not used. No production deployment was requested or performed. The Builder UTF-8 Git-output fix is separately planned, tested, and published at [its plan](2026-10-05-08-21-builder-decode-git-output-as-utf-8-for-spoke-preflight.md) and [report](../test-reports/2026-10-05-08-25-builder-decode-git-output-as-utf-8-for-spoke-preflight.md). The application and MongoDB listeners are closed; generated scratch directories remain because cleanup was rejected by command safety review.
+
+## Outcome
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| AC-1 | Complete | The tracked first-party inventory covers 1,421 files across Java, tests, browser code, templates, styles, configuration, build/CI, and operational scripts. Accepted changes address named readability, boundary, or failure-handling contracts; the complete list is in the implementation log and per-correction plans. |
+| AC-2 | Complete | Each independent correction has a Builder plan and candidate report; the final candidate passed `:website:check`, `:cbell-lib:check`, and `:website:bootJar`. See the [aggregate report](../test-reports/2026-10-05-06-53-christopherbell-dev-chris-street-style-audit-aggregate.md) and focused reports indexed under `docs/test-reports/`. |
+| AC-3 | Complete | The [bootstrap runtime report](../test-reports/2026-10-05-08-15-christopherbell-dev-bootstrap-empty-isolated-website-test-databases.md) records migrations 001–015, readiness and home page 200 responses, empty domain collections, and no synthetic ledger. |
+| AC-4 | Complete | Spoke `AGENTS.md`, README, and migration runbook contain style and isolated Mongo/JDK 25 setup guidance for future agents. |
+| AC-5 | Complete | PR [#1480](https://github.com/azurras/christopherbell.dev/pull/1480) merged as `a9d20589363ed0ed139ef3c709877cca98d2d602` after all listed CI checks passed. No production deployment was authorized or performed. |
+
+The former aggregate candidate report `dc928832` is intentionally superseded by the updated report for `dd206c0e`. PR #1477 remains excluded. No production deployment was authorized or performed. Runtime cleanup limitation is recorded above and in the runtime report.
