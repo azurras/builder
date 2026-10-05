@@ -316,3 +316,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Candidate `fc33aad` names the process outcome `probeResult` and makes raw tag, duration, date and number parsing stages explicit; focused tests passed 2/2 before and after, and the full native gate passed with 2,164 Java tests, 110 skipped, and no failures/errors.
 - **Reason:** Generic `result` and `value` names obscured the raw-to-parsed boundary without changing any parsing rules.
 - **Impact:** This is the nineteenth independently planned correction. Its [plan](2026-10-05-04-57-christopherbell-dev-clarify-ffprobe-metadata-parsing-names.md) is blocked only on runtime proof; the [candidate report](../test-reports/2026-10-05-05-04-christopherbell-dev-clarify-ffprobe-metadata-parsing-names.md) records that read-only test DB identity preflight returned `ECONNREFUSED`, so startup was not attempted. No PR was created. PR #1477 remains excluded; continue the remaining audit.
+
+### 2026-10-05 - Surface unexpected viewer identity failures
+
+- **Change:** Candidate `6f7aede` narrows the anonymous identity fallback in `PostService` and `RestaurantService` to the explicit missing-authentication `IllegalStateException`; the new baseline regressions failed before the correction and both focused suites pass afterward.
+- **Reason:** Catching every exception converted unexpected identity-resolution defects into anonymous public reads.
+- **Impact:** This is the twentieth independently planned correction. Its [plan](2026-10-05-05-08-christopherbell-dev-treat-only-missing-viewer-identity-as-anonymous.md) and [blocked runtime report](../test-reports/2026-10-05-05-17-christopherbell-dev-treat-only-missing-viewer-identity-as-anonymous.md) record passing full native checks and the refused MongoDB `test` preflight; startup was not attempted and no PR was created. PR #1477 remains excluded; continue the remaining audit.

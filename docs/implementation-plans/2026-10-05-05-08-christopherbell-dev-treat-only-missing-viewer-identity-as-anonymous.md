@@ -1,7 +1,7 @@
 # Treat only missing viewer identity as anonymous
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -103,10 +103,25 @@ Revert the isolated correction commit if focused tests show a public anonymous b
 | Local runtime remains unavailable | High based on current endpoint evidence | Repeat read-only preflight; do not bypass test DB safeguards. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record candidate checks and runtime blocker
+
+- **Change:** Candidate `6f7aede` narrows both optional viewer-ID catches to `IllegalStateException`; the new regressions failed on the broad catches and pass on the candidate. Both existing anonymous behavior and the unrelated-failure propagation contract are characterized.
+- **Reason:** `PermissionService.getSelf()` uses `IllegalStateException` for missing authentication; mapping every exception to `null` hid unexpected defects as successful anonymous reads.
+- **Impact:** AC-1 and AC-2 are met. AC-3 is blocked by the refused isolated MongoDB preflight; the candidate-specific report records the blocker, and no PR was created.
 
 ## Outcome
-Pending.
+
+> [!WARNING]
+> The two helper changes are committed and focused/full native checks pass; required local runtime proof remains blocked by unavailable isolated MongoDB.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Candidate `6f7aede` catches only `IllegalStateException` for the expected missing-identity outcome in both services. |
+| AC-2 | ✅ Met | New regressions failed on baseline and pass on candidate; focused suites pass PostService 27/27 and RestaurantService 62/62. |
+| AC-3 | ⏸️ Blocked | [Candidate report](../test-reports/2026-10-05-05-17-christopherbell-dev-treat-only-missing-viewer-identity-as-anonymous.md): MongoDB `test` identity preflight returned `ECONNREFUSED`, startup was not attempted, and no PR was created. |
+
+Follow-up: verify the committed app against supported isolated test resources before considering PR publication.
 
 ## Project
 christopherbell-dev
