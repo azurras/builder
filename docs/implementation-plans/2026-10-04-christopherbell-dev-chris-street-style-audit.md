@@ -322,3 +322,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Candidate `6f7aede` narrows the anonymous identity fallback in `PostService` and `RestaurantService` to the explicit missing-authentication `IllegalStateException`; the new baseline regressions failed before the correction and both focused suites pass afterward.
 - **Reason:** Catching every exception converted unexpected identity-resolution defects into anonymous public reads.
 - **Impact:** This is the twentieth independently planned correction. Its [plan](2026-10-05-05-08-christopherbell-dev-treat-only-missing-viewer-identity-as-anonymous.md) and [blocked runtime report](../test-reports/2026-10-05-05-17-christopherbell-dev-treat-only-missing-viewer-identity-as-anonymous.md) record passing full native checks and the refused MongoDB `test` preflight; startup was not attempted and no PR was created. PR #1477 remains excluded; continue the remaining audit.
+
+### 2026-10-05 - Preserve command-center action failure cause
+
+- **Change:** Candidate `453b3c5` narrows the action executor translation to its declared `IOException`, preserves the cause in the existing safe request exception, and proves unexpected runtime defects propagate; focused tests pass 32/32 and the full native gate passes with 2,165 Java tests, 110 skipped, and no failures/errors.
+- **Reason:** The broad catch hid programming defects as ordinary launch failures and discarded the cause of expected process I/O failures.
+- **Impact:** This is the twenty-first independently planned correction. Its [plan](2026-10-05-05-21-christopherbell-dev-preserve-command-center-action-failure-cause.md) and [blocked runtime report](../test-reports/2026-10-05-05-29-christopherbell-dev-preserve-command-center-action-failure-cause.md) record the refused MongoDB `test` preflight; startup was not attempted and no PR was created. PR #1477 remains excluded; continue the audit.

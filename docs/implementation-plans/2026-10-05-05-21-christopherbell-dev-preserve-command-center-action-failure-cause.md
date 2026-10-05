@@ -1,7 +1,7 @@
 # Preserve unexpected command-center action failures
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -101,10 +101,25 @@ Revert the isolated correction if I/O launch failures no longer return the safe 
 | Local runtime remains blocked | High based on current database endpoint evidence | Repeat read-only test identity check and stop if unavailable. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record candidate checks and runtime blocker
+
+- **Change:** Candidate `453b3c5` catches only `IOException` from the command executor and preserves it as the cause of the safe request exception; the focused suite proves unrelated runtime defects propagate. The full native gate passed, while local startup preflight was blocked by MongoDB `ECONNREFUSED`.
+- **Reason:** `CommandExecutor` declares `IOException` as its recoverable launch failure; the previous `Exception` catch hid defects and discarded causal evidence.
+- **Impact:** AC-1 and AC-2 are met. AC-3 is blocked by unavailable isolated MongoDB; the candidate report records that no startup or PR occurred.
 
 ## Outcome
-Pending.
+
+> [!WARNING]
+> The action failure boundary is committed and focused/full native checks pass; required local runtime proof remains blocked by unavailable isolated MongoDB.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Candidate `453b3c5` translates only `IOException` from command execution while preserving safe launch-failure handling. |
+| AC-2 | ✅ Met | New cause and runtime-propagation characterization failed on baseline; candidate `CommandCenterActionServiceTest` passes 32/32. |
+| AC-3 | ⏸️ Blocked | [Candidate report](../test-reports/2026-10-05-05-29-christopherbell-dev-preserve-command-center-action-failure-cause.md): test DB identity preflight returned `ECONNREFUSED`, startup was not attempted, and no PR was created. |
+
+Follow-up: verify the committed app against supported isolated test resources before considering PR publication.
 
 ## Project
 christopherbell-dev
