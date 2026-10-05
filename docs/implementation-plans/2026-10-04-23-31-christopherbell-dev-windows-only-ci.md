@@ -1,7 +1,7 @@
 # Target christopherbell.dev CI on Windows
 
 ## Document Status
-in-progress
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -98,8 +98,20 @@ Revert the workflow change through a follow-up commit and let the usual pull req
 - **Reason:** The existing CI tests encode the old three-platform matrix, conditional Pester setup and Unix Gradle invocation; the new Windows-only workflow correctly made those three assertions fail.
 - **Impact:** Task 1, Expected Changes, AC-1 and the Test Plan now include updating and running the workflow contract tests. No behavior beyond the requested CI target is added.
 
+### 2026-10-04 - Block on protected cutover startup gate
+
+- **Change:** Record local application verification as blocked and set the plan status to `blocked`.
+- **Reason:** A separate authenticated MongoDB `test` database allowed the candidate to connect, but its startup migration 015 requires a verified target-active domain cutover ledger; a fresh test database lacks that protected production migration state.
+- **Impact:** AC-1 remains partly met because workflow validation and the full Windows build passed but the required application runtime proof did not; AC-2 has not started because Builder policy forbids PR creation without that proof. A blocked test report records the evidence.
+
 ## Outcome
-Pending.
+> [!WARNING]
+> The Windows-only workflow is implemented, the focused configuration tests and full Windows build pass, and candidate `b0fc64b` is committed. Local application runtime proof is blocked by the protected cutover startup requirement, so no spoke PR was opened.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ⚠️ Partly met. Workflow YAML validation and all 2,164 JUnit tests passed (110 skipped), but local runtime verification stopped at migration 015 because the isolated fresh database lacks the verified `TARGET_ACTIVE` cutover ledger. | [Test report](../test-reports/2026-10-04-23-52-christopherbell-dev-windows-only-website-ci.md); candidate commit `b0fc64b`. |
+| AC-2 | ❌ Not met. PR creation and merge are deferred until a cutover-ready isolated runtime fixture or authorized test-only initialization path is available. | No PR created; Builder's before-PR runtime proof requirement remains unmet. |
 
 ## Project
 christopherbell-dev
