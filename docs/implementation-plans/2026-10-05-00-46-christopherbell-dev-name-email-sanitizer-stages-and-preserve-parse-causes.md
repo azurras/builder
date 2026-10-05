@@ -1,7 +1,7 @@
 # Name Email Sanitizer Stages and Preserve Parse Causes
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -103,7 +103,12 @@ Before merge, revert only this isolated correction if accepted input or messages
 | Runtime remains blocked by the failed test migration record | High | Do not open a PR until a supported isolated fixture/recovery procedure is supplied. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record sanitizer implementation and runtime blocker
+
+- **Change:** Implemented the planned stage-specific email names and preserved IPv6/IDN parse causes on candidate `eb8e7bc`; focused tests and full module checks passed. The packaged runtime report records startup blocked at migration 015 before readiness.
+- **Reason:** Exact candidate runtime proof is required before a spoke PR, and database `test` still lacks a supported migration fixture/recovery path. No direct database changes or PR were made.
+- **Impact:** Task 1 implementation is complete; AC-1 through AC-3 passed, AC-4 is blocked. See [candidate test report](../test-reports/2026-10-05-00-56-christopherbell-dev-name-email-sanitizer-stages-and-preserve-parse-causes.md). The plan status is blocked pending runtime fixture support.
 
 ## Outcome
 Pending.

@@ -186,3 +186,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Completed a third focused Java correction on candidate `0fb75ef`: the Mongo probe names expected future outcomes, retains identity failure causes, and converts timeout duration before launching work. Focused tests and full module checks pass; its candidate report records startup blocked at migration 015.
 - **Reason:** Broad catches hid invalid timeout conversion and discarded the cause from identity failures. This correction has a distinct plan and report as requested.
 - **Impact:** The Java source review continues with three isolated corrections recorded. The third correction has no PR because required runtime proof is blocked by the existing failed record in database `test`; continue the broader read-only audit while awaiting supported provisioning or recovery.
+
+### 2026-10-05 - Clarify email sanitizer stages and retain parse causes
+
+- **Change:** Completed a separately planned correction on candidate `eb8e7bc`: email normalization now names each materially different representation, and invalid IPv6/IDN translation retains its low-level cause while preserving safe messages. Both new cause regressions failed on baseline; all 32 focused sanitizer tests and full module checks pass.
+- **Reason:** Abbreviated/reused names obscured transformations, and broad catches discarded precise parse failures. User requires one plan and report for every independent correction.
+- **Impact:** The sanitizer plan and blocked candidate report are published separately. Runtime startup on database `test` failed before readiness at migration 015; no PR was created. Continue the wider code review, but keep runtime-dependent PR delivery blocked until supported isolated provisioning is available. Draft PR #1477 remains excluded.
