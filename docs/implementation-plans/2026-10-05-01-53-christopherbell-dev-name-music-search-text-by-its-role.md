@@ -1,7 +1,7 @@
 # Name Music Search Text by Its Role
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -97,10 +97,23 @@ Revert the two-file rename if the query key, captured `MusicQuery`, or route beh
 | Required candidate runtime remains blocked | High | Record actual startup attempt and do not open a PR before readiness and a supported test fixture/recovery path. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record runtime blocker
+
+- **Change:** The `searchText` rename, explicit `q` mapping, focused regression and full project gate are complete on committed candidate `3b7c064`; packaged startup was attempted and blocked at migration 015 before readiness.
+- **Reason:** The shared test database has an incomplete durable migration record, so application runtime and route behavior cannot be verified safely in this run.
+- **Impact:** AC-1 and AC-2 pass; AC-3 is blocked pending supported database recovery and a new runtime attempt. See the [test report](../test-reports/2026-10-05-01-56-christopherbell-dev-name-music-search-text-by-its-role.md).
 
 ## Outcome
-Pending.
+
+> [!CAUTION]
+> The internal search value was renamed and the public `q` contract remains pinned, but local runtime proof is blocked before readiness by the test database's incomplete migration 015 record. No PR was opened.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ PASS | Focused controller test confirms unchanged `MusicQuery` forwarding; candidate `3b7c064`. |
+| AC-2 | ✅ PASS | Focused controller test confirms explicit request key `q`; candidate `3b7c064`. |
+| AC-3 | ⏸️ BLOCKED | [Runtime report](../test-reports/2026-10-05-01-56-christopherbell-dev-name-music-search-text-by-its-role.md): full checks and package pass, but application startup fails at migration 015 before readiness.
 
 ## Project
 christopherbell-dev
