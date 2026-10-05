@@ -12,6 +12,7 @@ sys.path.insert(0, str(LIB))
 
 from artifact_io import dated_markdown_file, parse_optional_date, project_prefixed_title, save_dated_markdown
 from artifact_quality import project_of, validate_test_report_text
+from builder_hub import read_stdin_text
 from spoke_registry import require_active_project
 
 
@@ -63,7 +64,7 @@ def main() -> int:
         print("--title must not be blank", file=sys.stderr)
         return 2
 
-    body = sys.stdin.read().strip()
+    body = read_stdin_text().strip()
     if not body:
         print("Report body is required on stdin", file=sys.stderr)
         return 2

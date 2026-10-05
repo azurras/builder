@@ -13,6 +13,7 @@ sys.path.insert(0, str(LIB))
 
 from artifact_io import parse_optional_date
 from artifact_quality import PLAN_STATUSES, validate_implementation_plan_text
+from builder_hub import read_stdin_text
 
 LOG_HEADING = "## Implementation Log"
 SECTION_HEADING_PATTERN = r"(?m)^##[ \t]+\S"
@@ -82,7 +83,7 @@ def main() -> int:
         print("--title must not be blank", file=sys.stderr)
         return 2
 
-    entry_body = sys.stdin.read().strip()
+    entry_body = read_stdin_text().strip()
     if not entry_body:
         print("Log entry body is required on stdin", file=sys.stderr)
         return 2

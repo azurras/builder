@@ -74,6 +74,7 @@ Alternatives considered:
 | `write-implementation-plan/references/update.md` | Bold-label log entry |
 | `write-test-report/references/template.md`, `report.md`, `example.md` | New order, layout rules and example |
 | `write-implementation-plan/references/review.md` | Warn on plans that ignore the presentation conventions |
+| `.agents/lib/builder_hub.py` and the six stdin-reading helper scripts | Read stdin as UTF-8 so result markers survive saving |
 
 ## Task Breakdown
 
@@ -152,6 +153,12 @@ Revert the change commit. Documents written in the new layout would then fail on
 - **Change:** Machine-value sections moved to the end: reports close with Document Status and Project, plans with Project and Plan Format; plans keep Document Status under the title. The validator also accepts `| Port | 8081 |` as a local-run port, and the table column test checks fenced skeleton tables too. Review mode now warns, without blocking, on plans that ignore the presentation conventions.
 - **Reason:** GitHub renderings of the first draft (via the GitHub Markdown API, viewed in the browser pane) opened the report with four headings holding one bare value each before the verdict. The App / Environment table would otherwise not count as naming a port. The report template is a fenced skeleton whose tables would go unchecked.
 - **Impact:** AC-1 and AC-2 layouts updated as described; Expected Changes gain `write-implementation-plan/references/review.md`; `write-test-report/SKILL.md` needed no change. Acceptance criteria otherwise unchanged.
+
+### 2026-10-04 - Read helper stdin as UTF-8
+
+- **Change:** Added `builder_hub.read_stdin_text`, which decodes stdin as UTF-8, and used it in the six helpers that read a document body from stdin: both save helpers, both validators, `log_plan_change.py` and `save_session_memory.py`. A regression test pipes ✅, an em dash and an accented letter through four of them.
+- **Reason:** Gathering evidence after `e9385e6` showed Python's stdin is cp1252 on this machine, so `save_test_report.py` stored the example's ✅ as `âœ…`. The new templates put result markers in every completed plan and report, so AC-1 and AC-2 are unusable without this fix. The memory helper has the same defect and shares the reader. The scope addition was decided in-session under the existing authority to deliver this change.
+- **Impact:** Expected Changes gain `.agents/lib/builder_hub.py` and the six scripts. AC-4 now also covers UTF-8 stdin. Windows PowerShell 5.1 still sends ASCII to native programs; PowerShell 7, the documented shell, sends UTF-8.
 
 ## Outcome
 Pending.

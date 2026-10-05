@@ -11,6 +11,7 @@ LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
 from artifact_quality import validate_test_report_text
+from builder_hub import read_stdin_text
 
 
 def main() -> int:
@@ -24,7 +25,7 @@ def main() -> int:
             path = Path(name)
             errors.extend(validate_test_report_text(path.read_text(encoding="utf-8"), path))
     else:
-        errors.extend(validate_test_report_text(sys.stdin.read()))
+        errors.extend(validate_test_report_text(read_stdin_text()))
 
     if errors:
         print("Test report quality checks failed:")

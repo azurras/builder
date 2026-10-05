@@ -794,6 +794,38 @@ class PresentationFormTests(unittest.TestCase):
         self.assertEqual(validate_implementation_plan_text(self.plan_example.read_text(encoding="utf-8")), [])
         self.assertEqual(validate_test_report_text(self.report_example.read_text(encoding="utf-8")), [])
 
+    def test_helpers_store_utf8_stdin_unchanged(self) -> None:
+        marked_text = "✅ Met — café"
+        plan = pretty_living_plan().replace("shared development secret.", f"shared development secret. {marked_text}")
+        report = self.report_run_by("- **Local command:** `./export-tool in.csv`").replace("PASS:", f"{marked_text} PASS:")
+        scripts = ROOT / ".agents/skills"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_project_registry(root)
+            report_with_project = report.replace("## Story/Issue", "## Project\nbuilder\n\n## Story/Issue")
+            saved_plan = root / "docs/implementation-plans/2099-04-05-builder-encoding.md"
+            runs = (
+                ("save plan", [scripts / "write-implementation-plan/scripts/save_implementation_plan.py",
+                               "--root", directory, "--date", "2099-04-05", "--title", "Encoding"], plan,
+                 saved_plan),
+                ("log plan change", [scripts / "write-implementation-plan/scripts/log_plan_change.py",
+                                     "--plan", str(saved_plan), "--date", "2099-04-06", "--title", "Logged"],
+                 f"- **Change:** {marked_text}\n- **Reason:** Probe.\n- **Impact:** None.", saved_plan),
+                ("save report", [scripts / "write-test-report/scripts/save_test_report.py",
+                                 "--root", directory, "--date", "2099-04-05", "--title", "Encoding"],
+                 report_with_project, root / "docs/test-reports/2099-04-05-builder-encoding.md"),
+                ("save memory", [scripts / "save-session-memory/scripts/save_session_memory.py",
+                                 "--root", directory, "--project", "builder", "--title", "Probe",
+                                 "--date", "2099-04-05", "--time", "09:00"],
+                 f"- {marked_text}", root / "docs/session-memory/2099-04-05-builder.md"),
+            )
+            for name, arguments, stdin_text, stored_file in runs:
+                with self.subTest(helper=name):
+                    result = subprocess.run([sys.executable, *map(str, arguments)],
+                                            input=stdin_text.encode("utf-8"), capture_output=True)
+                    self.assertEqual(result.returncode, 0, result.stderr.decode("utf-8", "replace"))
+                    self.assertIn(marked_text, stored_file.read_text(encoding="utf-8"))
+
     def test_reference_tables_have_matching_column_counts(self) -> None:
         for document in (self.plan_example, self.report_example, self.report_template):
             for table in markdown_tables(document.read_text(encoding="utf-8")):

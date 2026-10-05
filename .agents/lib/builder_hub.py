@@ -7,6 +7,7 @@ import datetime as dt
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 
 DATED_FILE_RE = re.compile(r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<slug>.+)\.md$")
@@ -43,6 +44,11 @@ def slugify(value: str, fallback: str = "artifact", max_length: int = 80) -> str
 def dated_markdown_path(root: Path, directory: str, title: str, date: dt.date | None = None) -> Path:
     artifact_date = date or today_local()
     return root / directory / f"{artifact_date.isoformat()}-{slugify(title)}.md"
+
+
+def read_stdin_text() -> str:
+    """Standard input decoded as UTF-8 whatever the console code page, without a leading byte-order mark."""
+    return sys.stdin.buffer.read().decode("utf-8-sig")
 
 
 def read_text(path: Path) -> str:

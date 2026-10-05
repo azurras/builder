@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "lib"))
+from builder_hub import read_stdin_text
 from project_memory import append_entry
 
 
@@ -17,7 +18,7 @@ def main() -> int:
     parser.add_argument("--time")
     args = parser.parse_args()
     try:
-        print(append_entry(Path(args.root), args.project, args.title, sys.stdin.read(), args.date, args.time))
+        print(append_entry(Path(args.root), args.project, args.title, read_stdin_text(), args.date, args.time))
     except (ValueError, OSError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
