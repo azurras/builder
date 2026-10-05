@@ -1,7 +1,7 @@
 # Decode Git Output as UTF-8 for Spoke Preflight
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 
@@ -108,7 +108,16 @@ Revert the one helper change and its regression test. No repository data or remo
 - **Impact:** The new unittest passed and the normal spoke preflight command (without a Python UTF-8 mode override) now confirms the published report is identical to Builder origin/main. This Builder helper has no application runtime; native CLI checks cover its behavior.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Delivered the UTF-8 decoding fix on Builder origin/main; the normal spoke preflight now reads the published Unicode report correctly.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Shared Git helper explicitly decodes UTF-8; [test report](../test-reports/2026-10-05-08-25-builder-decode-git-output-as-utf-8-for-spoke-preflight.md). |
+| AC-2 | ✅ Met | Temporary Git repository regression round-tripped the committed ✅ PASS marker; same report. |
+| AC-3 | ✅ Met | Standard Windows preflight passed without Python UTF-8 mode flags and confirmed the report is identical to Builder origin/main; same report. |
+| AC-4 | ✅ Met | Commit 8d7e2b5 is on Builder origin/main; the helper and test were read back after publication. |
 
 ## Project
 builder
