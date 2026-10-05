@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 A person who opens a new implementation plan or test report on GitHub can see what it is, where it stands and how it ended at a glance, because the templates present the same content as summary callouts, tables and labeled blocks instead of runs of label lines and paragraphs.
@@ -161,4 +161,16 @@ Revert the change commit. Documents written in the new layout would then fail on
 - **Impact:** Expected Changes gain `.agents/lib/builder_hub.py` and the six scripts. AC-4 now also covers UTF-8 stdin. Windows PowerShell 5.1 still sends ASCII to native programs; PowerShell 7, the documented shell, sends UTF-8.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in `e9385e6` (layout, validator) and `d769e30` (UTF-8 stdin). Deviations are in the log: machine values moved to the end, a review-mode warning, and the stdin fix. No source issue; external closure does not apply.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Plan `example.md`, `plan.md` (Sections layout column, Presentation) and `update.md` in `e9385e6`; rendered through GitHub's Markdown API and viewed |
+| AC-2 | ✅ Met | Report `template.md`, `report.md` and `example.md` in `e9385e6`, verdict first, per-case fenced blocks; rendered and viewed |
+| AC-3 | ✅ Met | `test_reference_examples_validate` and `test_reference_tables_have_matching_column_counts` pass |
+| AC-4 | ✅ Met | Widened-form and UTF-8 tests pass (113 tests); hub check passes over all 206 plans and reports; [test report](../test-reports/2026-10-04-builder-make-plans-and-test-reports-pleasant-to-read.md) |
+| AC-5 | ✅ Met | Plan, change, report and memory pushed to origin/main; `git ls-remote` readback recorded in session memory |
+
+Follow-up: none required. Windows PowerShell 5.1 would still send `?` for markers; PowerShell 7 is the documented shell.
