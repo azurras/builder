@@ -1,0 +1,11 @@
+{
+  "spokes": [
+    {
+      "slug": "christopherbell-dev",
+      "name": "christopherbell.dev",
+      "repository": "https://github.com/azurras/christopherbell.dev.git",
+      "defaultBranch": "main",
+      "description": "Personal website: Java 25, Spring Boot and Gradle. The spoke's own AGENTS.md and README own build, run and deployment commands."
+    }
+  ]
+}

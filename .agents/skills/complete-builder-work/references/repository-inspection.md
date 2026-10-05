@@ -2,9 +2,13 @@
 
 Read historical context selectively; reverify path, origin, branch and relevant guardrails before execution.
 
-Run:
-python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py inspect --path <verified-repository>
+Registered spokes come from spokes.json at the Builder root. Run from the Builder root:
+python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py list
+python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py locate --spoke <slug>
+python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py inspect --spoke <slug>
 
-Omitting the mode also inspects. It is read-only: no fetch, source modification, memory write or deployment authority. Git failures remain explicit and nonzero.
+locate prints the resolved path and its source (spokes.local.json, BUILDER_SPOKES_ROOT, or the folder beside Builder) and fails when the checkout is missing or its origin differs from the registry. When a spoke is missing on this machine, clone --spoke <slug> clones its default branch to the resolved path; it refuses an existing path. For a repository that is not registered, use --path <verified-repository> instead of --spoke.
 
-For authorized persistence use snapshot --path <verified-repository> --root . --project <project>. The helper appends to today's dated memory, skips an identical latest snapshot within that day, and records inspection errors while returning failure. A new date gets its own record. No separate registry or state file is created.
+inspect is the default mode. It is read-only: no fetch, source modification, memory write or deployment authority. Git failures and registry mismatches remain explicit and nonzero.
+
+For authorized persistence use snapshot --spoke <slug> --root . (the memory project defaults to the spoke slug) or snapshot --path <verified-repository> --root . --project <project>. The helper appends to today's dated memory, skips an identical latest snapshot within that day, and records inspection errors while returning failure. A new date gets its own record. No per-spoke state file is created.

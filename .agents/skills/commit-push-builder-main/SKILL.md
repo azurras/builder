@@ -5,7 +5,7 @@ description: Commit selected Builder files to main or retry pushing an existing 
 
 # Commit Push Builder Main
 
-Operate only in `C:\Users\Christopher\Developer\builder` on Windows or `/Users/cbell/Developer/builder` on macOS, branch `main`, origin `https://github.com/azurras/builder.git`. Do not use this workflow in a spoke repository or linked worktree.
+Operate only at the top level of the primary Builder checkout (any local path), branch `main`, origin `https://github.com/azurras/builder.git`. Do not use this workflow in a spoke repository or linked worktree.
 
 ## Select the Operation
 

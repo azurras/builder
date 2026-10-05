@@ -124,6 +124,36 @@ class SkillDiscoveryTests(unittest.TestCase):
                 for command in re.findall(r"\.agents/skills/[a-z0-9-]+/scripts/[a-z0-9_]+\.py", content):
                     self.assertTrue((ROOT / command).is_file(), f"{path}: {command}")
 
+    def test_claude_entrypoints_mirror_canonical_skills(self):
+        sync = SKILLS / "maintain-builder-hub/scripts/sync_claude_skills.py"
+        result = run(sync, "--root", str(ROOT), "--check")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual({p.parent.name for p in (ROOT / ".claude/skills").glob("*/SKILL.md")},
+                         {p.parent.name for p in SKILLS.glob("*/SKILL.md")})
+        self.assertIn("@AGENTS.md", (ROOT / "CLAUDE.md").read_text(encoding="utf-8"))
+
+    def test_claude_sync_regenerates_drift_and_removes_orphans(self):
+        sync = SKILLS / "maintain-builder-hub/scripts/sync_claude_skills.py"
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            canonical = root / ".agents/skills/sample/SKILL.md"
+            canonical.parent.mkdir(parents=True)
+            canonical.write_text("---\nname: sample\ndescription: Sample skill.\n---\n\n# Sample\n", encoding="utf-8")
+            self.assertNotEqual(run(sync, "--root", temp, "--check").returncode, 0)
+            self.assertFalse((root / ".claude").exists())
+            self.assertEqual(run(sync, "--root", temp).returncode, 0)
+            entrypoint = root / ".claude/skills/sample/SKILL.md"
+            self.assertIn("description: Sample skill.", entrypoint.read_text(encoding="utf-8"))
+            self.assertEqual(run(sync, "--root", temp, "--check").returncode, 0)
+            manual = root / ".claude/skills/manual/SKILL.md"
+            manual.parent.mkdir()
+            manual.write_text("---\nname: manual\ndescription: Hand-written.\n---\n", encoding="utf-8")
+            canonical.parent.rename(root / ".agents/skills/renamed")
+            self.assertEqual(run(sync, "--root", temp).returncode, 0)
+            self.assertFalse(entrypoint.exists())
+            self.assertTrue((root / ".claude/skills/renamed/SKILL.md").is_file())
+            self.assertTrue(manual.is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

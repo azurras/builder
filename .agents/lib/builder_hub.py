@@ -9,12 +9,6 @@ import re
 import subprocess
 
 
-HUB_ROOTS = (
-    Path("C:/Users/Christopher/Developer/builder"),
-    Path("/Users/cbell/Developer/builder"),
-)
-HUB_ROOT = HUB_ROOTS[0]
-
 DATED_FILE_RE = re.compile(r"^(?P<date>\d{4}-\d{2}-\d{2})-(?P<slug>.+)\.md$")
 
 STATUS_VALUES = (

@@ -15,5 +15,5 @@ AGENTS.md owns shared authority, evidence and publication policy. Resume at the 
 6. Save dated session memory with delivery evidence and proposed closure; publish it. Use [closure](references/closure.md) for external closure and readback. No source issue means no external closure.
 
 Load [coordination](references/coordination.md) only for actual handoffs or multi-party work. Do not invent delegation or extra records for work performed locally.
-Load [repository inspection](references/repository-inspection.md) only for repository discovery or an explicitly requested snapshot.
+Load [repository inspection](references/repository-inspection.md) to locate, clone or inspect a registered spoke from spokes.json, or for an explicitly requested snapshot.
 For review-only requests, use write-chris-street-style-code review mode. For closure-only requests, inspect existing evidence using the closure reference without restarting delivery.

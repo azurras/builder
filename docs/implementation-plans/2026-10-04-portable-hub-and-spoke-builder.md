@@ -1,7 +1,7 @@
 # Portable Hub and Spoke Builder
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Plan Format
 task-contract-v1
@@ -106,6 +106,8 @@ No runnable application exists in this change; Builder is a workflow repository 
 
 ## Validation
 Full native suite, maintain-builder-hub check, git diff --check, and semantic review that no active file contains a machine-specific Builder or spoke path.
+
+Verified results on 2026-10-04: native suite ran 58 tests with 57 passing, including 11 new spoke registry tests and 2 new Claude entrypoint tests. The single failure is SkillDiscoveryTests detecting seven untracked folders on this machine that hold only __pycache__ from skills removed upstream; they are not tracked content and deleting them was blocked by this session's permission policy. maintain-builder-hub check and git diff --check passed. locate and inspect --spoke christopherbell-dev resolved A:/Projects/christopherbell.dev as the sibling of Builder with matching origin on main. The publication helper ran from this non-standard checkout path. No active file outside dated history contains a machine-specific path.
 
 ## Rollback or Recovery
 Revert the delivery commit; generated .claude entrypoints and spokes.json are additive. A failed push keeps its commit and is recovered with push-only.

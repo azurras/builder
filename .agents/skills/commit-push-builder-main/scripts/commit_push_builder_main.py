@@ -9,24 +9,8 @@ import subprocess
 import sys
 
 
-EXPECTED_ROOTS = (
-    "C:/Users/Christopher/Developer/builder",
-    "/Users/cbell/Developer/builder",
-)
 EXPECTED_REMOTE = "https://github.com/azurras/builder.git"
 EXPECTED_BRANCH = "main"
-
-
-def expected_roots_display() -> str:
-    return ", ".join(EXPECTED_ROOTS)
-
-
-def normalize_root(root: Path) -> str:
-    return str(root.resolve()).replace("\\", "/")
-
-
-def is_expected_root(root: Path) -> bool:
-    return normalize_root(root) in EXPECTED_ROOTS
 
 
 def parse_args() -> argparse.Namespace:
@@ -36,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--root",
         default=".",
-        help=f"Repository root. Must resolve to one of: {expected_roots_display()}.",
+        help="Repository root. Must be the top level of the primary Builder checkout, not a linked worktree.",
     )
     parser.add_argument(
         "--message",
@@ -95,8 +79,6 @@ def main() -> int:
     root = Path(args.root).expanduser().resolve()
     message = (args.message or "").strip()
 
-    if not is_expected_root(root):
-        return fail(f"Refusing to operate outside configured builder roots ({expected_roots_display()}): {root}")
     if not args.push_only and not message:
         return fail("--message must not be blank")
     if args.push_only and args.message is not None:
@@ -106,11 +88,15 @@ def main() -> int:
         top_level = Path(run_git(root, ["rev-parse", "--show-toplevel"]).stdout.strip()).resolve()
         branch = run_git(root, ["branch", "--show-current"]).stdout.strip()
         remote = run_git(root, ["remote", "get-url", "origin"]).stdout.strip()
+        git_dir = Path(run_git(root, ["rev-parse", "--absolute-git-dir"]).stdout.strip()).resolve()
+        common_dir = Path(root, run_git(root, ["rev-parse", "--git-common-dir"]).stdout.strip()).resolve()
     except subprocess.CalledProcessError as exc:
         return fail(exc.stderr.strip() or "Git validation failed")
 
-    if not is_expected_root(top_level):
-        return fail(f"Refusing unexpected Git root: {top_level}")
+    if top_level != root:
+        return fail(f"Refusing a path that is not the repository top level: {root} (top level is {top_level})")
+    if git_dir != common_dir:
+        return fail(f"Refusing to operate in a linked worktree: {root}")
     if branch != EXPECTED_BRANCH:
         return fail(f"Refusing to commit on branch {branch!r}; expected {EXPECTED_BRANCH!r}")
     if remote != EXPECTED_REMOTE:

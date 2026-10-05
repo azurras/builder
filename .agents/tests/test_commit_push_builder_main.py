@@ -24,25 +24,10 @@ def load_module():
 
 
 class CommitPushBuilderMainTests(unittest.TestCase):
-    def test_accepts_configured_builder_roots(self) -> None:
-        module = load_module()
-
-        roots = {str(path).replace("\\", "/") for path in module.EXPECTED_ROOTS}
-
-        self.assertIn("C:/Users/Christopher/Developer/builder", roots)
-        self.assertIn("/Users/cbell/Developer/builder", roots)
-
     def test_uses_builder_remote(self) -> None:
         module = load_module()
 
         self.assertEqual(module.EXPECTED_REMOTE, "https://github.com/azurras/builder.git")
-
-    def test_rejects_old_azurras_root(self) -> None:
-        module = load_module()
-
-        old_root = Path("/Users/azurras/Developer/builder").resolve()
-
-        self.assertFalse(module.is_expected_root(old_root))
 
 
 class CommitPushBehaviorTests(unittest.TestCase):
@@ -73,7 +58,6 @@ class CommitPushBehaviorTests(unittest.TestCase):
     def invoke(self, *args: str) -> int:
         output = io.StringIO()
         with (
-            patch.object(self.module, "EXPECTED_ROOTS", (str(self.root).replace("\\", "/"),)),
             patch.object(self.module, "EXPECTED_REMOTE", str(self.remote)),
             patch("sys.argv", [str(SCRIPT), "--root", str(self.root), *args]),
             contextlib.redirect_stdout(output),
@@ -131,6 +115,32 @@ class CommitPushBehaviorTests(unittest.TestCase):
         before = (self.git("write-tree"), self.git("rev-parse", "HEAD"), self.git("ls-remote", "origin", "refs/heads/main"))
         self.assertEqual(self.invoke("--message", "Preview", "--path", "chosen.md", "--dry-run"), 0)
         self.assertEqual((self.git("write-tree"), self.git("rev-parse", "HEAD"), self.git("ls-remote", "origin", "refs/heads/main")), before)
+
+    def test_refuses_subdirectory_root(self) -> None:
+        (self.root / "nested").mkdir()
+        (self.root / "nested" / "chosen.md").write_text("selected", encoding="utf-8")
+        output = io.StringIO()
+        with (
+            patch.object(self.module, "EXPECTED_REMOTE", str(self.remote)),
+            patch("sys.argv", [str(SCRIPT), "--root", str(self.root / "nested"), "--message", "Nested", "--path", "chosen.md", "--dry-run"]),
+            contextlib.redirect_stdout(output),
+            contextlib.redirect_stderr(output),
+        ):
+            self.assertNotEqual(self.module.main(), 0)
+        self.assertIn("not the repository top level", output.getvalue())
+
+    def test_refuses_linked_worktree(self) -> None:
+        linked = Path(self.temp.name).resolve() / "linked"
+        self.git("worktree", "add", "-b", "linked", str(linked))
+        output = io.StringIO()
+        with (
+            patch.object(self.module, "EXPECTED_REMOTE", str(self.remote)),
+            patch("sys.argv", [str(SCRIPT), "--root", str(linked), "--push-only", "--dry-run"]),
+            contextlib.redirect_stdout(output),
+            contextlib.redirect_stderr(output),
+        ):
+            self.assertNotEqual(self.module.main(), 0)
+        self.assertIn("linked worktree", output.getvalue())
 
     def test_selected_deletion_is_committed(self) -> None:
         (self.root / "baseline.md").unlink()

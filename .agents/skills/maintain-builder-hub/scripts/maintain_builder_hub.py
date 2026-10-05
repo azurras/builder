@@ -17,10 +17,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     commands = [
         [sys.executable, "-B", str(SKILLS / "maintain-builder-hub/scripts/update_hub_indexes.py"), "--root", args.root],
+        [sys.executable, "-B", str(SKILLS / "maintain-builder-hub/scripts/sync_claude_skills.py"), "--root", args.root],
         [sys.executable, "-B", str(SKILLS / "maintain-builder-hub/scripts/validate_hub_state.py"), "--root", args.root],
     ]
     if args.mode == "check":
         commands[0].append("--check")
+        commands[1].append("--check")
     failed = False
     for command in commands:
         result = subprocess.run(command, check=False)

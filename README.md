@@ -1,6 +1,31 @@
 # Builder
 
-Builder holds implementation plans, runtime evidence and dated session history.
+Builder is the AI workflow hub. All work starts here; the repositories it coordinates are spokes. Builder holds implementation plans, runtime evidence and dated session history for every spoke.
+
+## Start on Any Computer
+
+1. Clone Builder anywhere. Nothing depends on its location.
+2. List spokes and clone any that are missing (by default they go beside the Builder folder):
+
+   ```bash
+   python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py list
+   python .agents/skills/complete-builder-work/scripts/manage_spoke_repositories.py clone --spoke christopherbell-dev
+   ```
+
+3. Keep spokes somewhere else by setting `BUILDER_SPOKES_ROOT`, or map individual spokes in an ignored `spokes.local.json` such as `{"christopherbell-dev": "D:/code/site"}`.
+4. Open Builder in Claude Code, Codex or ChatGPT. Use `python3` where `python` is unavailable.
+
+| Spoke | Repository |
+|---|---|
+| christopherbell-dev | [azurras/christopherbell.dev](https://github.com/azurras/christopherbell.dev) |
+
+Register a new spoke in [spokes.json](spokes.json).
+
+## Agents
+
+[AGENTS.md](AGENTS.md) is the shared policy: Codex and ChatGPT read it directly, and Claude Code imports it through [CLAUDE.md](CLAUDE.md). Canonical skills live in `.agents/skills`; `.claude/skills` holds generated entrypoints that delegate to them and are refreshed by maintain-builder-hub.
+
+## Documents
 
 | Documents | Contents |
 |---|---|
