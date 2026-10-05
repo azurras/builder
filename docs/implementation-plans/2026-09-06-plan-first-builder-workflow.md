@@ -34,7 +34,7 @@ Dependencies: None.
 Files: AGENTS.md, README.md, .agents/skills/complete-builder-work, .agents/skills/plan-builder-work, .agents/skills/maintain-builder-hub, .agents/skills/commit-push-builder-main, .agents/tests/test_artifact_commit_checkpoints.py, .agents/tests/test_skill_consolidation.py, .agents/lib/builder_hub.py, docs/decisions/index.md.
 Symbols: Delivery and checkpoint instructions, planning mode and review contract, INDEX_TARGETS iteration, optional index requirements, maintenance fixture tests.
 Inspection: Read current delivery/plan/finalizer rules, generator main/build_index, validator ARTIFACT_DIRS/INDEX_FILES and main, existing tests, and folder record counts on clean main fbd2808.
-Required skill: chris-street-style before code changes.
+Required skill: write-chris-street-style-code before code changes.
 Behavior: Normal delivery begins with a self-contained implementation plan; optional specs do not add a mandatory phase. Empty optional specs/decisions folders are not generated or required. Optional records gain indexes when saved.
 Invariants: Reviewed plan publication still precedes implementation; verification, publication, continuity and closure readback remain required. Keep all historical records and valid existing plan schemas. Maintenance check stays read-only.
 Boundary/API: Preserve helper filenames and arguments. Optional folder policy is shared between generation and validation; decisions/specs records remain validated when present.

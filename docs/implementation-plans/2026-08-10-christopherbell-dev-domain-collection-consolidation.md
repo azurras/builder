@@ -16,7 +16,7 @@
 - Preserve public HTTP behavior, authorization, optimistic concurrency, BSON types, unique/sparse/partial indexes, TTL values, collation, and retention semantics.
 - Translate a legacy sparse index into an exact `_kind AND field-exists` partial index when shared-collection scoping is required, because MongoDB forbids combining the literal sparse flag with a partial filter; preserve absent/null membership and uniqueness semantics in tests.
 - Use the isolated branch `codex/domain-collection-consolidation` from current `origin/main`; never modify the authoritative dirty checkout.
-- Invoke `chris-street-style` before every production source, test, migration, script, executable configuration, or code-bearing template edit.
+- Invoke `write-chris-street-style-code` before every production source, test, migration, script, executable configuration, or code-bearing template edit.
 - No production source collection is renamed or dropped until a checksummed backup has passed a dry restore and the exact migration has passed disposable-Mongo, restored-clone, alternate-port, and live pre-publication verification.
 - Every destructive operation requires the protected deployment lock, stopped website writer, suspended service recovery, exact database/release/marker/manifest/process identity, and a literal collection allowlist.
 - Do not expose MongoDB URIs, service command lines, application secrets, or Cloudflare credentials in commands, logs, reports, or error messages.
@@ -180,7 +180,7 @@ Interfaces:
 - `save` performs insert when the legacy record is absent and compare-and-set on `payload.<versionField>` when metadata declares a version property.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: encode/decode losslessly and inject exact kind criteria into every operation.
   - Invariants: `_id.kind == _kind`, original BSON ID type survives round trip, caller queries cannot address envelope metadata, and stale versions never overwrite winners.
@@ -304,7 +304,7 @@ Interfaces:
 - Later migration JavaScript must be generated from or byte-for-byte checked against this manifest.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: make target names, kinds, sources, schema versions, and indexes compile-time visible and architecture-testable.
   - Invariants: exactly 14 unique targets, every current/dormant source maps once, every kind maps once, and no legacy runtime mapping survives.
@@ -401,7 +401,7 @@ Interfaces:
 - Account deletion scans target collections by allowlisted kinds rather than legacy collection names.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: preserve account/auth/session/message/notification/post/federation/admin behavior over the new envelopes.
   - Invariants: email/username uniqueness, session TTL, post expiration, notification ordering, federation lease semantics, and pending-action expiry remain exact.
@@ -487,7 +487,7 @@ Interfaces:
 - Whats For Lunch kinds are `restaurant`, `vote`, `favorite`, `preference`, `session`, `daily_picks`, `import_state`, and `import_preview`.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: route all music and WFL reads/writes to `music` and `whatsforlunch` with exact kind isolation.
   - Invariants: queue/radio independent CAS, track and playlist ordering, radio history, vote uniqueness, restaurant normalized-name uniqueness, session revision, import preview TTL, and pagination remain exact.
@@ -579,7 +579,7 @@ Interfaces:
 - Migration state uses `_kind: "migration_record"`; cutover ledger uses `_kind: "domain_collection_cutover"`.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: complete kind-scoped persistence for remaining domains and shared lease/collector infrastructure.
   - Invariants: audit TTL, media job leases, upload recovery, VIN cache TTL, dual vehicle import states, ZIP uniqueness, collector history, global lease ownership, and migration CAS remain exact.
@@ -671,7 +671,7 @@ Interfaces:
 - Every action returns one redacted JSON object with database, action, state, manifest digest, per-kind counts/checksums, index digests, and next operation.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: transform all source documents into 14 temporary targets, prove equivalence, resume ordered publication, delete exact legacy names, and reverse before deletion.
   - Invariants: canonical Extended JSON checksum preserves BSON type/order normalization; publication ledger is CAS-owned; per-collection rename is atomic; writer cannot start mid-sequence.
@@ -756,7 +756,7 @@ Interfaces:
 - `Invoke-ProductionDomainCollectionCutover` owns one deployment lock across backup, stop, stage, publish, target start, verification, immediate drop, marker finalization, service recovery, and auto-deploy refresh.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: provide one interactive, auditable operation that produces the exact 14-collection live state and one restore-bound rollback operation.
   - Invariants: writer stopped for live mutation, recovery suspended, candidate uses non-production database/port, lock and fixed-root identity rechecked, backup dry-restored, manifest exact, deletion last.
@@ -867,7 +867,7 @@ Sequence / dependencies:
 - Runs after Tasks 1-7; no production mutation occurs in this task.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any test/report code edits.
+- Required skill: `write-chris-street-style-code` before any test/report code edits.
 - Before-Edit Brief:
   - Behavior: prove the exact release and migration against isolated data and application ports before publication.
   - Invariants: production listener/database/services remain untouched; test Mongo roots/processes are marker-owned and removed.

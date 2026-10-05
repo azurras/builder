@@ -45,7 +45,7 @@ None. If refreshed-main inspection contradicts the approved attempt-storage desi
 ## Task Breakdown
 
 ### Task 1 - Implement immutable attempt-scoped cutover evidence and guarded retry
-Required skill: chris-street-style.
+Required skill: write-chris-street-style-code.
 - Dependencies: approved written design and this published implementation plan.
 - Files: `ops/production/windows/modules/Production.PostgreSqlMigration.psm1`; `docs/operations/postgresql-migration.md`.
 - Symbols: `Get-ProductionPostgreSqlCutoverJournalPath`, `Read-ProductionPostgreSqlCutoverJournal`, `Write-ProductionPostgreSqlCutoverJournal`, `Get-ProductionPostgreSqlCutoverSidecarPath`, `Read-ProductionPostgreSqlCutoverSidecar`, `Write-ProductionPostgreSqlCutoverSidecar`, `Assert-ProductionPostgreSqlCutoverMongoUnlocked`, `Restore-ProductionPostgreSqlCutoverPreAuthority`, and `Invoke-ProductionPostgreSqlCutover`.

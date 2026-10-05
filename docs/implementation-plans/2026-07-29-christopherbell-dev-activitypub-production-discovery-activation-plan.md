@@ -43,7 +43,7 @@ Sequence / dependencies:
 - First; discovery cannot bind safely without the key.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Invoke `superpowers:test-driven-development` and witness focused RED failures first.
 - Before-Edit Brief:
   - Behavior: prod plus discovery creates/reuses a secret and injects its base64 value; explicit override wins; disabled/non-prod performs no file I/O.
@@ -155,7 +155,7 @@ Sequence / dependencies:
 - After Task 1, because these endpoints must be live before becoming gates.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Update Pester expected paths/counts first and witness RED before production edit.
 - Before-Edit Brief:
   - Behavior: candidate/local production and both public hosts must return 200 for both NodeInfo routes.

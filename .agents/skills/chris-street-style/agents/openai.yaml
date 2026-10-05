@@ -1,7 +1,0 @@
-interface:
-  display_name: "Chris Street Style"
-  short_description: "Apply the rigorous house coding standard"
-  default_prompt: "Use $chris-street-style for implementation or read-only review, reuse the current Before-Edit Brief, and select evidence and references for the actual risk."
-
-policy:
-  allow_implicit_invocation: true

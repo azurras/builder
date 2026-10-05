@@ -74,7 +74,7 @@ Expected files or modules:
 - Modify catalog query/result/service, read controller/view, library playlist lookup, package documentation, and focused Java tests.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: a catalog request returns one stable page plus the full matching count; favorite and playlist queries operate before paging.
   - Invariants: only present READY tracks are returned; page size is 1-100; page is nonnegative and clamped after counting; path and download semantics remain hidden; radio uses a separate query.
@@ -184,7 +184,7 @@ Expected files or modules:
 - Modify Music API builder, response validator, page controller, template, CSS, frontend documentation, JavaScript tests, and production smoke coverage where appropriate.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: listeners see the real result total and can move through compact numbered pages while search/filter/view changes reset to page zero.
   - Invariants: only current-page tracks live in browser catalog state; active media is untouched; all URL values are encoded; invalid response metadata fails closed before rendering.

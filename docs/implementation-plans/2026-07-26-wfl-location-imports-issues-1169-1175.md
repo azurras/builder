@@ -81,7 +81,7 @@ None. The approved campaign specification defines all seven behaviors. The exist
 
 - Work only in the Batch 6 worktree and never edit, reset, or clean `A:\Projects\christopherbell.dev`.
 - Only GitHub comments authored by `azurras` may change scope; #1169-#1175 have no comments or attachments.
-- Invoke `chris-street-style` before production/test/config edits because repository instructions require it despite the user's waiver.
+- Invoke `write-chris-street-style-code` before production/test/config edits because repository instructions require it despite the user's waiver.
 - Use `superpowers:test-driven-development`: witness focused RED before each implementation slice, then focused GREEN before widening.
 - Preserve legacy API contracts. First-party Back Office actions use additive preview/apply endpoints.
 - Lease names are fixed constants, owner tokens are random and bounded, lease duration exceeds the configured request timeout, and release always conditions on exact ownership.

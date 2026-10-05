@@ -1,6 +1,6 @@
 # christopherbell.dev Shared Library Boundaries Implementation Plan
 
-> **For agentic workers:** Execute this plan after the backend query/resource-bounds plan. Before editing production code, tests, build logic, or executable examples, invoke `chris-street-style` and `superpowers:test-driven-development`. Use a clean `codex/` worktree from refreshed `origin/main`; never edit the authoritative dirty checkout.
+> **For agentic workers:** Execute this plan after the backend query/resource-bounds plan. Before editing production code, tests, build logic, or executable examples, invoke `write-chris-street-style-code` and `superpowers:test-driven-development`. Use a clean `codex/` worktree from refreshed `origin/main`; never edit the authoritative dirty checkout.
 
 ## Global Constraints
 
@@ -71,7 +71,7 @@ Sequence / dependencies:
 - First task; independent of leases and dependency cleanup.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before tests, package moves, or import edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before tests, package moves, or import edits.
 - Before-Edit Brief:
   - Behavior: cursor bytes, validation, exception types, and Spring injection remain identical.
   - Invariants: version prefix and timestamp/id ordering do not change.
@@ -148,7 +148,7 @@ Sequence / dependencies:
 - Run after the backend plan so its new scheduler consumers are included in the import rewrite.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before tests, package moves, or import edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before tests, package moves, or import edits.
 - Before-Edit Brief:
   - Behavior: acquisition, renewal, ownership loss, run status, and release remain unchanged.
   - Invariants: collection names, lease IDs, owner tokens, expiry fields, and run-status values remain byte-compatible.
@@ -248,7 +248,7 @@ Sequence / dependencies:
 - Independent of Tasks 1-2; land after their file moves to avoid build-file conflicts.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before build, fixture, or test edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before build, fixture, or test edits.
 - Before-Edit Brief:
   - Behavior: website tests read the same classpath JSON resources with the same failures.
   - Invariants: production compile/runtime classpaths cannot resolve `TestUtil`.
@@ -339,7 +339,7 @@ Sequence / dependencies:
 - Run after Task 3 build-file changes.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before build or test edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before build or test edits.
 - Before-Edit Brief:
   - Behavior: token generation/validation does not change.
   - Invariants: versions stay BOM-managed/current; runtime implementation and Jackson adapter remain present for website.
@@ -380,7 +380,7 @@ Sequence / dependencies:
 - Run after confirming the production import inventory on the execution commit.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before tests, package moves, or import edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before tests, package moves, or import edits.
 - Before-Edit Brief:
   - Behavior: workflow execution, retry/stop behavior, result models, and logging stay unchanged.
   - Invariants: only package names and source-set owner change.

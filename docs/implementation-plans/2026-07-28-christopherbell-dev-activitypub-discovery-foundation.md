@@ -60,7 +60,7 @@ Expected files or modules:
 - Account entity/create/update DTOs, mapper tests, federation consent/identity package, signup/profile behavior, migration/index, and account documentation.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: browser signup may explicitly request federation when server enrollment is available; existing users may enable or disable it; an enabled account owns one stable actor identity and keypair.
   - Invariants: omitted API consent is false; old null fields are false; identity generation and account enablement persist in one account write; disabling retains identity for stable re-enable; suspended/inactive accounts are never discoverable.
@@ -115,7 +115,7 @@ Expected files or modules:
 - Federation properties/configuration, identity cryptography service, PEM codec, production-settings validation, configuration examples, and negative tests.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: enabling federation creates one RSA keypair, publishes only the public key, encrypts PKCS#8 private bytes using AES-256-GCM, and can decrypt them only through the identity service.
   - Invariants: encryption uses a fresh 96-bit nonce and authenticated context binding account ID, actor ID, key ID, and key version; key/config values never appear in errors or logs; disabled discovery does not require a secret.
@@ -161,7 +161,7 @@ Expected files or modules:
 - Federation discovery controller/service/models, account/post query projection, security public routes, no-store response helpers, and protocol tests.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: WebFinger resolves exact local acct resources; NodeInfo describes the site; enabled actors and bounded read-only collections serialize canonical ActivityStreams JSON.
   - Invariants: only ACTIVE consented accounts with valid identity are visible; actor IDs, object IDs, links, and key IDs derive from the configured canonical origin; expired/private/missing posts never appear; inbox mutation remains unavailable.
@@ -239,7 +239,7 @@ Expected files or modules:
 - Signup/profile templates and JavaScript, CSS/accessibility tests, frontend docs, federation operations docs, and local/runtime evidence.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: signup presents a checked federation choice when enrollment is available, or the same disabled choice with unavailable copy when the safe rollout flag is off; current users can opt in/out from profile settings; UI reflects server-confirmed state.
   - Invariants: unchecked, disabled, or omitted means false; disclosure is never hidden behind a tooltip; disabling does not promise remote deletion; no browser secret or key material exists.

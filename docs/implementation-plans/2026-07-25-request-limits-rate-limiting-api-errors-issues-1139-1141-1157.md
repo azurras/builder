@@ -85,7 +85,7 @@ Sequence / dependencies:
 - First task. Capture focused failures before production edits.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: tests define the missing typed limit, standard 413/429 envelopes, expiring bucket state, rate-limit headers, and explicit operational exception mappings.
   - Invariants: current route matching, trusted client IPs, shared upload sizes, exception causes, and generic programmer-fault handling remain unchanged.
@@ -347,7 +347,7 @@ Sequence / dependencies:
 - Runs after Task 1 records RED failures.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: ordinary JSON bodies use a typed environment-aware limit, shared upload chunks retain their own limit, and known/unknown-length overflows return a standard 413 envelope.
   - Invariants: filters remain before rate limiting; non-JSON upload streams do not echo content; exact-size bodies pass; size-plus-one fails.
@@ -580,7 +580,7 @@ Sequence / dependencies:
 - Runs after Task 2 because it reuses `ApiErrorResponseWriter`.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: rate-limit entries expire after one inactive rule window, total state stays bounded, and exhausted responses include correct guidance and the standard envelope.
   - Invariants: rule ordering, path/method matching, trusted proxy resolution, capacities, and Bucket4j token semantics stay unchanged.
@@ -808,7 +808,7 @@ Sequence / dependencies:
 - Runs after Task 1 RED contracts; independent of Tasks 2-3 production code but completed before full verification.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: known persistence outages consistently return safe 503 envelopes; account credential-provider failures return the generic safe 500 envelope; original causes remain attached internally.
   - Invariants: duplicate conflicts remain 409, not-found remains 404, invalid input remains 400, and unanticipated runtime/programmer failures remain generic 500.
@@ -1029,7 +1029,7 @@ Sequence / dependencies:
 - Runs after Tasks 2-4 are GREEN.
 
 Implementation notes:
-- No production code edits are planned in this task; if verification exposes a defect, return to the owning task, invoke `chris-street-style`, add a RED regression, and update this plan if file scope changes materially.
+- No production code edits are planned in this task; if verification exposes a defect, return to the owning task, invoke `write-chris-street-style-code`, add a RED regression, and update this plan if file scope changes materially.
 - Build the production-profile JAR and start it on port `8090` against an exact disposable Mongo database named `christopherbell_request_limits_test_YYYYMMDDHHMMSS`.
 - Supply all valid production settings, `APP_REQUEST_SIZE_DEFAULT_MAX=128B`, mail disabled, and a first-match login rate rule with capacity 1 and window 5 seconds through command-line properties.
 - Send one 129-byte JSON login request and assert HTTP 413, `REQUEST_TOO_LARGE`, standard `success=false`, no echoed body, and no authentication call side effect.

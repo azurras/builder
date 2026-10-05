@@ -19,7 +19,7 @@ Append same-day project work; create another file for another date. Preserve dec
 | save-session-memory | Dated work records |
 | record-runtime-verification | Save or validate runtime evidence |
 | verify-local-spring-app | Isolated Spring execution and authorized deployment |
-| chris-street-style | Implementation standards and read-only code review |
+| write-chris-street-style-code | Implementation standards and read-only code review |
 | maintain-builder-hub | Index generation and document validation |
 | commit-push-builder-main | Scoped selected-file publication and push recovery |
 

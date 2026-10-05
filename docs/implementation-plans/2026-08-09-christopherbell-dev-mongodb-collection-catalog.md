@@ -19,7 +19,7 @@
 - Do not add an HTTP endpoint, Mission Control surface, or public/admin UI for the inventory.
 - Preserve the dirty authoritative checkout at `A:\Projects\christopherbell.dev`; implementation must use an isolated worktree from refreshed `origin/main`.
 - Use a private `GRADLE_USER_HOME`; validate a packaged candidate on a non-8080 port before any production deployment.
-- Invoke `chris-street-style` before every code edit and use test-driven development for behavior changes.
+- Invoke `write-chris-street-style-code` before every code edit and use test-driven development for behavior changes.
 
 ---
 
@@ -92,7 +92,7 @@ Interfaces:
 - Produces: `MongoCollectionCatalogTest.catalogEntriesAreCompleteAndValid()` and `MongoCollectionCatalogTest.everyMappedAndManualCollectionIsCataloged()`.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Required sub-skill: `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: A focused JUnit test reports every missing, extra, duplicate, invalid, or undocumented current collection entry without starting the application or connecting to MongoDB.
@@ -394,7 +394,7 @@ Interfaces:
 - Produces: `Get-ProductionMongoCollectionInventoryScript()`, `ConvertFrom-ProductionMongoCollectionInventory(string)`, public `Get-ProductionMongoCollectionInventory()`, and `prod.cmd mongo-inventory`.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Required sub-skill: `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: An operator can run `prod.cmd mongo-inventory` and receive a complete, sorted object containing only allowlisted metadata for non-system collections in `christopherbell`.
@@ -888,7 +888,7 @@ Interfaces:
 - Produces: discoverable README and native Windows runbook instructions.
 
 Implementation notes:
-- Required skill: `chris-street-style` before editing copy-ready command examples.
+- Required skill: `write-chris-street-style-code` before editing copy-ready command examples.
 - Before-Edit Brief:
   - Behavior: Operators can discover the catalog, run the exact metadata-only command, save JSON safely, and understand that live-only/empty collections are not deletion candidates by default.
   - Invariants: Documentation never prints secret-bearing configuration, suggests document reads, or weakens backup/approval rules.
@@ -1091,7 +1091,7 @@ Interfaces:
 - Produces: review evidence, Builder test report/update/closure/session memory, and a live metadata comparison with no cleanup action.
 
 Implementation notes:
-- Required skill: `chris-street-style` in review mode for the final code/test diff.
+- Required skill: `write-chris-street-style-code` in review mode for the final code/test diff.
 - Use `superpowers:verification-before-completion` before any success claim.
 - Use `verify-local-spring-app` for alternate-port application verification.
 - Before-Edit Brief:

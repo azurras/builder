@@ -30,7 +30,7 @@ None blocking; removal and supported deployment are authorized.
 ## Task Breakdown
 
 ### Task 1 - Remove content and discovery
-Required skill: chris-street-style
+Required skill: write-chris-street-style-code
 Dependencies: Published reviewed plan.
 Files: Inspected website/src/main/java/dev/christopherbell/view/content/ContentViewController.java, view/README.md, configuration/PublicSitemapService.java, configuration/security/SecurityConfig.java (comments/public GET rules), configuration/README.md, resources/static/js/components/nav.js and static/js/README.md; delete resources/templates/resources/software-handoff-kit.html and resources/products/software-handoff-kit-preview.md; affected ViewControllerTest, SecurityConfigTest, PublicSitemapServiceTest and nav-messages-link.test.js.
 Symbols: Replace two handoff controller handlers with combined empty410 response; remove product nav and STATIC_URLS entry; adjust owning documentation and discovery/download tests.
@@ -43,7 +43,7 @@ Tests and evidence: Regression-first former GET410/body/header/resource absence,
 Verification: :website:test affected classes, :website:jsTest, node --check nav.js, bootJar artifact contents and immutable source review.
 
 ### Task 2 - Verify and publish removal
-Required skill: chris-street-style
+Required skill: write-chris-street-style-code
 Dependencies: Task1 passing tests and independent review.
 Files: This plan, dated runtime report/session record, selected site implementation; inspect supported prod.cmd automatic deployer and owned disposable fixture.
 Symbols: Candidate readiness/retired routes/discovery, artifact identity, PR/CI/merge/deployed SHA and closure readback.

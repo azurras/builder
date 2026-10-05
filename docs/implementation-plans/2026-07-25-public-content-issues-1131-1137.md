@@ -72,7 +72,7 @@ Sequence / dependencies:
 - First task; no production edit may precede its expected failures.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Invoke the skill and its testing/review reference before changing tests.
 - Before-Edit Brief:
   - Behavior: anonymous APIs, envelope parsing, alt text, usage routing, archive hygiene, and self-hosted Bootstrap become executable contracts.
@@ -239,7 +239,7 @@ Sequence / dependencies:
 - After Task 1 RED evidence.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: anonymous pages fetch current versioned APIs once and render configured content.
   - Invariants: non-GET methods, bearer/cookie authentication, and unrelated APIs stay protected.
@@ -386,7 +386,7 @@ Sequence / dependencies:
 - After API/component GREEN.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: usage and both archive pages return 200 with valid links/assets only.
   - Invariants: preserve archive prose, real YouTube link, Tony images, and route names.
@@ -498,7 +498,7 @@ Sequence / dependencies:
 - Last because it changes shared build/security/static delivery.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: all pages receive Bootstrap 5.3.3 from the application with no Bootstrap CDN request.
   - Invariants: `main.css` is the single CSS entry; pages already using Bootstrap JS keep the bundle.

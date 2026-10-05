@@ -79,7 +79,7 @@ Sequence / dependencies:
 - First; every later production edit must make an observed test failure pass.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: Focused tests fail when public responses lack required headers, cookie mutations bypass CSRF, login exposes a JWT, logout fails to clear cookies, spoofed hosts affect reset links, invalid payloads reach services, or signup names remain optional.
   - Invariants: Tests exercise HTTP and exported browser boundaries rather than source-text presence; bearer compatibility and same-origin framing remain explicit.
@@ -310,7 +310,7 @@ Sequence / dependencies:
 - After Task 1 RED; establishes the global browser enforcement boundary before cookie authentication is enabled.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: Every response receives the compatible CSP/referrer/permissions/frame policy; production emits one-year HSTS; SPA requests receive a CSRF cookie; unsafe cookie flows need the matching header; bearer requests remain exempt.
   - Invariants: The persistent media shell keeps SAMEORIGIN framing; Bootstrap, Font Awesome, supported embeds, remote images, workers, and local media keep working; aggregate Actuator security is unchanged.
@@ -471,7 +471,7 @@ Sequence / dependencies:
 - After Task 2; the authentication cookie is not enabled until CSRF is enforced.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: Login sets HttpOnly auth and readable state cookies without returning a token; logout expires both; JWT filter authenticates cookie-only browser requests while preserving bearer precedence.
   - Invariants: Only the HttpOnly cookie contains credentials; explicit bearer behavior and one-day expiry remain compatible; marker/role UI state never authorizes a server action.
@@ -603,7 +603,7 @@ Sequence / dependencies:
 - After Task 3; browser code switches only after the server accepts cookies.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: Browser fetches send same-origin cookies and CSRF; UI auth uses only a non-secret marker; logout calls the server; native shared-folder media/download fetches forward their original cookie credentials without holding or injecting JWTs.
   - Invariants: Bearer API clients are unaffected; 401 still clears UI state; shared-folder capability checks, Range headers, one-time download URLs, denial notifications, and no-store behavior remain intact.
@@ -1091,7 +1091,7 @@ Sequence / dependencies:
 - After cookie/security configuration exists; uses the same typed browser-security properties.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: Reset emails always use configured `publicBaseUrl`; malformed login/reset bodies return the standard 400 envelope before service invocation.
   - Invariants: Generic reset-request success still avoids account enumeration; password bounds match account creation; forwarded host/proto never affect links.
@@ -1206,7 +1206,7 @@ Sequence / dependencies:
 - After central CSRF/fetch changes so signup can use the same request boundary.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: Browser-native validation and the JS payload boundary both reject blank first/last name; valid signup sends trimmed non-null names through CSRF-protected fetch.
   - Invariants: Existing server `@NotBlank` and 100-character maximum remain authoritative; page layout and redirect behavior remain unchanged.
@@ -1271,7 +1271,7 @@ Sequence / dependencies:
 - Last; only after Tasks 1-6 are GREEN and the diff is cohesive.
 
 Implementation notes:
-- No code edits. Invoke `chris-street-style` Review Mode, `superpowers:verification-before-completion`, and `superpowers:requesting-code-review` before merge.
+- No code edits. Invoke `write-chris-street-style-code` Review Mode, `superpowers:verification-before-completion`, and `superpowers:requesting-code-review` before merge.
 - Review security boundaries for bearer bypass, cookie flags, CSRF coverage, CSP compatibility, credential leakage, reset-host trust, and validation side effects.
 
 #### Code Edit 7.1

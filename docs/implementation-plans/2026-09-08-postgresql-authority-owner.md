@@ -30,7 +30,7 @@ No unresolved design choice for the owner fix. Any subsequent cutover failure mu
 ## Task Breakdown
 
 ### Task 1 - Align protected Windows owner policy
-Required skill: chris-street-style.
+Required skill: write-chris-street-style-code.
 - Dependencies: None; read-only production reproduction completed.
 - Files: `website/src/main/java/dev/christopherbell/configuration/persistence/migration/FinalizeEvidenceLoader.java`; `docs/operations/postgresql-migration.md`.
 - Symbols: protectedAttributes, trustedProductionPrincipal, trustedProductionWritePrincipal.
@@ -55,7 +55,7 @@ Required skill: chris-street-style.
 - Verification: healthy alternate-port acceptance within supported procedure, production readiness/public endpoints, exact release and authority journal; save runtime report before closure.
 
 ### Task 3 - Preserve safe migration CLI failure classification
-Required skill: chris-street-style.
+Required skill: write-chris-street-style-code.
 - Dependencies: Task 2 cutover failed with `MigrationStorageException` / `PSQLException`, SQLSTATE `42P01`; schema bootstrap failed with Java exit code 1. Read-only inventory confirms Flyway history and all migration ledger tables are absent.
 - Files: `website/src/main/java/dev/christopherbell/configuration/persistence/migration/PostgresqlMigrationSourceSnapshotCli.java`; `website/src/main/java/dev/christopherbell/configuration/persistence/migration/PostgresqlMigrationCli.java`; `website/src/main/java/dev/christopherbell/configuration/persistence/migration/ProductionPostgresqlSchemaMigrator.java`; `ops/production/windows/modules/Production.Common.psm1`; `ops/production/windows/modules/Production.PostgreSqlMigration.psm1`; `ops/production/windows/modules/Production.PostgreSql.psm1`; existing CLI contract assertions only.
 - Symbols: migration CLI `execute` failure handlers; schema migrator `main`; `Invoke-CheckedProcess`; both migration modules' `$script:DefaultProcessAction`.
@@ -68,7 +68,7 @@ Required skill: chris-street-style.
 - Verification: run `:website:classes`, review the allowlist and call-site scope, then wait for required CI before merge and cutover retry.
 
 ### Task 4 - Run schema bootstrap from a current origin/main release
-Required skill: chris-street-style.
+Required skill: write-chris-street-style-code.
 - Dependencies: Task 3 merged as `b532cb06`; bootstrap retry on September 22 failed with Java exit code 1. Production current resolves to release `e073823d14ffed0b4c113707d16c0ad0cfe1b7fa`, which predates `ProductionPostgresqlSchemaMigrator`; read-only database inventory confirms Flyway and migration ledger tables are absent.
 - Files: `ops/production/windows/modules/Production.PostgreSql.psm1`; existing PostgreSQL orchestration assertions only.
 - Symbols: `Invoke-ProductionPostgreSqlSchemaMigrationCore`, `Resolve-OriginMainRelease`, `New-ReleaseFromOriginMain`.

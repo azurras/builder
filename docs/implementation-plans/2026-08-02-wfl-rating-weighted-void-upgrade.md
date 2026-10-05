@@ -95,7 +95,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Required sub-skill: `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: select up to the requested number of unique restaurants using the approved confidence-adjusted weights.
@@ -367,7 +367,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Required sub-skill: `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: return count/sum for requested IDs using one aggregation; empty input performs no I/O.
@@ -500,7 +500,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Required sub-skill: `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: nearby/ZIP generation, daily refresh, and deleted-pick replacement consume the shared selector; stored daily picks continue to load in stored order.
@@ -861,7 +861,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Required sub-skill: `superpowers:test-driven-development`.
 - Before-Edit Brief:
   - Behavior: `/wfl` renders a dark, compact, responsive console with three equal non-ranked cards and a plain-language weighting disclosure while existing controls/states remain operable.
@@ -1401,7 +1401,7 @@ Implementation notes:
 
 - Invoke `superpowers:verification-before-completion`.
 - Invoke `superpowers:requesting-code-review` for independent final-diff review.
-- Apply the `chris-street-style` final rubric to production and tests.
+- Apply the `write-chris-street-style-code` final rubric to production and tests.
 - Invoke `verify-local-spring-app` for alternate-port startup, runtime evidence, and production restart boundaries.
 - Invoke `save-test-report` after browser/API testing.
 - Publish through a focused PR, wait for required CI/CodeQL, merge only when green, verify production, and close the Builder ledger with `close-hub-work`.

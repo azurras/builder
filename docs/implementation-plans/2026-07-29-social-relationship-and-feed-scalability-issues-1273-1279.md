@@ -22,7 +22,7 @@ Resolve #1273-#1279 by moving likes/follows into unique edge collections, making
 - Campaign spec `docs/specs/2026-07-29-complete-christopherbell-dev-issues-1258-1307.md`.
 - Trusted GitHub issues #1273-#1279 by `azurras`; no comments or attachments.
 - `origin/main` commit `f31535f29312d24573a6031b0162aa8ebc4b5318`.
-- Mandatory test-first execution and `chris-street-style`.
+- Mandatory test-first execution and `write-chris-street-style-code`.
 
 ## Branch
 

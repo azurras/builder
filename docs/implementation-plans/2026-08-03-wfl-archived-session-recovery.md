@@ -17,7 +17,7 @@
 - Active shared-session refresh behavior and visible server conflicts for genuine expiry races remain unchanged.
 - No dependencies, server endpoints, MongoDB data, session lifetime settings, thumb votes, or approval weights change.
 - Preserve the dirty authoritative spoke checkout; execute only in a clean isolated worktree from refreshed `origin/main`.
-- Invoke `chris-street-style` before editing JavaScript, tests, or executable documentation, and follow strict RED/GREEN TDD.
+- Invoke `write-chris-street-style-code` before editing JavaScript, tests, or executable documentation, and follow strict RED/GREEN TDD.
 - Validate a packaged candidate on a non-8080 port before production deployment.
 
 ---
@@ -80,7 +80,7 @@ Sequence / dependencies:
 - Update documentation only after the focused tests are GREEN.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: implicit archived saved sessions fall back locally; new-pick requests from explicit archives start fresh; active sessions still refresh in place.
   - Invariants: archived server history is never mutated; active-session reset and expiry-race conflict handling remain unchanged; saved state is cleared only on failed/inactive implicit restore or existing force-new flow.

@@ -49,7 +49,7 @@ Dependencies: None.
 Files: docs/session-memory, docs/specs, docs/spoke-reviews, docs/spoke-tasks, docs/spoke-updates, docs/spokes, docs/work, docs/work-closures, docs/templates, docs/active.md, docs/status-model.md, docs/skill-migration.md, new migration helper under .agents/skills/save-session-memory/scripts.
 Symbols: Source inventory, project assignment, source anchors, Markdown target rewriting, coverage verification.
 Inspection: Current filenames and headings establish app versus Builder tooling records; registry contains one app repository; personal-computer-cleanup is a separate unexecuted project. Existing links cross artifact folders.
-Required skill: chris-street-style before code changes.
+Required skill: write-chris-street-style-code before code changes.
 Behavior: Every substantive source record appears once in its project memory with date/type/source provenance; plan/report links target new anchors. Generated dashboards/indexes are retired or regenerated for the three retained folders.
 Invariants: Preserve complete bodies except explicit heading/link relocation; verify coverage before deletion; no live state inference. Preserve dates and externally linked evidence.
 Boundary/API: Stable project filenames and explicit source anchors replace historical per-request paths. Existing plan/report documents retain their names.
@@ -62,7 +62,7 @@ Dependencies: Task 1 format and mapping established.
 Files: .agents/skills/save-session-memory, .agents/skills/coordinate-builder-work, .agents/skills/review-spoke-work, .agents/skills/manage-spoke-repositories, .agents/skills/plan-builder-work, .agents/lib, .agents/tests.
 Symbols: Project-keyed append API, CLI arguments, repository inspect/snapshot, coordination and review persistence.
 Inspection: Current helpers write dated request files and separate coordination artifacts; registry/snapshot use docs/spokes; shared artifact writer serves obsolete record types.
-Required skill: chris-street-style before code changes.
+Required skill: write-chris-street-style-code before code changes.
 Behavior: Explicit --project chooses one stable memory file; progress/decisions/reviews/closure append with date and evidence. Repository inspect remains read-only; explicit snapshot appends to the chosen project memory. Plans carry requirements directly.
 Invariants: Different dates/titles cannot create separate files for the same project; malformed identity fails before mutation; no silent default to the wrong project. Preserve existing memory bytes when appending.
 Boundary/API: Replace obsolete artifact commands and registry storage with project memory; document new invocation arguments and remove dead helpers.
@@ -75,7 +75,7 @@ Dependencies: Tasks 1-2.
 Files: AGENTS.md, README.md, .agents/skills/complete-builder-work, .agents/skills/maintain-builder-hub, current skill metadata, docs/implementation-plans, docs/test-reports, docs/session-memory.
 Symbols: Three-folder indexes, project-memory validation, runtime report template reference, delivery checkpoints.
 Inspection: Existing maintenance creates active.md and many artifact indexes; validation requires seven templates and per-request memory names.
-Required skill: chris-street-style before code changes.
+Required skill: write-chris-street-style-code before code changes.
 Behavior: Maintenance generates navigation only for the three document types, without active status inference. Validate project memory names, provenance and links; preserve plan/runtime schema gates. Progress is appended within project memory rather than copied into parallel records.
 Invariants: Read-only checks remain read-only; reviewed plan and runtime/continuity evidence and trusted-comment boundary remain. No stale folder regeneration.
 Boundary/API: Skill roles remain useful but share the single continuity sink. Retire obsolete template/status guidance after preserving source history.

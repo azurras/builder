@@ -30,7 +30,7 @@ Demand, sustainable acquisition, operating costs at scale and willingness to pay
 ## Task Breakdown
 
 ### Task 1 - Implement private bounded monitoring
-Required skill: chris-street-style
+Required skill: write-chris-street-style-code
 Dependencies: Published reviewed plan.
 Files: New website/src/main/java/dev/christopherbell/sitemonitor/{model,fetch,monitor,persistence,api}/ and README.md; inspected configuration/mongo/domain/DomainMongoOperationsFactory.java, DomainAccountDeletionStore.java; new account/api/MonitorAccountAccess.java; architecture/LegacyModuleDependencyRules.java; new sitemonitor tests and runtime-kind tests.
 Symbols: Verified origin/page policy, DNS-pinned fetch, site snapshots/comparison, workspace repository, run service and daily scheduler, owner-only API; exact runtime-kind approval and account deletion cleanup.
@@ -43,7 +43,7 @@ Tests and evidence: Regression-first tests for validation/SSRF/pinning/redirect/
 Verification: Focused :website:test classes then required broader native/CI checks with inspected test-only Mongo target; actual candidate requests and report content.
 
 ### Task 2 - Deliver usable pilot UI and reports
-Required skill: chris-street-style
+Required skill: write-chris-street-style-code
 Dependencies: Task 1 API contracts.
 Files: Inspected view/tools/ToolsViewController.java, configuration/security/SecurityConfig.java, StaticAssetRequestMatcher.java, PublicMetadataController.java, static/js/lib/api.js, components/nav.js, templates/zip-coordinates.html and shared frontend helpers; new templates/site-monitor.html and static/js/site-monitor.js; owning README files; affected view/security/frontend tests.
 Symbols: Public data-free /site-monitor page, account-aware dashboard, accessible setup/verification/baseline/check/delete/report controls, text report export, Tools navigation and canonical metadata.

@@ -1,6 +1,6 @@
 # ChristopherBell.dev Omitted Failure-Actions SCM Output Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Every production-code edit and review must use `chris-street-style` in the appropriate mode.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Every production-code edit and review must use `write-chris-street-style-code` in the appropriate mode.
 
 **Goal:** Make the Windows recovery-policy verifier accept the single production-observed suspended SCM representation while rejecting every labeled or actionable suspended failure-actions state.
 
@@ -88,7 +88,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` in Implementation Mode before any code edits.
+- Required skill: `write-chris-street-style-code` in Implementation Mode before any code edits.
 - Required skill: `superpowers:test-driven-development` for the RED/GREEN sequence.
 - Before-Edit Brief:
   - Behavior: suspended `qfailure` output with reset `0` and an omitted action field passes; any suspended action label still fails.
@@ -316,7 +316,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` in Review Mode; review stays read-only unless a finding is accepted.
+- Required skill: `write-chris-street-style-code` in Review Mode; review stays read-only unless a finding is accepted.
 - Before-Edit Brief:
   - Behavior: no new behavior is introduced in this task; it proves the exact parser correction is isolated and release-ready.
   - Invariants: compare only `origin/main...HEAD`, preserve production, and exclude unrelated checkout state.

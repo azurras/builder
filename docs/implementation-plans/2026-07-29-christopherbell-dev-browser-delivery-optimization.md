@@ -1,6 +1,6 @@
 # christopherbell.dev Browser Delivery Optimization Implementation Plan
 
-> **For agentic workers:** Execute this plan task by task. Before editing production code, tests, build logic, templates, or executable examples, invoke `chris-street-style` and `superpowers:test-driven-development`. Use a clean `codex/` worktree from refreshed `origin/main`; do not edit the authoritative dirty checkout.
+> **For agentic workers:** Execute this plan task by task. Before editing production code, tests, build logic, templates, or executable examples, invoke `write-chris-street-style-code` and `superpowers:test-driven-development`. Use a clean `codex/` worktree from refreshed `origin/main`; do not edit the authoritative dirty checkout.
 
 ## Global Constraints
 
@@ -72,7 +72,7 @@ Sequence / dependencies:
 - First task; its RED result proves the current graph exceeds the approved budget.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before test or source edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before test or source edits.
 - Before-Edit Brief:
   - Behavior: recursively follow only static relative imports from `app.js`, report sorted files and raw byte total, and fail above 86,434 bytes.
   - Invariants: dynamic imports are excluded from the initial graph; cycles are counted once; paths cannot escape `static/js`.
@@ -132,7 +132,7 @@ Sequence / dependencies:
 - Runs after Task 1. Complete before stylesheet splitting because the player stylesheet follows the runtime.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before test or source edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before test or source edits.
 - Before-Edit Brief:
   - Behavior: nav/footer remain immediate; blog/gallery load only when their mount exists; media loads for persisted resume or a play action.
   - Invariants: one player host in the top document, one runtime promise, logout always clears an active player, navigation interception exists only after media loads.
@@ -303,7 +303,7 @@ Sequence / dependencies:
 - Runs after Task 2 so player CSS ownership matches runtime ownership.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before CSS, template, test, or source edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before CSS, template, test, or source edits.
 - Before-Edit Brief:
   - Behavior: route appearance is unchanged; lightweight routes do not download feature-only selectors.
   - Invariants: selector order within each moved block stays unchanged; shared variables/base selectors remain in `main.css`.
@@ -380,7 +380,7 @@ Sequence / dependencies:
 - Independent of Task 3; execute after Task 2 to minimize merge conflicts in imports.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before test or source edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before test or source edits.
 - Before-Edit Brief:
   - Behavior: markup/text remains byte-for-byte equivalent for valid inputs; unsafe values still pass through `sanitize` before HTML insertion.
   - Invariants: helpers are pure except the explicit status renderer; no hidden global DOM lookup.
@@ -503,7 +503,7 @@ Sequence / dependencies:
 - Runs after CSS/JS moves so the first fingerprint reflects the optimized asset tree.
 
 Implementation notes:
-- Required skill: invoke `chris-street-style` and `superpowers:test-driven-development` before build, configuration, test, or documentation edits.
+- Required skill: invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before build, configuration, test, or documentation edits.
 - Before-Edit Brief:
   - Behavior: identical static bytes yield identical version; any path/content change yields a new version; backend-only commits do not.
   - Invariants: relative paths and bytes are hashed in deterministic order; no timestamps or absolute paths enter the digest.

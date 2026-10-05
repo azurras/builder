@@ -18,7 +18,7 @@ Review and correct all tracked first-party executable code for the website again
 ## Inputs
 - Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, fetched 2026-10-04.
 - `AGENTS.md`, root and module READMEs, Gradle build files, JavaScript/CSS ownership READMEs.
-- Builder `.agents/skills/chris-street-style/SKILL.md` and its Java, JavaScript, API/design, configuration, and testing references.
+- Builder `.agents/skills/write-chris-street-style-code/SKILL.md` and its Java, JavaScript, API/design, configuration, and testing references.
 - Initial inventory: 1,421 tracked files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration. The execution re-count is 1,416; see the final audit record for extension counts and reviewed groups.
 
 ## Branch
@@ -43,7 +43,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 
 ### Task 1 - Review and correct Java application, library, and tests
 - Dependencies: None.
-- Required skill: chris-street-style.
+- Required skill: write-chris-street-style-code.
 - Files: `website/src/main/java`, `website/src/test/java`, `cbell-lib/src/main/java`, `cbell-lib/src/test`, and `cbell-lib/src/testFixtures`; update owning package READMEs only when ownership or documented behavior changes. Inspected repository guides: `AGENTS.md`, root `README.md`, `website/src/main/java/dev/christopherbell/README.md`, `cbell-lib/README.md`, root/module Gradle build files.
 - Symbols: Tracked Java types and methods in the listed source roots; prioritize public boundaries, feature services/controllers, repositories, async/concurrency owners, exception translation, and state constructors.
 - Inspection: Clean audit worktree at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`; root instructions, architecture guidance, module guidance and build configuration inspected. Read each owning feature README and its callers/tests before editing that feature.
@@ -56,7 +56,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 
 ### Task 2 - Review browser JavaScript and tests
 - Dependencies: Task 1 may proceed independently; consolidate final checks in Task 5.
-- Required skill: chris-street-style.
+- Required skill: write-chris-street-style-code.
 - Files: `website/src/main/resources/static/js`, `website/src/test/js`, and any executable service-worker JavaScript under website resources. Inspected `website/src/main/resources/static/js/README.md`, root `AGENTS.md`, and the Gradle JavaScript test task.
 - Symbols: Tracked ES modules, web components, service workers, tests, event handlers, fetch/promise flows, DOM rendering, timers and subscriptions.
 - Inspection: `origin/main` baseline `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`; shared/page ownership conventions and native test wiring inspected. Read nearby module/test contracts before each edit.
@@ -69,7 +69,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 
 ### Task 3 - Review templates, styles, and application configuration
 - Dependencies: Tasks 1-2 may proceed independently; consolidate final checks in Task 5.
-- Required skill: chris-street-style.
+- Required skill: write-chris-street-style-code.
 - Files: `website/src/main/resources/templates`, `website/src/main/resources/static/css`, `website/src/main/resources/application*.yml`, and code-bearing static/resource configuration. Inspected `website/src/main/resources/static/css/README.md`, `AGENTS.md`, root README, and `website/build.gradle.kts` resource processing.
 - Symbols: Template fragments/pages, Thymeleaf expressions, CSS selectors/media rules, configuration keys, and resource-rendering logic.
 - Inspection: Clean baseline at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`; template/config ownership and stylesheet contracts inspected. Trace every edited selector/config key to its consumers and tests.
@@ -82,7 +82,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 
 ### Task 4 - Review operational scripts, Gradle, and CI configuration
 - Dependencies: Tasks 1-3 may proceed independently; consolidate final checks in Task 5.
-- Required skill: chris-street-style.
+- Required skill: write-chris-street-style-code.
 - Files: tracked first-party `ops/production/windows/**/*.ps1`, `.psm1`, root and module `*.gradle.kts`, `prod.cmd`, `gradlew.bat`, `.github/workflows/*.yml`, and code-bearing Compose/configuration files. Inspected Gradle build/task wiring and repository worktree/build guidance.
 - Symbols: Script entrypoints/functions/modules, command argument parsing, process/file/service/database effects, workflow jobs/steps, and Gradle task/provider/configuration declarations.
 - Inspection: Clean audit worktree at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`; inspect each script's module tests and relevant operational runbook before any edit.
@@ -95,7 +95,7 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 
 ### Task 5 - Complete the whole-code audit and deliver verified results
 - Dependencies: Tasks 1-4.
-- Required skill: chris-street-style.
+- Required skill: write-chris-street-style-code.
 - Files: All in-scope tracked source, tests, configuration and executable scripts; website `AGENTS.md` coding guidance; implementation plan, runtime report if required, and dated Builder session memory.
 - Symbols: Every in-scope file from the re-counted manifest and all changed public/internal boundaries.
 - Inspection: Reconfirm source commit and manifest; semantically review the complete diff against the plan, callers, tests, security boundaries, compatibility and native outputs.

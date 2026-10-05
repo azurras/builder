@@ -62,7 +62,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: `Install-SharedFolderWorkerService` requests a protected service-root ACL that lets LocalService traverse the working directory before WinSW installation.
   - Invariants: LocalService receives read-and-execute only; the rule is non-inheriting; SYSTEM and Administrators retain full control; Administrators own the directory; initial service-stop failure still occurs before ACL/file effects.
@@ -252,7 +252,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` in Review Mode before merge; no code edits during review.
+- Required skill: `write-chris-street-style-code` in Review Mode before merge; no code edits during review.
 - Review ACL inheritance, owner, effective rights, failure ordering, service identity, and the complete branch diff.
 - Stage only the module and test file; leave `.superpowers/sdd/progress.md` untouched.
 
@@ -273,7 +273,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` in Implementation Mode for identifier refresh and Review Mode for preflight.
+- Required skill: `write-chris-street-style-code` in Implementation Mode for identifier refresh and Review Mode for preflight.
 - Before-Edit Brief:
   - Behavior: Install/reinstall and start the LocalService worker, deploy the pinned release, and complete infrastructure/browser acceptance.
   - Invariants: The feature flag follows both install passes; source SHA/tree cannot drift; rollback remains independently pinned; shared roots remain preserved.

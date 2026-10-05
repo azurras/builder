@@ -1,6 +1,6 @@
 # ChristopherBell.dev WinSW 2 Worker Reinstall Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to execute this plan task by task. Every production-code edit and review must use `chris-street-style` in the appropriate mode.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to execute this plan task by task. Every production-code edit and review must use `write-chris-street-style-code` in the appropriate mode.
 
 **Goal:** Replace the unsupported WinSW 2 `refresh` command with a bounded stop, prepare, uninstall, wait, install, wait lifecycle and safely resume the shared-folder production rollout.
 
@@ -75,7 +75,7 @@ None.
 
 ### Task 1 - Drive the supported worker lifecycle test-first
 
-Required skill: `chris-street-style` in Implementation Mode.
+Required skill: `write-chris-street-style-code` in Implementation Mode.
 
 Sequence and dependencies:
 
@@ -329,7 +329,7 @@ Verification:
 
 ### Task 2 - Validate, review, publish, and merge
 
-Required skill: `chris-street-style` in Review Mode for every review pass.
+Required skill: `write-chris-street-style-code` in Review Mode for every review pass.
 
 Sequence and dependencies:
 
@@ -361,7 +361,7 @@ Verification:
 
 ### Task 3 - Retry the guarded production installation
 
-Required skill: `chris-street-style` in Implementation Mode for the temporary guarded installer edit and Review Mode for its preflight inspection.
+Required skill: `write-chris-street-style-code` in Implementation Mode for the temporary guarded installer edit and Review Mode for its preflight inspection.
 
 Sequence and dependencies:
 

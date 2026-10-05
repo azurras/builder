@@ -24,7 +24,7 @@ Resolve #1258-#1264 by making bearer and browser credentials reflect current acc
 - GitHub issues #1258-#1264, all authored by `azurras` with zero comments.
 - Refreshed spoke baseline `8405cd77d0f1743fe33d70cc80b47e37048090a0`.
 - Baseline `:website:check`: BUILD SUCCESSFUL in 3m44s on 2026-07-29.
-- Mandatory implementation standards: `chris-street-style` and test-first RED/GREEN evidence.
+- Mandatory implementation standards: `write-chris-street-style-code` and test-first RED/GREEN evidence.
 
 ## Branch
 
@@ -58,7 +58,7 @@ Sequence / dependencies:
 - Runs first because later password, lifecycle, and permission edits must all feed one revocation invariant.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: a bearer JWT and opaque browser session authenticate only while the referenced account exists, is active, and has the same password hash, role, status, and permissions as at issuance.
   - Invariants: stale/missing fingerprint claims fail closed; authorities come from the current account; public routes remain anonymous when invalid cookies are cleared.
@@ -249,7 +249,7 @@ Sequence / dependencies:
 - Runs after Task 1 so a successful rehash automatically revokes credentials issued from the legacy hash state.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: unknown email, wrong password, malformed stored hash, and inactive account return the same 401 envelope; successful legacy login rewrites one current self-describing hash.
   - Invariants: verification is constant-time at the byte boundary; unknown accounts perform one current-work-factor derivation; malformed hashes reject without a 500; only successful authentication mutates the account.
@@ -426,7 +426,7 @@ Sequence / dependencies:
 - Independent of Tasks 1-2, but runs before HTTP contract tests so all negative responses share final mapping.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: malformed JSON, invalid arguments, unsupported media, unacceptable response type, access denial, and unexpected failures return stable safe descriptions and appropriate statuses.
   - Invariants: raw framework/parser messages never cross the API boundary; expected 4xx outcomes do not log stack traces at ERROR; unexpected 500 and infrastructure failures retain full cause server-side.
@@ -483,7 +483,7 @@ Sequence / dependencies:
 - Runs after error mapping so invalid startup configuration has clear diagnostic ownership and proxy tests use final request behavior.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: forwarding headers are ignored unless the immediate peer is trusted; trusted chains are walked right-to-left to the first untrusted client hop; malformed configured ranges fail bean creation.
   - Invariants: only IP literals/CIDRs are accepted; no DNS is performed; spoofed left-side header entries cannot override the nearest untrusted hop.
@@ -571,7 +571,7 @@ Sequence / dependencies:
 - Runs after credential revalidation so any status transition has immediate session consequences without consulting a second flag.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: signup creates active accounts; login and privileged feature access consult status; Back Office moderates status/role and has no separate pending-approval queue or action.
   - Invariants: one persisted lifecycle field controls access; old `isApproved`/`approvedBy` data is removed idempotently; no active account is denied due to stale legacy flags.
@@ -677,7 +677,7 @@ Sequence / dependencies:
 - Runs last because the removed approval endpoint and final account DTO determine the controller contract under test.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Before-Edit Brief:
   - Behavior: create returns 201 with a stable account resource location; synchronous update/delete return 200; DELETE routes accept requests without `Content-Type`; request-body endpoints retain JSON media validation.
   - Invariants: response envelopes and authorization remain unchanged; no bodyless mapping declares `consumes`; `Location` contains only the new public identifier.

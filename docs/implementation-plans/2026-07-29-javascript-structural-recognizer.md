@@ -1,6 +1,6 @@
 # JavaScript Structural Recognizer Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to implement this plan task-by-task. Every code task must also invoke `chris-street-style` and `superpowers:test-driven-development` before editing production or test code.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to implement this plan task-by-task. Every code task must also invoke `write-chris-street-style-code` and `superpowers:test-driven-development` before editing production or test code.
 >
 > **Review gate:** Approved for execution on 2026-08-01 after an independent full-plan review returned 0 Critical, 0 Important, and 0 Minor findings. Any later API or accepted-inventory change returns the plan to `ready-for-review` before spoke edits continue.
 
@@ -199,7 +199,7 @@ Interfaces:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
+- Required skill: `write-chris-street-style-code` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
 - Before-Edit Brief:
   - Behavior: callers can represent only complete source-positioned declaration data, exact documentation ownership, supported formal patterns, direct body facts, or one first structural failure.
   - Invariants: every collection is copied; declaration anchors are semantic non-EOF tokens; declaration order is strictly increasing; failure prefixes stop before their error; attachment variants carry only tokens of the promised role; parameter positions are one-based; property/binding names are nonblank; callable-only state cannot appear on a class value.
@@ -1525,7 +1525,7 @@ Interfaces:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
+- Required skill: `write-chris-street-style-code` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
 - Before-Edit Brief:
   - Behavior: a successful lexical stream gains exact delimiter partners, one-use JSDoc ownership, supported formal structure, and direct body facts without declaration policy or source rereads.
   - Invariants: every index/range is within the immutable token list; delimiter pairs are symmetric and type-correct; the first unmatched/mismatched boundary wins; one JSDoc index is claimed once; object leaves retain property path and local binding; nested callable/class ranges never contribute return/throw facts to an owner.
@@ -2334,7 +2334,7 @@ Interfaces:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
+- Required skill: `write-chris-street-style-code` before any code edits. Invoke it and `superpowers:test-driven-development` before creating the test or production files.
 - Before-Edit Brief:
   - Behavior: every approved/current stable JavaScript callable or class value is emitted exactly once in source order; truly anonymous direct call/new callbacks are exempt; unsupported callable-looking syntax and malformed structure fail at the first uncertain token.
   - Invariants: input is lexical success; scan state is per call; contexts and owner paths are explicit; declaration names preserve source category; class/object/function bodies are traversed once; nested helpers are retained; direct facts exclude nested bodies; no partial failed candidate is emitted.
@@ -3102,7 +3102,7 @@ Expected files or modules:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any corrective code edit. Invoke it and `superpowers:test-driven-development` if review identifies a required semantic change.
+- Required skill: `write-chris-street-style-code` before any corrective code edit. Invoke it and `superpowers:test-driven-development` if review identifies a required semantic change.
 - Before-Edit Brief for any correction:
   - Behavior: correct only the proven structural misrecognition while preserving every already approved declaration/exemption and immutable boundary.
   - Invariants: lexical files, B2 policy, discovery, violations, build wiring, application JavaScript, and authoritative checkout remain unchanged.

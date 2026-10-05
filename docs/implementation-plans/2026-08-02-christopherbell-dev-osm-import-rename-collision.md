@@ -80,7 +80,7 @@ Sequence / dependencies:
 - Apply Code Edits 1.2 through 1.5 only after RED evidence is captured.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Required sub-skill: `superpowers:test-driven-development`; do not edit `RestaurantService.java` before the focused test fails.
 - Before-Edit Brief:
   - Behavior: an incoming OpenStreetMap ID whose new normalized name belongs to another persisted ID is classified unchanged/skipped, neither persisted record is mutated, and later candidates still import.

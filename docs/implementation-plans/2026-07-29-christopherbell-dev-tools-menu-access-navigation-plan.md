@@ -44,7 +44,7 @@ Sequence / dependencies:
 - Single cohesive task; write and run the tests before the production edits, then run focused and full checks.
 
 Implementation notes:
-- Required skill: `chris-street-style` before any code edits.
+- Required skill: `write-chris-street-style-code` before any code edits.
 - Invoke the skill and its JavaScript/testing references before editing.
 - Before-Edit Brief:
   - Behavior: Music, Back Office, and Command Center appear only in the alphabetized Tools dropdown for accounts with effective access and disappear from their former navigation locations.

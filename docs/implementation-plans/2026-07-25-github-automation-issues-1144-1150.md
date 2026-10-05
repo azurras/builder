@@ -64,7 +64,7 @@ Sequence / dependencies:
 - First; supplies RED evidence for every later task.
 
 Implementation notes:
-- Required skill: chris-street-style before any code edits; invoke Implementation Mode and superpowers:test-driven-development.
+- Required skill: write-chris-street-style-code before any code edits; invoke Implementation Mode and superpowers:test-driven-development.
 - Before-Edit Brief:
   - Behavior: Local tests reject missing caching, reports, scans, grouping, and stale policy.
   - Invariants: Node built-ins only; semantic assertions rather than snapshots.
@@ -277,7 +277,7 @@ Sequence / dependencies:
 - After Task 1; makes CI/report assertions GREEN.
 
 Implementation notes:
-- Required skill: chris-street-style before any code edits.
+- Required skill: write-chris-street-style-code before any code edits.
 - Before-Edit Brief:
   - Behavior: Jobs cache Gradle, browser tests emit XML, and failures upload diagnostics.
   - Invariants: Matrix and wrapper commands remain; PR cache is read-only.
@@ -435,7 +435,7 @@ Sequence / dependencies:
 - After Task 1; independent of Task 2 implementation.
 
 Implementation notes:
-- Required skill: chris-street-style before any code edits.
+- Required skill: write-chris-street-style-code before any code edits.
 - Before-Edit Brief:
   - Behavior: PRs receive both checks; CodeQL also scans main and weekly.
   - Invariants: Java 25 manual build; no deploy; only security-events is writable.
@@ -534,7 +534,7 @@ Sequence / dependencies:
 - After Task 1; independent of Tasks 2-3.
 
 Implementation notes:
-- Required skill: chris-street-style before any code edits.
+- Required skill: write-chris-street-style-code before any code edits.
 - Before-Edit Brief:
   - Behavior: Updates are grouped; stale automation is specific, bounded, and exemptible.
   - Invariants: Both ecosystems and stale labels remain; pinned, roadmap, security, codex, milestone, and assigned issue work is exempt.
@@ -675,7 +675,7 @@ Sequence / dependencies:
 - After Tasks 2-4.
 
 Implementation notes:
-- Required skill: chris-street-style before the docs edit and final Review Mode.
+- Required skill: write-chris-street-style-code before the docs edit and final Review Mode.
 - Before-Edit Brief:
   - Behavior: Contributors can discover the automation and diagnostics contract.
   - Invariants: Do not claim external success before GitHub runs checks.

@@ -84,7 +84,7 @@ Sequence / dependencies:
 
 Implementation notes:
 
-- Required skill: `chris-street-style` before any code edits; invoke it and `superpowers:test-driven-development`, then read the Java, design/API, and testing/review references.
+- Required skill: `write-chris-street-style-code` before any code edits; invoke it and `superpowers:test-driven-development`, then read the Java, design/API, and testing/review references.
 - Before-Edit Brief:
   - Behavior: discovery excludes every repository-native archive package, and cleanup never claims success after an interrupted reader join unless the reader is verified stopped.
   - Invariants: exclusion reasons remain named and narrow; owned near misses remain discoverable; one session owns the process/streams/reader; every wait is bounded; primary failures and interrupt status are preserved.

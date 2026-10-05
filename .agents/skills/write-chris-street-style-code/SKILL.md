@@ -1,9 +1,9 @@
 ---
-name: chris-street-style
+name: write-chris-street-style-code
 description: Apply the house coding standard to implementation or read-only review of code, tests, scripts, migrations, code-bearing configuration and executable examples.
 ---
 
-# Chris Street Style
+# Write Chris Street-Style Code
 
 Use repository-native conventions and tools. Keep invalid states out of trusted code, interfaces consistent, effects explicit, errors causal, and changes cohesive.
 

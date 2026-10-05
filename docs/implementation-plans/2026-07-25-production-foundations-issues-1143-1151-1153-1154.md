@@ -80,7 +80,7 @@ Sequence / dependencies:
 - First task. Do not edit production code/configuration before capturing the focused failures.
 
 Implementation notes:
-- Required skill: `chris-street-style` before test or production edits.
+- Required skill: `write-chris-street-style-code` before test or production edits.
 - Before-Edit Brief:
   - Behavior: production settings aggregate failures, mail disablement is explicit, Compose is bounded, leases serialize, and migrations persist/skip/fail closed.
   - Invariants: no secret values in errors; no live database mutation; applied IDs/checksums are immutable; incomplete records block startup.
@@ -364,7 +364,7 @@ Sequence / dependencies:
 - After Task 1 RED evidence.
 
 Implementation notes:
-- Required skill: `chris-street-style`; invoke it before production or test edits.
+- Required skill: `write-chris-street-style-code`; invoke it before production or test edits.
 - Before-Edit Brief:
   - Behavior: production startup validates all required settings in one pre-refresh pass and mail delivery follows an explicit switch.
   - Invariants: values remain redacted, non-prod defaults remain usable, production mail remains enabled unless explicitly disabled, and JWT defense in depth remains.
@@ -668,7 +668,7 @@ Sequence / dependencies:
 - May follow Task 1 independently; complete before runtime acceptance.
 
 Implementation notes:
-- Required skill: `chris-street-style`; invoke it before editing executable Compose configuration or copy-ready commands.
+- Required skill: `write-chris-street-style-code`; invoke it before editing executable Compose configuration or copy-ready commands.
 - Before-Edit Brief:
   - Behavior: one command starts a persistent healthy local MongoDB matching the host's server version.
   - Invariants: port publishing is loopback-only, no production secret is embedded, stop preserves data, and reset names its destructive scope.
@@ -776,7 +776,7 @@ Sequence / dependencies:
 - After Task 1 RED evidence and Task 2 configuration defaults.
 
 Implementation notes:
-- Required skill: `chris-street-style`; invoke it before migration/lease source or tests.
+- Required skill: `write-chris-street-style-code`; invoke it before migration/lease source or tests.
 - Before-Edit Brief:
   - Behavior: one owner applies each immutable migration once, records durable state, and safely skips an identical applied migration.
   - Invariants: fixed bounded IDs, checksum immutability, atomic owner/expiry lease, applied-only skip, and release in `finally`.
@@ -1057,7 +1057,7 @@ Sequence / dependencies:
 - After the final configuration and migration interfaces are stable.
 
 Implementation notes:
-- Required skill: `chris-street-style` before copy-ready migration/operations examples.
+- Required skill: `write-chris-street-style-code` before copy-ready migration/operations examples.
 - Before-Edit Brief:
   - Behavior: contributors and operators can start local Mongo, author immutable migrations, and recover interrupted production starts safely.
   - Invariants: backup first, exact record/lease scope, no silent data rollback, and destructive commands identify their target.
