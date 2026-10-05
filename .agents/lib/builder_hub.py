@@ -109,4 +109,7 @@ def extract_status(markdown: str) -> str | None:
 
 
 def markdown_links(markdown: str) -> list[str]:
-    return re.findall(r"\[[^\]]+\]\(([^)]+)\)", markdown)
+    """Return link targets in prose; code fences and inline code spans are not links."""
+    prose_without_fences = re.sub(r"^```.*?^```", "", markdown, flags=re.MULTILINE | re.DOTALL)
+    prose_without_code = re.sub(r"`[^`\n]*`", "", prose_without_fences)
+    return re.findall(r"\[[^\]]+\]\(([^)]+)\)", prose_without_code)

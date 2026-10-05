@@ -1,6 +1,0 @@
-interface:
-  display_name: "Maintain Builder Hub"
-  short_description: "Check or refresh Builder artifact indexes"
-  default_prompt: "Use $maintain-builder-hub to check read-only by default or explicitly refresh indexes and validate once after document changes."
-policy:
-  allow_implicit_invocation: true

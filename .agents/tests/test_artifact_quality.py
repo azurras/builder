@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / ".agents" / "lib"))
 
 from artifact_quality import validate_implementation_plan_text, validate_test_report_text
+from builder_hub import markdown_links
 
 
 VALID_PLAN = """# Sample Plan
@@ -123,7 +124,7 @@ Verification: `./gradlew test --tests AppTest`
                 self.assertEqual(artifact.exists(), expected == 0)
 
     def test_hub_validates_new_plans_without_literal_code_edits(self) -> None:
-        script = ROOT / ".agents/skills/maintain-builder-hub/scripts/validate_hub_state.py"
+        script = ROOT / ".agents/skills/commit-push-builder-main/scripts/validate_hub_state.py"
         spec = importlib.util.spec_from_file_location("hub_validation", script)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
@@ -140,6 +141,14 @@ Verification: `./gradlew test --tests AppTest`
                 plan.write_text(content, encoding="utf-8")
                 result = subprocess.run([sys.executable, str(script), "--root", str(root)], text=True, capture_output=True)
                 self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+
+    def test_markdown_links_ignore_code_spans_and_fences(self) -> None:
+        markdown = (
+            "See the [plan](plan.md) and `[this](std::stop_token token)`.\n"
+            "```cpp\nauto worker = [this](std::stop_token token) {};\n```\n"
+            "Then the [report](report.md).\n"
+        )
+        self.assertEqual(markdown_links(markdown), ["plan.md", "report.md"])
 
     def test_inspected_symbol_contract_does_not_require_literal_patch(self) -> None:
         self.assertEqual(validate_implementation_plan_text(self.contract_plan()), [])

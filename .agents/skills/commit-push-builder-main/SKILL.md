@@ -1,6 +1,6 @@
 ---
 name: commit-push-builder-main
-description: Commit selected Builder files to main or retry pushing an existing Builder commit. Use for authorized Builder artifact checkpoints and completed hub changes.
+description: Commit selected Builder files to main or retry pushing an existing Builder commit. Use for authorized Builder artifact checkpoints, completed hub changes, and hub index refresh or document validation.
 ---
 
 # Commit Push Builder Main
@@ -33,6 +33,10 @@ Replace example filenames with the exact files reviewed for the current task. Re
 ```powershell
 python .agents/skills/commit-push-builder-main/scripts/commit_push_builder_main.py --push-only
 ```
+
+## Hub Check
+
+Run `python .agents/skills/commit-push-builder-main/scripts/check_hub.py check --root .` for a read-only check of indexes, document conventions, links, skill frontmatter and the shared `.claude/skills` symlink. The [phase finalizer](references/phase-finalization.md) runs `refresh`, which also regenerates the three indexes. Eight historical pre-schema plans remain explicit warnings; add no new exemptions.
 
 ## Checkpoints
 

@@ -7,7 +7,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-SKILLS = Path(__file__).resolve().parents[2]
+SCRIPTS = Path(__file__).resolve().parent
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -16,8 +16,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", default=".")
     args = parser.parse_args(argv)
     commands = [
-        [sys.executable, "-B", str(SKILLS / "maintain-builder-hub/scripts/update_hub_indexes.py"), "--root", args.root],
-        [sys.executable, "-B", str(SKILLS / "maintain-builder-hub/scripts/validate_hub_state.py"), "--root", args.root],
+        [sys.executable, "-B", str(SCRIPTS / "update_hub_indexes.py"), "--root", args.root],
+        [sys.executable, "-B", str(SCRIPTS / "validate_hub_state.py"), "--root", args.root],
     ]
     if args.mode == "check":
         commands[0].append("--check")
