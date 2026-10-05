@@ -304,3 +304,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Added a concise `Chris Street Style` section to the spoke `AGENTS.md` on candidate `322fb12`; full diff review, `git diff --check`, and `:website:bootJar` passed.
 - **Reason:** Keep the selected cross-language naming, validation, effects, error, and test principles visible in repository-local contributor guidance without duplicating the full Builder skill.
 - **Impact:** The independent guidance change has a [dedicated implementation plan](2026-10-05-04-44-christopherbell-dev-add-repository-chris-street-style-guidance.md) and [blocked runtime report](../test-reports/2026-10-05-04-47-christopherbell-dev-add-repository-chris-street-style-guidance.md). Runtime preflight could not verify isolated MongoDB `test` because port 27018 refused connections, so no app startup or PR occurred. Continue the code review; draft PR #1477 remains excluded.
+
+### 2026-10-05 - Name raw migration field values
+
+- **Change:** Candidate `d86dd03` renames five unvalidated BSON values to `rawFieldValue`; the V014 migration suite passed 29/29 before and after, and full checks passed with 2,164 Java tests, 110 skipped, and no failures/errors.
+- **Reason:** Distinguish raw persisted field data from typed values after validation, consistent with neighboring raw/parsed names in the strict migration codec.
+- **Impact:** The eighteenth independently planned code correction has a [dedicated implementation plan](2026-10-05-04-49-christopherbell-dev-name-raw-migration-field-values.md) and [blocked runtime report](../test-reports/2026-10-05-04-55-christopherbell-dev-name-raw-migration-field-values.md). Startup preflight could not verify isolated MongoDB `test` because port 27018 refused connections; no PR occurred. Continue the style review; draft PR #1477 remains excluded.

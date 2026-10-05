@@ -1,7 +1,7 @@
 # Name raw migration field values
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -96,10 +96,28 @@ Revert the single naming-only commit if focused checks show an accidental expres
 | Local packaged startup remains blocked by unavailable MongoDB or migration 015 | High based on current audit evidence | Record actual preflight/runtime state; do not bypass database isolation or migration checks. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin implementation with baseline characterization
+
+- **Change:** Started the published naming correction in an isolated worktree from `origin/main` `695a3ed` and captured the existing V014 migration test suite before editing.
+- **Reason:** The helper renames are behavior-preserving and the migration's current accept/reject contract should pass unchanged before implementation.
+- **Impact:** Task 1 is in progress; ACs remain unchanged.
+
+### 2026-10-05 - Verify naming and block on database availability
+
+- **Change:** Renamed the five raw BSON field locals to `rawFieldValue` on candidate `d86dd03`; V014 migration tests passed 29/29 before and after the change, and the full native gate passed with 2,164 Java tests, 110 skipped, and no failures/errors.
+- **Reason:** The strict parser now distinguishes unvalidated document contents from the typed pattern variables it has validated, without changing parsing behavior.
+- **Impact:** AC-1 and AC-2 are satisfied; AC-3 is blocked because MongoDB `127.0.0.1:27018` refused the read-only identity check for `test`, so startup was not attempted. See the [test report](../test-reports/2026-10-05-04-55-christopherbell-dev-name-raw-migration-field-values.md); no PR was created.
 
 ## Outcome
-Pending.
+> [!CAUTION]
+> The five raw-value names and automated checks are complete on candidate `d86dd03`; local app startup is blocked because isolated MongoDB database identity cannot be checked while port 27018 refuses connections, so no PR was created.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Satisfied | The five parser locals now use `rawFieldValue`; the final diff contains identifier substitutions only and preserves all typed validation and failure behavior. |
+| AC-2 | ✅ Satisfied | Baseline and candidate V014 tests passed 29/29; full `:website:check :cbell-lib:check :website:bootJar` passed with 2,164 Java tests, 110 skipped, and no failures/errors. See [test report](../test-reports/2026-10-05-04-55-christopherbell-dev-name-raw-migration-field-values.md). |
+| AC-3 | ⏸️ Blocked | `mongosh .../test ... db.getName()` returned `ECONNREFUSED` for `127.0.0.1:27018`; startup was not attempted without verified isolated data. No PR was created. |
 
 ## Project
 christopherbell-dev
