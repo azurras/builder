@@ -54,9 +54,11 @@ Find the first step whose Done evidence is missing or stale, and start there. Ev
 7. **Close.** When there is a source issue and authority to update it, follow [closure](references/closure.md). No source issue means no external closure.
    Done: the issue state is read back and recorded, or closure does not apply.
 
-## When Blocked
+## When Something Fails
 
-Ask the user only for missing authority, conflicting requirements or a consequential decision the repository cannot answer. A failed push, a red required check, an unmerged required PR or missing evidence leaves the step incomplete. Set the plan to `blocked` with update mode, record what blocks it and who can unblock it in dated memory, publish both, and report the actual state. Do not close the source issue.
+A failed push, a red check, a startup that never reaches readiness, a broken helper or missing evidence leaves the step incomplete. It is still your work, not a reason to stop. Diagnose the cause, fix it under AGENTS.md "Fix what you hit", rerun and continue. A prerequisite outside this plan, such as an isolated test environment that cannot start, becomes its own small change; deliver it and then resume this one.
+
+Ask the user only at a gate listed in AGENTS.md Scope and Autonomy. Set the plan to `blocked` only when the next step needs one of those gates, or when a real fix attempt failed for a reason outside your reach. Then use update mode to record what you tried, what blocks the work and who can unblock it, record the same in dated memory, publish both, and report the actual state. Do not close the source issue.
 
 ## Report
 

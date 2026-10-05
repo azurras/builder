@@ -5,7 +5,7 @@ description: Publish a verified spoke change through a branch, pull request, req
 
 # Publish Spoke Changes
 
-Use for registered spokes only; Builder publishes through publish-builder-changes. The spoke's own instructions own build, test and deployment commands. This skill owns the Git and GitHub steps between a verified candidate and a confirmed merge. Each `gh` step that creates, merges or comments needs existing authority for this change.
+Use for registered spokes only; Builder publishes through publish-builder-changes. The spoke's own instructions own build, test and deployment commands. This skill owns the Git and GitHub steps between a verified candidate and a confirmed merge. A delivery request already covers creating, commenting on and merging this change's own pull request once its gates pass. Commenting elsewhere, widening scope and deploying need the gates in AGENTS.md Scope and Autonomy.
 
 ## Where This Fits in deliver-change
 

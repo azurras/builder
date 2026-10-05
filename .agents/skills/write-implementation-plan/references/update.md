@@ -7,7 +7,7 @@ A plan is only useful if it stays true. Update it as the work moves, not after.
 - **Implementation starts:** set Document Status to `in-progress`.
 - **Work diverges from the plan:** a different file, symbol, design choice, test, task order or risk than planned; a discovery that changes an assumption; an abandoned approach. Edit the affected sections so they describe current truth, and append a log entry that records the difference.
 - **Scope changes:** a new or dropped goal, non-goal or acceptance criterion. Proceed only with existing authority; expansions beyond it need the user. Log the change and who decided it.
-- **Blocked:** set `blocked` and log what blocks it and who can unblock it.
+- **Blocked:** only after the fix attempts AGENTS.md "Fix what you hit" requires, or at one of its gates. Set `blocked` and log what you tried, what blocks it and who can unblock it.
 - **Closure:** write Outcome as a summary callout and a table with every AC ID, its result marker and evidence links (test report, commits, PR), as in [plan mode](plan.md#sections); say what shipped versus planned and any follow-ups; then set `complete`.
 
 Routine progress that matches the plan needs no entry. Do not use the log as a diary; dated session memory records the day's work and links here.

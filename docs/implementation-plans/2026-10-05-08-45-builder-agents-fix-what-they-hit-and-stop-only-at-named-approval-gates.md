@@ -132,7 +132,17 @@ Revert the change commit on `main` with `git revert`; it touches only Markdown.
 No entries yet.
 
 ## Outcome
-Pending.
+> [!TIP]
+> AGENTS.md now lists every approval gate, says that no other gate exists, and requires agents to fix what they hit before they mark work blocked. Five skills were updated to match. Everything shipped as planned.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | AGENTS.md Scope and Autonomy states what a delivery request covers, has a six-row gate table, and says that skill authority wording adds no gate. |
+| AC-2 | ✅ Met | AGENTS.md "Fix what you hit" and deliver-change "When Something Fails" require diagnosis and repair, a separate change for out-of-plan prerequisites, one fix for a shared cause, and a record of what was tried before `blocked`. |
+| AC-3 | ✅ Met | verify-local-app Preflight step 6 repairs or bootstraps the isolated environment; publish-spoke-changes, save-session-memory and update mode match the new rules. |
+| AC-4 | ✅ Met | `check_hub.py check` passed; `.agents/tests` ran 120 tests OK and publish-spoke-changes tests ran 1 test OK; the change commit is published to Builder `origin/main` with this plan. |
+
+No follow-ups. The existing blocked christopherbell-dev plans stay out of scope; their shared cause was already fixed by the isolated test bootstrap change.
 
 ## Project
 builder

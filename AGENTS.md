@@ -20,7 +20,22 @@ Builder is also a project in its own right, with slug `builder`, for changes to 
 All work starts in Builder. Locate a spoke with `python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py locate --spoke <slug>`, which resolves spokes.local.json (ignored, per machine), then the BUILDER_SPOKES_ROOT environment variable, then the folder beside the Builder checkout, and verifies the origin. Use clone when a spoke is missing on this machine and list to see all spokes. Register a new spoke with the same script's register mode, which validates the entry and refuses duplicate slugs, including project slugs, and local paths. Inside a spoke, its own instructions own build, run and deployment commands; Builder owns planning, evidence and memory, recorded under the spoke's slug.
 
 ## Scope and Autonomy
-Continue authorized work from verified progress through delivery. Resolve routine implementation choices using repository evidence; ask only for missing authority, conflicting requirements, or a consequential decision that cannot be inferred. Existing authorization persists. Honor planning-only, review-only, inspection-only and other limited requests; they do not authorize implementation, persistence or deployment.
+A request to deliver, fix, build or change something authorizes every deliver-change step up to its completion boundary: planning, implementation, local verification, test reports, session memory, Builder commits to `main`, and the spoke branch, pull request, CI fixes and merge. Do not pause between steps for confirmation, and do not ask permission for anything the request already covers. Existing authorization persists across sessions. Resolve routine choices from repository evidence.
+
+Only these need the user:
+
+| Gate | Why |
+|---|---|
+| The next step after a planning-only, review-only, inspection-only or other limited request | The request did not authorize implementation, persistence or deployment |
+| Production deployment or any change to production data the request did not name | Local verification never authorizes production |
+| Widening scope beyond the request's goals | Scope belongs to the user |
+| Deleting, discarding or overwriting work you do not own, force pushing, or bypassing a required check | The loss cannot be undone or hides a failure |
+| A consequential product or design decision, or conflicting requirements, that the repository and memory cannot settle | The answer is the user's to give |
+| Credentials, access, accounts or payment that only the user holds | You cannot supply them |
+
+No other approval gate exists. Words such as "authorized", "authority" or "existing authority" in a skill refer to this table; they never add a gate.
+
+**Fix what you hit.** A failed check, build, test, startup, push, CI run, helper, tool, dependency, fixture or environment is part of the work. Diagnose its cause, fix it, rerun and continue without waiting to be told. A fix outside the plan's files is still yours: log it in the plan, or deliver an unrelated prerequisite (for example a test environment that cannot start) as its own small change and then resume. When the same failure blocks several changes, fix the shared cause once. Never get past a safeguard by weakening it: repair the isolated setup instead of touching production, writing data directly or faking guarded state. Mark work `blocked` only when the remaining step needs a gate above, or when a real fix attempt fails for a reason outside your reach; record what you tried and exactly what is needed.
 
 Read relevant dated memory entries and inspected targets, not entire histories. Reuse an existing plan, brief and passing checks when they still apply. Reinspect or rerun when changes, failures or unresolved risk invalidate the evidence. Batch independent reads and checks. Keep updates concise and avoid repeated summaries.
 

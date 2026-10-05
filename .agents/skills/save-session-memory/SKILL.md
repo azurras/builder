@@ -9,7 +9,7 @@ Use docs/session-memory/YYYY-MM-DD.md for the actual work date. Every entry for 
 
 ## When to Write
 
-Write only with persistence authority. Review-only and inspection-only requests do not write memory.
+Any request to deliver, fix, build or change something carries persistence authority; write without asking. Review-only and inspection-only requests do not write memory.
 
 - **Delivery recorded** (deliver-change step 6): one entry per change, written after the plan's Outcome.
 - **Blocked:** what blocks the work, who can unblock it and the next action.
