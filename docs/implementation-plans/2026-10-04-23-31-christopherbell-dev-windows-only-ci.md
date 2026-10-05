@@ -1,7 +1,7 @@
 # Target christopherbell.dev CI on Windows
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
