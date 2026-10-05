@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-in-progress
+complete
 
 ## Project
 builder
@@ -180,4 +180,14 @@ Revert the commit on `main` with a new commit. Documents saved under the new rul
 - Impact: Documentation only; within Task 3's files.
 
 ## Outcome
-Pending.
+Delivered in `4da4e7b` on Builder `origin/main` (plan `88fae91`). No source issue, so external closure does not apply.
+
+- AC-1: Met. AGENTS.md's Hub and Spokes section opens with the purpose, a hub-versus-spoke table and the `builder` project; README has a new The Model section.
+- AC-2: Met. `test_save_cli_names_the_project_in_new_plans`, `test_save_cli_requires_current_format_for_new_plans`, `test_saves_test_report_with_project_prefixed_dated_slug` and `test_new_report_must_name_an_active_project` cover refusal, prefixing, no doubled prefix and historical overwrite.
+- AC-3: Met. `test_indexes_group_reports_by_project_and_validate_them` checks group order; the real indexes now open with `## builder` and end with `## Before the Project field`, and memory is grouped by its four slugs.
+- AC-4: Met. spokes.json lists personal-computer-cleanup (active) and software-handoff-kit (retired); `test_project_slugs_are_the_hub_spokes_and_standalone_projects`, `test_rejects_invalid_projects` and `test_register_refuses_a_standalone_project_slug_and_keeps_projects` pass, and the real-registry test asserts both statuses.
+- AC-5: Met. Memory, snapshot, hub-check and preflight tests cover each refusal. Live runs: saving memory for software-handoff-kit and snapshotting with project `nope` both exited 2 with the expected message and wrote nothing.
+- AC-6: Met. Both modules carry an archival notice; AGENTS.md and save-session-memory say the tooling is archival. `test_real_repository_passes_migration_audit` still passes.
+- AC-7: Met. 105 tests pass and `check_hub.py check --root .` passes at `4da4e7b`.
+
+Shipped as planned, plus the three logged deviations. Follow-ups: gap 5 (the index status suffix never appears because `extract_status` does not read `## Document Status`); gap 1 (christopherbell.dev does not point back to Builder); the paused plan `2026-10-04-make-plans-and-test-reports-pleasant-to-read.md` changes the same templates and needs to keep the Project section when it resumes.
