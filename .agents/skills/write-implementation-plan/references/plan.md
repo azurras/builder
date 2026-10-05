@@ -31,8 +31,8 @@ Unversioned historical literal-patch plans retain their original whole-plan vali
 
 1. Inspect repository instructions, relevant files, callers, and tests. Resolve material scope questions using existing authorization and context.
 2. Draft the plan with a branch, concrete contracts, ordered dependencies, testing, recovery, and completion criteria. Use draft or blocked when inspection or execution prerequisites remain unresolved.
-3. Run `plan-builder-work` review mode and correct blockers. Mechanical validation checks structure; it cannot prove that a symbol was inspected or that a proposed change is correct.
-4. Save with the helper, which validates before writing. Use `plan-builder-work` validate mode to recheck saved plans. Do not mark ready-for-execution until validation and review pass.
+3. Run `write-implementation-plan` review mode and correct blockers. Mechanical validation checks structure; it cannot prove that a symbol was inspected or that a proposed change is correct.
+4. Save with the helper, which validates before writing. Use `write-implementation-plan` validate mode to recheck saved plans. Do not mark ready-for-execution until validation and review pass.
 5. Use the [phase finalizer](../../commit-push-builder-main/references/phase-finalization.md) with the exact saved plan and intended indexes at the AGENTS.md publication checkpoint.
 
 ## PowerShell Helper
@@ -40,7 +40,7 @@ Unversioned historical literal-patch plans retain their original whole-plan vali
 Pass complete Markdown through stdin. For an existing draft file:
 
 ```powershell
-Get-Content -Raw -LiteralPath $draftPath | python .agents/skills/plan-builder-work/scripts/save_implementation_plan.py --root . --title 'Implementation title'
+Get-Content -Raw -LiteralPath $draftPath | python .agents/skills/write-implementation-plan/scripts/save_implementation_plan.py --root . --title 'Implementation title'
 ```
 
 Set `$draftPath` to the reviewed draft. The helper refuses accidental overwrite and exits nonzero on invalid plan structure. It retains `--date`, `--plan-dir`, and `--overwrite` for explicit requests.

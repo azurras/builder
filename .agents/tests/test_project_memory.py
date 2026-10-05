@@ -74,7 +74,7 @@ class MigrationTransformTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertFalse((root / "docs/templates").exists())
             self.assertIn("Preserve me.", (root / "docs/session-memory/2026-07-04-builder.md").read_text())
-            for skill, source in (("plan-builder-work", "implementation-plan"),
+            for skill, source in (("write-implementation-plan", "implementation-plan"),
                                   ("write-test-report", "test-report")):
                 self.assertEqual((root / f".agents/skills/{skill}/references/example.md").read_text(),
                                  files[f"docs/templates/examples/{source}-example.md"])

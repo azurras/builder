@@ -1,9 +1,9 @@
 ---
-name: plan-builder-work
+name: write-implementation-plan
 description: Create a self-contained implementation plan, review its readiness, or validate its structure.
 ---
 
-# Plan Builder Work
+# Write Implementation Plan
 
 Choose only the requested mode:
 - Plan: read [format and save command](references/plan.md).

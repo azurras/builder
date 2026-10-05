@@ -1,6 +1,0 @@
-interface:
-  display_name: "Plan Builder Work"
-  short_description: "Create, review, or validate implementation plans"
-  default_prompt: "Use $plan-builder-work for the requested planning, semantic review or validation mode; reuse applicable plans and publish before implementation."
-policy:
-  allow_implicit_invocation: true

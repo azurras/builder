@@ -114,7 +114,7 @@ Verification: `./gradlew test --tests AppTest`
 """ + VALID_PLAN[end:]
 
     def test_save_cli_accepts_contract_and_refuses_incomplete_task_before_write(self) -> None:
-        script = ROOT / ".agents/skills/plan-builder-work/scripts/save_implementation_plan.py"
+        script = ROOT / ".agents/skills/write-implementation-plan/scripts/save_implementation_plan.py"
         with tempfile.TemporaryDirectory() as directory:
             for title, content, expected in (("Valid", self.contract_plan(), 0), ("Invalid", self.contract_plan().replace("Symbols: `App.requiredSecret`", "Symbols:"), 1)):
                 result = subprocess.run([sys.executable, str(script), "--root", directory, "--date", "2099-04-05", "--title", title], input=content, text=True, capture_output=True)

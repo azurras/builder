@@ -64,7 +64,7 @@ def prepare(root: Path, commit: str):
     templates = {
         "docs/templates/test-report.md": root / ".agents/skills/write-test-report/references/template.md",
         "docs/templates/examples/test-report-example.md": root / ".agents/skills/write-test-report/references/example.md",
-        "docs/templates/examples/implementation-plan-example.md": root / ".agents/skills/plan-builder-work/references/example.md",
+        "docs/templates/examples/implementation-plan-example.md": root / ".agents/skills/write-implementation-plan/references/example.md",
     }
     for path, body in originals.items():
         p = Path(path)

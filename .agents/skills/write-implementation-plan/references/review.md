@@ -1,6 +1,6 @@
 # Review Mode
 
-Run `plan-builder-work` validate mode, then review whether the work is executable and appropriately scoped. Lead with concrete blockers and their task/file references.
+Run `write-implementation-plan` validate mode, then review whether the work is executable and appropriately scoped. Lead with concrete blockers and their task/file references.
 
 ## Review Contract
 

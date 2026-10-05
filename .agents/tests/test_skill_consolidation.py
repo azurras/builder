@@ -107,7 +107,7 @@ class MaintenanceModeTests(unittest.TestCase):
 
 class SkillDiscoveryTests(unittest.TestCase):
     def test_discovery_is_exact_and_active_links_resolve(self):
-        expected = {"complete-builder-work", "plan-builder-work",
+        expected = {"complete-builder-work", "write-implementation-plan",
                     "write-test-report", "maintain-builder-hub",
                     "commit-push-builder-main", "verify-local-app", "write-chris-street-style-code",
                     "save-session-memory"}
