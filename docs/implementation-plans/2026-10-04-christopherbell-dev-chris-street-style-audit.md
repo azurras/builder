@@ -234,3 +234,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Continued the published code-style audit from website `origin/main` `695a3ed` with a separate host metrics correction on committed candidate `f3854fbd`; its regression failed on the broad fallback and passes after removal/narrowing. Full website/library, browser, PowerShell and package gates pass.
 - **Reason:** Broad exception fallbacks turned missing provider configuration and defects into ordinary unavailable readings, while the metrics collector already owns isolation and alerting.
 - **Impact:** The dedicated plan/report record native success and migration-015 runtime blockage. No PR was opened. Current continuation uses `695a3ed`; the audit plan's original `76681a5` inventory baseline remains historical. Continue remaining source groups after recording this checkpoint.
+
+### 2026-10-05 - Narrow Box Index digest failure
+
+- **Change:** Continued the whole-codebase audit with the separately planned digest failure correction, committed as `a6976822`; 17 focused tests, full website/library checks and packaging pass, while packaged startup remains blocked at migration 015.
+- **Reason:** `MessageDigest.getInstance` declares `NoSuchAlgorithmException`; catching every `Exception` mislabeled unrelated defects. The candidate-specific report preserves the failed startup evidence.
+- **Impact:** The digest plan and blocked report are recorded independently; eight planned corrections now have dedicated evidence records. No PR was created. Continue the remaining source audit while runtime-gated delivery waits for supported isolated database recovery/provisioning. PR #1477 remains excluded.

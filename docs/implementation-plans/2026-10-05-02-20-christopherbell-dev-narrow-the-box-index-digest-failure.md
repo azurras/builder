@@ -1,7 +1,7 @@
 # Narrow the Box Index Digest Failure
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Plan Format
 task-contract-v2
@@ -100,10 +100,31 @@ Revert the isolated catch narrowing if the cause or existing client outcomes cha
 | Runtime remains blocked before readiness | High | Record actual startup result and do not open a PR before supported runtime proof. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin digest failure correction
+
+- **Change:** Implementation began with the planned single-file narrowing; the focused suite and full website/library/package gate passed on the edited source.
+- **Reason:** The client helper uses the declared `MessageDigest` setup exception, and the existing successful metadata tests cover the behavior kept stable.
+- **Impact:** AC-1 and AC-2 are implemented; AC-3 still requires a committed-candidate runtime attempt and report.
+
+### 2026-10-05 - Record digest correction runtime blocker
+
+- **Change:** The committed candidate `a6976822` passed focused/full checks and packaging, but packaged startup exited before readiness at migration 015; the dedicated report records the failure.
+- **Reason:** The isolated `test` database has an incomplete durable migration record. Database repair or guard bypass is outside scope and is prohibited.
+- **Impact:** AC-1 and AC-2 pass; AC-3 is blocked by runtime acceptance. No PR was created; supported test fixture provisioning or recovery is required.
 
 ## Outcome
-Pending.
+
+> [!CAUTION]
+> The source correction and native checks are complete; the application change remains blocked from delivery because packaged startup cannot pass migration 015 on the isolated `test` database.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ | Candidate `a6976822` catches only `NoSuchAlgorithmException` and preserves its cause. |
+| AC-2 | ✅ | 17 focused client tests and full website/library checks passed; report records unchanged audit metadata checks. |
+| AC-3 | ⏸️ | Native gates and packaging pass, but candidate startup exits before readiness at migration 015; [blocked test report](../test-reports/2026-10-05-02-26-christopherbell-dev-narrow-the-box-index-digest-failure.md). |
+
+The source change is committed on the isolated spoke branch. No PR was opened. Resume runtime verification only after a supported isolated database fixture or recovery procedure is available; do not alter migration records directly or bypass the guard.
 
 ## Project
 christopherbell-dev
