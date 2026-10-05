@@ -240,3 +240,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Continued the whole-codebase audit with the separately planned digest failure correction, committed as `a6976822`; 17 focused tests, full website/library checks and packaging pass, while packaged startup remains blocked at migration 015.
 - **Reason:** `MessageDigest.getInstance` declares `NoSuchAlgorithmException`; catching every `Exception` mislabeled unrelated defects. The candidate-specific report preserves the failed startup evidence.
 - **Impact:** The digest plan and blocked report are recorded independently; eight planned corrections now have dedicated evidence records. No PR was created. Continue the remaining source audit while runtime-gated delivery waits for supported isolated database recovery/provisioning. PR #1477 remains excluded.
+
+### 2026-10-05 - Bound shared-folder media process cleanup
+
+- **Change:** Continued the Chris Street Style audit with separately planned bounded process cleanup for the shared-folder media worker, committed as `e840c6dd`; the focused failure regression and full native gate pass, while packaged startup remains blocked at migration 015.
+- **Reason:** Process-tree termination failure previously led into unbounded process/readers waits that could mask cancellation or timeout. The fix reports primary and cleanup failures with any surviving PID.
+- **Impact:** The ninth independently planned correction has its own blocked runtime report. No PR was opened; continue the audit while runtime-gated delivery awaits supported isolated database recovery/provisioning. Draft PR #1477 remains excluded.
