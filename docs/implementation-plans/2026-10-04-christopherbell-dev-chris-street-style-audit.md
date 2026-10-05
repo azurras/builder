@@ -264,3 +264,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Added the separately planned downstream security-filter boundary correction on candidate `9820b394`; four regressions cover `IOException` and `ServletException` on public and protected routes. Full native checks pass, while committed startup is blocked by migration 015.
 - **Reason:** A broad authentication catch swallowed downstream failures on protected requests and redispatched public requests. The downstream servlet chain must own those failures.
 - **Impact:** This is the twelfth independently planned correction recorded in the audit. Its dedicated report documents the runtime blocker; no PR was created. Continue reviewing remaining code while awaiting supported isolated database provisioning/recovery. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Record FFprobe parser correction
+
+- **Change:** Added a separate FFprobe parser-boundary correction on candidate `3d41542b`; malformed JSON retains the Jackson cause while an injected mapper `IllegalStateException` propagates unchanged. Full native checks passed; startup is blocked at migration 015.
+- **Reason:** Catching all exceptions converted parser-path programming defects into malformed-input results.
+- **Impact:** This is the thirteenth independently planned correction recorded in the audit. Its dedicated report captures the blocker; no PR was created. Continue reviewing remaining code while awaiting supported test database provisioning/recovery. Draft PR #1477 remains excluded.

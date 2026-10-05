@@ -1,7 +1,7 @@
 # Preserve FFprobe Parser Failure Categories
 
 ## Document Status
-in-progress
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -103,6 +103,12 @@ Revert only the catch narrowing and regression if malformed JSON changes categor
 - **Change:** Began the isolated FFprobe candidate from website `origin/main` at `695a3ed8617f9b4ab07abb7413baf369c58acf6c`.
 - **Reason:** The dedicated plan is reviewed and published; source inspection confirmed Jackson's parser category is distinct from the broad exception boundary.
 - **Impact:** Task 1 starts as planned with no acceptance or scope changes.
+
+### 2026-10-05 - Record checks and runtime blocker
+
+- **Change:** Narrowed the FFprobe parse catch to `JacksonException` and added malformed-cause plus runtime-identity regressions. Candidate `3d41542b` passed 4 focused tests, the full native gate (2,043 website tests; 110 skipped), and the standalone 99-test deployment suite. Committed startup stopped at migration 015; see the [candidate test report](../test-reports/2026-10-05-03-38-christopherbell-dev-preserve-ffprobe-parser-failure-categories.md).
+- **Reason:** The baseline regression showed an unrelated mapper defect was mislabeled as malformed JSON; Jackson's parser exception identifies the expected translation boundary.
+- **Impact:** AC-1 and AC-2 pass. AC-3 native checks pass but runtime proof is blocked; no PR was created. Await supported isolated database provisioning or recovery, then rerun startup and a route.
 
 ## Outcome
 Pending.
