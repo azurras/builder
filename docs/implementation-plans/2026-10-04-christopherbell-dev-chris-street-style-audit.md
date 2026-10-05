@@ -19,7 +19,7 @@ Review and correct all tracked first-party executable code for the website again
 - Website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`, freshly checked out in `A:\Projects\christopherbell.dev-worktrees\chris-street-style-codebase-20261004` on 2026-10-04. Draft PR #1477 is explicitly excluded as a source of code or verification.
 - `AGENTS.md`, root and module READMEs, Gradle build files, JavaScript/CSS ownership READMEs.
 - Builder `.agents/skills/write-chris-street-style-code/SKILL.md` and its Java, JavaScript, API/design, configuration, and testing references.
-- Fresh inventory: 1,418 tracked first-party files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration; see the final audit record for the extension counts and reviewed groups.
+- Fresh inventory: 1,421 tracked first-party files with code-bearing extensions across website, shared library, operational tooling, and CI/build configuration; see the final audit record for the extension counts and reviewed groups.
 
 ## Branch
 Use `codex/chris-street-style-codebase-20261004`, created from the fetched website `origin/main` at `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`. Keep the dirty authoritative checkout at `A:\Projects\christopherbell.dev` and the separate draft PR worktree untouched.
@@ -156,3 +156,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Restarted the audit in a new clean worktree at current `origin/main` commit `76681a5ca5abd418e8ab5dc4f166a0da8563bb9b`; the worktree for draft PR #1477 is not used as a source of code or verification.
 - **Reason:** The user instructed not to trust that draft because it predates extensive code-style changes, and the current standard requires sentence-like names and precise argument roles.
 - **Impact:** Branch and Inputs now identify the fresh audit baseline. Each confirmed independent code correction must have its own reviewed and published implementation plan and its own test report before PR creation or update; no correction is inferred from the draft PR.
+
+### 2026-10-04 - Correct source inventory count
+
+- **Change:** Corrected the first-party code-bearing inventory from 1,418 to 1,421 tracked files after adding two `.properties` files and one `.toml` file to the extension count.
+- **Reason:** The initial recount omitted code-bearing configuration extensions, so its total understated the audit scope.
+- **Impact:** Inputs and whole-code coverage criteria use 1,421 files; no code scope or acceptance criterion changed.
