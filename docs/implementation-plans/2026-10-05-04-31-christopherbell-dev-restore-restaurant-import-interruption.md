@@ -1,7 +1,7 @@
 # Restore restaurant import interruption after cleanup
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -100,10 +100,28 @@ The correction only changes interruption timing and its focused regression. Reve
 | Application startup remains blocked by migration 015 | High based on current audit evidence | Record candidate and cleanup; do not bypass migration validation or create a PR. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin implementation after source review
+
+- **Change:** Began the published correction on an isolated candidate worktree from `origin/main` `695a3ed`; source inspection refined the reviewer note from a lost flag to premature restoration before failure persistence and lease release.
+- **Reason:** `safeCategory` already recognizes `InterruptedException`, so the concrete defect is restoration timing rather than loss at `runScheduled`.
+- **Impact:** Task 1 is in progress; ACs and scope are unchanged.
+
+### 2026-10-05 - Verify and block publication on migration record
+
+- **Change:** Candidate `2001573` defers restoring an import interruption until after failed-state persistence and lease release; the base regression failed, focused tests passed 18/18, and the full native check/package gate passed with 2,165 Java tests, 110 skipped, and no failures/errors.
+- **Reason:** `safeCategory` already recognized interruption, but set the flag before cleanup; source inspection narrowed the initial reviewer note to this ordering defect.
+- **Impact:** AC-1 and AC-2 are satisfied; AC-3 is blocked because committed startup on isolated database `test` stopped at the incomplete durable record for migration 015. See the [test report](../test-reports/2026-10-05-04-41-christopherbell-dev-restore-restaurant-import-interruption.md); no PR was created.
 
 ## Outcome
-Pending.
+> [!CAUTION]
+> Source correction and automated verification are complete on candidate `2001573`; application startup is blocked by the existing incomplete migration-015 durable record, so no PR was created.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Satisfied | The baseline ordering regression failed; candidate focused workflow tests passed 18/18 and prove `FAILED/INTERRUPTED`, same exception identity, un-interrupted failed-state persistence and exact lease release, and the restored flag. |
+| AC-2 | ✅ Satisfied | Full `:website:check :cbell-lib:check :website:bootJar` passed; Java reported 2,165 total tests, 110 skipped, with no failures/errors. See [test report](../test-reports/2026-10-05-04-41-christopherbell-dev-restore-restaurant-import-interruption.md). |
+| AC-3 | ⏸️ Blocked | Candidate JAR `2001573` targeted isolated MongoDB database `test` and failed startup on `Migration 015-require-domain-collection-schema has an incomplete durable record`; no listener remained on port 53179. No PR was created. |
 
 ## Project
 christopherbell-dev
