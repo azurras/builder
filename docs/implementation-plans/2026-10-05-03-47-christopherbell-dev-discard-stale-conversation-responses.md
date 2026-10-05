@@ -1,7 +1,7 @@
 # Discard stale conversation responses
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -101,10 +101,22 @@ The change is limited to page-local JavaScript, tests, and its feature guide. Re
 | Local runtime cannot reach readiness because migration 015 is incomplete | High based on current audit evidence | Record the exact candidate's failed startup, do not bypass or repair the database, and do not create a PR. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Guard conversation history responses
+
+- **Change:** Added a generation check before first-page, conversation-list, and older-page response mutations; reset the pagination button on selection changes and suppress stale older-page errors. Controlled regressions cover late success and failure outcomes.
+- **Reason:** A response from a previously selected conversation could replace or merge into the currently displayed conversation after requests completed out of order.
+- **Impact:** AC-1 and AC-2 pass on candidate `f5d1e60`; AC-3 is blocked because the isolated `test` database stops application startup at incomplete migration 015. The exact evidence is in the dedicated [test report](../test-reports/2026-10-05-04-03-christopherbell-dev-discard-stale-conversation-responses.md). No PR was created.
 
 ## Outcome
-Pending.
+> [!WARNING]
+> The response-ownership correction and native checks pass. Local runtime readiness and the required PR boundary remain blocked by incomplete test migration 015.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Controlled first-page and older-page races fail on baseline and pass on candidate `f5d1e60`; stale older-page failure does not alert under the new selection. [Test report](../test-reports/2026-10-05-04-03-christopherbell-dev-discard-stale-conversation-responses.md). |
+| AC-2 | ✅ Met | Focused suite 9/9, browser suite 382/382, 2,041 Java tests with 110 skipped and no failures/errors, full website/library checks, PowerShell suites, JAR package, and `git diff --check` pass. |
+| AC-3 | ⚠️ Partly met | Committed JAR targeted isolated MongoDB `test` and exited at incomplete migration 015 before readiness; port and process cleanup passed. No PR was created. [Test report](../test-reports/2026-10-05-04-03-christopherbell-dev-discard-stale-conversation-responses.md). |
 
 ## Project
 christopherbell-dev
@@ -114,4 +126,3 @@ task-contract-v2
 
 ## Plan Format
 task-contract-v2
-

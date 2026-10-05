@@ -270,3 +270,14 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Added a separate FFprobe parser-boundary correction on candidate `3d41542b`; malformed JSON retains the Jackson cause while an injected mapper `IllegalStateException` propagates unchanged. Full native checks passed; startup is blocked at migration 015.
 - **Reason:** Catching all exceptions converted parser-path programming defects into malformed-input results.
 - **Impact:** This is the thirteenth independently planned correction recorded in the audit. Its dedicated report captures the blocker; no PR was created. Continue reviewing remaining code while awaiting supported test database provisioning/recovery. Draft PR #1477 remains excluded.
+### 2026-10-05 - Guard late conversation history responses
+
+- **Change:** Added conversation selection-generation checks for first-page and older-page responses on candidate `f5d1e600`; deterministic regressions prove late first-page, pagination success, and pagination failure outcomes cannot overwrite the current recipient.
+- **Reason:** Browser requests can complete out of order, and the page previously applied a resolved response to mutable selection state without checking its owner.
+- **Impact:** The fourteenth independently planned correction has a [dedicated implementation plan](2026-10-05-03-47-christopherbell-dev-discard-stale-conversation-responses.md) and [blocked runtime report](../test-reports/2026-10-05-04-03-christopherbell-dev-discard-stale-conversation-responses.md). Focused tests, all 382 browser tests, full native checks, and packaging pass. Startup stopped at incomplete migration 015 in isolated database `test`; no PR was created. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Record remaining cross-group review findings
+
+- **Change:** Read-only reviews of browser assets, Java sources, application configuration, build/CI, and operational scripts covered the requested current-main baseline `695a3ed8617f9b4ab07abb7413baf369c58acf6`; reviewers found a test-profile scheduler gate gap and two interruption-restoration gaps in addition to the conversation race corrected above.
+- **Reason:** The whole-codebase request requires continuing the inventory beyond the earlier exception and naming hotspots; each confirmed correction must have its own plan and report.
+- **Impact:** Continue with separately planned review findings; no source edits or tests were made for those findings in this checkpoint. The audit remains in progress, PR #1477 is excluded, and runtime-gated publication remains blocked on supported test-database provisioning or recovery.
