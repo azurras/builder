@@ -134,7 +134,12 @@ Revert the merge through a PR. Without the event change, a missed push again nee
 | A stall alert fires during a normal deploy | Low | 45-minute threshold matches the lag rule; normal CI plus deploy takes about 20 minutes |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Production Watch was never registered
+
+- **Change:** Added a third PR, `claude/register-production-watch-20261005` at `0e2bf8a`, which adds an explanatory comment to `.github/workflows/production-watch.yml`.
+- **Reason:** After #1482 deployed (`ca98b1e`), `gh workflow run production-watch.yml` returned HTTP 404 and `/actions/workflows` omitted the file. GitHub indexes schedule- and dispatch-only workflows only from a main push that changes them, and the push that added this one (`06c3718`) was dropped.
+- **Impact:** Expected Changes gains `production-watch.yml`. AC-3's live check passes against production, but a scheduled or manual run still waits on this merge.
 
 ## Outcome
 Pending.
