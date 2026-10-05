@@ -41,7 +41,7 @@ Final combined verification for the repository-wide Chris Street Style audit and
 - **Candidate identity:** committed HEAD `dd206c0ef2498e0d400eccce519990e8050bd021` on `codex/chris-street-style-audit-20261005`.
 - **Process details:** MongoDB PID 3872 on port 49354 and website PID 22520 on port 49355; each bound to loopback only.
 - **Logs:** `C:\Users\Christopher\AppData\Local\Temp\christopherbell-test-mongo-de81b8651c314dcfbf423aa8d0c2bbf2\`.
-- **Cleanup:** Both processes stopped; PIDs and ports 49354/49355 confirmed gone/closed. Production MongoDB on port 27017 remained untouched. Generated temporary directories remain because recursive cleanup was rejected by command safety review.
+- **Cleanup:** Both processes stopped; PIDs and ports 49354/49355 confirmed gone/closed. Production MongoDB on port 27017 remained untouched. Generated temporary directories remain because recursive cleanup was rejected by command safety review. The remote and local task branches were deleted; `git worktree remove` unregistered the worktree but Windows returned `Filename too long`, leaving the residual `website` directory in the task worktree folder.
 
 ## Data Sent
 
@@ -110,7 +110,7 @@ Dependency Review: passed
 - Candidate `dc928832d39c1e019483c9aca668e63ba333463d` from the former blocked report is superseded: the isolated MongoDB test bootstrap and JDK 25 socket-temp instructions were added and then verified on `dd206c0e`.
 
 ## Bugs / Follow-ups
-No application defect remains from this audit. Production deployment was not requested or performed. Runtime processes and ports are closed. Generated scratch directories remain because recursive removal was rejected by command safety review; see the bootstrap runtime report.
+No application defect remains from this audit. Production deployment was not requested or performed. Runtime processes and ports are closed. Generated scratch directories remain because recursive removal was rejected by command safety review. Worktree registration and branches are removed, but a residual worktree `website` directory remains after Windows returned `Filename too long`; no alternate recursive deletion method was used. See the bootstrap runtime report for the runtime scratch paths.
 
 ## Document Status
 complete

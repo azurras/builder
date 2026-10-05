@@ -366,4 +366,4 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 | AC-4 | Complete | Spoke `AGENTS.md`, README, and migration runbook contain style and isolated Mongo/JDK 25 setup guidance for future agents. |
 | AC-5 | Complete | PR [#1480](https://github.com/azurras/christopherbell.dev/pull/1480) merged as `a9d20589363ed0ed139ef3c709877cca98d2d602` after all listed CI checks passed. No production deployment was authorized or performed. |
 
-The former aggregate candidate report `dc928832` is intentionally superseded by the updated report for `dd206c0e`. PR #1477 remains excluded. No production deployment was authorized or performed. Runtime cleanup limitation is recorded above and in the runtime report.
+The former aggregate candidate report `dc928832` is intentionally superseded by the updated report for `dd206c0e`. PR #1477 remains excluded. No production deployment was authorized or performed. Runtime and worktree cleanup limitations are recorded above and in the aggregate report.
