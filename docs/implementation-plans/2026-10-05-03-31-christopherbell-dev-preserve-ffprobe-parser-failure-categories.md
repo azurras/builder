@@ -1,7 +1,7 @@
 # Preserve FFprobe Parser Failure Categories
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -97,7 +97,12 @@ Revert only the catch narrowing and regression if malformed JSON changes categor
 | Runtime remains blocked before readiness | High | Record exact migration blocker and do not create a PR without runtime acceptance. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin isolated FFprobe implementation
+
+- **Change:** Began the isolated FFprobe candidate from website `origin/main` at `695a3ed8617f9b4ab07abb7413baf369c58acf6c`.
+- **Reason:** The dedicated plan is reviewed and published; source inspection confirmed Jackson's parser category is distinct from the broad exception boundary.
+- **Impact:** Task 1 starts as planned with no acceptance or scope changes.
 
 ## Outcome
 Pending.
