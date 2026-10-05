@@ -13,7 +13,7 @@ LIB = Path(__file__).resolve().parents[3] / "lib"
 sys.path.insert(0, str(LIB))
 
 from artifact_quality import project_of, validate_implementation_plan_text, validate_test_report_text
-from project_memory import PROJECT_RE
+from project_memory import PROJECT_LINE_RE
 from builder_hub import list_markdown, markdown_links, parse_dated_file, read_text
 from spoke_registry import REGISTRY_FILE, ProjectStatus, project_statuses_of
 
@@ -85,6 +85,26 @@ def validate_links(path: Path, root: Path, errors: list[str]) -> None:
             errors.append(f"{path}: broken local link {link}")
 
 
+def validate_memory_day(path: Path, project_statuses: dict[str, ProjectStatus] | None, errors: list[str]) -> None:
+    """A memory file is named for its date alone, and every entry's Project line names a registered project."""
+    if not is_iso_date(path.stem):
+        errors.append(f"{path}: memory filename must use YYYY-MM-DD.md")
+        return
+    if project_statuses is None:
+        return
+    for project in sorted({match.group("project") for match in PROJECT_LINE_RE.finditer(read_text(path))}):
+        if project not in project_statuses:
+            errors.append(f"{path}: memory project {project!r} is not builder, "
+                          f"a registered spoke or a project in {REGISTRY_FILE}")
+
+
+def is_iso_date(text: str) -> bool:
+    try:
+        return dt.date.fromisoformat(text).isoformat() == text
+    except ValueError:
+        return False
+
+
 def validate_record_project(path: Path, project: str | None, project_statuses: dict[str, ProjectStatus],
                             errors: list[str]) -> None:
     """A labeled plan or report names a registered project, and its filename carries that project."""
@@ -125,17 +145,7 @@ def main() -> int:
             if path.name in SPECIAL_DOC_NAMES:
                 continue
             if directory == "docs/session-memory":
-                parsed = parse_dated_file(path)
-                try:
-                    dt.date.fromisoformat(path.name[:10])
-                    valid = parsed and PROJECT_RE.fullmatch(path.stem[11:])
-                except ValueError:
-                    valid = False
-                if not valid:
-                    errors.append(f"{path}: memory filename must use YYYY-MM-DD-project.md")
-                elif project_statuses is not None and path.stem[11:] not in project_statuses:
-                    errors.append(f"{path}: memory project {path.stem[11:]!r} is not builder, "
-                                  f"a registered spoke or a project in {REGISTRY_FILE}")
+                validate_memory_day(path, project_statuses, errors)
             elif not parse_dated_file(path):
                 errors.append(f"{path}: filename must use YYYY-MM-DD-title.md")
             validate_links(path, root, errors)

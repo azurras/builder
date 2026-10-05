@@ -1,6 +1,6 @@
 interface:
   display_name: "Save Session Memory"
-  short_description: "Record work in separate dated session files"
-  default_prompt: "Use $save-session-memory to record work and events in the file for the actual work date and project, preserving earlier entries."
+  short_description: "Record work in the one session file for each date"
+  default_prompt: "Use $save-session-memory to record work and events in the one file for the actual work date, tagged with its project, preserving earlier entries."
 policy:
   allow_implicit_invocation: true

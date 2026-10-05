@@ -1,4 +1,5 @@
 from pathlib import Path
+import datetime as dt
 import json
 import os
 import subprocess
@@ -250,8 +251,9 @@ class SpokeCommandTests(unittest.TestCase):
         self.set_origin(REPOSITORY)
         result = self.command("snapshot", "--spoke", "site-dev")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertEqual([path.name.endswith("-site-dev.md") for path in (self.builder / "docs/session-memory").iterdir()],
-                         [True])
+        memory_files = list((self.builder / "docs/session-memory").iterdir())
+        self.assertEqual([path.name for path in memory_files], [f"{dt.date.today()}.md"])
+        self.assertIn("**Project:** site-dev", memory_files[0].read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

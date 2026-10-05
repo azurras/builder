@@ -108,5 +108,5 @@ Delivered on 2026-10-04 with one design correction (`ls-tree -r`, logged above).
 - AC-1: Met. `test_staged_rename_is_committed` (`git mv`, both sides selected; HEAD records `D baseline.md`, `A renamed.md`, clean tree) and `test_staged_removal_is_committed` (`git rm`) failed on the old helper with "not a tracked deletion" and pass now.
 - AC-2: Met. `test_selected_deletion_is_committed` passes unchanged.
 - AC-3: Met. `missing.md` rejection, the unrelated-staged, deleted-directory, dry-run, worktree and push-only tests pass unchanged; `test_dry_run_with_staged_deletion_changes_nothing` passes. All 13 helper tests and all 72 suite tests pass on `3172504` plus this diff; `git diff --check` is clean.
-- AC-4: Met. Published with the fixed helper and confirmed by `git ls-remote origin refs/heads/main` matching local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md).
+- AC-4: Met. Published with the fixed helper and confirmed by `git ls-remote origin refs/heads/main` matching local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04.md).
 Shipped versus planned: as planned plus `-r`. No follow-ups.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append work and events to the dated session record for a project."""
+"""Append a project-tagged entry to the one session record for its date."""
 import argparse
 from pathlib import Path
 import sys
@@ -12,8 +12,8 @@ from project_memory import append_entry
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
-    parser.add_argument("--project", required=True, help="Stable project slug, e.g. builder or christopherbell-dev")
-    parser.add_argument("--title", required=True, help="Entry title; does not determine filename")
+    parser.add_argument("--project", required=True, help="Project slug the entry is tagged with, e.g. builder or christopherbell-dev")
+    parser.add_argument("--title", required=True, help="Entry title; the file is named for the date alone")
     parser.add_argument("--date")
     parser.add_argument("--time")
     args = parser.parse_args()

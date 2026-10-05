@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "lib"))
-from project_memory import append_entry, project_path
+from project_memory import append_entry, memory_day_path, project_entries
 from spoke_registry import (Spoke, find_spoke, load_spokes, register_spoke, require_active_project,
                             resolve_spoke_location)
 from spoke_state import inspect_repository, origin_mismatch
@@ -94,7 +94,7 @@ def main() -> int:
         day = dt.date.today().isoformat()
         memory_path = None
         if args.mode == "snapshot":
-            memory_path = project_path(builder_root, project, day)
+            memory_path = memory_day_path(builder_root, day)
             require_active_project(builder_root, project)
         content, failed = inspect_repository(checkout)
         if spoke and not failed:
@@ -105,8 +105,9 @@ def main() -> int:
         print(content, end="")
         if memory_path:
             digest = hashlib.sha256(content.encode()).hexdigest()
-            previous = memory_path.read_text(encoding="utf-8") if memory_path.exists() else ""
-            snapshots = re.findall(r"<!-- git-snapshot: ([a-f0-9]+) -->", previous)
+            day_text = memory_path.read_text(encoding="utf-8") if memory_path.exists() else ""
+            project_text = "".join(project_entries(day_text, project))
+            snapshots = re.findall(r"<!-- git-snapshot: ([a-f0-9]+) -->", project_text)
             if not snapshots or snapshots[-1] != digest:
                 append_entry(builder_root, project, "Repository inspection",
                              f"<!-- git-snapshot: {digest} -->\n" + content, date=day)

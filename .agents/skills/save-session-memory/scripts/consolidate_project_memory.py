@@ -17,6 +17,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "lib"))
 from memory_migration import Destination, heading_ids, source_anchor, source_section, transform
+from project_memory import retarget_merged_memory_links
 
 SOURCE_FOLDERS = {"session-memory", "specs", "spoke-reviews", "spoke-tasks",
                   "spoke-updates", "spokes", "work", "work-closures", "templates"}
@@ -99,6 +100,19 @@ def apply_later_link_retargets(sections: dict[str, str], sources: dict[str, str]
         for source in matching_sources:
             retargeted_sections[source] = retargeted_sections[source].replace(migrated_target, current_target)
     return retargeted_sections
+
+
+def merged_day_file(migrated_file: Path) -> Path:
+    """Where a migrated memory file lives now: October 2026 merged each date's project files into YYYY-MM-DD.md."""
+    if migrated_file.parent.name != "session-memory" or migrated_file.name == "index.md":
+        return migrated_file
+    return migrated_file.with_name(f"{migrated_file.name[:10]}.md")
+
+
+def apply_merged_memory_links(sections: dict[str, str]) -> dict[str, str]:
+    """Expected sections with links to former per-project memory files pointed at the merged dated file."""
+    return {source: retarget_merged_memory_links(section, "docs/session-memory")
+            for source, section in sections.items()}
 
 
 def prepare(root: Path, commit: str):
@@ -198,8 +212,9 @@ def main() -> int:
     verify_sections(root, sources, sections, outputs)
     print(f"Source corpus: {len(sources)} documents; projects: {dict(Counter(sources.values()))}")
     if args.verify:
-        actual = {path: path.read_text(encoding="utf-8") for path in outputs}
-        verify_sections(root, sources, apply_later_link_retargets(sections, sources), actual)
+        actual = {path: merged_day_file(path).read_text(encoding="utf-8") for path in outputs}
+        expected_sections = apply_merged_memory_links(apply_later_link_retargets(sections, sources))
+        verify_sections(root, sources, expected_sections, actual)
         print("Every imported source body matches the full migration transformation.")
         return 0
     if not args.apply:

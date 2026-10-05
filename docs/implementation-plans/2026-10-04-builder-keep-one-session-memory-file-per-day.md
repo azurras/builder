@@ -1,7 +1,7 @@
 # Keep One Session Memory File per Day
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -182,7 +182,18 @@ Revert the change commit: the former files and links come back exactly from Git.
 | The audit change accepts unintended edits | Low | The rewrite applies only the merged-link rule; the fixture test still requires failure |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Tag recent entries individually and index projects per date
+
+- **Change:** Former files without imported sections whose content starts with a dated entry had a `**Project:**` line added under each dated `## ` heading instead of one `## Merged record - slug` heading; files with imported sections or other leading text use the merged-record heading. The memory index line for each date also names the projects the date holds. The library function is `memory_day_path`, not `memory_path`, and `append_entry` now separates entries with one blank line instead of two.
+- **Reason:** Per-entry tags let `project_entries` and the snapshot duplicate check see recent entries by project. Imported sections must stay verbatim for the audit. Naming the projects in the index replaces the old per-project grouping for finding one project's history.
+- **Impact:** Design and Task 2 behavior refined; acceptance criteria unchanged. The merge script `merge_memory_days.py` ran from the session scratchpad: 44 former files into 37 dated files, 24 other documents retargeted, readback before deletion.
+
+### 2026-10-04 - Leave plain-text file names in historical plans
+
+- **Change:** 17 earlier plans still name former memory files such as `docs/session-memory/2026-10-04-builder.md` in plain text, not as links; they were left unchanged.
+- **Reason:** They record which files that change touched at the time; only links must resolve, and the hub check confirms none is broken.
+- **Impact:** AC-6 covers links only, as written.
 
 ## Outcome
 Pending.

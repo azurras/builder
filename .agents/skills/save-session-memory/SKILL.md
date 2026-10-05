@@ -1,11 +1,11 @@
 ---
 name: save-session-memory
-description: Record work, decisions, events and outcomes in separate dated session-memory files for each project.
+description: Record work, decisions, events and outcomes for every project in one session-memory file per date.
 ---
 
 # Save Session Memory
 
-Use docs/session-memory/YYYY-MM-DD-project.md for the actual work date. Append same-day activity; another date gets another file. Record requests, actions, discoveries, decisions and reasons, attempts/results, reviews, tests, blockers and outcomes. Preserve sufficient context to resume; link primary evidence instead of copying it. Change-specific deviations and decisions belong in the implementation plan's log; record a short entry that links the plan. Append corrections without erasing history.
+Use docs/session-memory/YYYY-MM-DD.md for the actual work date. Every entry for that date goes in that one file, whatever its project; a later correction is a new entry appended to the same file. Another date gets another file. Record requests, actions, discoveries, decisions and reasons, attempts/results, reviews, tests, blockers and outcomes. Preserve sufficient context to resume; link primary evidence instead of copying it. Change-specific deviations and decisions belong in the implementation plan's log; record a short entry that links the plan. Append corrections without erasing history.
 
 ## When to Write
 
@@ -21,7 +21,7 @@ Routine substeps need no separate entry.
 
 ## Entry Shape
 
-The helper writes the heading `## YYYY-MM-DD HH:MM <zone> - <title>`. Pass only the body: three to six short bullets.
+The helper writes the heading `## YYYY-MM-DD HH:MM <zone> - <title>` followed by a `**Project:** <slug>` line. Pass only the body: three to six short bullets.
 
 1. The request: who asked, what, and a link to the plan.
 2. What was done and the decisions that matter, each with its reason.
@@ -48,8 +48,8 @@ Pass the entry body on stdin:
 '@ | python .agents/skills/save-session-memory/scripts/save_session_memory.py --root . --project builder --title 'Clarified deliver-change'
 ```
 
-- `--project` (required): `builder` for hub work; the spoke's `slug` from spokes.json for spoke work; for work with no repository, an active entry under `projects` in spokes.json (add one there first when the work is new). The helper refuses unknown and retired slugs.
-- `--title` (required): the entry title; it does not change the filename.
+- `--project` (required): the project the entry is tagged with, not part of the filename. `builder` for hub work; the spoke's `slug` from spokes.json for spoke work; for work with no repository, an active entry under `projects` in spokes.json (add one there first when the work is new). The helper refuses unknown and retired slugs.
+- `--title` (required): the entry title; the file is named for the date alone.
 - `--date`: `YYYY-MM-DD`, defaulting to today's local date. Pass it only for retrospective entries.
 - `--time`: 24-hour `HH:MM` local time, passed only when the work happened at a known time other than now. Without it the helper stamps the current time and time zone. For retrospective entries, distinguish the known work date and time from the recording time; never invent chronology.
 
@@ -61,7 +61,7 @@ The helper appends without locking. Other sessions can write to the same day's f
 
 ## Reading Memory
 
-Read the relevant dates and sections using targeted searches. Do not load an entire project history or create a permanent project file.
+Read the relevant dates and entries using targeted searches; `docs/session-memory/index.md` names the projects each date holds, and `**Project:** <slug>` finds one project's entries. Do not load an entire history or create a permanent project file. Dates before October 2026 were merged from per-project files: each former file is a block whose entries or `## Merged record - <slug>` heading carry its Project line.
 
 ## Publication
 

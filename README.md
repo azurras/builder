@@ -37,9 +37,9 @@ Register a new spoke in [spokes.json](spokes.json) with `manage_spoke_repositori
 |---|---|
 | [Implementation plans](docs/implementation-plans/index.md) | Requirements, design, inspected tasks and verification, in YYYY-MM-DD-project-title.md files |
 | [Test reports](docs/test-reports/index.md) | Actual runtime inputs, outputs and results, in YYYY-MM-DD-project-title.md files |
-| [Session memory](docs/session-memory/index.md) | Work and events in separate YYYY-MM-DD-project.md files |
+| [Session memory](docs/session-memory/index.md) | Work and events for every project in one YYYY-MM-DD.md file per date |
 
-Plans and reports name their project in a `## Project` section, and each index groups records by project. Older plans and reports without the section are listed last and are left as they are. Append same-day project work; create another file for another date. Preserve decisions, attempts, discoveries, reviews, verification, blockers and outcomes. Plans and reports hold detailed evidence linked from memory.
+Plans and reports name their project in a `## Project` section, and their indexes group records by project. Older plans and reports without the section are listed last and are left as they are. Memory entries name their project in a `**Project:**` line; append same-day work for any project to that date's file and create another file for another date. Preserve decisions, attempts, discoveries, reviews, verification, blockers and outcomes. Plans and reports hold detailed evidence linked from memory.
 
 ## Eight Skills
 

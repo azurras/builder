@@ -218,6 +218,6 @@ Delivered on 2026-10-04 as planned, with one logged discovery (the migration aud
 - AC-6: Met. verify-local-app has PowerShell and POSIX background-start patterns with logs outside the repository, process-tree stop, a free-port lookup, a before-and-after isolation check, deployment pointed at the spoke's instructions, and named Rerun and Before-PR rules.
 - AC-7: Met. `test_every_skill_allows_implicit_invocation` failed naming publish-builder-changes, save-session-memory and verify-local-app, and passes after adding their policy blocks.
 - AC-8: Met. `git grep` shows the 7-character threshold only in write-test-report; deliver-change and publish-spoke-changes now reference "verify-local-app's rerun rule" and "write-test-report's update rule" instead of restating them.
-- AC-9: Met when the delivery commit's `git ls-remote origin refs/heads/main` matches local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md).
+- AC-9: Met when the delivery commit's `git ls-remote origin refs/heads/main` matches local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04.md).
 Checks: 93 tests pass, the hub check passes and `git diff --check` is clean. Runtime verification does not apply: no runnable application.
 Shipped versus planned: as planned. Follow-up: `consolidate_project_memory.py --verify` already fails on `docs/skill-migration.md`, independent of this change.

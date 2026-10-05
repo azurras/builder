@@ -52,7 +52,7 @@ class RepositoryInspectionTests(unittest.TestCase):
 
     def test_snapshot_appends_to_project_and_unchanged_state_does_not_rewrite(self):
         self.assertEqual(self.command("snapshot", "--project", "sample").returncode, 0)
-        memory = self.root / f"docs/session-memory/{dt.date.today()}-sample.md"
+        memory = self.root / f"docs/session-memory/{dt.date.today()}.md"
         before = memory.read_bytes(), memory.stat().st_mtime_ns
         self.assertEqual(self.command("snapshot", "--project", "sample").returncode, 0)
         self.assertEqual((memory.read_bytes(), memory.stat().st_mtime_ns), before)
@@ -66,7 +66,7 @@ class RepositoryInspectionTests(unittest.TestCase):
         self.git("config", "core.bare", "true")
         result = self.command("snapshot", "--project", "sample")
         self.assertNotEqual(result.returncode, 0)
-        text = (self.root / f"docs/session-memory/{dt.date.today()}-sample.md").read_text(encoding="utf-8")
+        text = (self.root / f"docs/session-memory/{dt.date.today()}.md").read_text(encoding="utf-8")
         self.assertIn("Inspection error", text)
         self.assertNotIn("\nclean\n", text)
 
@@ -99,8 +99,9 @@ class MaintenanceModeTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertEqual({p.name for p in (root / "docs").iterdir()},
                              {"implementation-plans", "test-reports", "session-memory"})
-            memory = root / "docs/session-memory/2099-01-01-sample.md"
-            memory.write_text("# Sample\n\n## 2099-01-01 Progress\nEvidence.\n", encoding="utf-8")
+            memory = root / "docs/session-memory/2099-01-01.md"
+            memory.write_text("# 2099-01-01 Session Memory\n\n## 2099-01-01 09:00 - Progress\n\n**Project:** sample\n\nEvidence.\n",
+                              encoding="utf-8")
             before = snapshot()
             self.assertNotEqual(run(script, "check", "--root", temp).returncode, 0)
             self.assertEqual(snapshot(), before)
@@ -108,9 +109,11 @@ class MaintenanceModeTests(unittest.TestCase):
             before = snapshot()
             self.assertEqual(run(script, "check", "--root", temp).returncode, 0)
             self.assertEqual(snapshot(), before)
-            self.assertIn("Sample", (memory.parent / "index.md").read_text(encoding="utf-8"))
-            unregistered = memory.parent / "2099-01-01-stranger.md"
-            unregistered.write_text("# Stranger\n", encoding="utf-8")
+            self.assertIn("- [2099-01-01](2099-01-01.md) - sample",
+                          (memory.parent / "index.md").read_text(encoding="utf-8"))
+            unregistered = memory.parent / "2099-01-02.md"
+            unregistered.write_text("# 2099-01-02 Session Memory\n\n## 2099-01-02 09:00 - Visit\n\n"
+                                    "**Project:** stranger\n\nEvidence.\n", encoding="utf-8")
             unregistered_result = run(script, "refresh", "--root", temp)
             self.assertNotEqual(unregistered_result.returncode, 0)
             self.assertIn("memory project 'stranger' is not builder", unregistered_result.stdout)
@@ -119,6 +122,12 @@ class MaintenanceModeTests(unittest.TestCase):
             undated.write_text("# Permanent project history\n", encoding="utf-8")
             self.assertNotEqual(run(script, "refresh", "--root", temp).returncode, 0)
             undated.unlink()
+            per_project = memory.parent / "2099-01-03-sample.md"
+            per_project.write_text("# Per-project day", encoding="utf-8")
+            per_project_result = run(script, "refresh", "--root", temp)
+            self.assertNotEqual(per_project_result.returncode, 0)
+            self.assertIn("memory filename must use YYYY-MM-DD.md", per_project_result.stdout)
+            per_project.unlink()
             (root / "docs/active.md").write_text("# Stale dashboard", encoding="utf-8")
             self.assertNotEqual(run(script, "check", "--root", temp).returncode, 0)
 

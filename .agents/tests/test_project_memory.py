@@ -18,29 +18,51 @@ def run(*args, body="Evidence."):
 
 
 class ProjectMemoryTests(unittest.TestCase):
-    def test_same_day_appends_and_different_dates_have_separate_files(self):
+    def test_every_project_on_a_date_appends_to_that_date_file(self):
         with tempfile.TemporaryDirectory() as temp:
             write_project_registry(Path(temp), active=("sample", "other"))
             first = run("--root", temp, "--project", "sample", "--title", "Start",
-                        "--date", "2099-01-01", body="First evidence.")
+                        "--date", "2099-01-01", "--time", "09:00", body="First evidence.")
             self.assertEqual(first.returncode, 0, first.stderr)
-            path = Path(temp) / "docs/session-memory/2099-01-01-sample.md"
+            path = Path(temp).resolve() / "docs/session-memory/2099-01-01.md"
+            self.assertEqual(first.stdout.strip(), str(path))
             before = path.read_bytes()
-            second = run("--root", temp, "--project", "sample", "--title", "Finish",
-                         "--date", "2099-01-01", body="Final evidence.")
+            second = run("--root", temp, "--project", "other", "--title", "Finish",
+                         "--date", "2099-01-01", "--time", "10:30", body="Final evidence.")
             self.assertEqual(second.returncode, 0, second.stderr)
             self.assertTrue(path.read_bytes().startswith(before))
-            text = path.read_text(encoding="utf-8")
-            self.assertIn("2099-01-01", text)
-            self.assertIn("First evidence.", text)
-            self.assertIn("Final evidence.", text)
-            self.assertEqual(len(list(path.parent.glob("*.md"))), 1)
+            self.assertEqual(path.read_text(encoding="utf-8"),
+                             "# 2099-01-01 Session Memory\n\n"
+                             "Work, decisions, events, and evidence for every project on this date.\n\n"
+                             "## 2099-01-01 09:00 - Start\n\n**Project:** sample\n\nFirst evidence.\n\n"
+                             "## 2099-01-01 10:30 - Finish\n\n**Project:** other\n\nFinal evidence.\n")
             self.assertEqual(run("--root", temp, "--project", "sample", "--title", "Next day",
                                  "--date", "2099-02-01", body="Next day evidence.").returncode, 0)
-            self.assertNotIn("Next day evidence.", path.read_text())
-            self.assertIn("Next day evidence.", (path.parent / "2099-02-01-sample.md").read_text())
-            self.assertEqual(run("--root", temp, "--project", "other", "--title", "Start").returncode, 0)
-            self.assertEqual(len(list(path.parent.glob("*.md"))), 3)
+            self.assertNotIn("Next day evidence.", path.read_text(encoding="utf-8"))
+            self.assertIn("Next day evidence.", (path.parent / "2099-02-01.md").read_text(encoding="utf-8"))
+            self.assertEqual(sorted(p.name for p in path.parent.iterdir()), ["2099-01-01.md", "2099-02-01.md"])
+
+    def test_project_entries_select_only_the_named_project(self):
+        sys.path.insert(0, str(ROOT / ".agents/lib"))
+        from project_memory import project_entries
+        day_text = ("# 2099-01-01 Session Memory\n\nIntro.\n\n"
+                    "## 2099-01-01 09:00 - Start\n\n**Project:** sample\n\nOne.\n\n"
+                    "## 2099-01-01 10:00 - Other work\n\n**Project:** sample-two\n\nTwo.\n\n"
+                    "## 2099-01-01 11:00 - Finish\n\n**Project:** sample\n\nThree.\n")
+        self.assertEqual([entry.splitlines()[0] for entry in project_entries(day_text, "sample")],
+                         ["## 2099-01-01 09:00 - Start", "## 2099-01-01 11:00 - Finish"])
+
+    def test_merged_memory_links_point_at_the_dated_file(self):
+        sys.path.insert(0, str(ROOT / ".agents/lib"))
+        from project_memory import retarget_merged_memory_links
+        memory_text = ("[a](2099-01-01-sample.md#source-x) [b](../implementation-plans/2099-01-01-sample-plan.md) "
+                       "[c](2099-01-01.md) [d](https://example.invalid/2099-01-01-sample.md)\n")
+        self.assertEqual(retarget_merged_memory_links(memory_text, "docs/session-memory"),
+                         "[a](2099-01-01.md#source-x) [b](../implementation-plans/2099-01-01-sample-plan.md) "
+                         "[c](2099-01-01.md) [d](https://example.invalid/2099-01-01-sample.md)\n")
+        plan_text = "[m](../session-memory/2099-01-01-sample.md) [p](2099-01-01-sample-plan.md)\n"
+        self.assertEqual(retarget_merged_memory_links(plan_text, "docs/implementation-plans"),
+                         "[m](../session-memory/2099-01-01.md) [p](2099-01-01-sample-plan.md)\n")
 
     def test_invalid_or_missing_project_and_empty_body_do_not_write(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -53,7 +75,7 @@ class ProjectMemoryTests(unittest.TestCase):
                 self.assertIn(expected_message, refused.stderr)
             self.assertEqual(run("--root", temp, "--project", "builder", "--title", "Hub entry",
                                  "--date", "2099-01-01").returncode, 0)
-            (Path(temp) / "docs/session-memory/2099-01-01-builder.md").unlink()
+            (Path(temp) / "docs/session-memory/2099-01-01.md").unlink()
             (Path(temp) / "docs/session-memory").rmdir()
             (Path(temp) / "docs").rmdir()
             self.assertNotEqual(run("--root", temp, "--title", "Entry").returncode, 0)
@@ -93,9 +115,11 @@ class MigrationTransformTests(unittest.TestCase):
                                   ("write-test-report", "test-report")):
                 self.assertEqual((root / f".agents/skills/{skill}/references/example.md").read_text(),
                                  files[f"docs/templates/examples/{source}-example.md"])
+            # The October 2026 merge moved each migrated project file into its date's file.
+            memory = root / "docs/session-memory/2026-07-04.md"
+            (root / "docs/session-memory/2026-07-04-builder.md").rename(memory)
             result = subprocess.run(command + ["--verify"], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
-            memory = root / "docs/session-memory/2026-07-04-builder.md"
             imported_text = memory.read_text(encoding="utf-8")
             memory.write_text(imported_text.replace("Preserve me.", "Rewritten history."), encoding="utf-8")
             result = subprocess.run(command + ["--verify"], capture_output=True, text=True)

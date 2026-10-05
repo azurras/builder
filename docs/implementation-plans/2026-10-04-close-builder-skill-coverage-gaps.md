@@ -179,5 +179,5 @@ Delivered on 2026-10-04 with one logged deviation (the shared origin check).
 - AC-4: Met. test_spoke_registry.py adds library and CLI register tests, including byte-identical spokes.json on every refusal; existing mode tests pass. spokes.json itself is unchanged.
 - AC-5: Met. AGENTS.md, README (Eight Skills), deliver-change steps 1 and 5 and repository-inspection.md name the new skill, helper and register mode; `git grep "adding it to spokes.json"` outside docs is empty; test_github_trust_boundary.py passes.
 - AC-6: Met. `python -B -m unittest discover -s .agents/tests` ran 92 tests, OK. `check_hub.py refresh --root .` passed with only the eight historical warnings. `git diff --check` clean. The stale `test_commit_push_builder_main` bytecode was deleted locally (ignored by Git).
-- AC-7: Met when the publication readback in the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md) shows origin/main at the delivery commit.
+- AC-7: Met when the publication readback in the [2026-10-04 Builder memory](../session-memory/2026-10-04.md) shows origin/main at the delivery commit.
 Shipped versus planned: as planned, plus `origin_mismatch` moved into spoke_state.py. Follow-up, not started: the first real spoke PR through publish-spoke-changes will be the skill's first end-to-end use.

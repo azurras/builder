@@ -136,5 +136,5 @@ Revert the task commit to restore the old folder and references together. If a p
 - AC-2: Met for maintained files. `git grep` outside dated docs finds only this plan's title in the generated index (see log). Discovery lists seven skills through `.agents/skills` and the `.claude/skills` symlink.
 - AC-3: Met. 69 of 69 tests pass before and after. `check_hub.py check` and `refresh` pass from the new path. This change was published with the renamed helper.
 - AC-4: Met. SKILL.md went from 47 to 37 lines. It keeps operation choice, file selection and ownership, outgoing-commit review, dry run, push-failure recovery, the hub check and checkpoints. It drops the restated helper validation steps.
-- AC-5: Met when the delivery commit's push succeeds and remote readback matches; see [session memory](../session-memory/2026-10-04-builder.md).
+- AC-5: Met when the delivery commit's push succeeds and remote readback matches; see [session memory](../session-memory/2026-10-04.md).
 - Shipped as planned, plus one retargeted link in the 2026-09-06 session memory. Follow-ups: sessions with a cached skill list must reload to see the new name; the helper should accept deletions already staged in the index (see log).

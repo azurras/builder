@@ -817,7 +817,7 @@ class PresentationFormTests(unittest.TestCase):
                 ("save memory", [scripts / "save-session-memory/scripts/save_session_memory.py",
                                  "--root", directory, "--project", "builder", "--title", "Probe",
                                  "--date", "2099-04-05", "--time", "09:00"],
-                 f"- {marked_text}", root / "docs/session-memory/2099-04-05-builder.md"),
+                 f"- {marked_text}", root / "docs/session-memory/2099-04-05.md"),
             )
             for name, arguments, stdin_text, stored_file in runs:
                 with self.subTest(helper=name):

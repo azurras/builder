@@ -120,6 +120,6 @@ Delivered on 2026-10-04 with one logged refinement.
 - AC-2: Met. `LATER_LINK_RETARGETS` holds the one recorded retarget (maintain-builder-hub to publish-builder-changes in the 2026-09-06 Builder memory). `test_stale_link_retarget_is_rejected` shows a non-matching entry raises.
 - AC-3: Met. The fixture test now rewrites an imported line after `--apply` and `--verify` fails with "Source preservation failed"; the rest of that test passes unchanged.
 - AC-4: Met. `test_real_repository_passes_migration_audit` failed before the fix with "Source preservation failed: docs/skill-migration.md" and passes now; the audit command prints "Every imported source body matches the full migration transformation." across all 267 sources.
-- AC-5: Met when the delivery commit's `git ls-remote origin refs/heads/main` matches local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md).
+- AC-5: Met when the delivery commit's `git ls-remote origin refs/heads/main` matches local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04.md).
 Checks: the full test suite passes, the hub check passes and `git diff --check` is clean. Runtime verification does not apply: no runnable application.
 Shipped versus planned: as planned plus the produced-file refinement. No follow-ups.
