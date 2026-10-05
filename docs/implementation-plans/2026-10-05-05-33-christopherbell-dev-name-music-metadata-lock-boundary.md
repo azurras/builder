@@ -1,7 +1,7 @@
 # Name Music Metadata Lock Boundary
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Plan Format
 task-contract-v2
@@ -101,16 +101,27 @@ Revert the isolated candidate commit before publication if characterization or f
 | Isolated application runtime cannot be verified | High based on prior refused port | Read-only preflight first; leave publication blocked if DB is unavailable. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Narrow the lock callback contract
+
+- **Change:** Renamed the helper to `withTrackLock`, named its callback `metadataOperation`, and replaced `Callable<T>` with `Supplier<T>`; the callback body now catches only `RuntimeException` after the explicit response exception pass-through. The focused Music metadata suite passed before and after, and the full native gate passed.
+- **Reason:** The two inspected lambdas have no checked effects; `Callable` forced a broad exception path for a contract they do not use. The interface now states the actual effect boundary.
+- **Impact:** AC-1 native checks pass; AC-2 packaged startup still requires isolated test database preflight and runtime evidence.
+
+### 2026-10-05 - Record blocked runtime preflight
+
+- **Change:** Committed candidate `26cf68d`; focused characterization and full native checks passed, but the read-only test database identity request returned `ECONNREFUSED`.
+- **Reason:** Repository verification requires isolated MongoDB identity before startup; the endpoint on `127.0.0.1:27018` is unavailable, and no supported recovery/provisioning action was authorized for this continuation.
+- **Impact:** AC-2 remains partly met. [Candidate report](../test-reports/2026-10-05-05-42-christopherbell-dev-name-music-metadata-lock-boundary.md) records the blocker; no startup or PR was attempted.
 
 ## Outcome
 > [!WARNING]
-> Pending implementation and candidate-specific evidence.
+> AC-1 is met. AC-2's native gate is met, but required local runtime proof is blocked because the isolated test MongoDB port refuses connections; no PR was created.
 
 | AC | Result | Evidence |
 |---|---|---|
-| AC-1 | Pending | Pending focused characterization and diff review. |
-| AC-2 | Pending | Pending full checks and local runtime evidence. |
+| AC-1 | ✅ Met | Baseline and candidate `MusicMetadataServiceTest` both passed 6/6; candidate diff was reviewed and `git diff --check` passed. Candidate `26cf68d16b011aafd70d3c0e84e43dfc24dfd9aa`. |
+| AC-2 | ⚠️ Partly met | Full native gate passed with 2,165 Java tests, 0 failures/errors, 110 skipped, browser/PowerShell checks passed, and JAR built. Runtime report is [blocked](../test-reports/2026-10-05-05-42-christopherbell-dev-name-music-metadata-lock-boundary.md): isolated MongoDB `test` preflight returned `ECONNREFUSED`; startup and PR were not attempted. |
 
 ## Project
 christopherbell-dev
