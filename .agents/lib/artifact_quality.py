@@ -107,10 +107,9 @@ UNIT_TEST_ONLY_PATTERNS = (
     r"\bvitest\b",
 )
 
-LOCAL_COMMAND_PATTERN = (
-    r"(?im)^\s*(?:[-*]\s+)?local\s+"
-    r"(?:(?:app(?:lication)?|cli|worker|desktop|consumer)\s+)?"
-    r"(?:command|invocation|launch|run)\s*:\s*(?P<command>\S[^\n]*)$"
+LOCAL_COMMAND_LABEL = (
+    r"local\s+(?:(?:app(?:lication)?|cli|worker|desktop|consumer)\s+)?"
+    r"(?:command|invocation|launch|run)"
 )
 
 LOCAL_APP_RUN_PATTERNS = (
@@ -119,7 +118,7 @@ LOCAL_APP_RUN_PATTERNS = (
     r"\b0\.0\.0\.0\b",
     r"\bserver\.port\b",
     r"\bbase url\b",
-    r"\bport\s*[:=]\s*\d+",
+    r"\bport\s*(?:[:=]|\|)\s*\d+",
     r"\bbootrun\b",
     r"\bnpm\s+run\s+dev\b",
     r"\byarn\s+dev\b",
@@ -214,6 +213,34 @@ def _matches_any(value: str, patterns: tuple[str, ...]) -> bool:
     return any(re.search(pattern, value, re.IGNORECASE) for pattern in patterns)
 
 
+def _labeled_field_pattern(label: str) -> str:
+    """Match a field written as `Label: value`, `**Label:** value` or a `| Label | value |` table row.
+
+    `label` is a regular expression. The value is captured as `line_value` or `cell_value`.
+    """
+    name = rf"(?:\*\*)?(?:{label})(?:\*\*)?"
+    return (
+        r"(?mi)^[ \t]*(?:"
+        rf"(?:[-*][ \t]*)?{name}[ \t]*:(?:\*\*)?[ \t]*(?P<line_value>.*)$"
+        rf"|\|[ \t]*{name}[ \t]*:?(?:\*\*)?[ \t]*\|(?P<cell_value>(?:\\\||[^|\n])*)"
+        r")"
+    )
+
+
+def _labeled_field_values(label: str, text: str) -> list[str]:
+    """Every value given for label in text, in order and stripped, including empty values."""
+    return [
+        (match.group("line_value") or match.group("cell_value") or "").strip()
+        for match in re.finditer(_labeled_field_pattern(label), text)
+    ]
+
+
+def _first_labeled_field_value(label: str, text: str) -> str:
+    """The first value given for label in text, or an empty string when the label is absent."""
+    values = _labeled_field_values(label, text)
+    return values[0] if values else ""
+
+
 PLAN_TASK_FIELDS = (
     "Dependencies", "Files", "Symbols", "Inspection", "Behavior", "Invariants",
     "Boundary/API", "Effects and failures", "Tests and evidence", "Verification",
@@ -277,8 +304,7 @@ def _validate_task_contracts(
             continue
         has_contract = True
         for field in PLAN_TASK_FIELDS:
-            match = re.search(rf"(?mi)^[ \t]*(?:-[ \t]*)?{re.escape(field)}:[ \t]*(.*)$", task)
-            value = match.group(1).strip() if match else ""
+            value = _first_labeled_field_value(re.escape(field), task)
             if not value:
                 errors.append(f"{label} missing {field}: supply a task contract or legacy Code Edit block")
             elif status in {"ready-for-execution", "in-progress", "complete"} and re.search(
@@ -331,7 +357,7 @@ def _validate_living_plan(sections: dict[str, str], path: Path | None) -> list[s
 
 
 def _acceptance_criterion_ids(criteria: str, path: Path | None, errors: list[str]) -> list[str]:
-    numbers = [int(number) for number in re.findall(r"(?m)^[ \t]*(?:[-*][ \t]*)?\**AC-(\d+)\b", criteria)]
+    numbers = [int(number) for number in re.findall(r"(?m)^[ \t]*(?:[-*|][ \t]*)?\**AC-(\d+)\b", criteria)]
     if not numbers:
         errors.append(f"{_label(path)}Acceptance Criteria must define AC-1 and onward")
     elif numbers != list(range(1, len(numbers) + 1)):
@@ -352,8 +378,7 @@ def _validate_log_entries(log: str, path: Path | None, errors: list[str]) -> Non
         end = headings[index + 1].start() if index + 1 < len(headings) else len(log)
         entry = log[heading.end():end]
         for field in PLAN_LOG_ENTRY_FIELDS:
-            match = re.search(rf"(?mi)^[ \t]*(?:-[ \t]*)?{field}:[ \t]*(.*)$", entry)
-            if not match or not match.group(1).strip():
+            if not _first_labeled_field_value(re.escape(field), entry):
                 errors.append(f"{label} missing {field}")
 
 
@@ -433,9 +458,9 @@ def validate_test_report_text(markdown: str, path: Path | None = None) -> list[s
     response_received = sections.get("Response Received", "")
     report_body = "\n".join(sections.values())
 
-    local_commands = re.finditer(LOCAL_COMMAND_PATTERN, app_context)
+    local_commands = _labeled_field_values(LOCAL_COMMAND_LABEL, app_context)
     has_application_command = any(
-        not _is_test_command(command.group("command"))
+        not _is_test_command(command)
         for command in local_commands
     )
     has_local_app_run = has_application_command or _matches_any(app_context, LOCAL_APP_RUN_PATTERNS)

@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-blocked
+in-progress
 
 ## Objective
 A person who opens a new implementation plan or test report on GitHub can see what it is, where it stands and how it ended at a glance, because the templates present the same content as summary callouts, tables and labeled blocks instead of runs of label lines and paragraphs.
@@ -73,7 +73,7 @@ Alternatives considered:
 | `write-implementation-plan/references/example.md` | Rewritten in the new layout |
 | `write-implementation-plan/references/update.md` | Bold-label log entry |
 | `write-test-report/references/template.md`, `report.md`, `example.md` | New order, layout rules and example |
-| `write-test-report/SKILL.md` | Candidate example matches the new Branch form if changed |
+| `write-implementation-plan/references/review.md` | Warn on plans that ignore the presentation conventions |
 
 ## Task Breakdown
 
@@ -140,6 +140,18 @@ Revert the change commit. Documents written in the new layout would then fail on
 - Change: Implementation paused before Task 1.
 - Reason: The concurrent in-progress plan [Builder Hub Model and Project Registry](2026-10-04-builder-hub-model-and-project-registry.md) has uncommitted edits to `artifact_quality.py` and plans to change every file in this plan's Expected Changes, adding a `Project` section to plans and reports. The user chose to wait and build on it.
 - Impact: Status blocked until that plan's change is on origin/main; the new templates and examples will then include its Project section. Tasks unchanged.
+
+### 2026-10-04 - Resume on the project registry change
+
+- Change: Implementation resumed on `79f7f77`, after the project registry change landed (`4da4e7b`, `79f7f77`).
+- Reason: The blocking plan is complete on origin/main and the shared files are clean; the user said continue.
+- Impact: New templates and examples keep that change's plain `## Project` slug section directly under Document Status, because `project_of` reads the whole section as the slug. Inspection baseline for every task is now `79f7f77`.
+
+### 2026-10-04 - Put machine values last
+
+- **Change:** Machine-value sections moved to the end: reports close with Document Status and Project, plans with Project and Plan Format; plans keep Document Status under the title. The validator also accepts `| Port | 8081 |` as a local-run port, and the table column test checks fenced skeleton tables too. Review mode now warns, without blocking, on plans that ignore the presentation conventions.
+- **Reason:** GitHub renderings of the first draft (via the GitHub Markdown API, viewed in the browser pane) opened the report with four headings holding one bare value each before the verdict. The App / Environment table would otherwise not count as naming a port. The report template is a fenced skeleton whose tables would go unchecked.
+- **Impact:** AC-1 and AC-2 layouts updated as described; Expected Changes gain `write-implementation-plan/references/review.md`; `write-test-report/SKILL.md` needed no change. Acceptance criteria otherwise unchanged.
 
 ## Outcome
 Pending.

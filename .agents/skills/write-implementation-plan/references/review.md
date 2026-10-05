@@ -24,6 +24,8 @@ For an in-progress or complete plan, also reject it when:
 - A log entry rewrites history instead of appending a correction, or a scope change lacks the authority that decided it.
 - A complete plan's Outcome does not report each acceptance criterion with its result and evidence, or claims results the evidence does not show.
 
+Warn, without blocking, when a new plan ignores the [presentation conventions](plan.md#presentation): bare label lines that GitHub runs together, comparable facts in prose instead of a table, or a missing Objective or Outcome callout.
+
 Review historical v1 and legacy plans against their original contract; do not reject them for lacking v2 sections. Exact line ranges and replacement code are optional for inspected task contracts. When literal Code Edit blocks are used, check the supplied range and code against the inspected file.
 
 ## Outcome

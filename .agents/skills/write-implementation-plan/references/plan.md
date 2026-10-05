@@ -10,36 +10,49 @@ New plans use `## Plan Format` with value `task-contract-v2`; the save helper re
 
 ## Sections
 
-Write the sections in this order. Keep each short; a small change gets a small plan. When a section genuinely does not apply, say so and why rather than leaving it empty.
+Start with a `# Title` that names the outcome, then write the sections in this order. Keep each short; a small change gets a small plan. When a section genuinely does not apply, say so and why rather than leaving it empty. The Layout column is how a human reader sees it; [Presentation](#presentation) explains the conventions.
 
-| Section | What good content looks like |
-|---|---|
-| Plan Format | `task-contract-v2` |
-| Document Status | `draft`, `ready-for-review`, `ready-for-execution`, `in-progress`, `blocked` or `complete` |
-| Project | One slug: `builder` for hub work, the spoke's slug for spoke work, or an active entry under `projects` in spokes.json. The save helper refuses a new plan without it or with an unknown or retired slug. Plans written before this section existed keep their names; do not add it to them |
-| Objective | One or two sentences: the outcome, not the activity |
-| Background | Why now: the problem, its evidence and who asked |
-| Goals | Outcomes we commit to, each with how we will know (point to acceptance criteria) |
-| Non-Goals | Tempting adjacent work we will not do, each with the reason; this is the scope fence reviewers enforce |
-| Acceptance Criteria | Numbered `AC-1`, `AC-2`, ... observable, testable statements of done, including the delivery boundary (merged, deployed, closed) |
-| Inputs | Request, issue, user decisions and the files read, with the inspected commit |
-| Branch | Branch and base, or the Builder checkout and commit |
-| Assumptions | Facts relied on but not proven; each is a risk if wrong |
-| Open Questions | Unresolved decisions and who owns them, or None |
-| Design | The chosen approach, alternatives considered and why they lost, and key decisions with reasons |
-| Expected Changes | By file or area: what will change and why; the reviewer's map of the diff |
-| Task Breakdown | Ordered task contracts (below) |
-| Test Plan | For every AC ID: the native tests and the local runtime check that prove it; regressions and edge cases; reruns after runtime-affecting edits |
-| Rollback or Recovery | How to undo safely, including data and partial publication |
-| Risks | What could go wrong, its likelihood and the mitigation |
-| Implementation Log | `No entries yet.` until work diverges; then dated entries (see [update mode](update.md)) |
-| Outcome | `Pending.` until closure; then each AC with its result and evidence links, what shipped versus planned and any follow-ups |
+| Section | What good content looks like | Layout |
+|---|---|---|
+| Document Status | `draft`, `ready-for-review`, `ready-for-execution`, `in-progress`, `blocked` or `complete` | The bare value on the line under the heading |
+| Objective | One or two sentences: the outcome, not the activity | `> [!IMPORTANT]` callout |
+| Background | Why now: the problem, its evidence and who asked | Prose; a numbered list for several causes |
+| Goals | Outcomes we commit to, each with how we will know (point to acceptance criteria) | Bullets ending in `(AC-N)` |
+| Non-Goals | Tempting adjacent work we will not do, each with the reason; this is the scope fence reviewers enforce | Table: Not doing, Why |
+| Acceptance Criteria | Numbered `AC-1`, `AC-2`, ... observable, testable statements of done, including the delivery boundary (merged, deployed, closed) | Table: ID, Done when |
+| Inputs | Request, issue, user decisions and the files read, with the inspected commit | Bullets with bold labels |
+| Branch | Branch and base, or the Builder checkout and commit | One line |
+| Assumptions | Facts relied on but not proven; each is a risk if wrong | Bullets |
+| Open Questions | Unresolved decisions and who owns them, or None | Bullets, or `None.` |
+| Design | The chosen approach, alternatives considered and why they lost, and key decisions with reasons | Prose, then a table: Alternative, Why not |
+| Expected Changes | By file or area: what will change and why; the reviewer's map of the diff | Table: File or area, Change |
+| Task Breakdown | Ordered task contracts (below) | One `###` heading and contract table per task |
+| Test Plan | For every AC ID: the native tests and the local runtime check that prove it; regressions and edge cases; reruns after runtime-affecting edits | Table: AC, Native check, Local runtime check; regressions as bullets below |
+| Rollback or Recovery | How to undo safely, including data and partial publication | Prose or numbered steps |
+| Risks | What could go wrong, its likelihood and the mitigation | Table: Risk, Likelihood, Mitigation |
+| Implementation Log | `No entries yet.` until work diverges; then dated entries (see [update mode](update.md)) | Dated `###` entries with bold labels |
+| Outcome | `Pending.` until closure; then each AC with its result and evidence links, what shipped versus planned and any follow-ups | `> [!TIP]` summary (`> [!WARNING]` when an AC is not met), then a table: AC, Result, Evidence |
+| Project | One slug: `builder` for hub work, the spoke's slug for spoke work, or an active entry under `projects` in spokes.json. The save helper refuses a new plan without it or with an unknown or retired slug. Plans written before this section existed keep their names; do not add it to them | The bare slug, near the end as metadata |
+| Plan Format | `task-contract-v2` | Last, as metadata |
 
-The validator requires every section to be nonempty, `AC-N` IDs to be sequential, every ID to appear in Test Plan, log entries to be well formed, and a complete plan's Outcome to report every ID.
+The validator requires every section to be nonempty, `AC-N` IDs to be sequential, every ID to appear in Test Plan, log entries to be well formed, and a complete plan's Outcome to report every ID. Section order is not validated.
+
+## Presentation
+
+People read plans on GitHub. Present the same content so a reader can scan it:
+
+- **Tables for comparable facts.** Anything with the same shape on every row (criteria, changes, risks, results, alternatives) is a table. Keep cells to one sentence. Escape a literal pipe as `\|`; put long commands in a fenced block below the table.
+- **Callouts for what a reader must not miss.** The Objective is an `> [!IMPORTANT]` callout and the Outcome opens with `> [!TIP]` or `> [!WARNING]`. Use at most one callout per section; GitHub renders them as colored boxes and other viewers as quotes.
+- **Bold labels, not bare ones.** Write `- **Change:** ...` rather than `Change: ...`; GitHub joins consecutive bare label lines into one paragraph.
+- **Result markers.** In Outcome and other result columns, use ✅ Met, ⚠️ Partly met or ❌ Not met, followed by the evidence.
+- **Plain machine values.** Document Status, Project and Plan Format stay bare values on their own line: helpers and the resume search read them. Never add emoji, bold or extra text there. Status opens the plan because readers ask where it stands; Project and Plan Format close it as metadata.
+- **Collapse only raw output.** `<details>` is for long logs or pasted output, never for sections a reviewer must read.
+
+The validator also accepts the older bullet and bare-label forms, so existing plans need no rewrite.
 
 ## Task Contracts
 
-Use sequential `### Task N - Title` headings. Every code-changing task must state `Required skill: write-chris-street-style-code` before code changes and include its task-specific Before-Edit Brief. Each task uses these labels with a nonempty value on the same line; bullets are optional:
+Use sequential `### Task N - Title` headings. Every code-changing task must state `Required skill: write-chris-street-style-code` before code changes and include its task-specific Before-Edit Brief. Put the `Required skill` line under the task heading, then give these fields as a two-column table (`| Contract | Detail |`) with each label bold in the first column, as the [example](example.md) does. The validator also accepts each field as a `Label: value` line. Every field needs a nonempty value:
 
 - Dependencies: preceding tasks and why, or None.
 - Files: inspected repository-relative paths; for new files name the intended path and inspected neighboring pattern.

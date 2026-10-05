@@ -680,5 +680,128 @@ class LivingPlanTests(unittest.TestCase):
                     self.assertEqual(plan_file.read_bytes(), original_bytes)
 
 
+PLAIN_CRITERIA = ("- AC-1: Starting without `JWT_SECRET` exits with a redacted error.\n"
+                  "- AC-2: Starting with `JWT_SECRET` serves `/health` with 200.")
+
+TABLE_CRITERIA = ("| ID | Done when |\n"
+                  "|---|---|\n"
+                  "| **AC-1** | Starting without `JWT_SECRET` exits with a redacted error. |\n"
+                  "| AC-2 | Starting with `JWT_SECRET` serves `/health` with 200. |")
+
+PLAIN_TASK_CONTRACT = LIVING_PLAN[LIVING_PLAN.index("Dependencies:"):LIVING_PLAN.index("\n\n## Test Plan")]
+
+TABLE_TASK_CONTRACT = """| Contract | Detail |
+|---|---|
+| **Dependencies** | None; first task. |
+| **Files** | `src/main/java/App.java` |
+| **Symbols** | `App.requiredSecret` |
+| **Inspection** | Read implementation and caller at baseline commit abc1234. |
+| Behavior | Reject missing configuration at startup. |
+| Invariants | No fallback secret is accepted. |
+| Boundary/API | Keep existing startup configuration interface. |
+| Effects and failures | Missing input fails startup with a redacted error. |
+| Tests and evidence | Regression for absent secret; valid configuration remains accepted. |
+| Verification | `./gradlew test --tests AppTest` |"""
+
+BOLD_LOG_ENTRY = """### 2026-10-04 - Read the secret through Environment
+
+- **Change:** Read the secret through `Environment` instead of `System.getenv`.
+- **Reason:** Tests inject configuration through `Environment`.
+- **Impact:** Task 1 Symbols updated; no acceptance change.
+"""
+
+
+def pretty_living_plan() -> str:
+    return (LIVING_PLAN.replace(PLAIN_CRITERIA, TABLE_CRITERIA)
+            .replace(PLAIN_TASK_CONTRACT, TABLE_TASK_CONTRACT)
+            .replace("## Implementation Log\nNo entries yet.", f"## Implementation Log\n{BOLD_LOG_ENTRY}"))
+
+
+def markdown_tables(markdown: str) -> list[list[str]]:
+    """Each run of consecutive table rows, including rows inside a fenced skeleton, as a list of rows."""
+    tables: list[list[str]] = []
+    rows: list[str] = []
+    for line in markdown.splitlines() + [""]:
+        if line.lstrip().startswith("|"):
+            rows.append(line.strip())
+            continue
+        if rows:
+            tables.append(rows)
+            rows = []
+    return tables
+
+
+def table_cell_count(row: str) -> int:
+    return len(re.split(r"(?<!\\)\|", row.strip().strip("|")))
+
+
+class PresentationFormTests(unittest.TestCase):
+    """Readable Markdown forms validate exactly as their plain equivalents do."""
+
+    plan_example = ROOT / ".agents/skills/write-implementation-plan/references/example.md"
+    report_example = ROOT / ".agents/skills/write-test-report/references/example.md"
+    report_template = ROOT / ".agents/skills/write-test-report/references/template.md"
+
+    def test_table_and_bold_plan_forms_validate(self) -> None:
+        pretty_plan = pretty_living_plan()
+
+        self.assertNotIn("Dependencies:", pretty_plan)
+        self.assertEqual(validate_implementation_plan_text(pretty_plan), [])
+
+    def test_table_and_bold_plan_forms_still_require_values(self) -> None:
+        pretty_plan = pretty_living_plan()
+        cases = (
+            (pretty_plan.replace("| Behavior | Reject missing configuration at startup. |", "| Behavior | |"),
+             "Task 1 missing Behavior"),
+            (pretty_plan.replace("| AC-2 | Starting", "| AC-3 | Starting"), "Acceptance Criteria IDs must be sequential"),
+            (pretty_plan.replace("- **Reason:** Tests inject configuration through `Environment`.\n", ""),
+             "missing Reason"),
+        )
+        for invalid_plan, expected_error in cases:
+            with self.subTest(expected_error=expected_error):
+                errors = validate_implementation_plan_text(invalid_plan)
+                self.assertTrue(any(expected_error in error for error in errors), errors)
+
+    def report_run_by(self, run_details: str) -> str:
+        return ArtifactQualityTests().local_execution_report(
+            run_details,
+            "Command arguments: source.csv and result.json.",
+            "Exit code: 0; output file result.json contains the two expected records.",
+        )
+
+    def test_bold_and_table_local_command_labels_prove_a_run(self) -> None:
+        for run_details in ("- **Local command:** `python -m export_tool source.csv result.json`",
+                            "- **Local command**: `python -m export_tool source.csv result.json`",
+                            "| Setting | Value |\n|---|---|\n| **Local command** | `./queue-worker --once` |"):
+            with self.subTest(run_details=run_details):
+                self.assertEqual(validate_test_report_text(self.report_run_by(run_details)), [])
+
+    def test_bold_and_table_test_runner_labels_do_not_prove_a_run(self) -> None:
+        for run_details in ("- **Local command:** `pytest tests`",
+                            "| **Local command** | `./gradlew test` |"):
+            with self.subTest(run_details=run_details):
+                errors = validate_test_report_text(self.report_run_by(run_details))
+                self.assertTrue(any("local application command" in error for error in errors), errors)
+
+    def test_environment_table_port_identifies_a_local_run(self) -> None:
+        report = self.report_run_by("Started from the candidate checkout.").replace(
+            "Candidate checkout with isolated fixture directory.",
+            "| Setting | Value |\n|---|---|\n| Port | 8081 |")
+
+        self.assertEqual(validate_test_report_text(report), [])
+
+    def test_reference_examples_validate(self) -> None:
+        self.assertEqual(validate_implementation_plan_text(self.plan_example.read_text(encoding="utf-8")), [])
+        self.assertEqual(validate_test_report_text(self.report_example.read_text(encoding="utf-8")), [])
+
+    def test_reference_tables_have_matching_column_counts(self) -> None:
+        for document in (self.plan_example, self.report_example, self.report_template):
+            for table in markdown_tables(document.read_text(encoding="utf-8")):
+                with self.subTest(document=document.name, header=table[0]):
+                    self.assertGreaterEqual(len(table), 2)
+                    self.assertRegex(table[1], r"^\|(\s*:?-+:?\s*\|)+$")
+                    self.assertEqual({table_cell_count(row) for row in table}, {table_cell_count(table[0])})
+
+
 if __name__ == "__main__":
     unittest.main()
