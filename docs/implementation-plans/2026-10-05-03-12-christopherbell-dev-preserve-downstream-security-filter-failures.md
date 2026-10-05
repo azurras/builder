@@ -1,7 +1,7 @@
 # Preserve Downstream Security Filter Failures
 
 ## Document Status
-in-progress
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -105,6 +105,12 @@ Revert only the filter boundary/test change if established credential rejection 
 - **Change:** Started the isolated candidate from `origin/main` at `695a3ed8617f9b4ab07abb7413baf369c58acf6c` in `codex/preserve-downstream-filter-failures-20261005`.
 - **Reason:** The reviewed plan is published and authentication API inspection confirmed credential failures are unchecked while servlet-chain failures are checked.
 - **Impact:** Task 1 begins as designed; no acceptance criteria or scope changed.
+
+### 2026-10-05 - Record checks and runtime blocker
+
+- **Change:** Implemented the planned narrow credential-resolution catch and added public/protected `IOException` and `ServletException` propagation regressions. Candidate `9820b394` passed 18 focused tests, the full native gate (2,045 website tests; 110 skipped), and the standalone 99-test deployment suite. The committed JAR startup attempt was blocked at migration 015; see the [candidate test report](../test-reports/2026-10-05-03-27-christopherbell-dev-preserve-downstream-security-filter-failures.md).
+- **Reason:** The baseline regressions showed downstream failures being reclassified as credential rejection or dispatched twice. Runtime acceptance remains required before PR creation, and the test database has an incomplete migration record.
+- **Impact:** AC-1 and AC-2 pass. AC-3 native checks pass but runtime proof is blocked; no PR was created. Await supported isolated database provisioning or recovery, then rerun startup and a route.
 
 ## Outcome
 Pending.

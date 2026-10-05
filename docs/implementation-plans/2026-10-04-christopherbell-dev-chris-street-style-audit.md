@@ -258,3 +258,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Continued the audit with a separately planned production candidate setup cleanup on commit `2be74499`; the real-child failure regression and full native gate passed, while packaged startup remains blocked at migration 015.
 - **Reason:** `Start-ProductionJar` started Java before process-log setup completed, leaving an unreturned process handle and no caller able to clean up if attachment failed.
 - **Impact:** The eleventh planned correction has its own blocked candidate report. No PR was opened; continue the audit while runtime-gated delivery waits for supported test DB recovery/provisioning. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Record downstream security filter correction
+
+- **Change:** Added the separately planned downstream security-filter boundary correction on candidate `9820b394`; four regressions cover `IOException` and `ServletException` on public and protected routes. Full native checks pass, while committed startup is blocked by migration 015.
+- **Reason:** A broad authentication catch swallowed downstream failures on protected requests and redispatched public requests. The downstream servlet chain must own those failures.
+- **Impact:** This is the twelfth independently planned correction recorded in the audit. Its dedicated report documents the runtime blocker; no PR was created. Continue reviewing remaining code while awaiting supported isolated database provisioning/recovery. Draft PR #1477 remains excluded.
