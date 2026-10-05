@@ -228,3 +228,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** The Music search naming correction is recorded on committed candidate `3b7c064`; focused and full checks plus packaging pass, while the packaged startup attempt is blocked before readiness by migration 015.
 - **Reason:** The required test database has an incomplete durable migration record; a safe supported recovery/provisioning path is needed before app runtime can be verified.
 - **Impact:** Seven independently planned corrections are now logged in this audit; each has its own candidate report. This correction's AC-1/2 pass and AC-3 blocks; no PR is opened. Continue remaining source groups after the runtime prerequisite is addressed.
+
+### 2026-10-05 - Surface host metrics configuration failures
+
+- **Change:** Continued the published code-style audit from website `origin/main` `695a3ed` with a separate host metrics correction on committed candidate `f3854fbd`; its regression failed on the broad fallback and passes after removal/narrowing. Full website/library, browser, PowerShell and package gates pass.
+- **Reason:** Broad exception fallbacks turned missing provider configuration and defects into ordinary unavailable readings, while the metrics collector already owns isolation and alerting.
+- **Impact:** The dedicated plan/report record native success and migration-015 runtime blockage. No PR was opened. Current continuation uses `695a3ed`; the audit plan's original `76681a5` inventory baseline remains historical. Continue remaining source groups after recording this checkpoint.
