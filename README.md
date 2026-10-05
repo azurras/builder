@@ -42,7 +42,7 @@ Append same-day project work; create another file for another date. Preserve dec
 | complete-builder-work | Delivery, coordination, repository inspection and closure |
 | plan-builder-work | Plan creation, readiness review and validation |
 | save-session-memory | Dated work records |
-| record-runtime-verification | Save or validate runtime evidence |
+| write-test-report | Save or validate runtime evidence |
 | verify-local-app | Run any application locally before its PR; authorized deployment |
 | write-chris-street-style-code | Implementation standards and read-only code review |
 | maintain-builder-hub | Index generation and document validation |

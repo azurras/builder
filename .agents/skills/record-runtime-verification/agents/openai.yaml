@@ -1,6 +1,0 @@
-interface:
-  display_name: "Record Runtime Verification"
-  short_description: "Save or validate local application evidence"
-  default_prompt: "Use $record-runtime-verification to save actual supplied runtime evidence or validate a report without restarting completed verification."
-policy:
-  allow_implicit_invocation: true

@@ -108,7 +108,7 @@ class MaintenanceModeTests(unittest.TestCase):
 class SkillDiscoveryTests(unittest.TestCase):
     def test_discovery_is_exact_and_active_links_resolve(self):
         expected = {"complete-builder-work", "plan-builder-work",
-                    "record-runtime-verification", "maintain-builder-hub",
+                    "write-test-report", "maintain-builder-hub",
                     "commit-push-builder-main", "verify-local-app", "write-chris-street-style-code",
                     "save-session-memory"}
         self.assertEqual({p.name for p in SKILLS.iterdir() if p.is_dir()}, expected)

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Write Test Report"
+  short_description: "Save or validate local application evidence"
+  default_prompt: "Use $write-test-report to save actual supplied runtime evidence or validate a report without restarting completed verification."
+policy:
+  allow_implicit_invocation: true
