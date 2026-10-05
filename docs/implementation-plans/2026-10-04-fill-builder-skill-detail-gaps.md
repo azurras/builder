@@ -4,7 +4,7 @@
 task-contract-v2
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 An agent following any of six Builder workflow skills can act without guessing: each skill states the formats, conventions and edge-case steps it relies on. Every rule that several skills share is owned and stated by one skill and referenced the same way by the others. All eight skills declare the same Codex invocation policy.
@@ -201,7 +201,23 @@ Revert the change commit; skills return to their earlier wording and the test is
 - The `gh pr checks --required` behavior with no required checks may vary by gh version. Mitigation: describe the outcome (no required checks reported) rather than an exact message.
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-04 - Migration audit already fails and does not cover skill references
+
+- Change: Edited `write-test-report/references/template.md` with a short instruction line; example.md stays untouched as planned.
+- Reason: `consolidate_project_memory.py --verify` checks only migrated session-memory sections, not skill templates or examples. It already fails on `docs/skill-migration.md` on `b84cc2f` with this change stashed, so the failure is unrelated to this change and out of scope.
+- Impact: Non-Goal reason for example.md is weaker than stated but the file still stays unchanged; the audit failure is a follow-up, not part of AC-1 to AC-9.
 
 ## Outcome
-Pending.
+Delivered on 2026-10-04 as planned, with one logged discovery (the migration audit's unrelated existing failure).
+- AC-1: Met. save-session-memory now has When to Write (including proposed closure and closure result), Entry Shape with an example, Helper option details (`--time` as 24-hour `HH:MM`, slug rule for Builder, spokes and new projects), and Concurrent Writers.
+- AC-2: Met. write-test-report links its example, owns Candidate Identity (short SHA of at least 7 hex characters in Branch), defines the four statuses and gives same-date and later-date update procedures; report.md lists what the validator requires for `complete`. A sample report written from the skill alone passes `validate_test_report.py`; `test_test_report_workflow` passes unchanged.
+- AC-3: Met. publish-spoke-changes maps its steps onto deliver-change steps 3 to 5 and verifies once, and defines the agent branch prefix, worktree location, merge-method lookup order, no-required-checks handling, trusted change requests (new step 6) and Cleanup.
+- AC-4: Met. deliver-change Resume gives a tested `git grep` command for unfinished plans (it listed six, including this one); spoke branching happens before implementation and Builder code is committed in step 5; closure.md has Authority, Gates, `gh` steps, comment shape and readback; coordination.md has a handoff template and return verification.
+- AC-5: Met. publish-builder-changes names the three index paths, the message convention and a rebase-based divergence procedure that never stashes others' files.
+- AC-6: Met. verify-local-app has PowerShell and POSIX background-start patterns with logs outside the repository, process-tree stop, a free-port lookup, a before-and-after isolation check, deployment pointed at the spoke's instructions, and named Rerun and Before-PR rules.
+- AC-7: Met. `test_every_skill_allows_implicit_invocation` failed naming publish-builder-changes, save-session-memory and verify-local-app, and passes after adding their policy blocks.
+- AC-8: Met. `git grep` shows the 7-character threshold only in write-test-report; deliver-change and publish-spoke-changes now reference "verify-local-app's rerun rule" and "write-test-report's update rule" instead of restating them.
+- AC-9: Met when the delivery commit's `git ls-remote origin refs/heads/main` matches local HEAD; see the [2026-10-04 Builder memory](../session-memory/2026-10-04-builder.md).
+Checks: 93 tests pass, the hub check passes and `git diff --check` is clean. Runtime verification does not apply: no runnable application.
+Shipped versus planned: as planned. Follow-up: `consolidate_project_memory.py --verify` already fails on `docs/skill-migration.md`, independent of this change.

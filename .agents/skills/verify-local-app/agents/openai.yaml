@@ -2,3 +2,5 @@ interface:
   display_name: "Verify Local App"
   short_description: "Run any application locally before creating a PR"
   default_prompt: "Use $verify-local-app to run and exercise the candidate on the local machine with verified isolation, changing database data only through application endpoints, before creating a PR; record evidence and cleanup, and deploy only within existing authority."
+policy:
+  allow_implicit_invocation: true

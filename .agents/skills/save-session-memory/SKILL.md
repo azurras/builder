@@ -7,11 +7,62 @@ description: Record work, decisions, events and outcomes in separate dated sessi
 
 Use docs/session-memory/YYYY-MM-DD-project.md for the actual work date. Append same-day activity; another date gets another file. Record requests, actions, discoveries, decisions and reasons, attempts/results, reviews, tests, blockers and outcomes. Preserve sufficient context to resume; link primary evidence instead of copying it. Change-specific deviations and decisions belong in the implementation plan's log; record a short entry that links the plan. Append corrections without erasing history.
 
-Pass complete entry Markdown on stdin:
-python .agents/skills/save-session-memory/scripts/save_session_memory.py --root . --project builder --date YYYY-MM-DD --title 'Work update'
+## When to Write
 
---project is required; use the established slug. --date defaults to the current local date; --title names the entry and optional --time records a known time. The helper preserves existing bytes. Serialize same-file writes. For retrospective entries distinguish known work dates/times from recording time; never invent chronology.
+Write only with persistence authority. Review-only and inspection-only requests do not write memory.
 
-Read the relevant dates/sections using targeted searches. Do not load an entire project history or create a permanent project file. Closure results belong on their actual date, linked to earlier proposals when needed.
+- **Delivery recorded** (deliver-change step 6): one entry per change, written after the plan's Outcome.
+- **Blocked:** what blocks the work, who can unblock it and the next action.
+- **Proposed closure** (before any external issue update): the issue link, the exact text you will post, the evidence links, and the state you will set. Without a source issue, write "No source issue; external closure does not apply" in the delivery entry instead.
+- **Closure result:** the actual issue state read back, on the date it happened, linking the proposal when it was on an earlier date.
+- **Handoffs and other authorized events** that a later session needs to resume.
 
-Use the [phase finalizer](../publish-builder-changes/references/phase-finalization.md) for authorized persistence. Review/inspection-only requests do not write memory without authorization. For auditing the completed historical migration only, see [migration audit](references/migration-audit.md).
+Routine substeps need no separate entry.
+
+## Entry Shape
+
+The helper writes the heading `## YYYY-MM-DD HH:MM <zone> - <title>`. Pass only the body: three to six short bullets.
+
+1. The request: who asked, what, and a link to the plan.
+2. What was done and the decisions that matter, each with its reason.
+3. Discoveries, concurrent activity or deviations, linking the plan's log instead of repeating it.
+4. Verification actually observed: test counts, checks, readback, or why runtime proof does not apply.
+5. Blockers, follow-ups or the proposed closure, when there are any.
+
+```markdown
+- User asked to fix the helper after it refused the old side of a `git mv`. [Plan](../implementation-plans/2026-10-04-accept-staged-deletions-in-publish-builder-changes.md).
+- Cause: a missing file counted as a deletion only while still in the index. The helper now also accepts a file in HEAD but not the index.
+- The existing deleted-directory test caught a gap in the first version; fixed and logged in the plan.
+- Verification: no runnable application. 72 tests pass and the hub check passes.
+```
+
+Name the title for the outcome, such as "Clarified deliver-change", not the activity.
+
+## Helper
+
+Pass the entry body on stdin:
+
+```powershell
+@'
+- ...
+'@ | python .agents/skills/save-session-memory/scripts/save_session_memory.py --root . --project builder --title 'Clarified deliver-change'
+```
+
+- `--project` (required): `builder` for hub work; the spoke's `slug` from spokes.json for spoke work; otherwise a new lowercase hyphenated slug named for the project (letters, digits and single hyphens, starting with a letter, never `index`). Reuse a slug once it exists.
+- `--title` (required): the entry title; it does not change the filename.
+- `--date`: `YYYY-MM-DD`, defaulting to today's local date. Pass it only for retrospective entries.
+- `--time`: 24-hour `HH:MM` local time, passed only when the work happened at a known time other than now. Without it the helper stamps the current time and time zone. For retrospective entries, distinguish the known work date and time from the recording time; never invent chronology.
+
+The helper creates the file with its header on the first write of a date and otherwise appends, preserving existing bytes.
+
+## Concurrent Writers
+
+The helper appends without locking. Other sessions can write to the same day's file. Run one write at a time. Before publishing, read `git diff -- <memory file>`: it must contain only your entries on top of the published file. When another session's unpublished entry is in the diff, leave it alone and coordinate before selecting the file. When origin/main gained entries, update with publish-builder-changes' divergence procedure first.
+
+## Reading Memory
+
+Read the relevant dates and sections using targeted searches. Do not load an entire project history or create a permanent project file.
+
+## Publication
+
+Publish through the [phase finalizer](../publish-builder-changes/references/phase-finalization.md). Its refresh regenerates `docs/session-memory/index.md`; select that index with a new dated file. For auditing the completed historical migration only, see [migration audit](references/migration-audit.md).

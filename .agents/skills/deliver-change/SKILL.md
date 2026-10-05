@@ -21,6 +21,14 @@ Match the request before doing anything. A limited request never authorizes a la
 
 ## Resume
 
+Before starting, check whether the request continues unfinished work. List plans that are ready, in progress or blocked:
+
+```bash
+git grep -A1 "^## Document Status" -- 'docs/implementation-plans/*.md' | grep -E -- "-(ready-for-execution|in-progress|blocked)$"
+```
+
+Also read the latest dated session memory for the project and, for spoke work, its open PRs (`gh pr list --repo <owner/name> --author @me`). Continue a matching plan instead of writing a new one; leave unrelated unfinished plans alone.
+
 Find the first step whose Done evidence is missing or stale, and start there. Evidence is stale when the files or commit it covers changed after it was produced. Reuse evidence that still applies instead of producing it again.
 
 ## Where Things Are Published
@@ -35,11 +43,11 @@ Find the first step whose Done evidence is missing or stale, and start there. Ev
    Done: the plan's Objective, Acceptance Criteria and Branch can be written without guessing.
 2. **Plan.** Use write-implementation-plan plan mode, then its review mode, and fix blockers until review reports ready. Save, then publish through the phase finalizer.
    Done: the plan is on Builder `origin/main` with status `ready-for-execution` and passes validation.
-3. **Implement.** Set the plan to `in-progress`. Apply write-chris-street-style-code, reusing the task's Before-Edit Brief from the plan. Change only what the plan's tasks name. Run the checks in the plan's Test Plan, then review the full diff with write-chris-street-style-code review mode. When work diverges from the plan, update the plan with write-implementation-plan update mode as it happens.
+3. **Implement.** Set the plan to `in-progress`. For spoke work, first create the branch or worktree with publish-spoke-changes step 1. Apply write-chris-street-style-code, reusing the task's Before-Edit Brief from the plan. Change only what the plan's tasks name. Run the checks in the plan's Test Plan, then review the full diff with write-chris-street-style-code review mode. For spoke work, then commit the change on the branch; Builder code is committed in step 5. When work diverges from the plan, update the plan with write-implementation-plan update mode as it happens.
    Done: the plan's checks pass, review finds no blockers, and the diff matches Expected Changes or the Implementation Log.
-4. **Verify.** For an application change, use verify-local-app to run and exercise the committed candidate on the local machine, then write-test-report to save the report naming the candidate's short SHA, and publish it. This comes before any pull request, including a draft. For work with no runnable application, record the concrete reason in the plan's Test Plan and keep the native check results.
+4. **Verify.** For an application change, use verify-local-app to run and exercise the committed candidate on the local machine, then save the report with write-test-report, which names the candidate commit, and publish it. verify-local-app owns the rule that this precedes any pull request. For work with no runnable application, record the concrete reason in the plan's Test Plan and keep the native check results.
    Done: a published report names the candidate commit, or the plan records why runtime proof does not apply.
-5. **Publish.** Publish the code as described above. Where a PR is required, include the local verification evidence, wait for required CI, fix in-scope failures, merge only after the gates pass and read back the merge. After any edit that affects runtime, rerun the affected local verification and update the report before pushing again. Perform already-authorized deployment through the supported mechanism and verify it.
+5. **Publish.** Publish the code as described above. Where a PR is required, include the local verification evidence, wait for required CI, fix in-scope failures, merge only after the gates pass and read back the merge. After an edit that affects runtime, follow verify-local-app's rerun rule and write-test-report's update rule before pushing again. Perform already-authorized deployment through the supported mechanism and verify it.
    Done: the change commit is on Builder `origin/main`, or the spoke PR shows `MERGED`; an authorized deployment is verified.
 6. **Record.** Write the plan's Outcome against every acceptance criterion with evidence links and set it `complete`. Save dated session memory with save-session-memory, linking the plan and stating the proposed closure. Publish both through the phase finalizer.
    Done: the completed plan and memory are on Builder `origin/main`.

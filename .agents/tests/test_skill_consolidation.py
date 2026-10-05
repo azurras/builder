@@ -125,6 +125,15 @@ class SkillDiscoveryTests(unittest.TestCase):
                 for command in re.findall(r"\.agents/skills/[a-z0-9-]+/scripts/[a-z0-9_]+\.py", content):
                     self.assertTrue((ROOT / command).is_file(), f"{path}: {command}")
 
+    def test_every_skill_allows_implicit_invocation(self):
+        policy_pattern = re.compile(r"^policy:\n(?:[ \t]+.*\n)*?[ \t]+allow_implicit_invocation: true$", re.MULTILINE)
+        skills_without_policy = sorted(
+            metadata_path.parents[1].name
+            for metadata_path in SKILLS.glob("*/agents/openai.yaml")
+            if not policy_pattern.search(metadata_path.read_text(encoding="utf-8"))
+        )
+        self.assertEqual(skills_without_policy, [])
+
     def test_claude_reads_the_same_skills_folder_through_a_symlink(self):
         claude_skills = ROOT / ".claude/skills"
         self.assertTrue(claude_skills.is_symlink(), "Enable symlinks (see README) and re-checkout .claude/skills")
