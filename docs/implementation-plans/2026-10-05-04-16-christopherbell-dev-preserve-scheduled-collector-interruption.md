@@ -1,7 +1,7 @@
 # Preserve interruption in scheduled collectors
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -101,10 +101,28 @@ The correction is limited to the coordinator boundary, a focused test, and modul
 | Application readiness remains blocked by migration 015 | High based on current audit evidence | Record the exact candidate and do not bypass the startup guard or create a PR. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin implementation
+
+- **Change:** Began implementation from the published plan on the isolated candidate branch; retained the pre-existing `gradlew.bat` line-ending change without editing it.
+- **Reason:** The candidate checkout reports a CRLF-to-LF-only wrapper diff that is unrelated to the correction and must be preserved.
+- **Impact:** Task 1 is in progress; scope and acceptance criteria are unchanged.
+
+### 2026-10-05 - Verify and block publication on migration record
+
+- **Change:** Implemented the interruption catch and restore after final run persistence and lease release; the candidate is committed as `a1945a6`. The baseline regression failed as expected, the focused suite passed 5/5, and the full native check/package gate passed with 2,165 Java tests, 110 skipped, and no failures/errors.
+- **Reason:** Deferring restoration until cleanup finishes preserves the cancellation signal without interrupting the terminal persistence and lease-release path.
+- **Impact:** AC-1 and AC-2 are satisfied; AC-3 is blocked because committed startup on isolated database `test` stopped at the incomplete durable record for migration 015. See the [test report](../test-reports/2026-10-05-04-28-christopherbell-dev-preserve-scheduled-collector-interruption.md); no PR was created.
 
 ## Outcome
-Pending.
+> [!CAUTION]
+> Source correction and automated verification are complete on candidate `a1945a6`; application startup is blocked by the existing incomplete migration 015 durable record, so no PR was created.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Satisfied | The regression failed on base `695a3ed` and passed on candidate `a1945a6`; the focused coordinator suite passed 5/5 and asserts failed status, original cause identity, exact lease release, and restored interrupt flag. |
+| AC-2 | ✅ Satisfied | Full `:website:check :cbell-lib:check :website:bootJar` passed; Java reported 2,165 total tests, 110 skipped, with no failures/errors. See [test report](../test-reports/2026-10-05-04-28-christopherbell-dev-preserve-scheduled-collector-interruption.md). |
+| AC-3 | ⏸️ Blocked | Candidate JAR `a1945a6` targeted isolated MongoDB database `test` and failed startup on `Migration 015-require-domain-collection-schema has an incomplete durable record`; no listener remained on port 63216. No PR was created. |
 
 ## Project
 christopherbell-dev
