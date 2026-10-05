@@ -1,7 +1,7 @@
 # Add repository-local Chris Street Style guidance
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -71,13 +71,13 @@ Required skill: write-chris-street-style-code
 | **Boundary/API** | Markdown-only instruction contract; no source, API, configuration, or build interface changes. |
 | **Effects and failures** | No runtime effects; instruction must not authorize unverified production actions or weaken security guidance. |
 | **Tests and evidence** | Inspect full final diff, verify links/heading structure and `git diff --check`; record packaged startup attempt as required for an application repository. |
-| **Verification** | Validate the instruction diff and existing repository checks; run the committed application with test profile, isolated Mongo database `test`, test storage, disabled schedules/integrations, and free loopback port. |
+| **Verification** | Validate the instruction diff and package with `:website:bootJar`; run the committed application with test profile, isolated Mongo database `test`, test storage, disabled schedules/integrations, and free loopback port. |
 
 ## Test Plan
 | AC | Native check | Local runtime check |
 |---|---|---|
 | AC-1 | Review Markdown structure, existing guidance preservation, links and `git diff --check`. No code-specific unit test applies. | Start the packaged application and verify readiness plus a representative existing flow; the document itself has no runtime path. |
-| AC-2 | Build the committed candidate package with the existing native Gradle gate. | Verify isolated configuration and candidate readiness, or record the startup blocker, process cleanup, database identity, and free port. |
+| AC-2 | Build the committed candidate with `:website:bootJar`; confirm `git diff --check` and inspect the complete instruction diff. | Verify isolated configuration and candidate readiness, or record the startup blocker, process cleanup, database identity, and free port. |
 
 Regressions and edge cases:
 - Ensure wording does not contradict existing language/framework, security, or test instructions.
@@ -93,10 +93,27 @@ Remove the added subsection from `AGENTS.md` if review finds a conflict. No appl
 | Application runtime remains unavailable | High based on current audit evidence | Record the exact blocker and do not create a PR before local verification succeeds. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin documentation implementation
+
+- **Change:** Started the documentation-only change in its isolated worktree; narrowed native checks to Markdown/diff validation and packaging rather than rerunning behavior suites unchanged by the instruction file.
+- **Reason:** The sole target is `AGENTS.md`; a source-code test suite cannot validate instruction wording, while the application startup requirement still applies.
+- **Impact:** Task 1 is in progress; AC-1 still needs content/compatibility review and AC-2 still requires package build and local runtime evidence.
+
+### 2026-10-05 - Verify guidance and block on database availability
+
+- **Change:** Added a concise `Chris Street Style` section to spoke `AGENTS.md` on candidate `322fb12`; reviewed the full diff, passed `git diff --check`, and built `:website:bootJar` successfully.
+- **Reason:** Local instructions now surface the selected standard's core cross-language rules without duplicating the full Builder skill or conflicting with project rules.
+- **Impact:** AC-1 is satisfied; AC-2 is blocked because MongoDB `127.0.0.1:27018` refused the read-only identity check for database `test`, so candidate startup was not attempted. See the [test report](../test-reports/2026-10-05-04-47-christopherbell-dev-add-repository-chris-street-style-guidance.md); no PR was created.
 
 ## Outcome
-Pending.
+> [!CAUTION]
+> Repository guidance and packaging checks are complete on candidate `322fb12`; local app verification is blocked because isolated MongoDB database identity cannot be checked while port 27018 refuses connections, so no PR was created.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Satisfied | Added concise, actionable cross-language Chris Street Style guidance; full diff review and `git diff --check` passed. |
+| AC-2 | ⏸️ Blocked | `:website:bootJar` passed on `322fb12`, but `mongosh .../test ... db.getName()` returned `ECONNREFUSED` for `127.0.0.1:27018`; app startup was not attempted without verified isolated data. See [test report](../test-reports/2026-10-05-04-47-christopherbell-dev-add-repository-chris-street-style-guidance.md). |
 
 ## Project
 christopherbell-dev

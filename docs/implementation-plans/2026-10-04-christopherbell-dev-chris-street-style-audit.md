@@ -298,3 +298,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Candidate `2001573` makes import failure categorization side-effect free and restores the interrupt after failed-state persistence and lease release. The baseline ordering regression failed; focused tests passed 18/18 and full checks passed with 2,165 Java tests, 110 skipped, and no failures/errors.
 - **Reason:** Source inspection refined the reviewer note: the flag was restored, but before the workflow's cleanup effects completed.
 - **Impact:** The seventeenth independently planned correction has a [dedicated implementation plan](2026-10-05-04-31-christopherbell-dev-restore-restaurant-import-interruption.md) and [blocked runtime report](../test-reports/2026-10-05-04-41-christopherbell-dev-restore-restaurant-import-interruption.md). Committed startup stopped at the incomplete migration-015 durable record in isolated database `test`; no PR was created. Continue the wider code review. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Add repository-local style guidance
+
+- **Change:** Added a concise `Chris Street Style` section to the spoke `AGENTS.md` on candidate `322fb12`; full diff review, `git diff --check`, and `:website:bootJar` passed.
+- **Reason:** Keep the selected cross-language naming, validation, effects, error, and test principles visible in repository-local contributor guidance without duplicating the full Builder skill.
+- **Impact:** The independent guidance change has a [dedicated implementation plan](2026-10-05-04-44-christopherbell-dev-add-repository-chris-street-style-guidance.md) and [blocked runtime report](../test-reports/2026-10-05-04-47-christopherbell-dev-add-repository-chris-street-style-guidance.md). Runtime preflight could not verify isolated MongoDB `test` because port 27018 refused connections, so no app startup or PR occurred. Continue the code review; draft PR #1477 remains excluded.
