@@ -1,7 +1,7 @@
 # Let Agents Operate christopherbell.dev Without Administrator Rights
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -253,7 +253,24 @@ Required skill: write-chris-street-style-code
 - **Impact:** AC-9 completes after the follow-up deploys and the second request reports SUCCEEDED. Expected Changes gains `Production.Operations.psm1` and its tests.
 
 ## Outcome
-Pending.
+
+> [!WARNING]
+> A standard-user agent can now observe production and run allowlisted operations by merging requests. Proven end to end in production: a request-only commit ran `verify-startup` once without deploying, and after the startup-check fix it reported SUCCEEDED. Rollback is proven by tests only, and the token-expiry alert has no expiry to show because the installed token reports none.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Production `diagnostics.json` fresh each poll; a non-admin `prod.cmd diagnostics` showed services, releases, 69 redacted log entries and none of the searched secret patterns ([report](../test-reports/2026-10-05-13-40-christopherbell-dev-let-agents-operate-production-without-administrator-rights.md)) |
+| AC-2 | ✅ Met | Non-admin `auto-status`: `pollerState RUNNING`, `pollerReason REPORTED_BY_POLLER` (was `UNKNOWN`) |
+| AC-3 | ✅ Met | Pester validation, run-once, expiry and failure cases; production recorded each request once with its outcome |
+| AC-4 | ✅ Met | #1485 (`71848dd`, request-only) ran without a deploy: active stayed `a98e8cd` with `auto-status` `UP_TO_DATE`; the watch treats request-only differences as live |
+| AC-5 | ⚠️ Partly met | Hold, release, stale-SHA refusal and GitHub records proven by Pester; not exercised in production by design |
+| AC-6 | ✅ Met | `Production.OpsRequests.Tests.ps1` runs in CI's `automationPester`; accepted both real request files |
+| AC-7 | ⚠️ Partly met | Capture verified against a real GitHub response object, the payload field is present, and the watch threshold is proven by Pester. GitHub sends no expiry header for the installed token, so `tokenExpiresAt` is empty and the watch reports "No token expiry has been recorded" |
+| AC-8 | ✅ Met | Runbook "Delegated Operations" and "Administrator Bootstrap", README and `ops/requests/README.md` in #1484 |
+| AC-9 | ✅ Met | #1484 merged as `a98e8cd` and deployed. The first request found a stale startup contract, fixed in #1486 (`49700a7`, [report](../test-reports/2026-10-05-16-55-christopherbell-dev-accept-versioned-auto-deploy-tools-in-the-startup-task-contr.md)). Request `2026-10-05-second-agent-verify-startup` reported SUCCEEDED at 22:34 UTC on `49700a7` |
+
+- **Shipped versus planned:** everything planned, plus fixes found along the way: the deterministic async streaming test, the startup task contract accepting versioned tools (broken since #1405), and the repository auto-merge setting with the Builder dev-loop update ([plan](2026-10-05-17-19-builder-agents-watch-and-merge-their-own-pull-requests.md)).
+- **Follow-ups:** if the user later installs an expiring token, confirm `tokenExpiresAt` populates. Dependabot #1464's regenerated metadata awaits review as a separate change.
 
 ## Project
 christopherbell-dev
