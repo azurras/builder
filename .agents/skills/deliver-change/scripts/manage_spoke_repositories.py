@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""List, register, locate, clone or inspect spoke repositories; optionally snapshot to project memory."""
+"""List, register, locate, clone or inspect spoke repositories, prune their stale worktrees, or snapshot to memory."""
 import argparse
 import datetime as dt
 import hashlib
@@ -13,6 +13,7 @@ from project_memory import append_entry, memory_day_path, project_entries
 from spoke_registry import (Spoke, find_spoke, load_spokes, register_spoke, require_active_project,
                             resolve_spoke_location)
 from spoke_state import inspect_repository, origin_mismatch
+from spoke_worktrees import remove_worktree, stale_worktree_decisions
 
 
 def list_spokes(builder_root: Path) -> int:
@@ -58,9 +59,36 @@ def register_new_spoke(builder_root: Path, arguments: argparse.Namespace) -> int
     return 0
 
 
+def prune_spoke_worktrees(builder_root: Path, spoke: Spoke, *, minimum_age_days: float, dry_run: bool) -> int:
+    checkout = resolve_spoke_location(builder_root, spoke).path
+    mismatch = origin_mismatch(spoke, checkout)
+    if mismatch:
+        print(mismatch, file=sys.stderr)
+        return 1
+    decisions = stale_worktree_decisions(checkout, spoke.default_branch, minimum_age_days)
+    stale_decisions = [decision for decision in decisions if decision.is_stale]
+    for decision in decisions:
+        if not decision.is_stale:
+            print(f"[keep] {decision.worktree.path}: {decision.reason}")
+    failures = 0
+    for decision in stale_decisions:
+        if dry_run:
+            print(f"[would remove] {decision.worktree.path}: {decision.reason}")
+            continue
+        try:
+            print(f"[removed] {decision.worktree.path}: {remove_worktree(checkout, decision.worktree, spoke.default_branch)}")
+        except (ValueError, OSError, subprocess.TimeoutExpired) as error:
+            failures += 1
+            print(f"[FAIL] {decision.worktree.path}: {error}")
+    verb = "would remove" if dry_run else "removed"
+    print(f"{len(stale_decisions) - failures} {verb}, {len(decisions) - len(stale_decisions)} kept, {failures} failed. "
+          f"Fetch origin first so origin/{spoke.default_branch} is current.")
+    return 1 if failures else 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", nargs="?", choices=("inspect", "snapshot", "list", "register", "locate", "clone"), default="inspect")
+    parser.add_argument("mode", nargs="?", choices=("inspect", "snapshot", "list", "register", "locate", "clone", "prune-worktrees"), default="inspect")
     target = parser.add_mutually_exclusive_group()
     target.add_argument("--spoke", help="Registered spoke slug from spokes.json; for register, the new slug")
     target.add_argument("--path", help="Verified repository path when the repository is not a registered spoke")
@@ -70,6 +98,9 @@ def main() -> int:
     parser.add_argument("--repository", help="register: https, ssh or user@host:path remote")
     parser.add_argument("--description", help="register: one sentence; say which instructions own build and run")
     parser.add_argument("--default-branch", default="main", help="register: default branch (default: main)")
+    parser.add_argument("--dry-run", action="store_true", help="prune-worktrees: report without removing")
+    parser.add_argument("--min-age-days", type=float, default=7.0,
+                        help="prune-worktrees: keep worktrees Git touched more recently (default: 7)")
     args = parser.parse_args()
     builder_root = Path(args.root).expanduser().resolve()
     try:
@@ -83,9 +114,12 @@ def main() -> int:
                 parser.error("register requires --spoke, --name, --repository and --description, and not --path")
             return register_new_spoke(builder_root, args)
         spoke = find_spoke(builder_root, args.spoke) if args.spoke else None
-        if args.mode in {"locate", "clone"}:
+        if args.mode in {"locate", "clone", "prune-worktrees"}:
             if spoke is None:
                 parser.error(f"{args.mode} requires --spoke")
+            if args.mode == "prune-worktrees":
+                return prune_spoke_worktrees(builder_root, spoke, minimum_age_days=args.min_age_days,
+                                             dry_run=args.dry_run)
             return locate_spoke(builder_root, spoke) if args.mode == "locate" else clone_spoke(builder_root, spoke)
         if spoke is None and not args.path:
             parser.error(f"{args.mode} requires --spoke or --path")

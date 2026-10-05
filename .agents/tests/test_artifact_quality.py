@@ -283,6 +283,27 @@ None.
         )
         self.assertEqual(validate_test_report_text(report), [])
 
+    def test_fenced_input_and_output_blocks_prove_runtime_data_without_keywords(self) -> None:
+        report = self.local_execution_report(
+            "Local command: `./exporter source.csv result.json`.",
+            "### 1. Export\n\n```text\nsource.csv with 3 rows\n```",
+            "### 1. Export\n\n```json\n{\"exported\": 3}\n```",
+        )
+
+        self.assertEqual(validate_test_report_text(report), [])
+
+    def test_empty_fenced_blocks_do_not_prove_runtime_data(self) -> None:
+        report = self.local_execution_report(
+            "Local command: `./exporter source.csv result.json`.",
+            "### 1. Export\n\n```text\n\n```",
+            "### 1. Export\n\n```\n   \n```",
+        )
+
+        errors = validate_test_report_text(report)
+
+        self.assertTrue(any("Data Sent" in error for error in errors), errors)
+        self.assertTrue(any("Response Received" in error for error in errors), errors)
+
     def test_application_arguments_can_contain_test_runner_names(self) -> None:
         report = self.local_execution_report(
             "Local command: `./exporter pytest-results.csv result.json`.",

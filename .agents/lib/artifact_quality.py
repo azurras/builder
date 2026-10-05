@@ -213,6 +213,15 @@ def _matches_any(value: str, patterns: tuple[str, ...]) -> bool:
     return any(re.search(pattern, value, re.IGNORECASE) for pattern in patterns)
 
 
+FENCED_BLOCK_RE = re.compile(r"^(?P<fence>`{3,}|~{3,})[^\n]*\n(?P<body>.*?)^(?P=fence)[ \t]*$",
+                             re.MULTILINE | re.DOTALL)
+
+
+def _has_nonempty_fenced_block(value: str) -> bool:
+    """Real runtime input or output pasted as a fenced block; wording alone cannot satisfy it."""
+    return any(match.group("body").strip() for match in FENCED_BLOCK_RE.finditer(value))
+
+
 def _labeled_field_pattern(label: str) -> str:
     """Match a field written as `Label: value`, `**Label:** value` or a `| Label | value |` table row.
 
@@ -464,8 +473,12 @@ def validate_test_report_text(markdown: str, path: Path | None = None) -> list[s
         for command in local_commands
     )
     has_local_app_run = has_application_command or _matches_any(app_context, LOCAL_APP_RUN_PATTERNS)
-    has_runtime_data = _matches_any(data_sent, RUNTIME_DATA_PATTERNS)
-    has_runtime_response = _matches_any(response_received, RUNTIME_RESPONSE_PATTERNS)
+    # A non-empty fenced block of actual input or output is the primary evidence; the phrase
+    # lists still accept older reports written before that rule.
+    has_runtime_data = (_has_nonempty_fenced_block(data_sent)
+                        or _matches_any(data_sent, RUNTIME_DATA_PATTERNS))
+    has_runtime_response = (_has_nonempty_fenced_block(response_received)
+                            or _matches_any(response_received, RUNTIME_RESPONSE_PATTERNS))
     mentions_unit_tests = _matches_any(report_body, UNIT_TEST_ONLY_PATTERNS)
 
     if status == "complete":
@@ -475,11 +488,11 @@ def validate_test_report_text(markdown: str, path: Path | None = None) -> list[s
             )
         if not has_runtime_data:
             errors.append(
-                f"{_label(path)}complete test report Data Sent must describe a request, UI input, command arguments, fixture input, or queue message"
+                f"{_label(path)}complete test report Data Sent must contain a fenced block of the actual input (request, command arguments, fixture or message)"
             )
         if not has_runtime_response:
             errors.append(
-                f"{_label(path)}complete test report Response Received must describe an application response, UI result, exit status, output artifact, worker result, or log output"
+                f"{_label(path)}complete test report Response Received must contain a fenced block of the actual output (response, exit status, artifact or log excerpt)"
             )
     if status == "complete" and mentions_unit_tests and not (
         has_local_app_run and has_runtime_data and has_runtime_response

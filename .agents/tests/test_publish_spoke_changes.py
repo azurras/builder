@@ -138,5 +138,68 @@ class PreflightTests(unittest.TestCase):
         self.assertIn("docs/test-reports", result.stderr)
 
 
+PLAN_PATH = "docs/implementation-plans/2026-10-05-09-00-site-dev-workflow-only.md"
+NO_RUNTIME_REASON = "Only .github/workflows changes; the application is untouched."
+
+
+class NoRuntimePreflightTests(unittest.TestCase):
+    """A change with nothing runnable records why in its published plan instead of a report."""
+
+    setUp = PreflightTests.setUp
+    publish_report = PreflightTests.publish_report
+
+    def publish_plan(self, *, project="site-dev", reason=NO_RUNTIME_REASON):
+        reason_line = f"- **Runtime proof not applicable:** {reason}\n" if reason is not None else ""
+        plan_text = (
+            "# Workflow-only change\n\n## Document Status\nin-progress\n\n## Test Plan\n"
+            f"{reason_line}- Contract test covers the workflow.\n\n## Project\n{project}\n"
+        )
+        commit_file(self.builder, PLAN_PATH, plan_text, "Plan")
+        mark_published(self.builder)
+
+    def preflight_without_runtime(self, plan=PLAN_PATH):
+        return subprocess.run([sys.executable, "-B", str(SCRIPT), "--spoke", "site-dev", "--path", str(self.spoke),
+                               "--no-runtime-plan", plan, "--root", str(self.builder)],
+                              capture_output=True, text=True, encoding="utf-8", timeout=30)
+
+    def test_published_plan_reason_replaces_the_report(self):
+        self.publish_plan()
+
+        result = self.preflight_without_runtime()
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("[pass] no-runtime plan:", result.stdout)
+        self.assertIn(f"Runtime proof not applicable: {NO_RUNTIME_REASON}", result.stdout)
+        self.assertIn(f"https://github.com/example/builder/blob/main/{PLAN_PATH}", result.stdout)
+
+    def test_plan_without_a_reason_is_refused(self):
+        self.publish_plan(reason=None)
+
+        result = self.preflight_without_runtime()
+
+        self.assertEqual(result.returncode, 1)
+        self.assertRegex(result.stdout, r"\[FAIL\] no-runtime plan: .*Runtime proof not applicable")
+
+    def test_unpublished_or_foreign_plan_is_refused(self):
+        self.publish_plan()
+        with (self.builder / PLAN_PATH).open("a", encoding="utf-8") as plan_file:
+            plan_file.write("Unpublished edit.\n")
+        self.assertRegex(self.preflight_without_runtime().stdout, r"\[FAIL\] no-runtime plan published: .*differs")
+
+        self.publish_plan(project="other-site")
+        self.assertRegex(self.preflight_without_runtime().stdout,
+                         r"\[FAIL\] no-runtime plan: .*Project is other-site, not spoke site-dev")
+
+    def test_report_and_no_runtime_plan_are_exclusive(self):
+        self.publish_plan()
+        self.publish_report()
+
+        result = subprocess.run([sys.executable, "-B", str(SCRIPT), "--spoke", "site-dev", "--path", str(self.spoke),
+                                 "--report", REPORT_PATH, "--no-runtime-plan", PLAN_PATH, "--root", str(self.builder)],
+                                capture_output=True, text=True, encoding="utf-8", timeout=30)
+
+        self.assertEqual(result.returncode, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

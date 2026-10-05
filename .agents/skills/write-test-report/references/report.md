@@ -34,7 +34,9 @@ People read reports on GitHub, usually to answer "did it work, and on what?". Pr
 Every report has all eleven sections and a known status; Data Sent, Response Received, Pass / Fail and Evidence must not be empty. A `complete` report must also show:
 
 - **A local application run** in App / Environment, Local Run Details or Evidence: a `Local command:` style label (plain, bold or as a table row) whose command is not a test runner, or a localhost, `127.0.0.1`, port or base URL reference.
-- **Runtime input** in Data Sent: a request, UI input, command arguments, fixture input or queue message.
-- **Runtime output** in Response Received: an application response, UI result, exit status, output artifact, worker result or log output.
+- **Runtime input** in Data Sent: a non-empty fenced code block holding the actual input (request, command arguments, fixture or message). Describing a request, UI input, fixture input or queue message in prose also passes.
+- **Runtime output** in Response Received: a non-empty fenced code block holding the actual output (response, exit status, artifact or log excerpt). Describing an application response, UI result, exit status, output artifact, worker result or log output in prose also passes.
+
+Pasting the real input and output as fenced blocks is the reliable form; it never depends on wording.
 
 A report whose only evidence is `npm test`, `pytest`, `./gradlew test`, `mvn test` or similar automated test output fails. Mentioning those checks is fine alongside a real local run.

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Check that a spoke branch is ready to become a pull request backed by published runtime evidence.
+"""Check that a spoke branch is ready to become a pull request backed by published runtime evidence,
+or by a published plan that records why runtime proof does not apply.
 
 Read-only: it never fetches, writes, pushes or calls GitHub. Fetch the spoke and Builder first so the
 origin/<branch> refs it reads are current.
@@ -17,6 +18,8 @@ from spoke_registry import Spoke, find_spoke, normalize_remote, resolve_spoke_lo
 from spoke_state import git, origin_mismatch
 
 REPORT_FOLDER = PurePosixPath("docs/test-reports")
+PLAN_FOLDER = PurePosixPath("docs/implementation-plans")
+NO_RUNTIME_REASON_RE = re.compile(r"\*\*Runtime proof not applicable:\*\*[ \t]*(?P<reason>\S[^\n]*)")
 BUILDER_PUBLISHED_REF = "origin/main"
 SHORT_SHA_LENGTH = 7
 COMMIT_ID_RE = re.compile(rf"\b[0-9a-f]{{{SHORT_SHA_LENGTH},40}}\b")
@@ -118,18 +121,62 @@ def check_report(builder_root: Path, spoke: Spoke, report_path: PurePosixPath, c
     return checks
 
 
+def builder_plan_path_of(raw_plan: str) -> PurePosixPath:
+    plan_path = PurePosixPath(raw_plan.replace("\\", "/"))
+    if plan_path.parent != PLAN_FOLDER or plan_path.suffix != ".md" or plan_path.name == "index.md":
+        raise ValueError(f"--no-runtime-plan must be a dated plan under {PLAN_FOLDER}, relative to the Builder root")
+    return plan_path
+
+
+def no_runtime_reason_of(plan_text: str) -> str | None:
+    match = NO_RUNTIME_REASON_RE.search(plan_text)
+    return match.group("reason").strip() if match else None
+
+
+def check_no_runtime_plan(builder_root: Path, spoke: Spoke, plan_path: PurePosixPath) -> list[Check]:
+    """For a change with nothing runnable, the published plan must say why runtime proof does not apply."""
+    try:
+        plan_text = (builder_root / plan_path).read_text(encoding="utf-8")
+    except OSError as error:
+        return [Check("no-runtime plan", False, f"cannot read {plan_path}: {error}")]
+    problems = []
+    plan_project = project_of(plan_text)
+    if plan_project != spoke.slug:
+        problems.append(f"Project is {plan_project or 'missing'}, not spoke {spoke.slug}")
+    reason = no_runtime_reason_of(plan_text)
+    if not reason:
+        problems.append("plan has no '**Runtime proof not applicable:** <reason>' line")
+    checks = [Check("no-runtime plan", not problems, "; ".join(problems) or f"{plan_path}: {reason}")]
+    try:
+        published_text = git(builder_root, "show", f"{BUILDER_PUBLISHED_REF}:{plan_path}")
+    except GIT_FAILURES:
+        published_text = None
+    if published_text is None:
+        checks.append(Check("no-runtime plan published", False, f"{plan_path} is not on Builder {BUILDER_PUBLISHED_REF}"))
+    elif published_text.replace("\r\n", "\n").strip() != plan_text.replace("\r\n", "\n").strip():
+        checks.append(Check("no-runtime plan published", False,
+                            f"local {plan_path} differs from Builder {BUILDER_PUBLISHED_REF}; publish it first"))
+    else:
+        checks.append(Check("no-runtime plan published", True, f"identical on Builder {BUILDER_PUBLISHED_REF}"))
+    return checks
+
+
 def report_url_of(builder_root: Path, report_path: PurePosixPath) -> str:
     builder_remote = normalize_remote(git(builder_root, "remote", "get-url", "origin"))
     return f"https://{builder_remote}/blob/main/{report_path}"
 
 
-def preflight(builder_root: Path, spoke: Spoke, checkout: Path, report_path: PurePosixPath) -> tuple[list[Check], str]:
+def preflight(builder_root: Path, spoke: Spoke, checkout: Path, report_path: PurePosixPath | None,
+              no_runtime_plan_path: PurePosixPath | None = None) -> tuple[list[Check], str]:
     checkout_check = check_checkout(spoke, checkout)
     if not checkout_check.passed:
         return [checkout_check], ""
     candidate_commit = git(checkout, "rev-parse", "HEAD")
+    evidence_checks = (check_no_runtime_plan(builder_root, spoke, no_runtime_plan_path)
+                       if no_runtime_plan_path is not None
+                       else check_report(builder_root, spoke, report_path, candidate_commit))
     checks = [checkout_check, check_branch(spoke, checkout), check_tracked_changes(checkout),
-              check_commits_ahead(spoke, checkout), *check_report(builder_root, spoke, report_path, candidate_commit)]
+              check_commits_ahead(spoke, checkout), *evidence_checks]
     return checks, candidate_commit
 
 
@@ -137,15 +184,20 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--spoke", required=True, help="Registered spoke slug from spokes.json")
     parser.add_argument("--path", type=Path, help="Spoke checkout or linked worktree; defaults to the resolved spoke")
-    parser.add_argument("--report", required=True, help="Builder test report, e.g. docs/test-reports/<date>-<title>.md")
+    evidence = parser.add_mutually_exclusive_group(required=True)
+    evidence.add_argument("--report", help="Builder test report, e.g. docs/test-reports/<date>-<title>.md")
+    evidence.add_argument("--no-runtime-plan",
+                          help="Published Builder plan whose '**Runtime proof not applicable:** <reason>' line explains "
+                               "why the change has nothing runnable, e.g. a workflow-only or docs-only change")
     parser.add_argument("--root", default=".", help="Builder root containing spokes.json")
     args = parser.parse_args()
     builder_root = Path(args.root).expanduser().resolve()
     try:
-        report_path = builder_report_path_of(args.report)
+        report_path = builder_report_path_of(args.report) if args.report else None
+        no_runtime_plan_path = builder_plan_path_of(args.no_runtime_plan) if args.no_runtime_plan else None
         spoke = find_spoke(builder_root, args.spoke)
         checkout = args.path.expanduser().resolve() if args.path else resolve_spoke_location(builder_root, spoke).path
-        checks, candidate_commit = preflight(builder_root, spoke, checkout, report_path)
+        checks, candidate_commit = preflight(builder_root, spoke, checkout, report_path, no_runtime_plan_path)
     except GIT_FAILURES as error:
         print(str(error), file=sys.stderr)
         return 2
@@ -154,6 +206,12 @@ def main() -> int:
     if not all(check.passed for check in checks):
         print("Preflight failed; do not push or open the pull request until every check passes.")
         return 1
+    if no_runtime_plan_path is not None:
+        reason = no_runtime_reason_of((builder_root / no_runtime_plan_path).read_text(encoding="utf-8"))
+        print(f"\nCandidate {candidate_commit} is ready. Add to the pull request body:\n\n"
+              f"## Local Verification\nRuntime proof not applicable: {reason} "
+              f"({report_url_of(builder_root, no_runtime_plan_path)})")
+        return 0
     print(f"\nCandidate {candidate_commit} is ready. Add to the pull request body:\n\n"
           f"## Local Verification\nRuntime report for candidate `{candidate_commit[:SHORT_SHA_LENGTH]}`: "
           f"{report_url_of(builder_root, report_path)}")

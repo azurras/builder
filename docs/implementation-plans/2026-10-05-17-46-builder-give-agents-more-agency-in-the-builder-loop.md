@@ -1,7 +1,7 @@
 # Give Agents More Agency in the Builder Loop
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 
@@ -220,10 +220,32 @@ Required skill: write-chris-street-style-code
 | The user `GRADLE_OPTS` affects other Gradle projects | Low | It only sets the socket folder |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Prune recognizes squash merges, recent activity and locks
+
+- **Change:** prune-worktrees also treats a squash-merged worktree as merged (merging its HEAD into origin/<default> leaves the tree unchanged), keeps worktrees Git touched within `--min-age-days` (default 7), and honors `git worktree lock`. The operator checkout `christopherbell.dev-worktrees\prod-tools` was locked with reason "operator checkout for prod.cmd".
+- **Reason:** most spoke branches are squash-merged, so ancestry alone found almost nothing; a fresh worktree at origin/main with no commits yet belongs to live work, and prod-tools is a long-lived checkout at a merged commit.
+- **Impact:** the dry run on christopherbell.dev lists 24 removable worktrees (merged, clean, idle 11 to 56 days) and keeps 127 with a reason each. The real run was refused by the session's permission classifier, so it is left for the user to run.
+
+### 2026-10-05 - Wait helper watches without merging
+
+- **Change:** the wait helper's pr mode also returns exit 0 without merging when `--merge` is omitted, and treats a PR with no checks reported yet as pending rather than green.
+- **Reason:** watching without merging is needed for PRs owned by someone else, and a just-opened PR has an empty check rollup for a short while.
+- **Impact:** covered by `test_wait_for_github.py`; live runs against production `/actuator/info` (`49700a7`) and merged PR #1486 both exited 0.
 
 ## Outcome
-Pending.
+Delivered to Builder `main`, with one step left to the user (the real AC-7 prune run).
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| AC-1 | Met | `wait_for_github.py` pr and live modes; 10 tests in `test_wait_for_github.py`; `live` against `https://www.christopherbell.dev/actuator/info` expecting `49700a7` and `pr --number 1486` both exited 0; referenced in AGENTS.md and publish-spoke-changes step 5 |
+| AC-2 | Met | Fenced-block tests in `test_artifact_quality.py`; write-test-report's "What the Validator Requires" updated |
+| AC-3 | Met | `NoRuntimePreflightTests` (4 tests); `--report` tests unchanged and passing |
+| AC-4 | Met | AGENTS.md "Small changes" paragraph, deliver-change step 2, write-implementation-plan plan.md |
+| AC-5 | Met | User `GRADLE_OPTS` was empty and is now `-Djdk.net.unixdomain.tmpdir=C:\Temp\jdk-unix-sockets`; `gradlew.bat help` in christopherbell.dev exited 0 with it; verify-local-app "Known Environment Fixes" |
+| AC-6 | Met | `python .agents/run_tests.py`: 13 of 13 test files passed; AGENTS.md names it and `MSYS_NO_PATHCONV=1` |
+| AC-7 | Partly met | `prune-worktrees` and 6 tests in `test_spoke_worktree_prune.py`; dry run on christopherbell.dev: 24 would remove, 127 kept, 0 failed. The real run was refused by the session's permission classifier; the user can run `python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py prune-worktrees --spoke christopherbell-dev` |
+| AC-8 | Met | `run_tests.py` and `check_hub.py refresh` pass; published with publish-builder-changes |
 
 ## Project
 builder

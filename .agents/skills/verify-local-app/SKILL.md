@@ -7,7 +7,7 @@ description: Use when verifying any application change locally before creating a
 
 Run the application on the local machine and exercise the candidate before creating a pull request, including a draft PR. This applies to any change in an application repository, including code, configuration, dependencies, UI and documentation. Use the repository's native tools and executable entrypoint, regardless of language or framework. Passing unit tests, a build, CI, a remote preview or an already-running older revision do not replace local candidate execution.
 
-For standalone documentation, skills or other work with no runnable application, record the concrete reason application execution does not apply and run appropriate native checks before publication. For a library, exercise the change through a runnable local consumer or integration harness.
+For standalone documentation, skills or other work with no runnable application, record the concrete reason application execution does not apply and run appropriate native checks before publication. In a spoke, write the reason in the plan's Test Plan as `**Runtime proof not applicable:** <reason>` and pass that plan to the PR preflight with `--no-runtime-plan`; a change that touches application code, configuration or dependencies never qualifies. For a library, exercise the change through a runnable local consumer or integration harness.
 
 Choose verification-only or verification-plus-deployment from existing task authority. Local testing does not authorize production deployment; do not ask again when deployment is already authorized. Planning and review-only requests remain within their scope.
 
@@ -49,6 +49,10 @@ Proceed only when deployment is already authorized and candidate verification pa
 3. Let the supported supervisor own process rotation. For a documented unmanaged process, follow its exact stop/start/rollback procedure; port ownership alone is insufficient authority.
 4. Verify service/process state, expected listener when applicable, meaningful readiness, deployed identity and changed production behavior through authorized non-destructive checks. Do not write test fixtures into production.
 5. On failure, follow the established rollback and verify restoration. Stop repeated restart attempts; report the failed checks and actual recovery state. Request only genuinely missing authority or access.
+
+## Known Environment Fixes
+
+- **Gradle on Java 25 fails before any task runs** in an agent shell, with a daemon connection or Unix domain socket bind error under `%TEMP%`: the JDK cannot create its socket in the sandboxed temp folder. Create `C:\Temp\jdk-unix-sockets` and add `-Djdk.net.unixdomain.tmpdir=C:\Temp\jdk-unix-sockets` to `GRADLE_OPTS`, persistently with `[Environment]::SetEnvironmentVariable('GRADLE_OPTS', <existing value plus the flag>, 'User')`. A shorter `TEMP` does not help.
 
 ## Completion Evidence
 

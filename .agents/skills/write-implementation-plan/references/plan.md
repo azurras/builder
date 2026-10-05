@@ -10,7 +10,7 @@ New plans use `## Plan Format` with value `task-contract-v2`; the save helper re
 
 ## Sections
 
-Start with a `# Title` that names the outcome, then write the sections in this order. Keep each short; a small change gets a small plan. When a section genuinely does not apply, say so and why rather than leaving it empty. The Layout column is how a human reader sees it; [Presentation](#presentation) explains the conventions.
+Start with a `# Title` that names the outcome, then write the sections in this order. Keep each short; a small change gets a small plan, and a change AGENTS.md defines as small needs none: log it in the plan whose goals it serves, or in dated session memory. When a section genuinely does not apply, say so and why rather than leaving it empty. The Layout column is how a human reader sees it; [Presentation](#presentation) explains the conventions.
 
 | Section | What good content looks like | Layout |
 |---|---|---|
