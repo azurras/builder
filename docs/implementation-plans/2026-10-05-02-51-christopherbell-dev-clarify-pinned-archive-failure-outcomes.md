@@ -1,7 +1,7 @@
 # Clarify Pinned Archive Failure Outcomes
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -98,10 +98,31 @@ Revert only the `website/build.gradle.kts` correction if any existing cache or c
 | Runtime remains blocked before readiness | High | Record exact startup blocker and do not open a PR without required runtime proof. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Begin pinned archive failure correction
+
+- **Change:** Implementation begins from committed base `695a3ed8`; baseline `:website:verifySensorArchiveResolution` passed before edits.
+- **Reason:** Existing checks cover network I/O and checksums but not unchecked defects from the injected downloader; the new regression will establish that failure category first.
+- **Impact:** AC-1/AC-2 implementation is starting; add the defect characterization before changing the resolver.
+
+### 2026-10-05 - Record archive correction runtime blocker
+
+- **Change:** The committed candidate `a880cfd1` passed focused archive verification and the full serialized checks/package, but packaged startup exited before readiness at migration 015; its report records the failure.
+- **Reason:** Isolated database `test` contains an incomplete durable migration record, and direct repair or guard bypass is prohibited.
+- **Impact:** AC-1 and AC-2 pass; AC-3 is blocked by runtime acceptance. No PR was created; supported test fixture provisioning or recovery is required.
 
 ## Outcome
-Pending.
+
+> [!WARNING]
+> Archive mode and failure classification are clarified and the native gates pass; application delivery remains runtime-blocked at migration 015 in isolated database `test`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | All nine resolver invocations use named `offline` arguments. |
+| AC-2 | ✅ Met | Focused task proves I/O translation remains, programming `IllegalStateException` passes through by identity, and partial files are removed. |
+| AC-3 | ⚠️ Partly met | Full native checks and packaging pass; [candidate report](../test-reports/2026-10-05-02-59-christopherbell-dev-clarify-pinned-archive-failure-outcomes.md) records packaged startup blocked before readiness. |
+
+The build-script change is committed on its isolated spoke branch. No PR was opened. Resume runtime verification after supported isolated test fixture provisioning or recovery is available; do not modify migration records or bypass the guard.
 
 ## Project
 christopherbell-dev

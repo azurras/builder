@@ -246,3 +246,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Continued the Chris Street Style audit with separately planned bounded process cleanup for the shared-folder media worker, committed as `e840c6dd`; the focused failure regression and full native gate pass, while packaged startup remains blocked at migration 015.
 - **Reason:** Process-tree termination failure previously led into unbounded process/readers waits that could mask cancellation or timeout. The fix reports primary and cleanup failures with any surviving PID.
 - **Impact:** The ninth independently planned correction has its own blocked runtime report. No PR was opened; continue the audit while runtime-gated delivery awaits supported isolated database recovery/provisioning. Draft PR #1477 remains excluded.
+
+### 2026-10-05 - Clarify pinned archive failure outcomes
+
+- **Change:** Added a separate archive-resolution correction on committed candidate `a880cfd1`: all online/offline calls name their mode, I/O remains translated, and an injected programming defect now propagates unchanged after partial cleanup. Focused and full checks passed; startup remains blocked at migration 015.
+- **Reason:** Positional booleans hid cache/download behavior, while catching every exception mislabeled programming errors as upstream availability failures.
+- **Impact:** The tenth independently planned correction has its own blocked candidate report. No PR was created; continue the whole-codebase review while runtime-gated delivery awaits supported database recovery/provisioning. Draft PR #1477 remains excluded.
