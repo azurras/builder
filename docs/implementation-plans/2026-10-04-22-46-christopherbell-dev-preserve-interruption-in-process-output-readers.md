@@ -1,7 +1,7 @@
 # Preserve Interruption in Process Output Readers
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -119,18 +119,24 @@ Before merge, revert this focused change if tests or candidate verification fail
 
 - **Change:** Added deterministic direct-boundary tests and package-private `awaitOutput` helpers; interruption is rethrown after reader cancellation, while `ExecutionException`, `TimeoutException`, and `CancellationException` keep the empty/truncated fallback. The focused regressions failed on clean baseline and passed on candidate `d1d8b79c`.
 - **Reason:** The original broad catches swallowed `InterruptedException`; deterministic `FutureTask` tests exposed the defect without OS-specific process timing and verified the existing ordinary-failure contract.
-- **Impact:** Task 1 implementation and Test Plan now describe the package-private test boundary; AC-1 and AC-2 are locally verified in [the candidate test report](../test-reports/2026-10-04-23-15-christopherbell-dev-preserve-interruption-in-process-output-readers.md). PR, merge and deployment acceptance remain pending.
+- **Impact:** Task 1 implementation and Test Plan now describe the package-private test boundary; AC-1 and AC-2 are locally verified in [the candidate test report](../test-reports/2026-10-04-23-15-christopherbell-dev-preserve-interruption-in-process-output-readers.md). Delivery evidence is recorded below.
+
+### 2026-10-04 - Merge and verify the deployed candidate
+
+- **Change:** PR [#1478](https://github.com/azurras/christopherbell.dev/pull/1478) merged at `695a3ed8617f9b4ab07abb7413baf369c58acf6`; every reported CI check passed; supported production status now reports `SUCCEEDED`, `HEALTHY`, and that same SHA active.
+- **Reason:** Complete the already-authorized spoke delivery and verify activation through the automatic deployment path.
+- **Impact:** AC-3 is met; the candidate report remains the local runtime evidence and the PR, CI, merge, and production readback complete delivery.
 
 ## Outcome
 
-> [!WARNING]
-> Pending implementation and delivery.
+> [!TIP]
+> Shipped as planned. The change preserves interruption propagation and ordinary bounded-output fallback behavior without changing public APIs.
 
 | AC | Result | Evidence |
 |---|---|---|
-| AC-1 | Pending | Pending |
-| AC-2 | Pending | Pending |
-| AC-3 | Pending | Pending |
+| AC-1 | ✅ Met | Candidate regressions failed on clean baseline and passed on `d1d8b79c`; [test report](../test-reports/2026-10-04-23-15-christopherbell-dev-preserve-interruption-in-process-output-readers.md). |
+| AC-2 | ✅ Met | Focused tests and full native checks passed on `d1d8b79c`; see [test report](../test-reports/2026-10-04-23-15-christopherbell-dev-preserve-interruption-in-process-output-readers.md). |
+| AC-3 | ✅ Met | [PR #1478](https://github.com/azurras/christopherbell.dev/pull/1478) merged as `695a3ed8617f9b4ab07abb7413baf369c58acf6`; all CI checks passed; automatic production status at `2026-10-05T04:36:31Z` reports that SHA `SUCCEEDED` and `HEALTHY`. |
 
 ## Project
 christopherbell-dev

@@ -123,7 +123,7 @@ SHA-256: 1B903B323E177E2074E856C33B16AA4F373CF5DF9C96433AC73BD810A862B508
 - Candidate artifact hash recorded above; worktree was clean at `d1d8b79c` during runtime proof.
 
 ## Bugs / Follow-ups
-None for this correction. Pull request, required CI, merge, and supported deployment readback remain pending in the delivery plan.
+No correction-specific follow-up remains. PR [#1478](https://github.com/azurras/christopherbell.dev/pull/1478) passed all checks and merged as `695a3ed8617f9b4ab07abb7413baf369c58acf6`; automatic production status reports that SHA `SUCCEEDED` and `HEALTHY`.
 
 ## Document Status
 complete

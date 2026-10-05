@@ -162,3 +162,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Corrected the first-party code-bearing inventory from 1,418 to 1,421 tracked files after adding two `.properties` files and one `.toml` file to the extension count.
 - **Reason:** The initial recount omitted code-bearing configuration extensions, so its total understated the audit scope.
 - **Impact:** Inputs and whole-code coverage criteria use 1,421 files; no code scope or acceptance criterion changed.
+
+### 2026-10-04 - Deliver interruption correction and continue the audit
+
+- **Change:** Completed the first independent correction: bounded process-output readers now propagate interruption; PR #1478 merged as `695a3ed8617f9b4ab07abb7413baf369c58acf6`, all CI passed, and automatic production status confirmed that SHA active and healthy. Its plan and candidate report are separate records. Published the next focused provider-failure plan before editing.
+- **Reason:** Continue the audit from the fresh main-based branch while preserving the requested per-correction plan and report evidence; PR #1477 remains excluded.
+- **Impact:** The interruption correction is closed; the whole-codebase audit remains in progress, with Java provider future handling as the next reviewed task.
