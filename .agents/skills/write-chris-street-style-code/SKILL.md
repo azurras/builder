@@ -7,6 +7,8 @@ description: Use when creating, changing, refactoring, or reviewing code, tests,
 
 Apply this house adaptation of Jane Street engineering and review principles to **every language**. Use each repository's syntax, formatter, frameworks, and supported toolchain. The same contracts apply to production code, tests, reusable scripts, migrations, and executable examples. This skill supplements task-specific implementation and security guidance. [Sources and adaptation](references/sources-and-adaptation.md) explain the origin of the rules.
 
+**The style in brief.** Write for the next reader, not the author. Make illegal states unrepresentable, and handle every case by name. Make failure visible in names and return types, and keep its cause. Keep interfaces small, uniform, and honest about effects. Prefer direct, boring code to clever code. Calls read like sentences, and data gets a new name when its meaning changes. Prove behavior with tests that show input and output. [What Jane Street style means](references/jane-street-principles.md) explains each principle with its reasons, smells, and examples.
+
 ## Required Reference Selection
 
 Read the applicable references before editing or reviewing the affected code. An unlisted language is covered by the shared rules and adaptation procedure.
@@ -14,14 +16,21 @@ Read the applicable references before editing or reviewing the affected code. An
 | Work | Read |
 |---|---|
 | Any implementation or code review | [Naming and readability](references/naming-and-readability.md), [good and bad examples](references/good-and-bad-examples.md), [testing and review](references/testing-and-review.md) |
+| Learning or explaining the style, or judging a case the rules do not settle | [What Jane Street style means](references/jane-street-principles.md) |
 | State, validation, API, errors, effects, concurrency, compatibility, or performance | [Design and API](references/design-and-api.md) |
 | Every language; especially one without a dedicated guide | [Language adaptation](references/language-adaptation.md) |
 | Java | [Java](references/java.md) |
 | JavaScript or TypeScript | [JavaScript/TypeScript](references/javascript.md) |
 | Python | [Python](references/python.md) |
-| Shell commands, SQL, templates, configuration, migrations, or generated code | [Configuration and templates](references/templates-and-configuration.md) |
+| Go | [Go](references/go.md) |
+| Rust | [Rust](references/rust.md) |
+| C# or .NET | [C#](references/csharp.md) |
+| OCaml | [OCaml](references/ocaml.md) |
+| SQL queries, schema, migrations, or document stores such as MongoDB | [SQL and data stores](references/sql.md) |
+| Bash, POSIX shell, or PowerShell scripts | [Shell and PowerShell](references/shell.md) |
+| Templates, configuration, deployment, or generated code | [Configuration and templates](references/templates-and-configuration.md) |
 
-Load only the dedicated language guides for the files in scope. Read the sections of the examples reference that address the affected contract.
+Load only the dedicated language guides for the files in scope. Use the catalogue at the top of the examples reference to read the pairs that address the affected contract. Each language guide has an idiom table, a list of smells reviewers flag, and native good and bad pairs.
 
 ## Mandatory Coding Rules
 

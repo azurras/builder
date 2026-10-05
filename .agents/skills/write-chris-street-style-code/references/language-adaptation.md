@@ -1,6 +1,6 @@
 # Applying the Standard in Any Language
 
-The standard applies to every language. A dedicated language guide adds native detail; its absence never removes the shared obligations. Syntax and mechanisms vary, but behavior, naming, valid states, ownership, failure classification, and evidence remain the contract.
+The standard applies to every language. A dedicated language guide adds native detail; its absence never removes the shared obligations. Dedicated guides exist for [Java](java.md), [JavaScript and TypeScript](javascript.md), [Python](python.md), [Go](go.md), [Rust](rust.md), [C#](csharp.md), [OCaml](ocaml.md), [SQL and data stores](sql.md), and [Shell and PowerShell](shell.md). The [principles reference](jane-street-principles.md) explains what each obligation protects. Syntax and mechanisms vary, but behavior, naming, valid states, ownership, failure classification, and evidence remain the contract.
 
 ## Required Adaptation Procedure
 
@@ -29,6 +29,8 @@ These are candidates, not requirements to introduce machinery into every functio
 | SQL | Constraints, keys, transactions, explicit result sets; distinguish no rows from query failure | State migration/read/write roles, parameterize values, inspect plans and actual database behavior for affected contracts |
 | Shell, PowerShell | Validated arguments and deliberate exit/error handling | Quote literal paths, check statuses, bound external work, own processes/resources and use actual dry-run/parser evidence |
 | Templates and configuration | Schema and boundary validation; required values and explicit precedence | Check rendered/effective output and every meaningful branch; apply the configuration guide |
+
+Kotlin follows the Java guide plus sealed classes, `when` expressions, and named arguments; Swift, C/C++, Ruby, and PHP rely on this map until a dedicated guide is added.
 
 For any language not listed, follow the procedure above and record the chosen native equivalents in the current task brief. Preserve established library and framework contracts unless the task explicitly changes them.
 

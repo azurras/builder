@@ -4,7 +4,7 @@
 task-contract-v1
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 Make write-chris-street-style-code explain what Jane Street-inspired style means in depth, give many more paired good and bad examples, and give each supported language its own deep guide of idioms, smells, and good/bad pairs, while the shared rules stay language-neutral.
@@ -114,7 +114,11 @@ Reuse SkillDiscoveryTests; native example runs exercise valid and rejected input
 Runtime verification does not apply: Builder has no runnable application and this change is instructions plus isolated examples. Examples run in the scratchpad with native toolchains.
 
 ## Validation
-Pending implementation.
+Implemented: new jane-street-principles.md (14 principles, each with meaning, why, application in any language, smells, and a pair); the example catalogue grew from 8 to 25 pairs with an index; Java, JavaScript/TypeScript, and Python guides were rewritten with idiom tables, smell lists, and native pairs (including Spring, TypeScript, and async); new Go, Rust, C#, OCaml, SQL and data stores, and Shell/PowerShell guides; SKILL.md gained a style summary and routing rows; sources cite Effective ML Revisited and the expect-test post.
+
+Evidence: 40 complete examples were extracted from the references and exercised. Python (CPython 3.12.6): every complete example plus valid, invalid, cause, immutability, and mutation checks passed. JavaScript and TypeScript (Node 24.18, types stripped, not type-checked): all checks passed, including stale-response ordering; the harness caught one wrong expectation of its own, and the bad-sort explanation now states the concrete wrong output. Java (javac 25): six complete examples compile and pass behavior checks; deleting a switch case and swapping identity types both fail compilation as the text claims. Bash: syntax, paths with spaces and leading hyphens, empty directories, and trap cleanup on success and failure. PowerShell 7.6: -WhatIf deletes nothing, a real run removes only old .log files in a bracketed path, and invalid parameters are rejected. SQLite 3.45: NOT IN versus NOT EXISTS with NULL, all four constraint rejections, and keyset paging over duplicate timestamps. Go, Rust, C#, and OCaml examples were reviewed but not compiled; each guide says so.
+
+Checks: 99 local links and anchors resolve and every reference is routed from SKILL.md; frontmatter unchanged; git diff --check passes. SkillDiscoveryTests: 2 of 3 pass; the failure is the pre-existing set of seven untracked cache-only skill folders recorded in the 19:49 memory entry, unrelated to this change. Runtime verification does not apply: Builder has no runnable application.
 
 ## Rollback or Recovery
 Revert the publication commit through a reviewed follow-up commit; retain a local commit if push fails and retry with push-only.

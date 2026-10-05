@@ -16,6 +16,8 @@
 5. Validate rendered/effective output, not only the source template. Cover empty, malformed, optional, and required branches relevant to the change.
 6. For deployment/migration effects, establish ownership, exact targets, compatibility, bounded success criteria, and recovery through the repository's supported procedure.
 
+Dedicated guides go deeper: [Shell and PowerShell](shell.md) for scripts and [SQL and data stores](sql.md) for queries, schema, and migrations.
+
 ## Good and Bad Path Arguments
 
 Bad shell fragment:
