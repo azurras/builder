@@ -118,7 +118,8 @@ class SkillDiscoveryTests(unittest.TestCase):
             folder = SKILLS / name
             for path in folder.rglob("*.md"):
                 content = path.read_text(encoding="utf-8")
-                for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", content):
+                prose_outside_code_fences = re.sub(r"^```.*?^```", "", content, flags=re.MULTILINE | re.DOTALL)
+                for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", prose_outside_code_fences):
                     if "://" not in target and not target.startswith("#"):
                         self.assertTrue((path.parent / target.split("#", 1)[0]).exists(), f"{path}: {target}")
                 for command in re.findall(r"\.agents/skills/[a-z0-9-]+/scripts/[a-z0-9_]+\.py", content):
