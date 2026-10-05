@@ -1,7 +1,7 @@
 # Narrow Command Center Release Metadata Failures
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -97,10 +97,22 @@ Revert the narrow catch change if malformed metadata stops following the establi
 | Candidate runtime remains blocked | High | Record actual startup attempt; no PR before supported fixture/provisioning or recovery and readiness. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Record runtime block
+
+- **Change:** Narrowed `readReleaseCommit(Path)` from `catch (Exception)` to `catch (IOException | JacksonException)` and added malformed-JSON/non-regular-path characterization; both cases remain empty. Focused provider/collector tests, full module checks and packaging passed. Candidate startup against isolated `test` failed before readiness at migration 015; see the [blocked test report](../test-reports/2026-10-05-01-47-christopherbell-dev-narrow-command-center-release-metadata-failures.md).
+- **Reason:** The reader has two expected failure families: file I/O and Jackson 3 parse failures. Catching every exception would hide unrelated runtime defects; catching only IOException would break malformed JSON fallback because JacksonException is a RuntimeException.
+- **Impact:** AC-1 and AC-2 are met; AC-3 is partly met and runtime-blocked. No PR was opened. A supported fixture/provisioning or recovery procedure is needed.
 
 ## Outcome
-Pending.
+> [!WARNING]
+> Metadata fallback behavior and all source-level checks are verified. Required packaged runtime proof is blocked before readiness by migration 015, so no PR was opened.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Malformed JSON and non-regular metadata tests passed; existing malformed SHA behavior remains covered. [Test report](../test-reports/2026-10-05-01-47-christopherbell-dev-narrow-command-center-release-metadata-failures.md). |
+| AC-2 | ✅ Met | Catch names only `IOException | JacksonException`; resolved Jackson 3 hierarchy and compilation confirm parse failures stay included. [Test report](../test-reports/2026-10-05-01-47-christopherbell-dev-narrow-command-center-release-metadata-failures.md). |
+| AC-3 | ⏸️ Blocked | Focused/full checks and package passed; runtime exited at migration 015 before readiness. No PR opened. [Test report](../test-reports/2026-10-05-01-47-christopherbell-dev-narrow-command-center-release-metadata-failures.md). |
 
 ## Project
 christopherbell-dev

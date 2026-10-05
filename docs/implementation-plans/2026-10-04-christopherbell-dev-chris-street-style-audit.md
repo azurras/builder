@@ -216,3 +216,9 @@ None. Resolve ordinary naming, cohesion, and test-boundary decisions from the ex
 - **Change:** Continued the audit with a separate host-metrics failure-boundary correction on `5a2bece4`. The baseline regression failed as expected; 17 focused metrics tests, full native module checks and packaged build passed. Runtime again stopped before readiness at migration 015.
 - **Reason:** The host provider's catch hid runtime defects even though its collector owns failure isolation and diagnostic alerts. Project policy also requires successful local readiness before PR creation.
 - **Impact:** The dedicated plan and blocked report capture the change and evidence. No PR was opened. Continue remaining code groups; runtime-gated delivery still awaits supported test fixture/provisioning or recovery.
+
+### 2026-10-05 - Narrow release metadata failures
+
+- **Change:** Continued command-center review with a distinct release-metadata failure-boundary correction on `ae96a270`. Exact Jackson exception inheritance was verified; the new malformed JSON/non-regular path characterization passed before and after narrowing. Focused tests, full native checks and packaged build passed.
+- **Reason:** The broad catch treated all exceptions as absent release metadata; a narrower pair preserves both expected I/O and JSON parse fallback while allowing unrelated runtime defects to surface.
+- **Impact:** The candidate's own plan and blocked runtime report are published separately. Packaged startup failed at migration 015 before readiness; no PR was opened. Continue audit groups while the supported database prerequisite is unresolved.
