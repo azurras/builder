@@ -40,7 +40,7 @@ Name the title for the outcome, such as "Clarified deliver-change", not the acti
 
 ## Helper
 
-Pass the entry body on stdin:
+Write the entry body to a scratch file and pass `--body-file <file>`, which avoids shell quoting of backticks, quotes and dollar signs; or pass it on stdin:
 
 ```powershell
 @'
@@ -48,6 +48,7 @@ Pass the entry body on stdin:
 '@ | python .agents/skills/save-session-memory/scripts/save_session_memory.py --root . --project builder --title 'Clarified deliver-change'
 ```
 
+- `--body-file`: read the body from this UTF-8 file instead of stdin. The same option exists on save_implementation_plan.py, log_plan_change.py and save_test_report.py.
 - `--project` (required): the project the entry is tagged with, not part of the filename. `builder` for hub work; the spoke's `slug` from spokes.json for spoke work; for work with no repository, an active entry under `projects` in spokes.json (add one there first when the work is new). The helper refuses unknown and retired slugs.
 - `--title` (required): the entry title; the file is named for the date alone.
 - `--date`: `YYYY-MM-DD`, defaulting to today's local date. Pass it only for retrospective entries.

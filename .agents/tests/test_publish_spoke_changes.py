@@ -132,6 +132,40 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("[pass] report project: report Project is site-dev", result.stdout)
 
+    def test_fetch_refreshes_origin_refs_before_checking(self):
+        self.publish_report()
+        spoke_origin = self.spoke.parent / "site-origin.git"
+        builder_origin = self.spoke.parent / "builder-origin.git"
+        registry = {"spokes": [{"slug": "site-dev", "name": "site.dev", "repository": spoke_origin.as_uri(),
+                                "defaultBranch": "main", "description": "Sample spoke"}]}
+        commit_file(self.builder, "spokes.json", json.dumps(registry), "Register local origin")
+        for bare, repo in ((spoke_origin, self.spoke), (builder_origin, self.builder)):
+            git(repo.parent, "init", "--bare", "-b", "main", str(bare))
+            git(repo, "push", "--quiet", str(bare), "main:main")
+            git(repo, "remote", "set-url", "origin", bare.as_uri())
+        # Stale view: origin/main locally claims the candidate is already published.
+        git(self.spoke, "update-ref", "refs/remotes/origin/main", self.candidate)
+
+        stale = self.preflight()
+        fetched = self.preflight("--fetch")
+
+        self.assertIn("[FAIL] commits ahead", stale.stdout)
+        self.assertEqual(fetched.returncode, 0, fetched.stdout + fetched.stderr)
+
+    def test_fetch_failure_stops_before_checks(self):
+        self.publish_report()
+        missing_origin = (self.spoke.parent / "missing-origin.git").as_uri()
+        registry = {"spokes": [{"slug": "site-dev", "name": "site.dev", "repository": missing_origin,
+                                "defaultBranch": "main", "description": "Sample spoke"}]}
+        commit_file(self.builder, "spokes.json", json.dumps(registry), "Register missing origin")
+        git(self.spoke, "remote", "set-url", "origin", missing_origin)
+
+        result = self.preflight("--fetch")
+
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("git fetch origin failed", result.stderr)
+        self.assertNotIn("[pass]", result.stdout)
+
     def test_report_path_outside_test_reports_is_rejected(self):
         result = self.preflight(report="docs/session-memory/2026-10-04-builder.md")
         self.assertEqual(result.returncode, 2)

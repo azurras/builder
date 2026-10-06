@@ -9,7 +9,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / ".agents/lib"))
-from spoke_worktrees import remove_worktree, stale_worktree_decisions  # noqa: E402
+from spoke_worktrees import (LinkedWorktree, PullRequestHead, github_repository_of, merged_heads_of,  # noqa: E402
+                             pull_request_summary, remove_worktree, stale_worktree_decisions)
 
 SCRIPT = ROOT / ".agents/skills/deliver-change/scripts/manage_spoke_repositories.py"
 REPOSITORY = "https://github.com/example/site.dev.git"
@@ -114,6 +115,42 @@ class WorktreePruneTests(unittest.TestCase):
         self.assertFalse(stale.exists())
         self.assertEqual(git(self.checkout, "branch", "--list", "work/stale"), "")
         self.assertNotIn("stale", git(self.checkout, "worktree", "list"))
+
+    def test_merged_pull_request_head_counts_as_merged_even_when_main_moved_on(self):
+        rewritten = self.add_worktree("rewritten", branch="work/rewritten")
+        commit_file(rewritten, "README.md", "site from the branch\n", "Branch edit")
+        commit_file(self.checkout, "README.md", "site rewritten on main\n", "Conflicting main edit")
+        self.publish_main()
+        branch_head = git(rewritten, "rev-parse", "HEAD")
+
+        without_pull_requests = self.decisions_by_name()["rewritten"]
+        with_pull_requests = {decision.worktree.path.name: decision for decision in stale_worktree_decisions(
+            self.checkout, "main", 7, TEN_DAYS_LATER, merged_pull_request_heads=frozenset({branch_head}))}
+
+        self.assertFalse(without_pull_requests.is_stale)
+        self.assertTrue(with_pull_requests["rewritten"].is_stale)
+        self.assertIn("by a merged pull request", with_pull_requests["rewritten"].reason)
+
+    def test_pull_request_summary_tells_a_person_what_github_knows(self):
+        worktree = LinkedWorktree(self.worktrees / "w", "b" * 40, "work/w", False)
+        cases = {
+            "no pull request: never published": {},
+            "PR #7 closed without merging": {"work/w": [PullRequestHead(7, "CLOSED", "b" * 40, "u")]},
+            "PR #8 merged, but the worktree has commits after it":
+                {"work/w": [PullRequestHead(8, "MERGED", "a" * 40, "u")]},
+            "PR #9 open": {"work/w": [PullRequestHead(9, "OPEN", "b" * 40, "u")]},
+        }
+        for expected, pull_requests in cases.items():
+            with self.subTest(expected=expected):
+                self.assertEqual(pull_request_summary(worktree, pull_requests), expected)
+        self.assertEqual(merged_heads_of({"x": [PullRequestHead(1, "MERGED", "c" * 40, "u"),
+                                                 PullRequestHead(2, "CLOSED", "d" * 40, "u")]}), frozenset({"c" * 40}))
+
+    def test_only_github_repositories_have_pull_requests(self):
+        self.assertEqual(github_repository_of("https://github.com/Azurras/christopherbell.dev.git"),
+                         "azurras/christopherbell.dev")
+        with self.assertRaises(ValueError):
+            github_repository_of("https://gitlab.com/example/site.git")
 
     def test_command_dry_run_reports_without_removing(self):
         stale = self.add_worktree("stale", branch="work/stale")

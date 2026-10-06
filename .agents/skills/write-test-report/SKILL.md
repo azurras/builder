@@ -33,9 +33,27 @@ Rerun verification after any edit that affects runtime, as verify-local-app requ
 - **Same date:** read the existing report and replace it with `--overwrite`, naming the new candidate. List the superseded candidate SHAs and why they were rerun in Bugs / Follow-ups. The earlier text stays in Git history.
 - **Later date:** save a new dated report for the new candidate. Set the old report's status to `superseded` with a link to the new one, and publish both.
 
+## Record While You Run
+
+Capture evidence as you exercise the candidate instead of transcribing it afterwards. Each call runs one case and appends it to a JSON-lines evidence file in your scratch folder, masking secret headers and common token shapes:
+
+```powershell
+python .agents/skills/write-test-report/scripts/record_run.py http --evidence $evidence --case 'Health is UP' --checkout <candidate checkout> --url http://127.0.0.1:<port>/actuator/health --expect-text '"UP"'
+python .agents/skills/write-test-report/scripts/record_run.py run --evidence $evidence --case 'CLI prints version' --cwd <candidate checkout> -- <command> <arguments>
+python .agents/skills/write-test-report/scripts/record_run.py render --evidence $evidence --title '<Change>' --story '<issue or request>' --branch <branch> --project <slug> --env 'Database=test' > $reportDraftPath
+```
+
+`http` passes on a status below 400 unless `--expect-status` is given, plus `--expect-text` when set; `run` passes on exit code 0 unless `--expect-exit` is given. Each prints `[pass]` or `[FAIL]` and exits 0 or 1. `render` writes every report section with fenced Data Sent and Response Received blocks, sets `complete` only when every case passed (otherwise `draft`, listing the failures), and names the candidate commit of the checkout. Review and add judgement (test case descriptions, cleanup, follow-ups) before saving.
+
 ## Save
 
-Save complete Markdown on stdin:
+Save complete Markdown with `--body-file` (no shell quoting) or on stdin:
+
+```powershell
+python .agents/skills/write-test-report/scripts/save_test_report.py --root . --title 'Require explicit JWT secret' --body-file $reportDraftPath
+```
+
+Or on stdin:
 
 ```powershell
 Get-Content -Raw -LiteralPath $reportDraftPath | python .agents/skills/write-test-report/scripts/save_test_report.py --root . --title 'Require explicit JWT secret'

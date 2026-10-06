@@ -1,7 +1,7 @@
 # Close the Remaining Agent Friction in the Builder Loop
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -162,7 +162,15 @@ Required skill: write-chris-street-style-code
 - **Impact:** The full suite now reports 153 tests across 14 files, all passing, including the memory tests the old runner skipped.
 
 ## Outcome
-Pending.
+Delivered to Builder `main`.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| AC-1 | Met | `.claude/settings.json` allows only the prune command for Bash and PowerShell; the real `prune-worktrees` run completed under it (the 24 ancestry-merged worktrees had already been removed by the user) |
+| AC-2 | Met | `record_run.py` with 4 tests in `test_record_run.py`; it recorded and rendered the [christopherbell-dev diagnostics report](../test-reports/2026-10-05-19-34-christopherbell-dev-keep-recent-production-problems-visible-in-diagnostics.md), which the validator and the spoke preflight accepted |
+| AC-3 | Met | `--pull-requests` plus 3 new tests; on christopherbell.dev it removed 67 worktrees whose HEAD was a merged PR head (152 to 61 this session) and annotated the rest: 29 never published, 1 closed PR, 2 with commits after a merged PR, the remainder recent, modified or locked |
+| AC-4 | Met | `--body-file` on four helpers (this plan, its log entries and the spoke report were saved with it); `preflight_spoke_pr.py --fetch` (2 tests, and used for PR #1487); memory appends locked (concurrent-writer and stale-lock tests) |
+| AC-5 | Met | `run_tests.py`: 14 of 14 files, 155 tests; `check_hub.py` passes; published with publish-builder-changes |
 
 ## Project
 builder

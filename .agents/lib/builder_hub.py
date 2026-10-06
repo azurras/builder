@@ -54,6 +54,19 @@ def read_stdin_text() -> str:
     return sys.stdin.buffer.read().decode("utf-8-sig")
 
 
+def read_body_text(body_file: str | None) -> str:
+    """The --body-file contents when given, otherwise standard input; UTF-8 either way, without a byte-order mark.
+
+    A file avoids shell quoting entirely, which matters for Markdown with backticks, quotes and dollar signs.
+    """
+    if body_file is None:
+        return read_stdin_text()
+    return Path(body_file).read_bytes().decode("utf-8-sig")
+
+
+BODY_FILE_HELP = "Read the body from this UTF-8 file instead of standard input."
+
+
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 

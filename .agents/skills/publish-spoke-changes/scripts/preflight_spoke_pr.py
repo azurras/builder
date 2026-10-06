@@ -2,11 +2,12 @@
 """Check that a spoke branch is ready to become a pull request backed by published runtime evidence,
 or by a published plan that records why runtime proof does not apply.
 
-Read-only: it never fetches, writes, pushes or calls GitHub. Fetch the spoke and Builder first so the
-origin/<branch> refs it reads are current.
+It never writes, pushes or calls GitHub. Pass --fetch to fetch origin in the spoke and Builder first, so
+the origin/<branch> refs it reads are current; without it, the checks read the refs as they are.
 """
 import argparse
 from dataclasses import dataclass
+import os
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
@@ -24,6 +25,7 @@ BUILDER_PUBLISHED_REF = "origin/main"
 SHORT_SHA_LENGTH = 7
 COMMIT_ID_RE = re.compile(rf"\b[0-9a-f]{{{SHORT_SHA_LENGTH},40}}\b")
 GIT_FAILURES = (ValueError, OSError, subprocess.TimeoutExpired)
+FETCH_TIMEOUT_SECONDS = 300
 
 
 @dataclass(frozen=True)
@@ -161,6 +163,15 @@ def check_no_runtime_plan(builder_root: Path, spoke: Spoke, plan_path: PurePosix
     return checks
 
 
+def fetch_origin(repository: Path) -> None:
+    """Updates origin/* refs; the only network step, and only when --fetch asks for it."""
+    completed = subprocess.run(["git", "fetch", "--quiet", "origin"], cwd=repository, capture_output=True, text=True,
+                               encoding="utf-8", env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
+                               timeout=FETCH_TIMEOUT_SECONDS, check=False)
+    if completed.returncode:
+        raise ValueError(f"git fetch origin failed in {repository}: {completed.stderr.strip()}")
+
+
 def report_url_of(builder_root: Path, report_path: PurePosixPath) -> str:
     builder_remote = normalize_remote(git(builder_root, "remote", "get-url", "origin"))
     return f"https://{builder_remote}/blob/main/{report_path}"
@@ -190,6 +201,7 @@ def main() -> int:
                           help="Published Builder plan whose '**Runtime proof not applicable:** <reason>' line explains "
                                "why the change has nothing runnable, e.g. a workflow-only or docs-only change")
     parser.add_argument("--root", default=".", help="Builder root containing spokes.json")
+    parser.add_argument("--fetch", action="store_true", help="Fetch origin in the spoke and Builder before checking")
     args = parser.parse_args()
     builder_root = Path(args.root).expanduser().resolve()
     try:
@@ -197,6 +209,9 @@ def main() -> int:
         no_runtime_plan_path = builder_plan_path_of(args.no_runtime_plan) if args.no_runtime_plan else None
         spoke = find_spoke(builder_root, args.spoke)
         checkout = args.path.expanduser().resolve() if args.path else resolve_spoke_location(builder_root, spoke).path
+        if args.fetch:
+            fetch_origin(checkout)
+            fetch_origin(builder_root)
         checks, candidate_commit = preflight(builder_root, spoke, checkout, report_path, no_runtime_plan_path)
     except GIT_FAILURES as error:
         print(str(error), file=sys.stderr)

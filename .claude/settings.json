@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py prune-worktrees *)",
+      "PowerShell(python .agents/skills/deliver-change/scripts/manage_spoke_repositories.py prune-worktrees *)"
+    ]
+  }
+}

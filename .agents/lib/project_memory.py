@@ -1,9 +1,15 @@
 """Dated session records: one append-only file per date, each entry tagged with its project."""
 from __future__ import annotations
 
+from contextlib import contextmanager
 import datetime as dt
+import hashlib
+import os
 from pathlib import Path, PurePosixPath
 import re
+import tempfile
+import time
+from typing import Iterator
 
 from spoke_registry import require_active_project
 
@@ -15,6 +21,42 @@ ENTRY_HEADING_RE = re.compile(r"^## ", re.MULTILINE)
 # A Markdown link target naming a former per-project memory file, before any anchor.
 PROJECT_MEMORY_LINK_RE = re.compile(
     r"\]\((?P<folder>(?:[^()\s#]*/)?)(?P<date>\d{4}-\d{2}-\d{2})-[a-z][a-z0-9-]*\.md(?P<anchor>#[^()\s]*)?\)")
+
+
+LOCK_WAIT_SECONDS = 30.0
+STALE_LOCK_SECONDS = 120.0
+
+
+@contextmanager
+def exclusive_append_lock(target: Path) -> Iterator[None]:
+    """Serializes writers on this machine so two sessions never interleave or both write a day's header.
+
+    The lock lives in the system temp folder, keyed by the target path, so no lock file can reach a commit.
+    A lock older than STALE_LOCK_SECONDS belonged to a writer that died and is taken over.
+    """
+    digest = hashlib.sha256(str(target.resolve()).lower().encode("utf-8")).hexdigest()[:16]
+    lock_path = Path(tempfile.gettempdir()) / f"builder-memory-{digest}.lock"
+    deadline = time.monotonic() + LOCK_WAIT_SECONDS
+    while True:
+        try:
+            lock_descriptor = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            try:
+                if time.time() - lock_path.stat().st_mtime > STALE_LOCK_SECONDS:
+                    lock_path.unlink(missing_ok=True)
+                    continue
+            except FileNotFoundError:
+                continue
+            if time.monotonic() >= deadline:
+                raise ValueError(f"another session is writing {target.name}; lock {lock_path} held too long")
+            time.sleep(0.1)
+    try:
+        os.write(lock_descriptor, str(os.getpid()).encode("ascii"))
+        yield
+    finally:
+        os.close(lock_descriptor)
+        lock_path.unlink(missing_ok=True)
 
 
 def memory_day_path(root: Path, date: str | None = None) -> Path:
@@ -34,17 +76,18 @@ def append_entry(root: Path, project: str, title: str, body: str,
     stamp_date = dt.date.fromisoformat(date) if date else now.date()
     path = memory_day_path(builder_root, stamp_date.isoformat())
     stamp_time = dt.time.fromisoformat(time).strftime("%H:%M") if time else now.strftime("%H:%M %Z")
-    previous = path.read_bytes() if path.exists() else b""
-    if not previous:
-        prefix = (f"# {stamp_date.isoformat()} Session Memory\n\n"
-                  "Work, decisions, events, and evidence for every project on this date.\n\n")
-    else:
-        prefix = "\n" if previous.endswith(b"\n") else "\n\n"
-    entry = (f"{prefix}## {stamp_date.isoformat()} {stamp_time} - {title.strip()}\n\n"
-             f"**Project:** {project}\n\n{body.strip()}\n")
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("ab") as stream:
-        stream.write(entry.encode("utf-8"))
+    with exclusive_append_lock(path):
+        previous = path.read_bytes() if path.exists() else b""
+        if not previous:
+            prefix = (f"# {stamp_date.isoformat()} Session Memory\n\n"
+                      "Work, decisions, events, and evidence for every project on this date.\n\n")
+        else:
+            prefix = "\n" if previous.endswith(b"\n") else "\n\n"
+        entry = (f"{prefix}## {stamp_date.isoformat()} {stamp_time} - {title.strip()}\n\n"
+                 f"**Project:** {project}\n\n{body.strip()}\n")
+        with path.open("ab") as stream:
+            stream.write(entry.encode("utf-8"))
     return path
 
 

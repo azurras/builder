@@ -42,6 +42,59 @@ class ProjectMemoryTests(unittest.TestCase):
             self.assertIn("Next day evidence.", (path.parent / "2099-02-01.md").read_text(encoding="utf-8"))
             self.assertEqual(sorted(p.name for p in path.parent.iterdir()), ["2099-01-01.md", "2099-02-01.md"])
 
+    def test_body_file_carries_markdown_without_shell_quoting(self):
+        with tempfile.TemporaryDirectory() as temp:
+            write_project_registry(Path(temp), active=("sample",))
+            body_file = Path(temp) / "entry.md"
+            body = "- Ran `gh api /repos/x` with \"quotes\", 'apostrophes' and $dollars.\n"
+            body_file.write_bytes(b"\xef\xbb\xbf" + body.encode("utf-8"))
+
+            result = run("--root", temp, "--project", "sample", "--title", "Quoting", "--date", "2099-03-01",
+                         "--time", "09:00", "--body-file", str(body_file), body="ignored stdin")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            text = (Path(temp) / "docs/session-memory/2099-03-01.md").read_text(encoding="utf-8")
+            self.assertIn(body.strip(), text)
+            self.assertNotIn("ignored stdin", text)
+            self.assertNotIn("﻿", text)
+
+    def test_concurrent_writers_each_append_whole_entries_under_one_header(self):
+        with tempfile.TemporaryDirectory() as temp:
+            write_project_registry(Path(temp), active=("sample",))
+            writers = [subprocess.Popen([sys.executable, "-B", str(SCRIPT), "--root", temp, "--project", "sample",
+                                         "--title", f"Writer {number}", "--date", "2099-04-01", "--time", "09:00"],
+                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                       for number in range(8)]
+            for number, writer in enumerate(writers):
+                writer.communicate(f"Evidence from writer {number}.".encode("utf-8"), timeout=60)
+
+            text = (Path(temp) / "docs/session-memory/2099-04-01.md").read_text(encoding="utf-8")
+
+            self.assertEqual([writer.returncode for writer in writers], [0] * 8)
+            self.assertEqual(text.count("# 2099-04-01 Session Memory"), 1)
+            for number in range(8):
+                self.assertEqual(text.count(f"## 2099-04-01 09:00 - Writer {number}\n\n**Project:** sample\n\n"
+                                            f"Evidence from writer {number}.\n"), 1)
+
+    def test_stale_lock_from_a_dead_writer_is_taken_over(self):
+        sys.path.insert(0, str(ROOT / ".agents/lib"))
+        import project_memory
+        with tempfile.TemporaryDirectory() as temp:
+            target = Path(temp) / "2099-05-01.md"
+            original_stale = project_memory.STALE_LOCK_SECONDS
+            project_memory.STALE_LOCK_SECONDS = 0.0
+            try:
+                import hashlib
+                digest = hashlib.sha256(str(target.resolve()).lower().encode("utf-8")).hexdigest()[:16]
+                abandoned = Path(tempfile.gettempdir()) / f"builder-memory-{digest}.lock"
+                abandoned.write_text("99999", encoding="ascii")
+                with project_memory.exclusive_append_lock(target):
+                    taken_over = abandoned.read_text(encoding="ascii") != "99999"
+                self.assertTrue(taken_over)
+                self.assertFalse(abandoned.exists())
+            finally:
+                project_memory.STALE_LOCK_SECONDS = original_stale
+
     def test_project_entries_select_only_the_named_project(self):
         sys.path.insert(0, str(ROOT / ".agents/lib"))
         from project_memory import project_entries

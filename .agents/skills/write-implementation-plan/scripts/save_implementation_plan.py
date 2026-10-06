@@ -13,7 +13,7 @@ sys.path.insert(0, str(LIB))
 from artifact_io import (dated_markdown_file, parse_optional_date, parse_optional_time, project_prefixed_title,
                          save_dated_markdown)
 from artifact_quality import CURRENT_PLAN_FORMAT, plan_format_of, project_of, validate_implementation_plan_text
-from builder_hub import read_stdin_text
+from builder_hub import BODY_FILE_HELP, read_body_text
 from spoke_registry import require_active_project
 
 
@@ -53,6 +53,7 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Replace an existing plan with the same date and title, whatever its time.",
     )
+    parser.add_argument("--body-file", help=BODY_FILE_HELP)
     return parser.parse_args()
 
 
@@ -75,9 +76,9 @@ def main() -> int:
         print("--title must not be blank", file=sys.stderr)
         return 2
 
-    body = read_stdin_text().strip()
+    body = read_body_text(args.body_file).strip()
     if not body:
-        print("Plan body is required on stdin", file=sys.stderr)
+        print("Plan body is required on stdin or in --body-file", file=sys.stderr)
         return 2
 
     errors = validate_implementation_plan_text(body)

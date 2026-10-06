@@ -13,7 +13,8 @@ from project_memory import append_entry, memory_day_path, project_entries
 from spoke_registry import (Spoke, find_spoke, load_spokes, register_spoke, require_active_project,
                             resolve_spoke_location)
 from spoke_state import inspect_repository, origin_mismatch
-from spoke_worktrees import remove_worktree, stale_worktree_decisions
+from spoke_worktrees import (github_repository_of, merged_heads_of, pull_request_summary, pull_requests_by_branch,
+                             remove_worktree, stale_worktree_decisions)
 
 
 def list_spokes(builder_root: Path) -> int:
@@ -59,17 +60,22 @@ def register_new_spoke(builder_root: Path, arguments: argparse.Namespace) -> int
     return 0
 
 
-def prune_spoke_worktrees(builder_root: Path, spoke: Spoke, *, minimum_age_days: float, dry_run: bool) -> int:
+def prune_spoke_worktrees(builder_root: Path, spoke: Spoke, *, minimum_age_days: float, dry_run: bool,
+                          use_pull_requests: bool) -> int:
     checkout = resolve_spoke_location(builder_root, spoke).path
     mismatch = origin_mismatch(spoke, checkout)
     if mismatch:
         print(mismatch, file=sys.stderr)
         return 1
-    decisions = stale_worktree_decisions(checkout, spoke.default_branch, minimum_age_days)
+    pull_requests = pull_requests_by_branch(github_repository_of(spoke.repository)) if use_pull_requests else {}
+    decisions = stale_worktree_decisions(checkout, spoke.default_branch, minimum_age_days,
+                                         merged_pull_request_heads=merged_heads_of(pull_requests))
     stale_decisions = [decision for decision in decisions if decision.is_stale]
     for decision in decisions:
         if not decision.is_stale:
-            print(f"[keep] {decision.worktree.path}: {decision.reason}")
+            pull_request_note = (f"; {pull_request_summary(decision.worktree, pull_requests)}"
+                                 if use_pull_requests and decision.worktree.branch else "")
+            print(f"[keep] {decision.worktree.path}: {decision.reason}{pull_request_note}")
     failures = 0
     for decision in stale_decisions:
         if dry_run:
@@ -101,6 +107,9 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="prune-worktrees: report without removing")
     parser.add_argument("--min-age-days", type=float, default=7.0,
                         help="prune-worktrees: keep worktrees Git touched more recently (default: 7)")
+    parser.add_argument("--pull-requests", action="store_true",
+                        help="prune-worktrees: also treat a HEAD that is a merged PR's head as merged, and report "
+                             "each kept branch's PR state (needs gh)")
     args = parser.parse_args()
     builder_root = Path(args.root).expanduser().resolve()
     try:
@@ -119,7 +128,7 @@ def main() -> int:
                 parser.error(f"{args.mode} requires --spoke")
             if args.mode == "prune-worktrees":
                 return prune_spoke_worktrees(builder_root, spoke, minimum_age_days=args.min_age_days,
-                                             dry_run=args.dry_run)
+                                             dry_run=args.dry_run, use_pull_requests=args.pull_requests)
             return locate_spoke(builder_root, spoke) if args.mode == "locate" else clone_spoke(builder_root, spoke)
         if spoke is None and not args.path:
             parser.error(f"{args.mode} requires --spoke or --path")
