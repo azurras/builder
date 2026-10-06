@@ -1,0 +1,196 @@
+# Bring All christopherbell.dev Code to Chris Street Style Conformance
+
+## Document Status
+ready-for-execution
+
+## Objective
+
+> [!IMPORTANT]
+> Every tracked first-party code file in christopherbell.dev is reviewed against write-chris-street-style-code and either recorded as conforming or brought into conformance, one feature slice per pull request, without changing observable behavior.
+
+## Background
+The user asked on 2026-10-05 to start a project that moves all christopherbell.dev code to the Chris Street Style. The [2026-10-04 audit](2026-10-04-christopherbell-dev-chris-street-style-audit.md), merged in PR #1480, reviewed 1,421 files but by its own non-goals made only 23 targeted, evidence-backed corrections and ruled out broad rewrites. Most code therefore still predates the standard: vague names, reused variables whose meaning changes, loosely typed states and catch-all failure handling remain common. The user chose full conformance over contract-only fixes, one PR per feature, and the smallest feature first.
+
+## Goals
+- Every tracked first-party code file has a recorded verdict, conforming as-is or changed, in the slice plan that covered it (AC-1, AC-2, AC-6).
+- Each slice reaches conformance with behavior preserved, proven by native checks and local runtime evidence (AC-3, AC-4).
+- Each slice ships as its own reviewed, merged and deployed pull request, so any one can be reverted alone (AC-5).
+
+## Non-Goals
+
+| Not doing | Why |
+|---|---|
+| Changing routes, JSON payloads, persisted field names, schemas or Mongo collections | Conformance is a behavior-preserving migration; contract changes need their own decision |
+| New features or bug fixes found along the way | A real bug found during a slice is logged and delivered as its own small change, not folded into a style diff |
+| Formatter-only or whole-file reformatting | The standard is about meaning, not whitespace; churn hides the real changes from reviewers |
+| New frameworks, libraries, npm packages or build tools | Spoke AGENTS.md forbids them and the standard does not need them |
+| Historical design documents, data sets, media, vendored or generated files | Not first-party code |
+| Reworking draft PR #1477 or the 23 per-correction plans still marked blocked from the earlier audit | Their code shipped in #1480; tidying those records is separate housekeeping |
+| Manual production operations | Production changes only through the supported CI-gated auto-deploy of each merged slice |
+
+## Acceptance Criteria
+
+| ID | Done when |
+|---|---|
+| AC-1 | This plan's slice ledger names every slice, its files and its order, and is published on Builder `origin/main` |
+| AC-2 | Each slice has its own plan whose Expected Changes lists every file in the slice with a verdict (conforming or changed) and the rule it served |
+| AC-3 | Each slice candidate passes `:website:check :cbell-lib:check :website:bootJar`, plus Pester for script slices, and write-chris-street-style-code review of the full diff finds no blocker |
+| AC-4 | Each slice candidate runs locally on an isolated `test` MongoDB, the slice's routes or jobs are exercised, and a test report naming the candidate commit is published before its PR |
+| AC-5 | Each slice PR merges after all required checks pass, and the auto-deployed production `/actuator/info` reports the merge commit |
+| AC-6 | After the last slice, a recount of tracked first-party code files equals the number of files with verdicts across the slice plans, and this plan's Outcome is complete |
+
+## Inputs
+- **Request:** user on 2026-10-05: start a project to move all christopherbell.dev code to the Chris Street Style. Decisions via question: full conformance, one PR per feature, smallest feature first.
+- **Standard:** Builder `.agents/skills/write-chris-street-style-code/SKILL.md` and its references; spoke `AGENTS.md` "Chris Street Style" section.
+- **Prior work:** [2026-10-04 audit plan](2026-10-04-christopherbell-dev-chris-street-style-audit.md), PR #1480 (`a9d20589`); [isolated test database bootstrap](2026-10-05-07-17-christopherbell-dev-bootstrap-isolated-empty-test-database.md).
+- **Inspected:** spoke `origin/main` `ef15adc0`: package tree under `website/src/main/java/dev/christopherbell`, test tree, `cbell-lib`, `static/js`, templates, PowerShell, Gradle and workflow files, with file and line counts per slice below.
+
+## Branch
+Each slice uses its own branch `claude/style-<slice>` from the then-current spoke `origin/main`; this umbrella plan has no code branch.
+
+## Assumptions
+- The isolated-`test` bootstrap from 2026-10-05 still starts a fresh candidate without production data.
+- Existing tests cover enough behavior to show preservation; where a slice finds a gap, it adds characterization tests before refactoring.
+- Merging a slice to `main` deploys it automatically through the CI-gated pipeline, which AGENTS.md treats as authorized deployment.
+
+## Open Questions
+None. Large slices are split at their own planning time by subpackage, recorded in this plan's log.
+
+## Design
+Work proceeds slice by slice in ascending size. A slice is a feature package with everything it owns: main Java, its tests, its page JavaScript module and template, and feature-owned CSS. Cross-cutting areas follow the features. Each slice gets its own task-contract-v2 plan, written when the slice starts and based on the code as it is then, with a per-file ledger in Expected Changes. Slices over about 8,000 lines are split into sub-slices by subpackage when planned, each with its own PR.
+
+**Conformance** means a write-chris-street-style-code review of the file finds no blocker and no actionable warning against the ten mandatory rules. Typical changes: role-revealing names and call sites that read as sentences, new variables when meaning changes, value types or enums for loosely typed states, validation at trust boundaries, narrowed catches that keep causes, visible effects and ownership, and tests that show input and output. Renamed Java fields that are persisted or serialized keep their stored or wire names.
+
+| Alternative | Why not |
+|---|---|
+| One big PR per language layer | Each PR would span the whole site; review and rollback get impractical (user decision) |
+| Contract fixes only, as in the audit | The audit already did this; the user wants full conformance |
+| Enforce on touched code only | Leaves most code nonconforming indefinitely (user decision) |
+| Largest or riskiest slice first | The workflow and ledger format should be proven on a small slice first (user decision) |
+
+### Slice ledger
+Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates and CSS are added when each slice is planned.
+
+| Order | Slice | Java main / test files | Java lines | Status |
+|---|---|---|---|---|
+| 1 | photo | 5 / 4 | 287 | pending |
+| 2 | blog | 5 / 3 | 375 | pending |
+| 3 | permission | 1 / 1 | 447 | pending |
+| 4 | location (with `zip-coordinates.js`) | 11 / 4 | 899 | pending |
+| 5 | report | 18 / 7 | 1,704 | pending |
+| 6 | sitemonitor | 17 / 6 | 1,778 | pending |
+| 7 | message | 19 / 9 | 1,786 | pending |
+| 8 | view | 13 / 3 | 1,794 | pending |
+| 9 | notification | 29 / 13 | 2,323 | pending |
+| 10 | canesboxtracker | 13 / 4 | 2,953 | pending |
+| 11 | federation | 40 / 23 | 5,033 | pending |
+| 12 | vehicle | 44 / 14 | 6,880 | pending |
+| 13 | music | 81 / 25 | 7,239 | pending |
+| 14 | account | 60 / 26 | 7,435 | pending |
+| 15 | admin | 41 / 25 | 8,506 | pending; split when planned |
+| 16 | post | 68 / 35 | 8,653 | pending; split when planned |
+| 17 | whatsforlunch | 96 / 18 | 11,800 | pending; split when planned |
+| 18 | configuration | 90 / 70 | 17,691 | pending; split by subpackage (filter, mail, mongo, persistence, security, root) |
+| 19 | sharedfolder | 101 / 35 | 26,570 | pending; split when planned |
+| 20 | Application and cross-feature tests (`architecture` and other test-only packages) | remaining | counted when planned | pending |
+| 21 | cbell-lib | 65 Java files | 4,386 | pending |
+| 22 | Shared browser JavaScript (`lib`, `components`, `auth`, `app.js`) and JS tests not owned by a feature | part of 128 files | part of 22,935 | pending |
+| 23 | Shared templates and CSS | part of 35 templates and 10 stylesheets | counted when planned | pending |
+| 24 | Operational PowerShell and `prod.cmd` | 35 files | 36,268 | pending; split when planned |
+| 25 | Gradle, workflows and application YAML | 4 Gradle, 12 YAML and related | counted when planned | pending |
+
+## Expected Changes
+
+| File or area | Change |
+|---|---|
+| Builder `docs/implementation-plans/` | This umbrella plan, plus one plan per slice or sub-slice |
+| Builder `docs/test-reports/` | One runtime report per slice candidate |
+| Spoke code in each slice | Behavior-preserving conformance edits, plus characterization tests where coverage is missing |
+| Spoke feature READMEs | Updated only where a rename changes a documented name |
+
+## Task Breakdown
+
+### Task 1 - Publish the umbrella plan and slice ledger
+
+| Contract | Detail |
+|---|---|
+| **Dependencies** | None |
+| **Files** | This plan |
+| **Symbols** | Slice ledger table |
+| **Inspection** | Spoke `origin/main` `ef15adc0` file and line counts per package, as listed in Inputs |
+| **Behavior** | Documentation only; no spoke change |
+| **Invariants** | Every first-party code area belongs to exactly one slice |
+| **Boundary/API** | None |
+| **Effects and failures** | Builder publication only |
+| **Tests and evidence** | Plan validation and review |
+| **Verification** | Save helper validation; phase finalizer publishes to Builder `origin/main` |
+
+### Task 2 - Deliver each slice in ledger order
+
+Required skill: write-chris-street-style-code
+
+| Contract | Detail |
+|---|---|
+| **Dependencies** | Task 1; each slice starts after the previous slice merges, so it builds on current `main` |
+| **Files** | The slice's files as listed in its own plan, enumerated with `git ls-files` at the slice's base commit |
+| **Symbols** | Every type, method, function and configuration key in the slice's files |
+| **Inspection** | Each slice plan records its own inspection of the slice's files, callers outside the slice, tests and owning README at its base commit |
+| **Behavior** | Routes, status codes, response bodies, rendered pages, scheduled jobs, persisted documents and logs keep their observable behavior |
+| **Invariants** | Stored field names and JSON property names stay the same; security checks and Modulith boundaries hold; no new dependencies |
+| **Boundary/API** | Published module APIs used by other slices may be renamed only with every caller updated in the same PR; external HTTP and persistence contracts are fixed |
+| **Effects and failures** | Narrowed catches keep causes and the same user-facing outcome; no new I/O or background work |
+| **Tests and evidence** | Passing characterization before and after; failing-then-passing regression when a style fix exposes a real defect, which is logged |
+| **Verification** | `./gradlew.bat :website:check :cbell-lib:check :website:bootJar`; Pester for script slices; local runtime report; PR CI; production `/actuator/info` readback |
+
+### Task 3 - Recount and close the migration
+
+| Contract | Detail |
+|---|---|
+| **Dependencies** | Task 2 for every slice |
+| **Files** | This plan's ledger and Outcome |
+| **Symbols** | Slice ledger statuses |
+| **Inspection** | `git ls-files` recount of first-party code files at the final `origin/main` |
+| **Behavior** | Documentation only |
+| **Invariants** | Recount equals the sum of slice verdicts, or each difference is explained |
+| **Boundary/API** | None |
+| **Effects and failures** | Builder publication only |
+| **Tests and evidence** | Recount output recorded in the log |
+| **Verification** | Plan validation; Outcome reports AC-1 to AC-6 |
+
+## Test Plan
+
+| AC | Native check | Local runtime check |
+|---|---|---|
+| AC-1 | Plan validation | Not applicable: documentation |
+| AC-2 | Slice plan validation and review | Not applicable: documentation |
+| AC-3 | `./gradlew.bat :website:check :cbell-lib:check :website:bootJar`; Pester for script slices; full-diff style review | Covered by AC-4 |
+| AC-4 | Characterization tests for the slice | verify-local-app starts the packaged candidate on isolated MongoDB `test`; requests to the slice's routes and pages, or triggers of its jobs, return the same results as the baseline |
+| AC-5 | Required PR checks: build, three Analyze, dependency-review | `wait_for_github.py live` confirms production `/actuator/info` serves the merge commit |
+| AC-6 | Recount script output | Not applicable: documentation |
+
+- **Regressions:** each slice also exercises one route of a neighboring slice that calls its published API.
+- **Reruns:** any runtime-affecting edit after a report reruns the affected checks and updates the report before the PR is updated.
+
+## Rollback or Recovery
+Each slice is one squash-merged PR; revert that merge commit and let auto-deploy roll forward to the revert. No data or schema changes are in scope, so no data recovery is needed. A partially delivered migration leaves earlier slices merged and later ones pending, which is a valid state.
+
+## Risks
+
+| Risk | Likelihood | Mitigation |
+|---|---|---|
+| A rename silently changes a Mongo field or JSON property | Medium | Keep `@Field` or `@JsonProperty` names; runtime reads and writes existing-shape documents |
+| Large style diffs hide a behavior change | Medium | Slices stay small; characterization before and after; one purpose per PR |
+| Concurrent feature work conflicts with a slice | Medium | Slice branches are short-lived and rebased on current `main` |
+| Unrelated production problem appears after an auto-deploy | Low | Production Watch and diagnostics; revert the slice if it is the cause |
+
+## Implementation Log
+No entries yet.
+
+## Outcome
+Pending.
+
+## Project
+christopherbell-dev
+
+## Plan Format
+task-contract-v2
