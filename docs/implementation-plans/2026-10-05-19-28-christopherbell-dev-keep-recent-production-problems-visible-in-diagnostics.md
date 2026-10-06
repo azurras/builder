@@ -1,7 +1,7 @@
 # Keep Recent Production Problems Visible in Diagnostics
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -105,7 +105,12 @@ Required skill: write-chris-street-style-code
 | A stack frame leaks a secret | Low | Frames go through the same redaction as messages, with a test |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Local verification through a module-scope harness
+
+- **Change:** Candidate `3571135` was verified locally with a harness. It runs the real reader, publisher and `Get-AutoDeployDiagnostics` on a 20,001-line fixture log. Only the SYSTEM-only ACL guards and the SYSTEM task query are replaced in module scope, as the Pester tests do. Evidence was captured with Builder's new `record_run.py`.
+- **Reason:** The production status folder requires SYSTEM-only ACLs that a standard user cannot create. The guards are not part of this change, and Pester already covers them.
+- **Impact:** Publishing took about 310 ms and produced a 37 KB record. The in-window ERROR kept three frames, with `password=[REDACTED]`. The ERROR outside the 10,000-line window was dropped as designed. The full production Pester suite passed: 910 passed, 0 failed.
 
 ## Outcome
 Pending.
