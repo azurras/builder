@@ -1,7 +1,7 @@
 # Bring All christopherbell.dev Code to Chris Street Style Conformance
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -73,7 +73,7 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 
 | Order | Slice | Java main / test files | Java lines | Status |
 |---|---|---|---|---|
-| 1 | photo | 5 / 4 | 287 | pending |
+| 1 | photo | 5 / 4 | 287 | done: [plan](2026-10-05-20-06-christopherbell-dev-photo-slice-conforms-to-chris-street-style.md), PR #1488 `1d6c7d0` |
 | 2 | blog | 5 / 3 | 375 | pending |
 | 3 | permission | 1 / 1 | 447 | pending |
 | 4 | location (with `zip-coordinates.js`) | 11 / 4 | 899 | pending |
@@ -184,7 +184,12 @@ Each slice is one squash-merged PR; revert that merge commit and let auto-deploy
 | Unrelated production problem appears after an auto-deploy | Low | Production Watch and diagnostics; revert the slice if it is the cause |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Slice 1 (photo) delivered; workflow settled
+
+- **Change:** Photo shipped in PR #1488 (`1d6c7d0`). The settled per-slice workflow: plan with a per-file verdict table, worktree branch, baseline focused tests, edits, full check, commit, packaged candidate on a fresh isolated MongoDB `test`, JSON compared byte-for-byte with production on the previous commit, report, PR with auto-merge, and `wait_for_github.py live` readback.
+- **Reason:** Proving the workflow on the smallest slice was the user's chosen order.
+- **Impact:** Later slices reuse it. Gradle needs `JAVA_TOOL_OPTIONS` as well as `GRADLE_OPTS` set to the socket folder, and must run outside the command sandbox. Auto-deploy took about 20 minutes after merge.
 
 ## Outcome
 Pending.

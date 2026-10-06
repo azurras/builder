@@ -1,7 +1,7 @@
 # Photo Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -132,7 +132,16 @@ Revert the squash-merge commit; auto-deploy rolls production forward to the reve
 - **Impact:** No spoke change. Later slices use the same environment.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped as planned in PR #1488 (`1d6c7d0`) and auto-deployed. The JSON contract is unchanged. The two deviations are recorded in the Implementation Log. Follow-up: the unbound `date-added` key leaves `createdOn` always null, which is a contract decision for later.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes gives a verdict for all 14 existing files plus the new `PhotoConfiguration` (13 changed, 1 conforming, 1 new) |
+| AC-2 | ✅ Met | Full check passed: 2,215 Java tests with 0 failures, 382 JS tests, Pester suites; full-diff self-review found no blocker ([report](../test-reports/2026-10-05-20-15-christopherbell-dev-photo-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | Candidate `190cfc0` on isolated MongoDB `test`: 6 of 6 cases passed, and the gallery JSON is byte-identical to production `ef15adc0` ([report](../test-reports/2026-10-05-20-15-christopherbell-dev-photo-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1488](https://github.com/azurras/christopherbell.dev/pull/1488) merged as `1d6c7d0` after build, three Analyze, CodeQL and dependency-review passed; production `/actuator/info` reports `1d6c7d0`, and the production gallery JSON is unchanged |
 
 ## Project
 christopherbell-dev
