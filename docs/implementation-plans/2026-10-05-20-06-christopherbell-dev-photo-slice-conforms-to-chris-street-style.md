@@ -1,7 +1,7 @@
 # Photo Slice Conforms to Chris Street Style
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -118,7 +118,18 @@ Revert the squash-merge commit; auto-deploy rolls production forward to the reve
 | JSON field order or nulls change | Low | Baseline and candidate responses compared byte for byte |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-05 - Missing gallery configuration yields an empty list
+
+- **Change:** `PhotoProperties` turns an absent `photos` list into an empty unmodifiable list, so the API would return `images: []` instead of `images: null` when the `photo-properties` block is missing.
+- **Reason:** A record with a defensive copy cannot hold `null` without a special case, and the gallery JavaScript already treats both as no photos.
+- **Impact:** Only reachable with a configuration that has no gallery; the shipped `application.yml` has one, and the runtime JSON is byte-identical to production. Covered by `PhotoServiceTest.listsNoPhotosWhenNoneAreConfigured`.
+
+### 2026-10-05 - Forked Gradle JVMs need the socket folder too
+
+- **Change:** Ran Gradle with both `GRADLE_OPTS` and `JAVA_TOOL_OPTIONS` set to `-Djdk.net.unixdomain.tmpdir=C:\Temp\jdk-unix-sockets`, outside the command sandbox.
+- **Reason:** With only `GRADLE_OPTS`, the test executor JVM failed with "Unable to establish loopback connection"; the spoke README already sets `JAVA_TOOL_OPTIONS` for the same reason.
+- **Impact:** No spoke change. Later slices use the same environment.
 
 ## Outcome
 Pending.
