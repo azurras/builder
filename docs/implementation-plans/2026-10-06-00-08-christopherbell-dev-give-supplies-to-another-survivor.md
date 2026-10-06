@@ -1,14 +1,14 @@
 # Give supplies to another survivor
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
 > Let survivors give wood or food directly to another survivor in the existing Java-owned shared world.
 
 ## Background
-The user requested direct survivor interaction after the initial Survive delivery. Current main a42d4b8 provides shared camp construction but private inventories and no targeted commands. Resource giving is the stated first interaction while the user can steer the pending preference question.
+The user requested direct survivor interaction after the initial Survive delivery. Current main a42d4b8 provides shared camp construction but private inventories and no targeted commands. The user selected giving wood or food as the first interaction.
 
 ## Goals
 - Target a specific survivor without revealing credentials. (AC-1)
@@ -119,7 +119,14 @@ Revert through a checked PR and supported automatic deployment. No persistent ga
 - **Impact:** Added red/green regression and repeated committed-candidate API/browser proof, including recipient replacement and repeated refresh/Enter without a gift. All 389 final JS tests pass; Java implementation unchanged, reviewer finds no blockers. Report supersedes 2b594f75 before PR update.
 
 ## Outcome
-Pending.
+Complete. [PR #1490](https://github.com/azurras/christopherbell.dev/pull/1490) merged candidate 05ca1149 as 0202b97b6e311d11fa665ef8edbded66988118c5; required PR and main CI passed. Supported automatic deployment serves that exact commit, with service running, site healthy and no deployment failure.
+
+- AC-1 passed: public survivor IDs distinguish duplicate names without exposing owner credentials.
+- AC-2 passed: Java validates and transfers wood or food atomically, conserves supplies and protects capacity and revisions; concurrent final-slot transfers admit exactly one sender.
+- AC-3 passed: keyboard/mobile giving works, polling preserves focused inputs, and departed recipients require explicit reselection. Both inventories, messages and the shared journal update.
+- AC-4 passed: full native checks, 389 final JavaScript tests, independent semantic review and seven committed-candidate runtime cases passed. [Runtime report](../test-reports/2026-10-06-00-21-christopherbell-dev-survivors-give-wood-and-food.md). Public identity, readiness, page, API and assets passed read-only checks; the live field guide displays sharing instructions with no browser errors.
+
+Owned runtime processes, ports and disposable database were cleaned up; the merged worktree and branches were removed. No source issue; external closure does not apply.
 
 ## Project
 christopherbell-dev

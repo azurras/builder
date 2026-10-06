@@ -244,3 +244,12 @@ complete
 
 ## Project
 christopherbell-dev
+
+## Production Readback
+
+
+[PR #1490](https://github.com/azurras/christopherbell.dev/pull/1490) merged final candidate 05ca1149 as 0202b97b6e311d11fa665ef8edbded66988118c5. Required PR checks and main CI run 37419610977 passed. Automatic deployment status at 2026-10-06T05:54:11Z was UP_TO_DATE, service RUNNING, site HEALTHY, failureCategory NONE, with active and remote identity equal to that merge SHA.
+
+Read-only public HTTP verification passed: /actuator/info 200 contains the merged SHA; /actuator/health/readiness 200 UP; /survive 200 contains Share supplies; /api/survive/v1/game 204 without creating a survivor; /js/survive.js 200 contains Choose a survivor; /js/lib/api.js 200 contains the gift route; /css/survive.css 200 contains the gift styles. Evidence: survivor-gifts-live-evidence.jsonl in the local temporary evidence directory.
+
+Live browser field guide displays resource giving, camp targeting and inventory constraints; error console is empty. No production fixtures were created. Local processes and disposable database and merged worktree/branches were cleaned up.
