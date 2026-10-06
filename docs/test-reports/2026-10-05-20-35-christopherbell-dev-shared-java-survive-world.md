@@ -1977,3 +1977,25 @@ complete
 ## Project
 
 christopherbell-dev
+
+## Production delivery readback
+
+PR #1489 MERGED: head 6bf3c148cf9427a767cc8ed4297821219b75e881; squash merge a42d4b8e5af103d3c91fdcbb3cc943ca8bb8402f. Every PR check passed. Main CI and supported automatic deployment completed; auto-status reports active/remote/successful SHA a42d4b8, UP_TO_DATE, service RUNNING, site HEALTHY at 2026-10-06T02:16:12Z.
+
+Initial generic Python-agent HTTP request received 403 from the public edge. Browser page succeeded; rerun with Mozilla/5.0 user agent passed:
+
+```text
+exit code: 0
+--- stdout ---
+PASS /actuator/info 200 a42d4b8e5af103d3c91fdcbb3cc943ca8bb8402f
+PASS /actuator/health/readiness 200 UP
+PASS /survive 200 Join camp
+PASS /api/survive/v1/game 204 empty body
+PASS /js/survive.js 200 Survive
+PASS /css/survive.css 200 survive
+PASS /licenses/survive-GPL-3.0.txt 200 GNU GENERAL PUBLIC LICENSE
+PASS /sitemap.xml 200 /survive
+PASS public read-only deployment checks; no survivor or production fixture created
+```
+
+Actual deployed browser shows the Join camp form, guide and source attribution with no error console entries. Screenshot: temporary survive-live.png. No production fixtures or survivors created. Owned worktree and remote/local branch removed after merge; unrelated checkouts preserved.

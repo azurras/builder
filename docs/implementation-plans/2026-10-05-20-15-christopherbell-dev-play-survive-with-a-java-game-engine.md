@@ -1,7 +1,7 @@
 # Play Survive on the website with a Java game engine
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -156,7 +156,19 @@ Revert the merged feature through a verified PR and the supported automatic pipe
 - **Impact:** Full website checks and actual isolated API/browser runtime proof repeated on the new jar; all passed. Updated runtime report before pushing the refreshed candidate.
 
 ## Outcome
-Pending.
+> [!TIP]
+> Delivered and verified live at [Play Survive](https://www.christopherbell.dev/survive). [PR #1489](https://github.com/azurras/christopherbell.dev/pull/1489) merged candidate 6bf3c148 as a42d4b8e5af103d3c91fdcbb3cc943ca8bb8402f after every CI check passed. Main CI passed and automatic deployment readback reports that exact active revision, UP_TO_DATE and HEALTHY.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Java-owned single shared world, private survivors, bounded state, CSRF and revision checks | [Runtime report](../test-reports/2026-10-05-20-35-christopherbell-dev-shared-java-survive-world.md), service/controller tests and PR |
+| AC-2 | ✅ Complete gathering, crafting, combat, food, rest, escape/death and survivor replacement | Deterministic model tests and two-survivor actual API playthrough in report |
+| AC-3 | ✅ Responsive keyboard-operable page, stats, inventory, camp journal, guide, attribution, navigation | Browser play, mobile/desktop layout and lifecycle evidence in report; verified live join form with no console errors |
+| AC-4 | ✅ Checks, review, candidate runtime, report publication, merge and deployment readback complete | Full checks twice, 386 final JS tests, all PR checks successful, public build identity a42d4b8 and read-only live checks |
+
+Live readback on 2026-10-05 at 21:16 CDT verified build identity, readiness, /survive, anonymous game GET 204, JS/CSS, sitemap and GPL license. The generic Python user agent was denied 403 by the public edge; the ordinary browser and browser-user-agent requests succeeded. No production survivor or fixture was created. Separate game states are not persisted: one in-memory world per server process resets on restart; distributed replicas need durable shared state before scaling.
+
+Owned test processes stopped and ports closed, remote/local task branch deleted and owned worktree removed. Temporary logs/screenshots and disposable database files are retained because automatic approval review rejected recursive cleanup. No source issue; external closure does not apply.
 
 ## Project
 christopherbell-dev
