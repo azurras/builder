@@ -112,6 +112,12 @@ Revert through a checked PR and supported automatic deployment. No persistent ga
 - **Reason:** Confirmed interaction preference; receiving must not leak cookies or overfill inventory, and refresh must not interrupt typing.
 - **Impact:** Scope remains supply sharing. Added invalid/stale/expiry/concurrency tests plus delayed-read focus regression; Java and focused JS checks pass, full checks/runtime proof remain in progress.
 
+### 2026-10-06 - Prevent silent gift retargeting after recipient departure
+
+- **Change:** Require an explicit recipient choice; a departed selection becomes empty and remains empty across polls. Pause automatic merge while verifying the UI-only correction; candidate is now 05ca1149.
+- **Reason:** Final review confirmed falling back to the first remaining survivor could send a gift to someone the user did not choose.
+- **Impact:** Added red/green regression and repeated committed-candidate API/browser proof, including recipient replacement and repeated refresh/Enter without a gift. All 389 final JS tests pass; Java implementation unchanged, reviewer finds no blockers. Report supersedes 2b594f75 before PR update.
+
 ## Outcome
 Pending.
 
