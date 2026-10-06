@@ -1,990 +1,1979 @@
-# Shared Java Survive world: Test Report
-
-## Story/Issue
-User requested Survive on the website, implemented in Java, with one shared world and separate survivors.
-
-## Branch
-`codex/survive-java-20261005` at candidate `7e64db0`
-
-## Pass / Fail
-
-> [!TIP]
-> 7 of 7 cases passed on candidate `7e64db0`.
-
-| # | Test case | Result | Why |
-|---|---|---|---|
-| 1 | Shared Java world API playthrough and security boundaries | ✅ PASS | Expected exit code 0 |
-| 2 | Candidate readiness | ✅ PASS | Expected status below 400 and body containing 'UP' |
-| 3 | Committed candidate build identity | ✅ PASS | Expected status below 400 and body containing '7e64db0c' |
-| 4 | Source license is publicly readable | ✅ PASS | Expected status below 400 and body containing 'GNU GENERAL PUBLIC LICENSE' |
-| 5 | Actual browser keyboard combat mobile and Back navigation evidence | ✅ PASS | Expected exit code 0 |
-| 6 | Disposable test database and candidate listener ownership | ✅ PASS | Expected exit code 0 |
-| 7 | Verification cleanup readback | ✅ PASS | Expected exit code 0 |
-
-## Test Cases
-1. **Shared Java world API playthrough and security boundaries**: command `python -X utf8 C:\Users\CHRIST~1\AppData\Local\Temp/survive-runtime-api.py http://127.0.0.1:57184`
-2. **Candidate readiness**: http `GET http://127.0.0.1:57184/actuator/health/readiness`
-3. **Committed candidate build identity**: http `GET http://127.0.0.1:57184/actuator/info`
-4. **Source license is publicly readable**: http `GET http://127.0.0.1:57184/licenses/survive-GPL-3.0.txt`
-5. **Actual browser keyboard combat mobile and Back navigation evidence**: command `python -X utf8 -c "from pathlib import Path; print(Path(r'C:/Users/Christopher/AppData/Local/Temp/survive-browser-observed.json').read_text())"`
-6. **Disposable test database and candidate listener ownership**: command `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; & mongosh --quiet --norc (\"mongodb://127.0.0.1:\"+$r.mongoPort+\"/test\") --eval \"JSON.stringify({database:db.getName(),ping:db.runCommand({ping:1}).ok})\"; Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort | Select-Object LocalAddress,LocalPort,OwningProcess; Get-NetTCPConnection -State Established -OwningProcess $r.appPid | Where-Object RemotePort -eq $r.mongoPort | Select-Object RemoteAddress,RemotePort,OwningProcess"`
-7. **Verification cleanup readback**: command `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; if(Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort -ErrorAction SilentlyContinue){throw \"Verification ports remain open\"}; if(Get-Process -Id $r.appPid,$r.mongoPid -ErrorAction SilentlyContinue){throw \"Recorded verification processes remain\"}; \"PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.\""`
-
-## App / Environment
-
-| Setting | Value |
-|---|---|
-| Profile | test |
-| Base URL | http://127.0.0.1:57184 |
-| MongoDB | mongodb://127.0.0.1:57180/test; disposable and loopback-only |
-| Candidate | 7e64db0c7d790fc3f6aa6cf1f2dc8dcd98df2987 |
-
+# Shared Java Survive world: Test Report
+
+
+
+## Story/Issue
+
+User requested Survive on the website, implemented in Java, with one shared world and separate survivors.
+
+
+
+## Branch
+
+`codex/survive-java-20261005` at current candidate `6bf3c148cf9427a767cc8ed4297821219b75e881` (initial implementation `7e64db0`)
+
+
+
+## Updated candidate verification
+
+The PR required an up-to-date branch after main advanced. Merged current origin/main without conflicts, producing candidate `6bf3c148cf9427a767cc8ed4297821219b75e881`; incoming changes concern photography and do not alter Survive. Full `:website:check :website:bootJar` passed again in 4m 50s, including 386 JavaScript tests. Log: temporary `survive-updated-check.log`.
+
+Ran the new jar at http://127.0.0.1:57184 with the same test-profile isolation and a fresh, initially empty disposable `updated-db` MongoDB directory on 127.0.0.1:57180/test. Readiness returned 200 UP; `/actuator/info` returned 200 with build version naming `6bf3c148`. Repeated the complete two-survivor API playthrough: CSRF 403, invalid/unavailable 400, stale 409, shared shelter, private inventories, combat/food/rest, shared boat consumption/escape, restart preserving camp, death and bounded journal all passed. API recorder was launched from Builder and recorded its cwd hash; that is a recorder metadata error, not application identity. The independent HTTP build identity records explicitly name the actual candidate checkout and commit.
+
+Actual browser on the new jar joined UpdatedScout, saw the shelter and two API survivors, performed Gather wood using Enter, and reloaded to the same survivor and resulting narrative. Screenshot: temporary `survive-updated-desktop.png`. Owned app PID 31540 and the newly launched mongod PID were checked before stopping; subsequent readback confirmed both processes absent and ports 57184/57180 closed. Disposable files remain after the earlier automatic approval review rejected recursive cleanup. This update supersedes the initial candidate identity below; original evidence is preserved.
+
+## Pass / Fail
+
+
+
+> [!TIP]
+
+> 7 of 7 cases passed on candidate `7e64db0`.
+
+
+
+| # | Test case | Result | Why |
+
+|---|---|---|---|
+
+| 1 | Shared Java world API playthrough and security boundaries | ✅ PASS | Expected exit code 0 |
+
+| 2 | Candidate readiness | ✅ PASS | Expected status below 400 and body containing 'UP' |
+
+| 3 | Committed candidate build identity | ✅ PASS | Expected status below 400 and body containing '7e64db0c' |
+
+| 4 | Source license is publicly readable | ✅ PASS | Expected status below 400 and body containing 'GNU GENERAL PUBLIC LICENSE' |
+
+| 5 | Actual browser keyboard combat mobile and Back navigation evidence | ✅ PASS | Expected exit code 0 |
+
+| 6 | Disposable test database and candidate listener ownership | ✅ PASS | Expected exit code 0 |
+
+| 7 | Verification cleanup readback | ✅ PASS | Expected exit code 0 |
+
+
+
+## Test Cases
+
+1. **Shared Java world API playthrough and security boundaries**: command `python -X utf8 C:\Users\CHRIST~1\AppData\Local\Temp/survive-runtime-api.py http://127.0.0.1:57184`
+
+2. **Candidate readiness**: http `GET http://127.0.0.1:57184/actuator/health/readiness`
+
+3. **Committed candidate build identity**: http `GET http://127.0.0.1:57184/actuator/info`
+
+4. **Source license is publicly readable**: http `GET http://127.0.0.1:57184/licenses/survive-GPL-3.0.txt`
+
+5. **Actual browser keyboard combat mobile and Back navigation evidence**: command `python -X utf8 -c "from pathlib import Path; print(Path(r'C:/Users/Christopher/AppData/Local/Temp/survive-browser-observed.json').read_text())"`
+
+6. **Disposable test database and candidate listener ownership**: command `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; & mongosh --quiet --norc (\"mongodb://127.0.0.1:\"+$r.mongoPort+\"/test\") --eval \"JSON.stringify({database:db.getName(),ping:db.runCommand({ping:1}).ok})\"; Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort | Select-Object LocalAddress,LocalPort,OwningProcess; Get-NetTCPConnection -State Established -OwningProcess $r.appPid | Where-Object RemotePort -eq $r.mongoPort | Select-Object RemoteAddress,RemotePort,OwningProcess"`
+
+7. **Verification cleanup readback**: command `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; if(Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort -ErrorAction SilentlyContinue){throw \"Verification ports remain open\"}; if(Get-Process -Id $r.appPid,$r.mongoPid -ErrorAction SilentlyContinue){throw \"Recorded verification processes remain\"}; \"PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.\""`
+
+
+
+## App / Environment
+
+
+
+| Setting | Value |
+
+|---|---|
+
+| Profile | test |
+
+| Base URL | http://127.0.0.1:57184 |
+
+| MongoDB | mongodb://127.0.0.1:57180/test; disposable and loopback-only |
+
+| Candidate | 7e64db0c7d790fc3f6aa6cf1f2dc8dcd98df2987 |
+
+
+
 ## Local Run Details
 - **Application launch:** `java -jar website/build/libs/website.jar --server.address=127.0.0.1 --server.port=57184`, started hidden from the candidate worktree with `SPRING_PROFILES_ACTIVE=test`, `SPRING_MONGODB_URI=mongodb://127.0.0.1:57180/test`, `APP_MAIL_ENABLED=false`, random temporary JWT secret and `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=<short temporary socket directory>`.
 - **Isolation before startup:** MongoDB `test` on loopback port 57180 had no collections and ping returned 1. Listener belonged to the launched mongod PID 26612. The app's opened connections after startup target that same port, and read-only `db.getName()` confirms `test`.
-- **Application logs:** Candidate output/error and mongod logs retained under the session-owned temporary runtime directory; no secrets are included in this report.
-- **Local command:** `python -X utf8 C:\Users\CHRIST~1\AppData\Local\Temp/survive-runtime-api.py http://127.0.0.1:57184` in `A:\Projects\christopherbell.dev.worktrees\survive`
-- **Local command:** `GET http://127.0.0.1:57184/actuator/health/readiness` in `A:\Projects\christopherbell.dev.worktrees\survive`
-- **Local command:** `GET http://127.0.0.1:57184/actuator/info` in `A:\Projects\christopherbell.dev.worktrees\survive`
-- **Local command:** `GET http://127.0.0.1:57184/licenses/survive-GPL-3.0.txt` in `A:\Projects\christopherbell.dev.worktrees\survive`
-- **Local command:** `python -X utf8 -c "from pathlib import Path; print(Path(r'C:/Users/Christopher/AppData/Local/Temp/survive-browser-observed.json').read_text())"` in `A:\Projects\christopherbell.dev.worktrees\survive`
-- **Local command:** `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; & mongosh --quiet --norc (\"mongodb://127.0.0.1:\"+$r.mongoPort+\"/test\") --eval \"JSON.stringify({database:db.getName(),ping:db.runCommand({ping:1}).ok})\"; Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort | Select-Object LocalAddress,LocalPort,OwningProcess; Get-NetTCPConnection -State Established -OwningProcess $r.appPid | Where-Object RemotePort -eq $r.mongoPort | Select-Object RemoteAddress,RemotePort,OwningProcess"` in `A:\Projects\christopherbell.dev.worktrees\survive`
-- **Local command:** `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; if(Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort -ErrorAction SilentlyContinue){throw \"Verification ports remain open\"}; if(Get-Process -Id $r.appPid,$r.mongoPid -ErrorAction SilentlyContinue){throw \"Recorded verification processes remain\"}; \"PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.\""` in `A:\Projects\christopherbell.dev.worktrees\survive`
-- **Candidate identity:** `7e64db0`
-- **Cleanup:** Stopped owned Java PID 48072 and MongoDB PID 26612; ports 57184 and 57180 closed; disposable directory retained after policy denied recursive cleanup.
-
-## Data Sent
-
-### 1. Shared Java world API playthrough and security boundaries
-
-```text
-python -X utf8 C:\Users\CHRIST~1\AppData\Local\Temp/survive-runtime-api.py http://127.0.0.1:57184
-```
-
-### 2. Candidate readiness
-
-```http
-GET http://127.0.0.1:57184/actuator/health/readiness
-```
-
-### 3. Committed candidate build identity
-
-```http
-GET http://127.0.0.1:57184/actuator/info
-```
-
-### 4. Source license is publicly readable
-
-```http
-GET http://127.0.0.1:57184/licenses/survive-GPL-3.0.txt
-```
-
-### 5. Actual browser keyboard combat mobile and Back navigation evidence
-
-```text
-python -X utf8 -c "from pathlib import Path; print(Path(r'C:/Users/Christopher/AppData/Local/Temp/survive-browser-observed.json').read_text())"
-```
-
-### 6. Disposable test database and candidate listener ownership
-
-```text
-powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; & mongosh --quiet --norc (\"mongodb://127.0.0.1:\"+$r.mongoPort+\"/test\") --eval \"JSON.stringify({database:db.getName(),ping:db.runCommand({ping:1}).ok})\"; Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort | Select-Object LocalAddress,LocalPort,OwningProcess; Get-NetTCPConnection -State Established -OwningProcess $r.appPid | Where-Object RemotePort -eq $r.mongoPort | Select-Object RemoteAddress,RemotePort,OwningProcess"
-```
-
-### 7. Verification cleanup readback
-
-```text
-powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; if(Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort -ErrorAction SilentlyContinue){throw \"Verification ports remain open\"}; if(Get-Process -Id $r.appPid,$r.mongoPid -ErrorAction SilentlyContinue){throw \"Recorded verification processes remain\"}; \"PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.\""
-```
-
-## Response Received
-
-### 1. Shared Java world API playthrough and security boundaries
-
-```text
-exit code: 0
---- stdout ---
-PASS anonymous page, 204 before joining, missing CSRF=403, separate survivors, no-store and hidden credentials
-PASS invalid/unavailable commands=400; duplicate stale revision=409
-PASS Java gathering progression; Alice built shared shelter; Bob has wood=0 and strength=2
-PASS fresh hogs, defend, attack, victory food, consuming food, flee and shared shelter rest
-PASS capacity=10, boat shared with Bob, consumed on escape, terminal actions=400
-PASS restart preserves shared camp and Alice; Bob health=10
-PASS death health=0, no actions available; journal bounded to 30
-{"name": "Runtime Alice", "health": 10, "strength": 6, "wood": 0, "shelters": 1, "boats": 0, "survivors": ["Runtime Alice", "Runtime Bob reborn"], "worldRevision": 49}
-All runtime API cases passed. Requests made only through application endpoints; no direct database writes.
-```
-
-### 2. Candidate readiness
-
-```text
-HTTP 200 
-X-Request-Id: 7b840dc3-1ac7-44fb-8326-0073a3fca956
-Set-Cookie: [REDACTED]
-X-RateLimit-Limit: 10000
-X-RateLimit-Remaining: 9999
-X-RateLimit-Reset: 1791250487
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: SAMEORIGIN
-Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com; img-src 'self' data: blob: https:; connect-src 'self' https://gateway.raisingcanes.com https://order.raisingcanes.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://w.soundcloud.com; frame-ancestors 'self'; media-src 'self' blob:; worker-src 'self' blob:; form-action 'self'
-Referrer-Policy: strict-origin-when-cross-origin
-Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()
-Content-Type: application/vnd.spring-boot.actuator.v3+json
-Transfer-Encoding: chunked
-Date: Tue, 06 Oct 2026 01:33:47 GMT
-Connection: close
-
-{"status":"UP"}
-```
-
-### 3. Committed candidate build identity
-
-```text
-HTTP 200 
-X-Request-Id: 5854fc17-7c9c-4f0d-ab3d-a99d0c11af22
-Set-Cookie: [REDACTED]
-X-RateLimit-Limit: 10000
-X-RateLimit-Remaining: 9999
-X-RateLimit-Reset: 1791250487
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: SAMEORIGIN
-Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com; img-src 'self' data: blob: https:; connect-src 'self' https://gateway.raisingcanes.com https://order.raisingcanes.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://w.soundcloud.com; frame-ancestors 'self'; media-src 'self' blob:; worker-src 'self' blob:; form-action 'self'
-Referrer-Policy: strict-origin-when-cross-origin
-Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()
-Content-Type: application/vnd.spring-boot.actuator.v3+json
-Content-Length: 176
-Date: Tue, 06 Oct 2026 01:33:47 GMT
-Connection: close
-
-{"build":{"artifact":"website","name":"website","time":"2026-10-06T01:31:18.107Z","version":"0.0.0-dev.7e64db0c7d790fc3f6aa6cf1f2dc8dcd98df2987","group":"christopherbell.dev"}}
-```
-
-### 4. Source license is publicly readable
-
-<details><summary>376 lines</summary>
-
-```text
-HTTP 200 
-X-Request-Id: d48fb739-31a5-4dc2-acc2-d09f264cd894
-Set-Cookie: [REDACTED]
-X-RateLimit-Limit: 10000
-X-RateLimit-Remaining: 9999
-X-RateLimit-Reset: 1791250487
-Cache-Control: max-age=3600, public
-Last-Modified: Tue, 06 Oct 2026 01:31:23 GMT
-Accept-Ranges: bytes
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-X-Frame-Options: SAMEORIGIN
-Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com; img-src 'self' data: blob: https:; connect-src 'self' https://gateway.raisingcanes.com https://order.raisingcanes.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://w.soundcloud.com; frame-ancestors 'self'; media-src 'self' blob:; worker-src 'self' blob:; form-action 'self'
-Referrer-Policy: strict-origin-when-cross-origin
-Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()
-Content-Type: text/plain
-Content-Length: 35823
-Date: Tue, 06 Oct 2026 01:33:47 GMT
-Connection: close
-
-                    GNU GENERAL PUBLIC LICENSE
-
-                       Version 3, 29 June 2007
-
-
-
- Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
-
- Everyone is permitted to copy and distribute verbatim copies
-
- of this license document, but changing it is not allowed.
-
-
-
-                            Preamble
-
-
-
-  The GNU General Public License is a free, copyleft license for
-
-software and other kinds of works.
-
-
-
-  The licenses for most software and other practical works are designed
-
-to take away your freedom to share and change the works.  By contrast,
-
-the GNU General Public License is intended to guarantee your freedom to
-
-share and change all versions of a program--to make sure it remains free
-
-software for all its users.  We, the Free Software Foundation, use the
-
-GNU General Public License for most of our software; it applies also to
-
-any other work released this way by its authors.  You can apply it to
-
-your programs, too.
-
-
-
-  When we speak of free software, we are referring to freedom, not
-
-price.  Our General Public Licenses are designed to make sure that you
-
-have the freedom to distribute copies of free software (and charge for
-
-them if you wish), that you receive source code or can get it if you
-
-want it, that you can change the software or use pieces of it in new
-
-free programs, and that you know you can do these things.
-
-
-
-  To protect your rights, we need to prevent others from denying you
-
-these rights or asking you to surrender the rights.  Therefore, you have
-
-certain responsibilities if you distribute copies of the software, or if
-
-you modify it: responsibilities to respect the freedom of others.
-
-
-
-  For example, if you distribute copies of such a program, whether
-
-gratis or for a fee, you must pass on to the recipients the same
-
-freedoms that you received.  You must make sure that they, too, receive
-
-or can get the source code.  And you must show them these terms so they
-
-know their rights.
-
-
-
-  Developers that use the GNU GPL protect your rights with two steps:
-
-(1) assert copyright on the software, and (2) offer you this License
-
-giving you legal permission to copy, distribute and/or modify it.
-
-
-
-  For the developers' and authors' protection, the GPL clearly explains
-
-that there is no warranty for this free software.  For both users' and
-
-authors' sake, the GPL requires that modified versions be marked as
-
-changed, so that their problems will not be attributed erroneously to
-
-authors of previous versions.
-
-
-
-  Some devices are designed to deny users access to install or run
-
-modified versions of the software inside them, although the manufacturer
-
-can do so.  This is fundamentally incompatible with the aim of
-
-protecting users' freedom to change the software.  The systematic
-
-pattern of such abuse occurs in the area of products for individuals to
-
-use, which is precisely where it is most unacceptable.  Therefore, we
-
-have designed this version of the GPL to prohibit the practice for those
-
-products.  If such problems arise substantially in other domains, we
-
-stand ready to extend this provision to those domains in future versions
-
-of the GPL, as needed to protect the freedom of users.
-
-
-
-  Finally, every program is threatened constantly by software patents.
-
-States should not allow patents to restrict development and use of
-
-software on general-purpose computers, but in those that do, we wish to
-
-avoid the special danger that patents applied to a free program could
-
-make it effectively proprietary.  To prevent this, the GPL assures that
-
-patents cannot be used to render the program non-free.
-
-
-
-  The precise terms and conditions for copying, distribution and
-
-modification follow.
-
-
-
-                       TERMS AND CONDITIONS
-
-
-
-  0. Definitions.
-
-
-
-  "This License" refers to version 3 of the GNU General Public License.
-
-
-
-  "Copyright" also means copyright-like laws that apply to other kinds of
-
-works, such as semiconductor masks.
-
-
-
-  "The Program" refers to any copyrightable work licensed under this
-
-License.  Each licensee is addressed as "you".  "Licensees" and
-
-"recipients" may be individuals or organizations.
-
-
-
-  To "modify" a work means to copy from or adapt all or part of the work
-
-in a fashion requiring copyright permission, other than the making of an
-
-exact copy.  The resulting work is called a "modified version" of the
-
-earlier work or a work "based on" the earlier work.
-
-
-
-  A "covered work" means either the unmodified Program or a work based
-
-on the Program.
-
-
-
-  To "propagate" a work means to do anything with it that, without
-
-permission, would make you directly or secondarily liable for
-
-infringement under applicable copyright law, except executing it on a
-
-computer or modifying a private copy.  Propagation includes copying,
-
-distribution (with or without modification), making available to the
-
-public, and in some countries other activities as well.
-
-
-
-  To "convey" a work means any kind of propagation that enables other
-
-parties to make or receive copies.  Mere interaction with a user through
-
-a computer network, with no transfer of a copy, is not conveying.
-
-
-
-  An interactive user interface displays "Appropriate Legal Notices"
-
-to the extent that it includes a convenient and prominently visible
-
-feature that (1) displays an appropriate copyright notice, and (2)
-
-tells the user that there is no warranty for the work (except to the
-
-extent that warranties are provided), that licensees may convey the
-
-work under this License, and how to view a copy of this License.  If
-
-the interface presents a list of user commands or options, such as a
-
-menu, a prominent item in the list meets this criterion.
-
-
-
-  1. Source Code.
-
-
-
-  The "source code" for a work means the preferred form of the work
-
-for making modifications to it.  "Object code" means any non-source
-
-form of a work.
-
-
-
-  A "Standard Interface" means an interface that either is an official
-
-standard defined by a recognized standards body, or, in the case of
-
-interfaces specified for a particular programming language, one that
-
-is widely used among developers working in that language.
-
-
-
-  The "System Libraries" of an executable work include anything, other
-
-than the work as a whole, that (a) is included in the normal form of
-
-packaging a Major Component, but which is not part of that Major
-
-Component, and (b) serves only to enable use of the work with that
-
-Major Component, or to implement a Standard Interface for which an
-
-implementation is available to the public in source code form.  A
-
-"Major Component", in this context, means a major essential component
-
-(kernel, window system, and so on) of the specific operating system
-
-(if any) on which the executable work runs, or a compiler used to
-
-produce the work, or an object code interpreter used to run it.
-
-
-
-  The "Corresponding Source" for a work in object code form means all
-
-the source code needed to generate, install, and (for an executable
-
-work) run the object code and to modify the work, including scripts to
-
-control those activities.  However, it does not include the work's
-
-System Libraries, or general-purpose tools or generally available free
-
-programs which are used unmodified in performing those activities but
-
-which are not part of the work.  For example, Corresponding Source
-
-includes interface definition files associated with source files for
-
-the work, and the source code for shared libraries and dynamically
-
-linked subprograms that the work is specifically designed to require,
-
-such as by intimate data communication or control flow between those
-
-subprograms and other parts of the work.
-
-
-
-  The Corresponding Source need not include anything that users
-
-can regenerate automatically from other parts of the Corresponding
-
-Source.
-
-
-
-  The Corresponding Source for a work in source code form is that
-
-same work.
-
-
-
-  2. Basic Permissions.
-
-
-
-  All rights granted under this License are granted for the term of
-
-copyright on the Program, and are irrevocable provided the stated
-
-conditions are met.  This License explicitly affirms your unlimited
-
-permission to run the unmodified Program.  The output from running a
-
-covered work is covered by this License only if the output, given its
-
-content, constitutes a covered work.  This License acknowledges your
-
-rights of fair use or other equivalent, as provided by copyright law.
-
-
-
-  You may make, run and propagate covered works that you do not
-
-convey, without conditions so long as your license otherwise remains
-
-in force.  You may convey covered works to others for the sole purpose
-
-of having them make modifications exclusively for you, or provide you
-
-with facilities for running those works, provided that you comply with
-
-the terms of this License in conveying all material for which you do
-
-not control copyright.  Those thus making or running the covered works
-
-for you must do so exclusively on your behalf, under your direction
-
-and control, on terms that prohibit them from making any copies of
-
-your copyrighted material outside their relationship with you.
-
-
-
-  Conveying under any other circumstances is permitted solely under
-
-the conditions stated below.  Sublicensing is not allowed; section 10
-
-makes it unnecessary.
-
-
-
-  3. Protecting Users' Legal Rights From Anti-Circumvention Law.
-
-
-
-  No covered work shall be deemed part of an effective technological
-
-measure under any applicable law fulfilling obligations under article
-
-11 of the WIPO copyright treaty adopted on 20 December 1996, or
-
-similar laws prohibiting or restricting circumvention of such
-
-measures.
-
-
-
-  When you convey a covered work, you waive any legal power to forbid
-
-circumvention of technological measures to the extent such circumvention
-
-is effected by exercising rights under this License with respect to
-
-the covered work, and you disclaim any intention to limit operation or
-
-modification of the work as a means of enforcing, against the work's
-
-users, your or third parties' legal rights to forbid circumvention of
-
-technological measures.
-
-
-
-  4. Conveying Verbatim Copies.
-
-
-
-  You may convey verbatim copies of the Program's source code as you
-
-receive it, in any medium, provided that you conspicuously and
-
-appropriately publish on each copy an appropriate copyright notice;
-
-keep intact all notices stating that this License and any
-
-non-permissive terms added in accord with section 7 apply to the code;
-
-keep intact all notices of the absence of any warranty; and give all
-
-recipients a copy of this License along with the Program.
-
-
-
-  You may charge any price or no price for each copy that you convey,
-
-and you may offer support or warranty protection for a fee.
-
-
-
-  5. Conveying Modified Source Versions.
-
-
-
-  You may convey a work based on the Program, or the modifications to
-
-produce it from the Program, in the form of source code under the
-
-terms of section 4, provided that you also meet all of these conditions:
-
-
-
-    a) The work must carry prominent notices stating that you modified
-
-    it, and giving a relevant date.
-
-
-
-    b) The work must carry prominent notices stating that it is
-
-    released under this License and any conditions added under section
-
-    7.  This requirement modifies the requirement in section 4 to
-
-    "keep intact all notices".
-
-
-
-    c) You must license the entire work, as a whole, under this
-
-    License to anyone who comes into possession of a copy.  This
-
-    License will therefore apply, along with any applicable section 7
-
-    additional terms, to the whole of the work, and all its parts,
-
-    regardless of how they are packaged.  This License gives no
-
-    permission to license the work in any other way, but it does not
-
-    invalidate such permission if you have separately received it.
-
-
-
-    d) If the work has interactive user interfaces, each must display
-
-    Appropriate Legal Notices; however, if the Program has interactive
-
-    interfaces that do not display Appropriate Legal Notices, your
-
-    work need not make them do so.
-
-
-
-  A compilation of a covered work with other separate and independent
-
-works, which are not by their nature extensions of the covered work,
-
-and which are not combined with it such as to form a larger program,
-
-in or on a volume of a storage or distribution medium, is called an
-
-"aggregate" if the compilation and its resulting copyright are not
-
-used to limit the access or legal rights of the compilation's users
-
-beyond what the individual works permit.  Inclusion of a covered work
-
-in an aggregate does not cause this License to apply to the other
-
-parts of the aggregate.
-
-
-
-  6. Conveying Non-Source Forms.
-
-
-
-  You may convey a covered work in object code form under the terms
-
-of sections 4 and 5, provided that you also convey the
-
-machine-readable Corresponding Source under the terms of this License,
-
-in one of these ways:
-
-
-
-    a) Convey the object code in, or embodied in, a physical product
-
-    (including a physical distribution medium), accompanied by the
-
-    Corresponding Source fixed on a durable physical medium
-
-    customarily used for software interchange.
-
-
-
-    b) Convey the object code in, or embodied in, a physical product
-
-    (including a physical distribution medium), accompanied by a
-
-    written offer, valid for at least three years and valid for as
-
-    long as you offer spare parts or customer support for that product
-
-    model, to give anyone who possesses the object code either (1) a
-
-    copy of the Corresponding Source for all the software in the
-
-    product that is covered by this License, on a durable physical
-
-    medium customarily used for software interchange, for a price no
-
-    more than your reasonable cost of physically performing this
-
-    conveying of source, or (2) access to copy the
-
-    Corresponding Source from a network server at no charge.
-
-
-
-    c) Convey individual copies of the object code with a copy of the
-
-    written offer to provide the Corresponding Source.  This
-
-    alternative is allowed only occasionally and noncommercially, and
-
-    only if you received the object code with such an offer, in accord
-
-    with subsection 6b.
-
-
-
-    d) Convey the object code by offering access from a designated
-
-    place (gratis or for a charge), and offer equivalent access to the
-
-    Corresponding Source in the same way through the same place at no
-
-    further charge.  You need not require recipients to copy the
-
-    Corresponding Source along with the object code.  If the place to
-
-    copy the object code is a network server, the Corresponding Source
-
-    may be on a different server (operated by you or a third party)
-
-    that supports equivalent copying facilities, provided you maintain
-
-    clear directions next to the object code saying where to find the
-
-    Corresponding Source.  Regardless of what server hosts the
-
-    Corresponding Source, you remain obligated to ensure that it is
-
-    available for as long as needed to satisfy these requirements.
-
-
-
-    e) Convey the object code using peer-to-peer transmission, provided
-
-    you inform other peers where the object code and Corresponding
-
-    Source of the work are being offered to the general public at no
-
-    charge under subsection 6d.
-
-
-
-  A separable portion of the object code, whose source code is excluded
-
-from the Corresponding Source as a System Library, need not be
-
-included in conveying the object code work.
-
-
-
-  A "User Product" is either (1) a "consumer product", which means any
-
-tangible personal property which is normally used for personal, family,
-
-or household purposes, or (2) anything designed or sold for incorporation
-
-into a dwelling.  In determining whether a product is a consumer product,
-
-doubtful cases shall be resolved in favor of coverage.  For a particular
-
-product received by a particular user, "normally used" refers to a
-
-typical or common use of that class of product, regardless of the status
-
-of the particular user or of the way in which the particular user
-
-actually uses, or expects or is expected to use, the product.  A product
-
-is a consumer product regardless of whether the product has substantial
-
-commercial, industrial or non-consumer uses, unless such uses represent
-
-the only significant mode of use of the product.
-
-
-
-  "Installation Information" for a User Product means any methods,
-
-procedures, authorization keys, or other information required to install
-
-and execute modified versions of a covered work in that User Product from
-
-a modified version of its Corresponding Source.  The information must
-
-suffice to ensure that the continued functioning of the modified object
-
-code is in no case prevented or interfered with solely because
-
-modification has been made.
-
-
-
-  If you convey an object code work under this section in, or with, or
-
-specifically for use in, a User Product, and the conveying occurs as
-
-part of a transaction in which the right of possession and use of the
-
-User Product is transferred to the recipient in perpetuity or for a
-
-fixed term (regardless of how the transaction is characterized), the
-
-Corresponding Source conveyed under this section must be accompanied
-
-by the Installation Information.  But this requirement does not apply
-
-if neither you nor any third party retains the ability to install
-
-modified object code on the User Product (for example, the work has
-
-been installed in ROM).
-
-
-
-  The requirement to provide Installation Information does not include a
-
-requirement to continue to provide support service, warranty, or updates
-
-for a work that has been modified or installed by the recipient, or for
-
-the User Product in which it has been modified or installed.  Access to a
-
-network may be denied when the modification itself materially and
-
-adversely affects the operation of the network or violates the rules and
-
-protocols for communication across the network.
-
-
-
-  Corresponding Source conveyed, and Installation Information provided,
-
-in accord with this section must be in a format that is publicly
-
-documented (and with an implementation available to the public in
-
-source code form), and must require no special password or key for
-
-unpacking, reading or copying.
-
-
-
-  7. Additional Terms.
-
-
-
-  "Additional permissions" are terms that supplement the terms of this
-
-License by making exceptions from one or more of its conditions.
-
-Additional permissions that are applicable to the entire Program shall
-
-be treated as though they were included in this License, to the extent
-
-that they are valid under applicable law.  If additional permissions
-
-apply only to part of the Program, that part may be used separately
-
-under those permissions, but the entire Program remains governed by
-
-this License without regard to the additional permissions.
-
-
-
-  When you convey a copy of a covered work, you may at your option
-
-remove any additional permissions from that 
-... [16997 more characters not recorded]
-```
-
-</details>
-
-### 5. Actual browser keyboard combat mobile and Back navigation evidence
-
-```text
-exit code: 0
---- stdout ---
-{
-  "observed": {
-    "food": "1",
-    "health": "8 / 10",
-    "message": "You defeated the hog and gathered one food. You took 1 damage.",
-    "name": "Browser Scout",
-    "pageWidth": 1265,
-    "shelters": "1",
-    "status": "At camp",
-    "survivors": [
-      "Runtime Alice",
-      "Runtime Bob reborn",
-      "Browser Scout"
-    ],
-    "viewport": 1280,
-    "wood": "2"
-  },
-  "consoleErrors": [],
-  "actionsPerformed": [
-    "Join Browser Scout",
-    "Gather by keyboard Enter",
-    "390x844 mobile layout check: scrollWidth375 <= innerWidth390",
-    "Reload resumes survivor",
-    "Navigate home, Back, Gather: controls still work",
-    "Hunt until hog; Defend; Attack twice: health8 food1"
-  ],
-  "screenshot": "C:/Users/Christopher/AppData/Local/Temp/survive-desktop.png"
-}
-```
-
-### 6. Disposable test database and candidate listener ownership
-
-```text
-exit code: 0
---- stdout ---
-{"database":"test","ping":1}
-
-LocalAddress LocalPort OwningProcess
------------- --------- -------------
-127.0.0.1        57184         48072
-127.0.0.1        57180         26612
-                               48072
-                               48072
-                               48072
-                               48072
-```
-
-### 7. Verification cleanup readback
-
-```text
-exit code: 0
---- stdout ---
-PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.
-```
-
+- **Application logs:** Candidate output/error and mongod logs retained under the session-owned temporary runtime directory; no secrets are included in this report.
+
+- **Local command:** `python -X utf8 C:\Users\CHRIST~1\AppData\Local\Temp/survive-runtime-api.py http://127.0.0.1:57184` in `A:\Projects\christopherbell.dev.worktrees\survive`
+
+- **Local command:** `GET http://127.0.0.1:57184/actuator/health/readiness` in `A:\Projects\christopherbell.dev.worktrees\survive`
+
+- **Local command:** `GET http://127.0.0.1:57184/actuator/info` in `A:\Projects\christopherbell.dev.worktrees\survive`
+
+- **Local command:** `GET http://127.0.0.1:57184/licenses/survive-GPL-3.0.txt` in `A:\Projects\christopherbell.dev.worktrees\survive`
+
+- **Local command:** `python -X utf8 -c "from pathlib import Path; print(Path(r'C:/Users/Christopher/AppData/Local/Temp/survive-browser-observed.json').read_text())"` in `A:\Projects\christopherbell.dev.worktrees\survive`
+
+- **Local command:** `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; & mongosh --quiet --norc (\"mongodb://127.0.0.1:\"+$r.mongoPort+\"/test\") --eval \"JSON.stringify({database:db.getName(),ping:db.runCommand({ping:1}).ok})\"; Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort | Select-Object LocalAddress,LocalPort,OwningProcess; Get-NetTCPConnection -State Established -OwningProcess $r.appPid | Where-Object RemotePort -eq $r.mongoPort | Select-Object RemoteAddress,RemotePort,OwningProcess"` in `A:\Projects\christopherbell.dev.worktrees\survive`
+
+- **Local command:** `powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; if(Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort -ErrorAction SilentlyContinue){throw \"Verification ports remain open\"}; if(Get-Process -Id $r.appPid,$r.mongoPid -ErrorAction SilentlyContinue){throw \"Recorded verification processes remain\"}; \"PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.\""` in `A:\Projects\christopherbell.dev.worktrees\survive`
+
+- **Candidate identity:** `7e64db0`
+
+- **Cleanup:** Stopped owned Java PID 48072 and MongoDB PID 26612; ports 57184 and 57180 closed; disposable directory retained after policy denied recursive cleanup.
+
+
+
+## Data Sent
+
+
+
+### 1. Shared Java world API playthrough and security boundaries
+
+
+
+```text
+
+python -X utf8 C:\Users\CHRIST~1\AppData\Local\Temp/survive-runtime-api.py http://127.0.0.1:57184
+
+```
+
+
+
+### 2. Candidate readiness
+
+
+
+```http
+
+GET http://127.0.0.1:57184/actuator/health/readiness
+
+```
+
+
+
+### 3. Committed candidate build identity
+
+
+
+```http
+
+GET http://127.0.0.1:57184/actuator/info
+
+```
+
+
+
+### 4. Source license is publicly readable
+
+
+
+```http
+
+GET http://127.0.0.1:57184/licenses/survive-GPL-3.0.txt
+
+```
+
+
+
+### 5. Actual browser keyboard combat mobile and Back navigation evidence
+
+
+
+```text
+
+python -X utf8 -c "from pathlib import Path; print(Path(r'C:/Users/Christopher/AppData/Local/Temp/survive-browser-observed.json').read_text())"
+
+```
+
+
+
+### 6. Disposable test database and candidate listener ownership
+
+
+
+```text
+
+powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; & mongosh --quiet --norc (\"mongodb://127.0.0.1:\"+$r.mongoPort+\"/test\") --eval \"JSON.stringify({database:db.getName(),ping:db.runCommand({ping:1}).ok})\"; Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort | Select-Object LocalAddress,LocalPort,OwningProcess; Get-NetTCPConnection -State Established -OwningProcess $r.appPid | Where-Object RemotePort -eq $r.mongoPort | Select-Object RemoteAddress,RemotePort,OwningProcess"
+
+```
+
+
+
+### 7. Verification cleanup readback
+
+
+
+```text
+
+powershell -NoProfile -Command "$r=Get-Content -Raw $env:TEMP/survive-runtime.json | ConvertFrom-Json; if(Get-NetTCPConnection -State Listen -LocalPort $r.appPort,$r.mongoPort -ErrorAction SilentlyContinue){throw \"Verification ports remain open\"}; if(Get-Process -Id $r.appPid,$r.mongoPid -ErrorAction SilentlyContinue){throw \"Recorded verification processes remain\"}; \"PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.\""
+
+```
+
+
+
+## Response Received
+
+
+
+### 1. Shared Java world API playthrough and security boundaries
+
+
+
+```text
+
+exit code: 0
+
+--- stdout ---
+
+PASS anonymous page, 204 before joining, missing CSRF=403, separate survivors, no-store and hidden credentials
+
+PASS invalid/unavailable commands=400; duplicate stale revision=409
+
+PASS Java gathering progression; Alice built shared shelter; Bob has wood=0 and strength=2
+
+PASS fresh hogs, defend, attack, victory food, consuming food, flee and shared shelter rest
+
+PASS capacity=10, boat shared with Bob, consumed on escape, terminal actions=400
+
+PASS restart preserves shared camp and Alice; Bob health=10
+
+PASS death health=0, no actions available; journal bounded to 30
+
+{"name": "Runtime Alice", "health": 10, "strength": 6, "wood": 0, "shelters": 1, "boats": 0, "survivors": ["Runtime Alice", "Runtime Bob reborn"], "worldRevision": 49}
+
+All runtime API cases passed. Requests made only through application endpoints; no direct database writes.
+
+```
+
+
+
+### 2. Candidate readiness
+
+
+
+```text
+
+HTTP 200 
+
+X-Request-Id: 7b840dc3-1ac7-44fb-8326-0073a3fca956
+
+Set-Cookie: [REDACTED]
+
+X-RateLimit-Limit: 10000
+
+X-RateLimit-Remaining: 9999
+
+X-RateLimit-Reset: 1791250487
+
+X-Content-Type-Options: nosniff
+
+X-XSS-Protection: 0
+
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+
+Pragma: no-cache
+
+Expires: 0
+
+X-Frame-Options: SAMEORIGIN
+
+Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com; img-src 'self' data: blob: https:; connect-src 'self' https://gateway.raisingcanes.com https://order.raisingcanes.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://w.soundcloud.com; frame-ancestors 'self'; media-src 'self' blob:; worker-src 'self' blob:; form-action 'self'
+
+Referrer-Policy: strict-origin-when-cross-origin
+
+Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()
+
+Content-Type: application/vnd.spring-boot.actuator.v3+json
+
+Transfer-Encoding: chunked
+
+Date: Tue, 06 Oct 2026 01:33:47 GMT
+
+Connection: close
+
+
+
+{"status":"UP"}
+
+```
+
+
+
+### 3. Committed candidate build identity
+
+
+
+```text
+
+HTTP 200 
+
+X-Request-Id: 5854fc17-7c9c-4f0d-ab3d-a99d0c11af22
+
+Set-Cookie: [REDACTED]
+
+X-RateLimit-Limit: 10000
+
+X-RateLimit-Remaining: 9999
+
+X-RateLimit-Reset: 1791250487
+
+X-Content-Type-Options: nosniff
+
+X-XSS-Protection: 0
+
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+
+Pragma: no-cache
+
+Expires: 0
+
+X-Frame-Options: SAMEORIGIN
+
+Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com; img-src 'self' data: blob: https:; connect-src 'self' https://gateway.raisingcanes.com https://order.raisingcanes.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://w.soundcloud.com; frame-ancestors 'self'; media-src 'self' blob:; worker-src 'self' blob:; form-action 'self'
+
+Referrer-Policy: strict-origin-when-cross-origin
+
+Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()
+
+Content-Type: application/vnd.spring-boot.actuator.v3+json
+
+Content-Length: 176
+
+Date: Tue, 06 Oct 2026 01:33:47 GMT
+
+Connection: close
+
+
+
+{"build":{"artifact":"website","name":"website","time":"2026-10-06T01:31:18.107Z","version":"0.0.0-dev.7e64db0c7d790fc3f6aa6cf1f2dc8dcd98df2987","group":"christopherbell.dev"}}
+
+```
+
+
+
+### 4. Source license is publicly readable
+
+
+
+<details><summary>376 lines</summary>
+
+
+
+```text
+
+HTTP 200 
+
+X-Request-Id: d48fb739-31a5-4dc2-acc2-d09f264cd894
+
+Set-Cookie: [REDACTED]
+
+X-RateLimit-Limit: 10000
+
+X-RateLimit-Remaining: 9999
+
+X-RateLimit-Reset: 1791250487
+
+Cache-Control: max-age=3600, public
+
+Last-Modified: Tue, 06 Oct 2026 01:31:23 GMT
+
+Accept-Ranges: bytes
+
+X-Content-Type-Options: nosniff
+
+X-XSS-Protection: 0
+
+X-Frame-Options: SAMEORIGIN
+
+Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://maxcdn.bootstrapcdn.com; img-src 'self' data: blob: https:; connect-src 'self' https://gateway.raisingcanes.com https://order.raisingcanes.com; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://open.spotify.com https://w.soundcloud.com; frame-ancestors 'self'; media-src 'self' blob:; worker-src 'self' blob:; form-action 'self'
+
+Referrer-Policy: strict-origin-when-cross-origin
+
+Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()
+
+Content-Type: text/plain
+
+Content-Length: 35823
+
+Date: Tue, 06 Oct 2026 01:33:47 GMT
+
+Connection: close
+
+
+
+                    GNU GENERAL PUBLIC LICENSE
+
+
+
+                       Version 3, 29 June 2007
+
+
+
+
+
+
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+
+
+
+ Everyone is permitted to copy and distribute verbatim copies
+
+
+
+ of this license document, but changing it is not allowed.
+
+
+
+
+
+
+
+                            Preamble
+
+
+
+
+
+
+
+  The GNU General Public License is a free, copyleft license for
+
+
+
+software and other kinds of works.
+
+
+
+
+
+
+
+  The licenses for most software and other practical works are designed
+
+
+
+to take away your freedom to share and change the works.  By contrast,
+
+
+
+the GNU General Public License is intended to guarantee your freedom to
+
+
+
+share and change all versions of a program--to make sure it remains free
+
+
+
+software for all its users.  We, the Free Software Foundation, use the
+
+
+
+GNU General Public License for most of our software; it applies also to
+
+
+
+any other work released this way by its authors.  You can apply it to
+
+
+
+your programs, too.
+
+
+
+
+
+
+
+  When we speak of free software, we are referring to freedom, not
+
+
+
+price.  Our General Public Licenses are designed to make sure that you
+
+
+
+have the freedom to distribute copies of free software (and charge for
+
+
+
+them if you wish), that you receive source code or can get it if you
+
+
+
+want it, that you can change the software or use pieces of it in new
+
+
+
+free programs, and that you know you can do these things.
+
+
+
+
+
+
+
+  To protect your rights, we need to prevent others from denying you
+
+
+
+these rights or asking you to surrender the rights.  Therefore, you have
+
+
+
+certain responsibilities if you distribute copies of the software, or if
+
+
+
+you modify it: responsibilities to respect the freedom of others.
+
+
+
+
+
+
+
+  For example, if you distribute copies of such a program, whether
+
+
+
+gratis or for a fee, you must pass on to the recipients the same
+
+
+
+freedoms that you received.  You must make sure that they, too, receive
+
+
+
+or can get the source code.  And you must show them these terms so they
+
+
+
+know their rights.
+
+
+
+
+
+
+
+  Developers that use the GNU GPL protect your rights with two steps:
+
+
+
+(1) assert copyright on the software, and (2) offer you this License
+
+
+
+giving you legal permission to copy, distribute and/or modify it.
+
+
+
+
+
+
+
+  For the developers' and authors' protection, the GPL clearly explains
+
+
+
+that there is no warranty for this free software.  For both users' and
+
+
+
+authors' sake, the GPL requires that modified versions be marked as
+
+
+
+changed, so that their problems will not be attributed erroneously to
+
+
+
+authors of previous versions.
+
+
+
+
+
+
+
+  Some devices are designed to deny users access to install or run
+
+
+
+modified versions of the software inside them, although the manufacturer
+
+
+
+can do so.  This is fundamentally incompatible with the aim of
+
+
+
+protecting users' freedom to change the software.  The systematic
+
+
+
+pattern of such abuse occurs in the area of products for individuals to
+
+
+
+use, which is precisely where it is most unacceptable.  Therefore, we
+
+
+
+have designed this version of the GPL to prohibit the practice for those
+
+
+
+products.  If such problems arise substantially in other domains, we
+
+
+
+stand ready to extend this provision to those domains in future versions
+
+
+
+of the GPL, as needed to protect the freedom of users.
+
+
+
+
+
+
+
+  Finally, every program is threatened constantly by software patents.
+
+
+
+States should not allow patents to restrict development and use of
+
+
+
+software on general-purpose computers, but in those that do, we wish to
+
+
+
+avoid the special danger that patents applied to a free program could
+
+
+
+make it effectively proprietary.  To prevent this, the GPL assures that
+
+
+
+patents cannot be used to render the program non-free.
+
+
+
+
+
+
+
+  The precise terms and conditions for copying, distribution and
+
+
+
+modification follow.
+
+
+
+
+
+
+
+                       TERMS AND CONDITIONS
+
+
+
+
+
+
+
+  0. Definitions.
+
+
+
+
+
+
+
+  "This License" refers to version 3 of the GNU General Public License.
+
+
+
+
+
+
+
+  "Copyright" also means copyright-like laws that apply to other kinds of
+
+
+
+works, such as semiconductor masks.
+
+
+
+
+
+
+
+  "The Program" refers to any copyrightable work licensed under this
+
+
+
+License.  Each licensee is addressed as "you".  "Licensees" and
+
+
+
+"recipients" may be individuals or organizations.
+
+
+
+
+
+
+
+  To "modify" a work means to copy from or adapt all or part of the work
+
+
+
+in a fashion requiring copyright permission, other than the making of an
+
+
+
+exact copy.  The resulting work is called a "modified version" of the
+
+
+
+earlier work or a work "based on" the earlier work.
+
+
+
+
+
+
+
+  A "covered work" means either the unmodified Program or a work based
+
+
+
+on the Program.
+
+
+
+
+
+
+
+  To "propagate" a work means to do anything with it that, without
+
+
+
+permission, would make you directly or secondarily liable for
+
+
+
+infringement under applicable copyright law, except executing it on a
+
+
+
+computer or modifying a private copy.  Propagation includes copying,
+
+
+
+distribution (with or without modification), making available to the
+
+
+
+public, and in some countries other activities as well.
+
+
+
+
+
+
+
+  To "convey" a work means any kind of propagation that enables other
+
+
+
+parties to make or receive copies.  Mere interaction with a user through
+
+
+
+a computer network, with no transfer of a copy, is not conveying.
+
+
+
+
+
+
+
+  An interactive user interface displays "Appropriate Legal Notices"
+
+
+
+to the extent that it includes a convenient and prominently visible
+
+
+
+feature that (1) displays an appropriate copyright notice, and (2)
+
+
+
+tells the user that there is no warranty for the work (except to the
+
+
+
+extent that warranties are provided), that licensees may convey the
+
+
+
+work under this License, and how to view a copy of this License.  If
+
+
+
+the interface presents a list of user commands or options, such as a
+
+
+
+menu, a prominent item in the list meets this criterion.
+
+
+
+
+
+
+
+  1. Source Code.
+
+
+
+
+
+
+
+  The "source code" for a work means the preferred form of the work
+
+
+
+for making modifications to it.  "Object code" means any non-source
+
+
+
+form of a work.
+
+
+
+
+
+
+
+  A "Standard Interface" means an interface that either is an official
+
+
+
+standard defined by a recognized standards body, or, in the case of
+
+
+
+interfaces specified for a particular programming language, one that
+
+
+
+is widely used among developers working in that language.
+
+
+
+
+
+
+
+  The "System Libraries" of an executable work include anything, other
+
+
+
+than the work as a whole, that (a) is included in the normal form of
+
+
+
+packaging a Major Component, but which is not part of that Major
+
+
+
+Component, and (b) serves only to enable use of the work with that
+
+
+
+Major Component, or to implement a Standard Interface for which an
+
+
+
+implementation is available to the public in source code form.  A
+
+
+
+"Major Component", in this context, means a major essential component
+
+
+
+(kernel, window system, and so on) of the specific operating system
+
+
+
+(if any) on which the executable work runs, or a compiler used to
+
+
+
+produce the work, or an object code interpreter used to run it.
+
+
+
+
+
+
+
+  The "Corresponding Source" for a work in object code form means all
+
+
+
+the source code needed to generate, install, and (for an executable
+
+
+
+work) run the object code and to modify the work, including scripts to
+
+
+
+control those activities.  However, it does not include the work's
+
+
+
+System Libraries, or general-purpose tools or generally available free
+
+
+
+programs which are used unmodified in performing those activities but
+
+
+
+which are not part of the work.  For example, Corresponding Source
+
+
+
+includes interface definition files associated with source files for
+
+
+
+the work, and the source code for shared libraries and dynamically
+
+
+
+linked subprograms that the work is specifically designed to require,
+
+
+
+such as by intimate data communication or control flow between those
+
+
+
+subprograms and other parts of the work.
+
+
+
+
+
+
+
+  The Corresponding Source need not include anything that users
+
+
+
+can regenerate automatically from other parts of the Corresponding
+
+
+
+Source.
+
+
+
+
+
+
+
+  The Corresponding Source for a work in source code form is that
+
+
+
+same work.
+
+
+
+
+
+
+
+  2. Basic Permissions.
+
+
+
+
+
+
+
+  All rights granted under this License are granted for the term of
+
+
+
+copyright on the Program, and are irrevocable provided the stated
+
+
+
+conditions are met.  This License explicitly affirms your unlimited
+
+
+
+permission to run the unmodified Program.  The output from running a
+
+
+
+covered work is covered by this License only if the output, given its
+
+
+
+content, constitutes a covered work.  This License acknowledges your
+
+
+
+rights of fair use or other equivalent, as provided by copyright law.
+
+
+
+
+
+
+
+  You may make, run and propagate covered works that you do not
+
+
+
+convey, without conditions so long as your license otherwise remains
+
+
+
+in force.  You may convey covered works to others for the sole purpose
+
+
+
+of having them make modifications exclusively for you, or provide you
+
+
+
+with facilities for running those works, provided that you comply with
+
+
+
+the terms of this License in conveying all material for which you do
+
+
+
+not control copyright.  Those thus making or running the covered works
+
+
+
+for you must do so exclusively on your behalf, under your direction
+
+
+
+and control, on terms that prohibit them from making any copies of
+
+
+
+your copyrighted material outside their relationship with you.
+
+
+
+
+
+
+
+  Conveying under any other circumstances is permitted solely under
+
+
+
+the conditions stated below.  Sublicensing is not allowed; section 10
+
+
+
+makes it unnecessary.
+
+
+
+
+
+
+
+  3. Protecting Users' Legal Rights From Anti-Circumvention Law.
+
+
+
+
+
+
+
+  No covered work shall be deemed part of an effective technological
+
+
+
+measure under any applicable law fulfilling obligations under article
+
+
+
+11 of the WIPO copyright treaty adopted on 20 December 1996, or
+
+
+
+similar laws prohibiting or restricting circumvention of such
+
+
+
+measures.
+
+
+
+
+
+
+
+  When you convey a covered work, you waive any legal power to forbid
+
+
+
+circumvention of technological measures to the extent such circumvention
+
+
+
+is effected by exercising rights under this License with respect to
+
+
+
+the covered work, and you disclaim any intention to limit operation or
+
+
+
+modification of the work as a means of enforcing, against the work's
+
+
+
+users, your or third parties' legal rights to forbid circumvention of
+
+
+
+technological measures.
+
+
+
+
+
+
+
+  4. Conveying Verbatim Copies.
+
+
+
+
+
+
+
+  You may convey verbatim copies of the Program's source code as you
+
+
+
+receive it, in any medium, provided that you conspicuously and
+
+
+
+appropriately publish on each copy an appropriate copyright notice;
+
+
+
+keep intact all notices stating that this License and any
+
+
+
+non-permissive terms added in accord with section 7 apply to the code;
+
+
+
+keep intact all notices of the absence of any warranty; and give all
+
+
+
+recipients a copy of this License along with the Program.
+
+
+
+
+
+
+
+  You may charge any price or no price for each copy that you convey,
+
+
+
+and you may offer support or warranty protection for a fee.
+
+
+
+
+
+
+
+  5. Conveying Modified Source Versions.
+
+
+
+
+
+
+
+  You may convey a work based on the Program, or the modifications to
+
+
+
+produce it from the Program, in the form of source code under the
+
+
+
+terms of section 4, provided that you also meet all of these conditions:
+
+
+
+
+
+
+
+    a) The work must carry prominent notices stating that you modified
+
+
+
+    it, and giving a relevant date.
+
+
+
+
+
+
+
+    b) The work must carry prominent notices stating that it is
+
+
+
+    released under this License and any conditions added under section
+
+
+
+    7.  This requirement modifies the requirement in section 4 to
+
+
+
+    "keep intact all notices".
+
+
+
+
+
+
+
+    c) You must license the entire work, as a whole, under this
+
+
+
+    License to anyone who comes into possession of a copy.  This
+
+
+
+    License will therefore apply, along with any applicable section 7
+
+
+
+    additional terms, to the whole of the work, and all its parts,
+
+
+
+    regardless of how they are packaged.  This License gives no
+
+
+
+    permission to license the work in any other way, but it does not
+
+
+
+    invalidate such permission if you have separately received it.
+
+
+
+
+
+
+
+    d) If the work has interactive user interfaces, each must display
+
+
+
+    Appropriate Legal Notices; however, if the Program has interactive
+
+
+
+    interfaces that do not display Appropriate Legal Notices, your
+
+
+
+    work need not make them do so.
+
+
+
+
+
+
+
+  A compilation of a covered work with other separate and independent
+
+
+
+works, which are not by their nature extensions of the covered work,
+
+
+
+and which are not combined with it such as to form a larger program,
+
+
+
+in or on a volume of a storage or distribution medium, is called an
+
+
+
+"aggregate" if the compilation and its resulting copyright are not
+
+
+
+used to limit the access or legal rights of the compilation's users
+
+
+
+beyond what the individual works permit.  Inclusion of a covered work
+
+
+
+in an aggregate does not cause this License to apply to the other
+
+
+
+parts of the aggregate.
+
+
+
+
+
+
+
+  6. Conveying Non-Source Forms.
+
+
+
+
+
+
+
+  You may convey a covered work in object code form under the terms
+
+
+
+of sections 4 and 5, provided that you also convey the
+
+
+
+machine-readable Corresponding Source under the terms of this License,
+
+
+
+in one of these ways:
+
+
+
+
+
+
+
+    a) Convey the object code in, or embodied in, a physical product
+
+
+
+    (including a physical distribution medium), accompanied by the
+
+
+
+    Corresponding Source fixed on a durable physical medium
+
+
+
+    customarily used for software interchange.
+
+
+
+
+
+
+
+    b) Convey the object code in, or embodied in, a physical product
+
+
+
+    (including a physical distribution medium), accompanied by a
+
+
+
+    written offer, valid for at least three years and valid for as
+
+
+
+    long as you offer spare parts or customer support for that product
+
+
+
+    model, to give anyone who possesses the object code either (1) a
+
+
+
+    copy of the Corresponding Source for all the software in the
+
+
+
+    product that is covered by this License, on a durable physical
+
+
+
+    medium customarily used for software interchange, for a price no
+
+
+
+    more than your reasonable cost of physically performing this
+
+
+
+    conveying of source, or (2) access to copy the
+
+
+
+    Corresponding Source from a network server at no charge.
+
+
+
+
+
+
+
+    c) Convey individual copies of the object code with a copy of the
+
+
+
+    written offer to provide the Corresponding Source.  This
+
+
+
+    alternative is allowed only occasionally and noncommercially, and
+
+
+
+    only if you received the object code with such an offer, in accord
+
+
+
+    with subsection 6b.
+
+
+
+
+
+
+
+    d) Convey the object code by offering access from a designated
+
+
+
+    place (gratis or for a charge), and offer equivalent access to the
+
+
+
+    Corresponding Source in the same way through the same place at no
+
+
+
+    further charge.  You need not require recipients to copy the
+
+
+
+    Corresponding Source along with the object code.  If the place to
+
+
+
+    copy the object code is a network server, the Corresponding Source
+
+
+
+    may be on a different server (operated by you or a third party)
+
+
+
+    that supports equivalent copying facilities, provided you maintain
+
+
+
+    clear directions next to the object code saying where to find the
+
+
+
+    Corresponding Source.  Regardless of what server hosts the
+
+
+
+    Corresponding Source, you remain obligated to ensure that it is
+
+
+
+    available for as long as needed to satisfy these requirements.
+
+
+
+
+
+
+
+    e) Convey the object code using peer-to-peer transmission, provided
+
+
+
+    you inform other peers where the object code and Corresponding
+
+
+
+    Source of the work are being offered to the general public at no
+
+
+
+    charge under subsection 6d.
+
+
+
+
+
+
+
+  A separable portion of the object code, whose source code is excluded
+
+
+
+from the Corresponding Source as a System Library, need not be
+
+
+
+included in conveying the object code work.
+
+
+
+
+
+
+
+  A "User Product" is either (1) a "consumer product", which means any
+
+
+
+tangible personal property which is normally used for personal, family,
+
+
+
+or household purposes, or (2) anything designed or sold for incorporation
+
+
+
+into a dwelling.  In determining whether a product is a consumer product,
+
+
+
+doubtful cases shall be resolved in favor of coverage.  For a particular
+
+
+
+product received by a particular user, "normally used" refers to a
+
+
+
+typical or common use of that class of product, regardless of the status
+
+
+
+of the particular user or of the way in which the particular user
+
+
+
+actually uses, or expects or is expected to use, the product.  A product
+
+
+
+is a consumer product regardless of whether the product has substantial
+
+
+
+commercial, industrial or non-consumer uses, unless such uses represent
+
+
+
+the only significant mode of use of the product.
+
+
+
+
+
+
+
+  "Installation Information" for a User Product means any methods,
+
+
+
+procedures, authorization keys, or other information required to install
+
+
+
+and execute modified versions of a covered work in that User Product from
+
+
+
+a modified version of its Corresponding Source.  The information must
+
+
+
+suffice to ensure that the continued functioning of the modified object
+
+
+
+code is in no case prevented or interfered with solely because
+
+
+
+modification has been made.
+
+
+
+
+
+
+
+  If you convey an object code work under this section in, or with, or
+
+
+
+specifically for use in, a User Product, and the conveying occurs as
+
+
+
+part of a transaction in which the right of possession and use of the
+
+
+
+User Product is transferred to the recipient in perpetuity or for a
+
+
+
+fixed term (regardless of how the transaction is characterized), the
+
+
+
+Corresponding Source conveyed under this section must be accompanied
+
+
+
+by the Installation Information.  But this requirement does not apply
+
+
+
+if neither you nor any third party retains the ability to install
+
+
+
+modified object code on the User Product (for example, the work has
+
+
+
+been installed in ROM).
+
+
+
+
+
+
+
+  The requirement to provide Installation Information does not include a
+
+
+
+requirement to continue to provide support service, warranty, or updates
+
+
+
+for a work that has been modified or installed by the recipient, or for
+
+
+
+the User Product in which it has been modified or installed.  Access to a
+
+
+
+network may be denied when the modification itself materially and
+
+
+
+adversely affects the operation of the network or violates the rules and
+
+
+
+protocols for communication across the network.
+
+
+
+
+
+
+
+  Corresponding Source conveyed, and Installation Information provided,
+
+
+
+in accord with this section must be in a format that is publicly
+
+
+
+documented (and with an implementation available to the public in
+
+
+
+source code form), and must require no special password or key for
+
+
+
+unpacking, reading or copying.
+
+
+
+
+
+
+
+  7. Additional Terms.
+
+
+
+
+
+
+
+  "Additional permissions" are terms that supplement the terms of this
+
+
+
+License by making exceptions from one or more of its conditions.
+
+
+
+Additional permissions that are applicable to the entire Program shall
+
+
+
+be treated as though they were included in this License, to the extent
+
+
+
+that they are valid under applicable law.  If additional permissions
+
+
+
+apply only to part of the Program, that part may be used separately
+
+
+
+under those permissions, but the entire Program remains governed by
+
+
+
+this License without regard to the additional permissions.
+
+
+
+
+
+
+
+  When you convey a copy of a covered work, you may at your option
+
+
+
+remove any additional permissions from that 
+
+... [16997 more characters not recorded]
+
+```
+
+
+
+</details>
+
+
+
+### 5. Actual browser keyboard combat mobile and Back navigation evidence
+
+
+
+```text
+
+exit code: 0
+
+--- stdout ---
+
+{
+
+  "observed": {
+
+    "food": "1",
+
+    "health": "8 / 10",
+
+    "message": "You defeated the hog and gathered one food. You took 1 damage.",
+
+    "name": "Browser Scout",
+
+    "pageWidth": 1265,
+
+    "shelters": "1",
+
+    "status": "At camp",
+
+    "survivors": [
+
+      "Runtime Alice",
+
+      "Runtime Bob reborn",
+
+      "Browser Scout"
+
+    ],
+
+    "viewport": 1280,
+
+    "wood": "2"
+
+  },
+
+  "consoleErrors": [],
+
+  "actionsPerformed": [
+
+    "Join Browser Scout",
+
+    "Gather by keyboard Enter",
+
+    "390x844 mobile layout check: scrollWidth375 <= innerWidth390",
+
+    "Reload resumes survivor",
+
+    "Navigate home, Back, Gather: controls still work",
+
+    "Hunt until hog; Defend; Attack twice: health8 food1"
+
+  ],
+
+  "screenshot": "C:/Users/Christopher/AppData/Local/Temp/survive-desktop.png"
+
+}
+
+```
+
+
+
+### 6. Disposable test database and candidate listener ownership
+
+
+
+```text
+
+exit code: 0
+
+--- stdout ---
+
+{"database":"test","ping":1}
+
+
+
+LocalAddress LocalPort OwningProcess
+
+------------ --------- -------------
+
+127.0.0.1        57184         48072
+
+127.0.0.1        57180         26612
+
+                               48072
+
+                               48072
+
+                               48072
+
+                               48072
+
+```
+
+
+
+### 7. Verification cleanup readback
+
+
+
+```text
+
+exit code: 0
+
+--- stdout ---
+
+PASS: candidate and MongoDB processes absent; ports closed. Disposable files retained after policy refused recursive cleanup.
+
+```
+
+
+
 ## Evidence
 - Native `gradlew.bat :website:check :website:bootJar` passed: 1,989 Java tests passed, 109 database contract tests skipped; JavaScript suite initially 385 passing tests, and Pester suites passed (184, 208, 208 and 76 reported passes; the duplicated suite is part of the check task). No affected test was skipped.
 - After final review changes, `gradlew.bat :website:test --tests dev.christopherbell.survive.* --tests dev.christopherbell.configuration.PublicSitemapServiceTest :website:jsTest` passed, including concurrent shared-boat consumption and 386 JavaScript tests. `node --check` passed for all three touched JavaScript modules, and `git diff --check` passed.
 - After committing, `gradlew.bat :website:bootJar` passed and the real candidate reports build version containing `7e64db0c`.
 - Independent semantic review found a Back/forward-cache pagehide defect, corrected before this committed candidate and verified by unit and actual browser navigation. No remaining important review findings.
-- CUA browser performed the saved UI sequence directly; case 5 prints that actual captured DOM evidence, rather than substituting unit tests for browser play. Desktop screenshot retained outside the repositories.
-- Case 1 started 2026-10-05T20:31:45-05:00, took 1282 ms, candidate `7e64db0`
-- Case 2 started 2026-10-05T20:33:47-05:00, took 31 ms, candidate `7e64db0`
-- Case 3 started 2026-10-05T20:33:47-05:00, took 30 ms, candidate `7e64db0`
-- Case 4 started 2026-10-05T20:33:47-05:00, took 31 ms, candidate `7e64db0`
-- Case 5 started 2026-10-05T20:33:48-05:00, took 31 ms, candidate `7e64db0`
-- Case 6 started 2026-10-05T20:33:48-05:00, took 2031 ms, candidate `7e64db0`
-- Case 7 started 2026-10-05T20:34:42-05:00, took 1014 ms, candidate `7e64db0`
-
-## Bugs / Follow-ups
-None
-
-## Document Status
-complete
-
-## Project
+- CUA browser performed the saved UI sequence directly; case 5 prints that actual captured DOM evidence, rather than substituting unit tests for browser play. Desktop screenshot retained outside the repositories.
+
+- Case 1 started 2026-10-05T20:31:45-05:00, took 1282 ms, candidate `7e64db0`
+
+- Case 2 started 2026-10-05T20:33:47-05:00, took 31 ms, candidate `7e64db0`
+
+- Case 3 started 2026-10-05T20:33:47-05:00, took 30 ms, candidate `7e64db0`
+
+- Case 4 started 2026-10-05T20:33:47-05:00, took 31 ms, candidate `7e64db0`
+
+- Case 5 started 2026-10-05T20:33:48-05:00, took 31 ms, candidate `7e64db0`
+
+- Case 6 started 2026-10-05T20:33:48-05:00, took 2031 ms, candidate `7e64db0`
+
+- Case 7 started 2026-10-05T20:34:42-05:00, took 1014 ms, candidate `7e64db0`
+
+
+
+## Bugs / Follow-ups
+
+None
+
+
+
+## Document Status
+
+complete
+
+
+
+## Project
+
 christopherbell-dev

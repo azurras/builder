@@ -149,6 +149,12 @@ Revert the merged feature through a verified PR and the supported automatic pipe
 - **Impact:** No database/schema changes. In-memory world survives character replacement but resets on process restart; fixed bounds limit players, structures, names and events. Skill progression caps strength at 20. Browser Back retains controls when the document is cached.
 - **Evidence:** Initial tests failed on absent implementation/routes; the Java model tests now pass. Independent reviewer found the pagehide/back-forward-cache lifecycle defect; it was corrected with a regression. Native Gradle tests needed JAVA_TOOL_OPTIONS as well as GRADLE_OPTS so child JVMs use the short socket directory. Full checks are running; runtime proof remains required before PR.
 
+### 2026-10-05 - Refresh candidate after main advanced
+
+- **Change:** Merged current origin/main into the work branch after CI passed but merge was refused by the up-to-date branch requirement; candidate is now 6bf3c148.
+- **Reason:** Preserve all required checks without bypassing branch protection. Incoming changes only concern photography.
+- **Impact:** Full website checks and actual isolated API/browser runtime proof repeated on the new jar; all passed. Updated runtime report before pushing the refreshed candidate.
+
 ## Outcome
 Pending.
 
