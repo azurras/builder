@@ -1,7 +1,7 @@
 # Give supplies to another survivor
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -39,10 +39,10 @@ The user requested direct survivor interaction after the initial Survive deliver
 codex/survivor-interactions-20261006 from origin/main a42d4b8 in an owned isolated worktree.
 
 ## Assumptions
-Supply giving is the first interaction. Both survivors must be at camp (EXPLORING). Receiving does not extend an idle survivor's lifetime; active recipients refresh normally. Existing names list remains compatible; new public recipient summaries carry identity/status.
+The user selected supply giving as the first interaction. Both survivors must be at camp (EXPLORING). Receiving does not extend an idle survivor's lifetime; active recipients refresh normally. Existing names list remains compatible; new public recipient summaries carry identity/status.
 
 ## Open Questions
-The user may steer the interaction preference while implementation proceeds with the stated resource-giving default.
+None. The user selected giving wood or food.
 
 ## Design
 Each SurvivePlayer gets a public UUID independent of its private cookie. Snapshot adds own survivorId and a list of eligible recipients with public ID/name; preserve the existing survivors names array. Java computes eligibility. POST /api/survive/v1/gifts accepts recipientId, resource enum WOOD/FOOD, quantity and sender revision. The synchronized service expires inactive players, validates identities/revision/availability/capacity before any mutation, updates both inventories and revisions and records one event. Recipient IDs convey no action authority. Only the cookie controls the sender. UI adds a camp form, displays short IDs to distinguish duplicate names, preserves selected recipient across polling, uses existing serialized request/reconciliation flow and never retries gifts automatically. Feature documentation and field guide explain giving and recipient restrictions.
@@ -105,7 +105,12 @@ Revert through a checked PR and supported automatic deployment. No persistent ga
 | Recipient receiving invalidates an in-flight action | Advance its revision; stale command refreshes without replay. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-06 - Implement giving and preserve form editing during polls
+
+- **Change:** User selected giving wood or food. Implemented public targeting IDs, recipient summaries, atomic gifts and the camp form. Independent review found background polls disabled focused gift fields; separated mutation/request pending and preserve unchanged native options.
+- **Reason:** Confirmed interaction preference; receiving must not leak cookies or overfill inventory, and refresh must not interrupt typing.
+- **Impact:** Scope remains supply sharing. Added invalid/stale/expiry/concurrency tests plus delayed-read focus regression; Java and focused JS checks pass, full checks/runtime proof remain in progress.
 
 ## Outcome
 Pending.
@@ -115,3 +120,4 @@ christopherbell-dev
 
 ## Plan Format
 task-contract-v2
+
