@@ -1,7 +1,7 @@
 # Keep Recent Production Problems Visible in Diagnostics
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -113,7 +113,16 @@ Required skill: write-chris-street-style-code
 - **Impact:** Publishing took about 310 ms and produced a 37 KB record. The in-window ERROR kept three frames, with `password=[REDACTED]`. The ERROR outside the 10,000-line window was dropped as designed. The full production Pester suite passed: 910 passed, 0 failed.
 
 ## Outcome
-Pending.
+Delivered and deployed. [PR #1487](https://github.com/azurras/christopherbell.dev/pull/1487) at head `3571135` passed all six checks (build, three CodeQL analyses, CodeQL, dependency-review). Auto-merge merged it as `ef15adc`, and the poller deployed it automatically.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| AC-1 | Met | Pester problem-window tests; in production, `prod.cmd diagnostics` at 00:57 UTC reports 100 `recentLogEntries` and 26 `recentProblems`, the oldest from 15:53 UTC, well before the latest-entries window |
+| AC-2 | Met | Pester stack-frame test with a planted secret; [local run](../test-reports/2026-10-05-19-34-christopherbell-dev-keep-recent-production-problems-visible-in-diagnostics.md) kept three frames with `password=[REDACTED]`. Production currently has only WARN entries without stack traces, so `errorStack` is null there |
+| AC-3 | Met | Size-bound and shedding tests; full production Pester 910 passed, 0 failed; production record reads back with `schemaVersion` 1 and `FRESH` |
+| AC-4 | Met | `wait_for_github.py live` saw `ef15adc` on `/actuator/info`; `auto-status` reports `UP_TO_DATE`, `HEALTHY`, active and tool source `ef15adc` |
+
+Cleanup: the worktree and the local and remote branches were deleted, and the `prod-tools` operator checkout was moved to `ef15adc`. No source issue, so external closure does not apply.
 
 ## Project
 christopherbell-dev
