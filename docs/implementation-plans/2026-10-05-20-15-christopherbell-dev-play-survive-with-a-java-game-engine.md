@@ -1,7 +1,7 @@
 # Play Survive on the website with a Java game engine
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -26,7 +26,7 @@ The user requested a playable website adaptation of azurras/survive and explicit
 ## Acceptance Criteria
 | ID | Done when |
 |---|---|
-| AC-1 | Java owns all gameplay; anonymous CSRF-protected APIs isolate browser games, validate inputs, cap capacity and expire inactive state. |
+| AC-1 | Java owns all gameplay; anonymous CSRF-protected APIs isolate survivors within one shared world, validate inputs, cap capacity and expire inactive state. |
 | AC-2 | Gathering has 50 percent success, inventory caps at ten, strength/stamina advance, shelter costs five wood, boat costs ten, hunting finds fresh hogs, attack/defend/flee/eat/rest/escape and restart work, death and escape end actions. |
 | AC-3 | /survive provides keyboard-operable mobile controls, stats, inventory, bounded narrative feedback, instructions, source attribution and a navigation entry. |
 | AC-4 | Native checks and semantic review pass, committed candidate runs with disposable test MongoDB, report is published before PR, PR merges after CI and production serves the game. |
@@ -66,7 +66,7 @@ Use a focused survive feature: a single Java SurviveWorld aggregate containing s
 | static/js/lib/api.js and components/nav.js | API paths and discovery. |
 | static/js/README.md, static/css/README.md, security/README.md | Ownership and access documentation. |
 | static/licenses/survive-GPL-3.0.txt | Upstream attribution license. |
-| Java view/security/sitemap tests and JS tests | Integration, access and rendering behavior. |
+| Java view/security/sitemap tests, architecture/LegacyModuleDependencyRules.java and JS tests | Integration, access and rendering behavior. |
 
 ## Task Breakdown
 ### Task 1 - Implement the Java gameplay and bounded browser service
@@ -74,7 +74,7 @@ Required skill: write-chris-street-style-code
 | Contract | Detail |
 |---|---|
 | **Dependencies** | None. |
-| **Files** | New survive/SurviveWorld.java, SurvivePlayer.java, SurviveAction.java, SurviveSnapshot.java, SurviveService.java, SurviveController.java, README.md; neighboring tools controller and security configuration inspected above. |
+| **Files** | New survive/SurviveWorld.java, survive/SurvivePlayer.java, survive/model/SurviveAction.java, survive/model/SurviveSnapshot.java, survive/model/SurviveRequests.java, survive/SurviveService.java, survive/SurviveController.java, survive/README.md; neighboring tools controller and security configuration inspected above. |
 | **Symbols** | World and survivor transitions, immutable snapshot, token lifetime, player revision and controller DTOs. |
 | **Inspection** | Python master controllers/models and website ef15adc0 security CSRF/matchers and frontend fetchJson. |
 | **Behavior** | Server-authoritative shared playable world with bounded players and clear rejection. |
@@ -142,6 +142,13 @@ Revert the merged feature through a verified PR and the supported automatic pipe
 - **Impact:** Shared world state and separate survivors are the acceptance boundary; no database persistence is introduced.
 - **Validation:** Tests will prove two survivors share camp construction while retaining private inventory, health and revision; restarts preserve other players and camp.
 
+### 2026-10-05 - Implement shared world and fix browser lifecycle review finding
+
+- **Change:** Implemented a single SurviveWorld with separate survivors, shared shelter/boat counts, 30 recent events, server-owned allowed actions and revisions, exact anonymous CSRF-protected routes, a vanilla display-only UI and source license attribution. Registered the new survive area in the architecture catalog and updated its sitemap/navigation coverage.
+- **Reason:** The user explicitly requires Java and a shared game state with separate survivors. Existing architecture checks require every new area to be cataloged. Completing unfinished mechanics makes the requested game playable.
+- **Impact:** No database/schema changes. In-memory world survives character replacement but resets on process restart; fixed bounds limit players, structures, names and events. Skill progression caps strength at 20. Browser Back retains controls when the document is cached.
+- **Evidence:** Initial tests failed on absent implementation/routes; the Java model tests now pass. Independent reviewer found the pagehide/back-forward-cache lifecycle defect; it was corrected with a regression. Native Gradle tests needed JAVA_TOOL_OPTIONS as well as GRADLE_OPTS so child JVMs use the short socket directory. Full checks are running; runtime proof remains required before PR.
+
 ## Outcome
 Pending.
 
@@ -150,5 +157,3 @@ christopherbell-dev
 
 ## Plan Format
 task-contract-v2
-
-
