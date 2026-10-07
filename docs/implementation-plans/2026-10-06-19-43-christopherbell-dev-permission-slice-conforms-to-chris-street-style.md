@@ -78,18 +78,20 @@ None.
 
 | File | Verdict | Change and rule |
 |---|---|---|
-| `website/src/main/java/dev/christopherbell/permission/LoginTokens.java` | new | Owns key, lifetime and clock; `issueFor`, `verifiedClaimsOf` (rules 1, 7, 9) |
-| `website/src/main/java/dev/christopherbell/permission/PermissionConfiguration.java` | new | Builds the `LoginTokens` bean (rule 7) |
+| `website/src/main/java/dev/christopherbell/account/api/LoginTokens.java` | new | Owns key, lifetime and clock; `issueFor`, `verifiedClaimsOf` (rules 1, 7, 9) |
+| `website/src/main/java/dev/christopherbell/account/auth/LoginTokensConfiguration.java` | new | Builds the `LoginTokens` bean (rule 7) |
+| `website/src/main/java/dev/christopherbell/account/README.md` | changed | Names `api.LoginTokens` and `auth.LoginTokensConfiguration` |
 | `website/src/main/java/dev/christopherbell/permission/PermissionService.java` | changed | Role checks only; no catch-all; no dead code (rules 8, 9) |
 | `website/src/main/java/dev/christopherbell/permission/README.md` | changed | Correct seven-day lifetime and the two collaborators |
 | `website/src/main/java/dev/christopherbell/account/auth/AccountAuthenticationService.java` | changed (call site) | Injected `LoginTokens.issueFor` |
 | `website/src/main/java/dev/christopherbell/configuration/security/JwtAuthenticationFilter.java` | changed (call site) | Full constructor takes `LoginTokens`; bearer path needs it |
 | `website/src/main/java/dev/christopherbell/configuration/security/browser/BrowserSessionService.java` | changed (call site) | Constructor takes `LoginTokens` |
 | `website/src/main/java/dev/christopherbell/configuration/security/SecurityConfig.java` | changed (call site) | Passes the bean to both |
-| `website/src/test/java/dev/christopherbell/permission/LoginTokensTest.java` | new | Claims, lifetime, bearer prefix, expiry, foreign signature, secret precedence and length (rule 10) |
-| `website/src/test/java/dev/christopherbell/permission/LoginTokensFixture.java` | new | Local development tokens and a test configuration bean |
+| `website/src/test/java/dev/christopherbell/account/api/LoginTokensTest.java` | new | Claims, lifetime, bearer prefix, expiry, foreign signature, secret precedence and length (rule 10) |
+| `website/src/test/java/dev/christopherbell/account/api/LoginTokensFixture.java` | new | Local development tokens and a test configuration bean |
 | `website/src/test/java/dev/christopherbell/permission/PermissionServiceTest.java` | changed | Full role-rank table, denial cases, current account id (rule 10) |
 | `website/src/test/java/dev/christopherbell/configuration/JwtAuthenticationFilterTest.java`, `configuration/security/browser/BrowserSessionServiceTest.java`, `account/AccountServiceTest.java`, `sharedfolder/SharedFolderSecurityIntegrationTest.java`, `whatsforlunch/restaurant/RestaurantControllerMemberSecurityTest.java` | changed (call sites) | Issue and verify through `LoginTokens` |
+| `website/src/test/resources/architecture-baseline/e847d3fd-3e97-4258-ac91-4674dc7531ae` | changed | Two resolved frozen violations removed |
 | `website/src/test/java/dev/christopherbell/configuration/security/ControllerSliceSecurityTestConfig.java`, `configuration/security/AsyncDispatcherSecurityIntegrationTest.java`, `location/LocationControllerSecurityTest.java`, `survive/SurviveControllerTest.java` | changed (wiring) | Provide `LoginTokens` to the security beans |
 
 ## Task Breakdown
@@ -138,6 +140,30 @@ Revert the squash-merge commit; auto-deploy rolls forward. Tokens issued before 
 - **Change:** This plan was saved after the code edits, while the full check ran.
 - **Reason:** I inspected and edited directly while slice 2's CI ran.
 - **Impact:** No PR exists yet; the plan and runtime report are published before it.
+
+### 2026-10-06 - LoginTokens lives in the account area's published API
+
+- **Change:** `LoginTokens` moved from `permission` to `account.api`, its bean factory became `account.auth.LoginTokensConfiguration`, and the test and fixture moved to `account.api`.
+- **Reason:** `ModularMonolithArchitectureTest.legacyInternalCrossAreaAccessDoesNotGrow` failed. `permission` belongs to the `account` area and is never published, so `JwtAuthenticationFilter`, `BrowserSessionService` and `SecurityConfig` reaching `permission.LoginTokens` counted as three new cross-area accesses. Growing the frozen baseline would weaken the safeguard; `account.api` is the published route the rule allows.
+- **Impact:** Two frozen violations (`configuration` to `permission.PermissionService`) disappear because those classes no longer use it.
+
+### 2026-10-06 - Foreign-signature test used a longer secret
+
+- **Change:** `rejectsATokenSignedWithADifferentSecret` now uses a foreign secret of the same length as the configured one.
+- **Reason:** jjwt picks HS384 for a 49-byte key, so verification failed with `WeakKeyException` instead of `SignatureException`.
+- **Impact:** Test-only.
+
+### 2026-10-06 - Rebased onto main c746d0e2
+
+- **Change:** The unpushed candidate was rebased onto `c746d0e2`, which changed `SurviveControllerTest` from another session. The rebase was clean, and the full check reruns on the rebased candidate.
+- **Reason:** The ruleset requires branches to be up to date.
+- **Impact:** None to scope.
+
+### 2026-10-06 - Frozen architecture store drops the two resolved entries
+
+- **Change:** `website/src/test/resources/architecture-baseline/e847d3fd-...` lost its two `configuration -> account ... -> PermissionService` lines, regenerated by running the architecture test once with `archunit.freeze.store.default.allowStoreUpdate=true`.
+- **Reason:** The store is read-only by default, so the rule fails when frozen violations are fixed until the store is shrunk. The diff is two deletions and no additions.
+- **Impact:** One more file in the change; the safeguard is tighter, not weaker.
 
 ## Outcome
 Pending.
