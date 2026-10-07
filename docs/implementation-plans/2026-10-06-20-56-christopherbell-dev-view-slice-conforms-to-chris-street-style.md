@@ -1,7 +1,7 @@
 # View Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -127,8 +127,24 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** I worked ahead while earlier slices were in CI.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-06 - PR branch updated with main before merge
+
+- **Change:** `gh pr update-branch` merged `main` `38907c6c` (message slice) into the PR branch, and CI passed on the merged head.
+- **Reason:** The ruleset requires up-to-date branches, and force-pushing is a gate.
+- **Impact:** None to the view diff.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1498 (`d83f96c`) and auto-deployed. All 40 view routes return the same statuses in production after the deploy as the candidate did.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed; `ViewControllerTest` 51/51 ([report](../test-reports/2026-10-06-21-01-christopherbell-dev-view-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | Route sweep: 40 of 40 routes matched production ([report](../test-reports/2026-10-06-21-01-christopherbell-dev-view-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1498](https://github.com/azurras/christopherbell.dev/pull/1498) merged as `d83f96c` after all six checks passed; production `/actuator/info` reports `d83f96c` |
+
 
 ## Project
 christopherbell-dev
