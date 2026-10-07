@@ -1,7 +1,7 @@
 # Sitemonitor Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -136,8 +136,24 @@ Revert the squash-merge commit; auto-deploy rolls forward. Stored workspaces kee
 - **Reason:** I worked ahead while earlier slices were in CI.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-06 - PR branch updated with main before merge
+
+- **Change:** `gh pr update-branch` merged `main` `6dad824b` (report slice) into the PR branch, and CI passed on the merged head.
+- **Reason:** The ruleset requires up-to-date branches, and force-pushing is a gate.
+- **Impact:** None to the sitemonitor diff.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1496 (`1d1516f`) and auto-deployed. Stored workspaces keep the same status strings. Production anonymous access still returns 403.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check: 2,256 Java tests with 0 failures, `MonitorPolicyTest` 27/27 ([report](../test-reports/2026-10-06-20-39-christopherbell-dev-sitemonitor-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 12 of 12 runtime cases, including the stored and reloaded `BASELINE` and the 429 with `Retry-After: 900` ([report](../test-reports/2026-10-06-20-39-christopherbell-dev-sitemonitor-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1496](https://github.com/azurras/christopherbell.dev/pull/1496) merged as `1d1516f` after all six checks passed; production `/actuator/info` reports `1d1516f` |
+
 
 ## Project
 christopherbell-dev
