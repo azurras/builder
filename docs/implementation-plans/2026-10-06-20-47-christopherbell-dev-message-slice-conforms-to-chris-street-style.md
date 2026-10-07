@@ -1,7 +1,7 @@
 # Message Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -140,8 +140,24 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** I worked ahead while earlier slices were in CI.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-06 - PR branch updated with main before merge
+
+- **Change:** `gh pr update-branch` merged `main` `1d1516f9` (sitemonitor slice) into the PR branch, and CI passed on the merged head.
+- **Reason:** The ruleset requires up-to-date branches, and force-pushing is a gate.
+- **Impact:** None to the message diff.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1497 (`38907c6`) and auto-deployed. The query port keeps the shared `Optional` cursor shape; aligning the three cursor ports is an umbrella follow-up.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed, including `ModularMonolithArchitectureTest` ([report](../test-reports/2026-10-06-20-52-christopherbell-dev-message-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 16 of 16 runtime cases covering send, list, open, page, read state, archive and rejections ([report](../test-reports/2026-10-06-20-52-christopherbell-dev-message-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1497](https://github.com/azurras/christopherbell.dev/pull/1497) merged as `38907c6` after all six checks passed; production `/actuator/info` reports `38907c6` |
+
 
 ## Project
 christopherbell-dev
