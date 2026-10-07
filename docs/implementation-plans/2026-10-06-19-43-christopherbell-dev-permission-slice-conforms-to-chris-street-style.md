@@ -1,7 +1,7 @@
 # Permission Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -165,8 +165,24 @@ Revert the squash-merge commit; auto-deploy rolls forward. Tokens issued before 
 - **Reason:** The store is read-only by default, so the rule fails when frozen violations are fixed until the store is shrunk. The diff is two deletions and no additions.
 - **Impact:** One more file in the change; the safeguard is tighter, not weaker.
 
+### 2026-10-06 - PR branch updated with main before merge
+
+- **Change:** `gh pr update-branch` merged `main` `07859a2f` (blog slice) into the PR branch; the merged head `6fa7135` passed CI.
+- **Reason:** The ruleset requires up-to-date branches, and force-pushing is a gate.
+- **Impact:** None to the permission diff.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1493 (`17e24c4`) and auto-deployed. `LoginTokens` moved to `account.api` and the frozen architecture store shrank by two entries, both recorded in the log. Production auth behaves as before: no token gives 403, a garbage bearer gives 401, the site is healthy, and diagnostics show no JWT errors. Sign-in with a real production account was not exercised, because the agent holds no production credentials.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes and the log record every changed file |
+| AC-2 | ✅ Met | Full check on `1436d1d`: 2,256 Java tests with 0 failures, including `LoginTokensTest` 11/11 and `PermissionServiceTest` 15/15 ([report](../test-reports/2026-10-06-20-03-christopherbell-dev-permission-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 6 of 6 runtime cases: signup and login, bearer `/me` 200, admin list 403, tampered token 401, no token 403 (matching production) ([report](../test-reports/2026-10-06-20-03-christopherbell-dev-permission-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1493](https://github.com/azurras/christopherbell.dev/pull/1493) merged as `17e24c4` after all six checks passed; production `/actuator/info` reports `17e24c4` and `auto-status` shows it active and healthy |
+
 
 ## Project
 christopherbell-dev
