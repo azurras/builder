@@ -1,7 +1,7 @@
 # Blog Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -127,8 +127,24 @@ Revert the squash-merge commit; auto-deploy rolls production forward. No data ch
 - **Reason:** Continuing straight from slice 1, I started inspecting and editing before saving the plan.
 - **Impact:** No PR has been opened. Inspection evidence and design are unchanged; the plan is published before the runtime report and PR.
 
+### 2026-10-06 - PR branch updated with main before merge
+
+- **Change:** `gh pr update-branch` merged `main` (`c746d0e2`, Survive game files from another session) into the PR branch. The merged head `e8f1de7` passed CI and merged.
+- **Reason:** The `main` ruleset requires up-to-date branches. Force-pushing a rebase is an approval gate, so a merge update was used.
+- **Impact:** The verified blog diff is unchanged. The merged-in commit touches no blog file, and CI verified the combined head.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped as planned in PR #1492 (`07859a2`) and auto-deployed. Production blog responses (list, 404, 400) are byte-identical before and after.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes gives verdicts for all 13 existing files plus the new `BlogConfiguration` |
+| AC-2 | ✅ Met | Full check passed: 2,234 Java tests with 0 failures, 389 JS tests, Pester suites ([report](../test-reports/2026-10-06-19-37-christopherbell-dev-blog-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | Candidate `2acb67a`: 7 of 7 cases passed; list, 404 and 400 are byte-identical to production `0202b97b` ([report](../test-reports/2026-10-06-19-37-christopherbell-dev-blog-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1492](https://github.com/azurras/christopherbell.dev/pull/1492) merged as `07859a2` after all six checks passed; production `/actuator/info` reports `07859a2` |
+
 
 ## Project
 christopherbell-dev

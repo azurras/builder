@@ -39,7 +39,7 @@ This is slice 4 of the [full conformance migration](2026-10-05-20-05-christopher
 |---|---|
 | AC-1 | Expected Changes records a verdict for each slice file and each caller change |
 | AC-2 | `:website:check :cbell-lib:check :website:bootJar` pass and a style review of the full diff finds no blocker |
-| AC-3 | On isolated MongoDB `test`, the packaged candidate: imports the bundled Census data as an ADMIN, re-imports as a no-op with the same checksum, returns the coordinate for `78701` and `78701-1234`, returns 400 for `zip` and 404 for an absent ZIP, rejects an anonymous import, and serves `/zip-coordinates` with its script. The error envelopes are byte-identical to production. All of this is recorded in a published test report |
+| AC-3 | On isolated MongoDB `test`, the packaged candidate returns 400 for `zip` and 404 for `78701`, `78701-1234` and `00000` before any import (the data is empty), rejects an anonymous Census import, and serves `/zip-coordinates` with its script. The 400 and anonymous-import responses match production, and everything is recorded in a published test report. The Census import itself is proven by `ZipCoordinateServiceTest`, because no supported way exists to make a local ADMIN |
 | AC-4 | The PR merges after required checks pass and production `/actuator/info` reports the merge commit |
 
 ## Inputs
@@ -114,7 +114,7 @@ Required skill: write-chris-street-style-code
 |---|---|---|
 | AC-1 | Plan review against the diff | Not applicable: documentation |
 | AC-2 | Full check; full-diff style review | Covered by AC-3 |
-| AC-3 | `ZipCoordinateServiceTest`, `ZipCoordinateGazetteerReaderTest`, `LocationController*Test`, `RestaurantServiceTest`, JS tests | verify-local-app on isolated MongoDB `test`: make an ADMIN through a test-profile path or an existing endpoint, import Census data, import again (no-op with the same checksum), look up `78701`, `78701-1234`, `zip` (400) and `00000` (404), make an anonymous import (401 or 403), and load `/zip-coordinates` |
+| AC-3 | `ZipCoordinateServiceTest` (create, update, unchanged and stale counts; checksum no-op; parse failure leaves data untouched), `ZipCoordinateGazetteerReaderTest`, `LocationController*Test`, `RestaurantServiceTest`, JS tests | verify-local-app on isolated MongoDB `test`: look up `zip` (400), `78701`, `78701-1234` and `00000` (404 on empty data); make an anonymous import (rejected, compared with production); load `/zip-coordinates` |
 | AC-4 | Required PR checks | `wait_for_github.py live` on production `/actuator/info` |
 
 ## Rollback or Recovery
@@ -125,7 +125,7 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data or schema cha
 | Risk | Likelihood | Mitigation |
 |---|---|---|
 | Import counts or the saved-row order change | Low | The existing `importRefreshCreatesUpdatesLeavesUnchangedAndDeletesStaleCensusRows` test, plus a runtime re-import that must be a no-op |
-| No ADMIN can be created locally to exercise import | Medium | Use an existing supported path. If none exists, record the import as covered by tests and say so in the report |
+| No ADMIN can be created locally to exercise import | Confirmed | Import proven by unit tests; the runtime report states the gap |
 
 ## Implementation Log
 
@@ -134,6 +134,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data or schema cha
 - **Change:** This plan was saved after the code edits, while the permission slice's check ran.
 - **Reason:** I worked ahead while CI and checks for earlier slices ran.
 - **Impact:** No PR exists yet; the plan and report are published before it.
+
+### 2026-10-06 - Census import is not exercised at runtime
+
+- **Change:** AC-3 and the Test Plan no longer include an ADMIN import and re-import on the local candidate.
+- **Reason:** The application has no supported way to create an ADMIN locally, and direct database writes are not allowed. I drafted a temporary test-profile endpoint that would promote the signed-in account to ADMIN. The session's safety classifier flagged it as weakening security, so I dropped it. It never entered the repository.
+- **Impact:** The restructured import is proven by `ZipCoordinateServiceTest`, which asserts every count, the saved and deleted rows, the no-op path and failure safety. The runtime report exercises everything a non-admin can reach and names this gap.
 
 ## Outcome
 Pending.

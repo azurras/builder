@@ -74,9 +74,9 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | Order | Slice | Java main / test files | Java lines | Status |
 |---|---|---|---|---|
 | 1 | photo | 5 / 4 | 287 | done: [plan](2026-10-05-20-06-christopherbell-dev-photo-slice-conforms-to-chris-street-style.md), PR #1488 `1d6c7d0` |
-| 2 | blog | 5 / 3 | 375 | pending |
-| 3 | permission | 1 / 1 | 447 | pending |
-| 4 | location (with `zip-coordinates.js`) | 11 / 4 | 899 | pending |
+| 2 | blog | 5 / 3 | 375 | done: [plan](2026-10-06-19-31-christopherbell-dev-blog-slice-conforms-to-chris-street-style.md), PR #1492 `07859a2` |
+| 3 | permission | 1 / 1 | 447 | in progress: [plan](2026-10-06-19-43-christopherbell-dev-permission-slice-conforms-to-chris-street-style.md), PR #1493 |
+| 4 | location (with `zip-coordinates.js`) | 11 / 4 | 899 | in progress: [plan](2026-10-06-19-59-christopherbell-dev-location-slice-conforms-to-chris-street-style.md) |
 | 5 | report | 18 / 7 | 1,704 | pending |
 | 6 | sitemonitor | 17 / 6 | 1,778 | pending |
 | 7 | message | 19 / 9 | 1,786 | pending |
@@ -190,6 +190,24 @@ Each slice is one squash-merged PR; revert that merge commit and let auto-deploy
 - **Change:** Photo shipped in PR #1488 (`1d6c7d0`). The settled per-slice workflow: plan with a per-file verdict table, worktree branch, baseline focused tests, edits, full check, commit, packaged candidate on a fresh isolated MongoDB `test`, JSON compared byte-for-byte with production on the previous commit, report, PR with auto-merge, and `wait_for_github.py live` readback.
 - **Reason:** Proving the workflow on the smallest slice was the user's chosen order.
 - **Impact:** Later slices reuse it. Gradle needs `JAVA_TOOL_OPTIONS` as well as `GRADLE_OPTS` set to the socket folder, and must run outside the command sandbox. Auto-deploy took about 20 minutes after merge.
+
+### 2026-10-06 - Workflow adjustments from slices 2 to 4
+
+- **Change:** PRs that fall behind `main` are updated with `gh pr update-branch` instead of a rebase and force-push. Unpushed candidates are rebased locally before verification. The watcher script stops before deploy readback when there is no merge SHA.
+- **Reason:** Another session merges Survive game work to `main` concurrently. Force-pushing is an approval gate. One watcher run reported a vacuous readback on an empty SHA.
+- **Impact:** Each slice's report covers its own diff; CI verifies the combined head.
+
+### 2026-10-06 - Cross-area moves must go through published APIs
+
+- **Change:** When a slice moves a dependency that another area uses, the new home must be that area's published `api` package, or the frozen architecture rule fails. Resolved frozen violations must be removed from the store in the same PR.
+- **Reason:** Learned in the permission slice (`LoginTokens` moved to `account.api`).
+- **Impact:** Later slices check `ModularMonolithArchitectureTest` early.
+
+### 2026-10-06 - No local ADMIN for runtime checks
+
+- **Change:** Admin-only runtime paths are proven by unit and slice tests. Runtime reports cover everything a USER or anonymous visitor can reach, and name the gap.
+- **Reason:** The application has no supported way to create a local ADMIN. A temporary promotion endpoint was refused by the session's safety classifier, and direct database writes are prohibited.
+- **Impact:** This affects the admin-heavy slices (admin, report moderation, the command center). A supported, reviewed local-admin bootstrap would close the gap, but it is a security decision for the user.
 
 ## Outcome
 Pending.
