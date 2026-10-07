@@ -1,7 +1,7 @@
 # Location Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -141,8 +141,24 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data or schema cha
 - **Reason:** The application has no supported way to create an ADMIN locally, and direct database writes are not allowed. I drafted a temporary test-profile endpoint that would promote the signed-in account to ADMIN. The session's safety classifier flagged it as weakening security, so I dropped it. It never entered the repository.
 - **Impact:** The restructured import is proven by `ZipCoordinateServiceTest`, which asserts every count, the saved and deleted rows, the no-op path and failure safety. The runtime report exercises everything a non-admin can reach and names this gap.
 
+### 2026-10-06 - PR branch updated with main before merge
+
+- **Change:** `gh pr update-branch` merged `main` `17e24c43` (permission slice) into the PR branch, and CI passed on the merged head.
+- **Reason:** The ruleset requires up-to-date branches, and force-pushing is a gate.
+- **Impact:** None to the location diff.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1494 (`1f1287d`) and auto-deployed. Production `/api/location/zip/78701` is byte-identical before and after. The ADMIN Census import was not exercised at runtime; unit tests cover it.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file and the restaurant call site |
+| AC-2 | ✅ Met | Full check on `d64c12b`: 2,243 Java tests with 0 failures, 390 JS tests ([report](../test-reports/2026-10-06-20-10-christopherbell-dev-location-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 8 of 8 runtime cases, with the 400 envelope matching production ([report](../test-reports/2026-10-06-20-10-christopherbell-dev-location-slice-conforms-to-chris-street-style.md)); the import is covered by `ZipCoordinateServiceTest`, as AC-3 allows |
+| AC-4 | ✅ Met | [PR #1494](https://github.com/azurras/christopherbell.dev/pull/1494) merged as `1f1287d` after all six checks passed; production `/actuator/info` reports `1f1287d` |
+
 
 ## Project
 christopherbell-dev
