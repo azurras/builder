@@ -213,6 +213,16 @@ PASS owned Java and MongoDB stopped, verification ports closed, owned disposable
 
 The initial overlapping Gradle runs collided in their binary test-output files; that result was discarded and the final complete suite ran serially and passed. A later harness attempt expected a temporary guest to survive the six-hour pause; corrected the expectation to its existing two-hour idle expiry and verified both account progress and guest expiry. The isolation script moved its read-only mongosh query to a file to avoid Windows PowerShell argument quoting. The final cases here use the last successful executions; the full scratch JSON-lines evidence preserves the attempts. No product code changed after candidate 9f9f8093.
 
+## Delivery Readback
+
+- PR #1491 merged after successful build, dependency review and CodeQL checks. Candidate `9f9f80932b675b6d73b769dec668bc800bbc1382`; squash merge `c746d0e234f11abe6e8505a54af52f335636ea7a`.
+- Main-branch CI build passed. The supported automatic deployment activated this exact merge SHA and reports healthy readiness.
+- Five read-only production HTTP checks passed: actuator info 200 with exact merge SHA, readiness 200 UP, /survive 200 with one-saved-character guidance, /js/survive.js 200 with saved-account status, and anonymous /api/survive/v1/game 204. No production accounts or survivor fixtures were created.
+- Live browser field guide displays account persistence, temporary guest expiry and restart behavior with no console errors. Desktop/mobile screenshots of the actual local saved character are linked above.
+- Merged owned worktree and branches removed; authoritative checkout preserved. Local test processes and database removed. Automatic approval review rejected deleting three generated credential/cookie files in the owned temporary runtime folder, stating `blocked by policy`; they remain outside the repositories. No product verification gap remains.
+
+- Readback ran at 2026-10-06 19:53 CDT. The recorder was invoked from Builder, so its automatic candidate metadata names the Builder commit; the HTTP body and exact-version assertion above identify the deployed application revision. Scratch live HTTP/browser evidence is retained outside the repositories.
+
 ## Bugs / Follow-ups
 None
 

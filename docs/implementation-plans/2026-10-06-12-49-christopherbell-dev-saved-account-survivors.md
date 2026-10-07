@@ -1,7 +1,7 @@
 # Saved survivors for logged-in accounts
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -128,8 +128,19 @@ Revert via checked PR and supported deployment. Additive saved document remains 
 - **Reason:** An overlapping focused test invocation replaced the full suite binary output while it was running, causing a NoSuchFileException in reporting.
 - **Impact:** Discard that failed full-run result; use the serial final suite and its actual XML results for evidence.
 
+### 2026-10-06 - Verify and deliver saved characters
+
+- **Change:** Completed serial native checks and seven committed-candidate runtime cases, then merged PR #1491 after all checks passed. Supported automatic deployment activated the exact merge revision.
+- **Reason:** Local signup, separate login sessions, logout/login and app restart prove ownership and durability; public readback proves the verified change reached the live site.
+- **Impact:** Saved account progress also survived the six-hour work pause against the same owned database, while temporary guests expired correctly. Independent semantic review has no remaining blocker. Owned test processes/database and merged worktree/branches were cleaned up. Automatic approval review rejected deletion of three generated local test credential files with `blocked by policy`; these remain outside the repositories in the owned temporary runtime folder.
+
 ## Outcome
-Pending.
+
+- **AC-1 met:** Real signup/login/logout, two sessions for one account, a second account and guest-cookie precedence passed. Repeated joins resume the living character; stale requests cannot affect a terminal replacement.
+- **AC-2 met:** Full stats, combat, inventory, camp and journal persisted across app restart and the later six-hour pause. Native tests verify atomic gifts, failed-save conservation and competing-process conflicts.
+- **AC-3 met:** Guest play and two-hour expiry passed; saved inactive characters retained progress. Real browser saved-state controls passed on desktop and mobile with no console errors; native account-deletion tests verify scoped removal and advancing storage version.
+- **AC-4 met:** 2,007 Java tests passed (110 skipped), 390 JavaScript tests and 184 PowerShell tests passed, architecture checks/build passed, and seven local runtime cases passed. [Published runtime report](../test-reports/2026-10-06-19-32-christopherbell-dev-saved-account-survivors.md) preceded PR creation. [PR #1491](https://github.com/azurras/christopherbell.dev/pull/1491) merged candidate `9f9f80932b675b6d73b769dec668bc800bbc1382` as `c746d0e234f11abe6e8505a54af52f335636ea7a`; PR checks and main CI passed. Production identity, readiness, saved-character HTML/JavaScript and anonymous 204 readback passed without production fixtures.
+- No source issue; external closure does not apply. No unresolved product blocker. Generated local credential-file cleanup was rejected by automatic approval review; the test database and processes were removed.
 
 ## Project
 christopherbell-dev
