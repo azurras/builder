@@ -1,7 +1,7 @@
 # Saved survivors for logged-in accounts
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -116,7 +116,17 @@ Revert via checked PR and supported deployment. Additive saved document remains 
 | Saved accounts exhaust bounded world | Low | Existing 1000-character cap remains explicit; deleted accounts release slots. |
 
 ## Implementation Log
-No entries yet.
+### 2026-10-06 - Persist shared world and account ownership
+
+- **Change:** Added additive versioned world storage, detached restoration and account identity precedence while retaining guest play. Native auth test uses the real bearer filter through an explicitly configured Spring security chain, avoiding duplicate MockMvc bean-filter registration.
+- **Reason:** A saved character must resume independently of guest cookies and every acknowledged command must be durable; one document preserves gift atomicity without a replica-set transaction requirement.
+- **Impact:** Added saved-state, storage-failure, competing-process, BSON round-trip, deletion-version and UI regressions. Independent review identified stale commands across account replacement; replacements now advance beyond the previous character revision. Corrected a status-text encoding warning. Full native checks and committed runtime proof remain in progress.
+
+### 2026-10-06 - Serialize Gradle verification
+
+- **Change:** Rerun the final full check as the only Gradle verification process.
+- **Reason:** An overlapping focused test invocation replaced the full suite binary output while it was running, causing a NoSuchFileException in reporting.
+- **Impact:** Discard that failed full-run result; use the serial final suite and its actual XML results for evidence.
 
 ## Outcome
 Pending.
