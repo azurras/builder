@@ -133,6 +133,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** The ruleset requires up-to-date branches, and force-pushing is a gate.
 - **Impact:** None to the view diff.
 
+### 2026-10-06 - How the post-deploy route check was verified
+
+- **Change:** The post-deploy statement in the Outcome rests on comparing production's statuses after the deploy with the candidate's statuses recorded in the runtime report. All 40 routes matched.
+- **Reason:** The first post-deploy command mistakenly compared production with itself, which proves nothing. It was replaced by this comparison before the claim was relied on.
+- **Impact:** None to the result; the evidence is now the right one.
+
 ## Outcome
 
 > [!TIP]
