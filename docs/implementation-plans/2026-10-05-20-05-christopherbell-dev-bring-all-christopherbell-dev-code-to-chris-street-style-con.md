@@ -77,9 +77,9 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 2 | blog | 5 / 3 | 375 | done: [plan](2026-10-06-19-31-christopherbell-dev-blog-slice-conforms-to-chris-street-style.md), PR #1492 `07859a2` |
 | 3 | permission | 1 / 1 | 447 | done: [plan](2026-10-06-19-43-christopherbell-dev-permission-slice-conforms-to-chris-street-style.md), PR #1493 `17e24c4` |
 | 4 | location (with `zip-coordinates.js`) | 11 / 4 | 899 | done: [plan](2026-10-06-19-59-christopherbell-dev-location-slice-conforms-to-chris-street-style.md), PR #1494 `1f1287d` |
-| 5 | report | 18 / 7 | 1,704 | in progress: [plan](2026-10-06-20-16-christopherbell-dev-report-slice-conforms-to-chris-street-style.md), PR #1495 |
+| 5 | report | 18 / 7 | 1,704 | done: [plan](2026-10-06-20-16-christopherbell-dev-report-slice-conforms-to-chris-street-style.md), PR #1495 `6dad824` |
 | 6 | sitemonitor | 17 / 6 | 1,778 | in progress: [plan](2026-10-06-20-33-christopherbell-dev-sitemonitor-slice-conforms-to-chris-street-style.md), PR #1496 |
-| 7 | message | 19 / 9 | 1,786 | pending |
+| 7 | message | 19 / 9 | 1,786 | in progress |
 | 8 | view | 13 / 3 | 1,794 | pending |
 | 9 | notification | 29 / 13 | 2,323 | pending |
 | 10 | canesboxtracker | 13 / 4 | 2,953 | pending |

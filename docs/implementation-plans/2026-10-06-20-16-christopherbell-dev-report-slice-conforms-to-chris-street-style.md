@@ -1,7 +1,7 @@
 # Report Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -140,8 +140,24 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data or schema cha
 - **Reason:** I worked ahead while earlier slices were in CI.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-06 - PR branch updated with main before merge
+
+- **Change:** `gh pr update-branch` merged `main` `1f1287d2` (location slice) into the PR branch, and CI passed on the merged head.
+- **Reason:** The ruleset requires up-to-date branches, and force-pushing is a gate.
+- **Impact:** None to the report diff.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1495 (`6dad824`) and auto-deployed. ADMIN moderation was not exercised at runtime; the lifecycle tests cover it.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check on `873fb78`: 2,256 Java tests with 0 failures, 390 JS tests ([report](../test-reports/2026-10-06-20-21-christopherbell-dev-report-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 8 of 8 runtime cases: submit, dedupe, 2025-09-03 submit, USER 403 on queue and resolve, anonymous rejected ([report](../test-reports/2026-10-06-20-21-christopherbell-dev-report-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1495](https://github.com/azurras/christopherbell.dev/pull/1495) merged as `6dad824` after all six checks passed; production `/actuator/info` reports `6dad824` |
+
 
 ## Project
 christopherbell-dev
