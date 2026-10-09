@@ -86,7 +86,7 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 11 | federation | 40 / 23 | 5,033 | done: [plan](2026-10-09-09-45-christopherbell-dev-federation-slice-conforms-to-chris-street-style.md), PR #1501 `be88be2` |
 | 12 | vehicle | 44 / 14 | 6,880 | in progress: [plan](2026-10-09-10-04-christopherbell-dev-vehicle-slice-conforms-to-chris-street-style.md) |
 | 13 | music | 81 / 25 | 7,239 | in progress: [plan](2026-10-09-10-18-christopherbell-dev-music-slice-conforms-to-chris-street-style.md) |
-| 14 | account | 60 / 26 | 7,435 | pending |
+| 14 | account | 60 / 26 | 7,435 | in progress: [plan](2026-10-09-10-33-christopherbell-dev-account-slice-conforms-to-chris-street-style.md) |
 | 15 | admin | 41 / 25 | 8,506 | pending; split when planned |
 | 16 | post | 68 / 35 | 8,653 | pending; split when planned |
 | 17 | whatsforlunch | 96 / 18 | 11,800 | pending; split when planned |
