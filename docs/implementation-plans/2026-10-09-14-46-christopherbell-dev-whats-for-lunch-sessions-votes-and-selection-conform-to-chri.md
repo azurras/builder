@@ -1,7 +1,7 @@
 # What's for Lunch Sessions, Votes and Selection Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -155,7 +155,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** The umbrella ledger row 17 lists the new parts.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1511 (`7d71174`) and auto-deployed. Production serves `7d71174`, and `/wfl` returns 200. Joins, votes and resets on a live session still rely on the mutation store and mutation-safety Mongo tests, because restaurants cannot be created locally.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in the five packages |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-14-53-christopherbell-dev-whats-for-lunch-sessions-votes-and-selection-conform-to-chri.md)) |
+| AC-3 | ✅ Met | 6 of 6 runtime cases, including all 11 USER sub-checks, passed on candidate `a6c1020` ([report](../test-reports/2026-10-09-14-53-christopherbell-dev-whats-for-lunch-sessions-votes-and-selection-conform-to-chri.md)) |
+| AC-4 | ✅ Met | [PR #1511](https://github.com/azurras/christopherbell.dev/pull/1511) merged as `7d71174` after all checks passed; production `/actuator/info` reports `7d71174` |
 
 ## Project
 christopherbell-dev
