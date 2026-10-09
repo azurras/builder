@@ -165,7 +165,7 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
   - Two expected messages were wrong: the shared `ControllerExceptionHandler` answers `INVALID_TOKEN` with "Authentication is required." for both a wrong password and a bogus reset token.
   - The rerun dropped the duplicate sign-up case and expects `INVALID_TOKEN` with status 401. All 21 cases passed.
 - **Reason:** Production applies the domain manifest indexes through `ops/production/windows/scripts/DomainCollectionManifest.js`, and `V015RequireDomainCollectionSchema` blocks startup until the cutover ledger is ready. No migration creates these indexes in a fresh local database, so duplicate rejection cannot be shown locally without writing to the database directly, which this migration avoids.
-- **Impact:**
+- **Impact:** Two consequences.
   - Duplicate sign-up rejection is covered by the code path (`DuplicateKeyException` maps to 409) and production's indexes, not by local runtime evidence.
   - Follow-up for the user: local disposable databases lack the manifest indexes.
 
