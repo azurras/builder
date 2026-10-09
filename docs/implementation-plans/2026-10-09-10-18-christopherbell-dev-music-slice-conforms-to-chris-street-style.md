@@ -1,7 +1,7 @@
 # Music Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -163,7 +163,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** None beyond the test.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1503 (`00d898a`) and auto-deployed. Production serves the merge commit; `/music` returns 200 and anonymous catalog and radio reads still return 403.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check and `music.test.js` passed ([report](../test-reports/2026-10-09-10-25-christopherbell-dev-music-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 14 of 14 runtime cases, including the single-constructor audit recorder answering the entry probe ([report](../test-reports/2026-10-09-10-25-christopherbell-dev-music-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1503](https://github.com/azurras/christopherbell.dev/pull/1503) merged as `00d898a` after its branch was updated with main and all checks passed; production `/actuator/info` reports `00d898a` |
 
 ## Project
 christopherbell-dev

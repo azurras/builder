@@ -85,7 +85,7 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 10 | canesboxtracker | 13 / 4 | 2,953 | done: [plan](2026-10-06-21-21-christopherbell-dev-canesboxtracker-slice-conforms-to-chris-street-style.md), PR #1500 `5038999` |
 | 11 | federation | 40 / 23 | 5,033 | done: [plan](2026-10-09-09-45-christopherbell-dev-federation-slice-conforms-to-chris-street-style.md), PR #1501 `be88be2` |
 | 12 | vehicle | 44 / 14 | 6,880 | done: [plan](2026-10-09-10-04-christopherbell-dev-vehicle-slice-conforms-to-chris-street-style.md), PR #1502 `8bd5e2f` |
-| 13 | music | 81 / 25 | 7,239 | in progress: [plan](2026-10-09-10-18-christopherbell-dev-music-slice-conforms-to-chris-street-style.md) |
+| 13 | music | 81 / 25 | 7,239 | done: [plan](2026-10-09-10-18-christopherbell-dev-music-slice-conforms-to-chris-street-style.md), PR #1503 `00d898a` |
 | 14 | account | 60 / 26 | 7,435 | in progress: [plan](2026-10-09-10-33-christopherbell-dev-account-slice-conforms-to-chris-street-style.md) |
 | 15 | admin | 41 / 25 | 8,506 | 15a Java in progress: [plan](2026-10-09-10-54-christopherbell-dev-admin-java-slice-conforms-to-chris-street-style.md); 15b back-office JavaScript and template pending |
 | 16 | post | 68 / 35 | 8,653 | pending; split when planned |
