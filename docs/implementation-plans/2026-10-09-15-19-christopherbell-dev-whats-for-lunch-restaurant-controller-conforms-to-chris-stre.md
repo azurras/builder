@@ -1,7 +1,7 @@
 # What's for Lunch Restaurant Controller Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -110,7 +110,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1515 (`2e31f37`) and auto-deployed. Production serves `2e31f37`, and `/wfl` returns 200. This completes slice 17.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for the controller and its tests |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-15-26-christopherbell-dev-whats-for-lunch-restaurant-controller-conforms-to-chris-stre.md)) |
+| AC-3 | ✅ Met | 16 of 16 runtime cases passed on candidate `8da0de0` ([report](../test-reports/2026-10-09-15-26-christopherbell-dev-whats-for-lunch-restaurant-controller-conforms-to-chris-stre.md)) |
+| AC-4 | ✅ Met | [PR #1515](https://github.com/azurras/christopherbell.dev/pull/1515) merged as `2e31f37` after all checks passed; production `/actuator/info` reports `2e31f37` |
 
 ## Project
 christopherbell-dev
