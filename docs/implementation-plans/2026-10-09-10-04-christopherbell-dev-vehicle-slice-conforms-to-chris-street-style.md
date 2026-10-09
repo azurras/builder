@@ -1,7 +1,7 @@
 # Vehicle Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -143,7 +143,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1502 (`8bd5e2f`) and auto-deployed. Production serves the merge commit, and anonymous vehicle admin reads still return 403.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-10-09-christopherbell-dev-vehicle-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 15 of 15 runtime cases, including the published batch codes and messages ([report](../test-reports/2026-10-09-10-09-christopherbell-dev-vehicle-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1502](https://github.com/azurras/christopherbell.dev/pull/1502) merged as `8bd5e2f` after its branch was updated with main and all checks passed; production `/actuator/info` reports `8bd5e2f`; anonymous `GET /api/vehicles/2026-05-09` and `/data-collection-state` return 403 |
 
 ## Project
 christopherbell-dev
