@@ -72,8 +72,14 @@ def read_text(path: Path) -> str:
 
 
 def write_text(path: Path, content: str) -> Path:
+    """Write content with LF line endings on every platform, whatever endings the input used.
+
+    Text mode on Windows would turn each "\\n" into "\\r\\n", so a body that already used CRLF
+    would be stored with doubled carriage returns.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(content.rstrip() + "\n", encoding="utf-8")
+    normalized = content.replace("\r\n", "\n").replace("\r", "\n")
+    path.write_text(normalized.rstrip() + "\n", encoding="utf-8", newline="\n")
     return path
 
 

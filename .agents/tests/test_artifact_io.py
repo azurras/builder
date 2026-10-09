@@ -32,6 +32,24 @@ class ArtifactIoTests(unittest.TestCase):
             self.assertEqual(path.name, "2099-04-05-09-05-issue-42-local-app-test.md")
             self.assertEqual(path.read_text(encoding="utf-8"), "# Report\n")
 
+    def test_save_dated_markdown_writes_lf_line_endings_for_any_body(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+
+            path = save_dated_markdown(
+                root=root,
+                directory="docs/test-reports",
+                title="Line endings",
+                body="# Report\r\n\r\nWindows line.\r\nOld Mac line.\rUnix line.\n",
+                fallback_slug="test-report",
+                artifact_date=dt.date(2099, 4, 5),
+                artifact_time=dt.time(9, 5),
+            )
+
+            self.assertEqual(
+                path.read_bytes(),
+                b"# Report\n\nWindows line.\nOld Mac line.\nUnix line.\n")
+
     def test_save_dated_markdown_refuses_overwrite_by_default(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

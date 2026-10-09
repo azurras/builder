@@ -256,6 +256,9 @@ def main() -> int:
         try:
             if any("=" not in setting for setting in args.env):
                 raise ValueError("--env takes Setting=value")
+            # Reports contain non-ASCII marks; a Windows console code page cannot encode them, and
+            # redirected output would otherwise gain CRLF line endings.
+            sys.stdout.reconfigure(encoding="utf-8", newline="\n")
             print(render_report(read_cases(args.evidence), title=args.title, story=args.story, branch=args.branch,
                                 project=args.project, environment=args.env, cleanup=args.cleanup), end="")
         except (OSError, ValueError, TypeError, json.JSONDecodeError) as error:
