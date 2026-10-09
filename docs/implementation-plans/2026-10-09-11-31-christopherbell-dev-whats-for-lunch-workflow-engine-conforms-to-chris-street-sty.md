@@ -1,7 +1,7 @@
 # What's for Lunch Workflow Engine Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -137,7 +137,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1509 (`c84d203`) and auto-deployed. Production serves `7ec9ae1`, which contains it, and `/wfl` returns 200. `#1508` merged on top of it as `7ec9ae1` before the deploy finished, so production went straight to `7ec9ae1`, which contains `c84d203`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every workflow file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-11-37-christopherbell-dev-whats-for-lunch-workflow-engine-conforms-to-chris-street-sty.md)) |
+| AC-3 | ✅ Met | 7 of 7 runtime cases passed on candidate `26f4e20`, with no ERROR lines in the startup log ([report](../test-reports/2026-10-09-11-37-christopherbell-dev-whats-for-lunch-workflow-engine-conforms-to-chris-street-sty.md)) |
+| AC-4 | ✅ Met | [PR #1509](https://github.com/azurras/christopherbell.dev/pull/1509) merged as `c84d203` after all checks passed; production `/actuator/info` reports `7ec9ae1`, which contains it |
 
 ## Project
 christopherbell-dev

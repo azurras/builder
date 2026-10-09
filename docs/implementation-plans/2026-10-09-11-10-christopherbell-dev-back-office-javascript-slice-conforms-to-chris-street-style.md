@@ -1,7 +1,7 @@
 # Back Office JavaScript Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -139,7 +139,16 @@ Revert the squash-merge commit; auto-deploy rolls forward.
 - **Impact:** Only the rerun's results are used as evidence.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1506 (`9962afd`) and auto-deployed. Production serves `9962afd`, and `/back-office` returns 200.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-11-11-christopherbell-dev-back-office-javascript-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 11 of 11 runtime cases passed on candidate `0332f5c` ([report](../test-reports/2026-10-09-11-11-christopherbell-dev-back-office-javascript-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1506](https://github.com/azurras/christopherbell.dev/pull/1506) merged as `9962afd` after all checks passed; production `/actuator/info` reports `9962afd` |
 
 ## Project
 christopherbell-dev

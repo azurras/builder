@@ -1,7 +1,7 @@
 # Post Java Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -149,7 +149,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** None beyond the test.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1507 (`db86567`) and auto-deployed. Production serves `db86567`, and `/void` returns 200.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every post Java file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-11-24-christopherbell-dev-post-java-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 8 of 8 runtime cases, including all 28 post-flow checks, passed on candidate `58ded01` ([report](../test-reports/2026-10-09-11-24-christopherbell-dev-post-java-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1507](https://github.com/azurras/christopherbell.dev/pull/1507) merged as `db86567` after all checks passed; production `/actuator/info` reports `db86567` |
 
 ## Project
 christopherbell-dev

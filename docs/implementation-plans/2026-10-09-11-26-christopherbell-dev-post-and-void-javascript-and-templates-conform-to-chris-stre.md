@@ -1,7 +1,7 @@
 # Post and Void JavaScript and Templates Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -137,7 +137,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1508 (`7ec9ae1`) and auto-deployed. Production serves `7ec9ae1`, and `/void/explore` returns 200.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-11-33-christopherbell-dev-post-and-void-front-end-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 3 of 3 setup cases and all 12 browser walk-through checks passed on candidate `3d875c5`, with no console errors ([report](../test-reports/2026-10-09-11-33-christopherbell-dev-post-and-void-front-end-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1508](https://github.com/azurras/christopherbell.dev/pull/1508) merged as `7ec9ae1` after all checks passed; production `/actuator/info` reports `7ec9ae1` |
 
 ## Project
 christopherbell-dev
