@@ -1,7 +1,7 @@
 # Mongo Domain Persistence Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -119,7 +119,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1522 (`4c5aaa7`) and auto-deployed after the deploy gate released it. Production serves `4c5aaa7`. This completes slice 18.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every domain file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-16-28-christopherbell-dev-mongo-domain-persistence-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 6 of 6 runtime cases passed on candidate `5b4e778`, including the post and lunch round trips ([report](../test-reports/2026-10-09-16-28-christopherbell-dev-mongo-domain-persistence-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1522](https://github.com/azurras/christopherbell.dev/pull/1522) merged as `4c5aaa7` after all checks passed; production `/actuator/info` reports `4c5aaa7` |
 
 ## Project
 christopherbell-dev
