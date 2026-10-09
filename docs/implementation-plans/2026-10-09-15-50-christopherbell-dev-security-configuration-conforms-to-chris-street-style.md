@@ -140,6 +140,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** That is how the application provides its `Clock`.
 - **Impact:** Test configuration only.
 
+### 2026-10-09 - First runtime run discarded
+
+- **Change:** The first runtime run compared security headers and the anonymous `/me` with production while production was restarting for the slice 17f deploy; Cloudflare answered 502, so the comparison was against an error page. The candidate-only checks all passed. The comparisons were rerun on the same candidate once production answered 200.
+- **Reason:** A comparison is only evidence when both sides answer normally.
+- **Impact:** None on the code; the report records the discarded run.
+
 ## Outcome
 Pending.
 
