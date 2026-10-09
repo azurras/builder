@@ -85,7 +85,7 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 10 | canesboxtracker | 13 / 4 | 2,953 | done: [plan](2026-10-06-21-21-christopherbell-dev-canesboxtracker-slice-conforms-to-chris-street-style.md), PR #1500 `5038999` |
 | 11 | federation | 40 / 23 | 5,033 | in progress: [plan](2026-10-09-09-45-christopherbell-dev-federation-slice-conforms-to-chris-street-style.md) |
 | 12 | vehicle | 44 / 14 | 6,880 | in progress: [plan](2026-10-09-10-04-christopherbell-dev-vehicle-slice-conforms-to-chris-street-style.md) |
-| 13 | music | 81 / 25 | 7,239 | pending |
+| 13 | music | 81 / 25 | 7,239 | in progress: [plan](2026-10-09-10-18-christopherbell-dev-music-slice-conforms-to-chris-street-style.md) |
 | 14 | account | 60 / 26 | 7,435 | pending |
 | 15 | admin | 41 / 25 | 8,506 | pending; split when planned |
 | 16 | post | 68 / 35 | 8,653 | pending; split when planned |
