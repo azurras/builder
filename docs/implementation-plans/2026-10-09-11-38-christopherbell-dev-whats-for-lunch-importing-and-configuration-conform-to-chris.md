@@ -1,7 +1,7 @@
 # What's for Lunch Importing and Configuration Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -131,7 +131,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1510 (`7a1b097`) and auto-deployed. Production serves `7a1b097`, and `/wfl` returns 200. A real preview and apply still need an ADMIN and a live Overpass call; the import workflow tests cover them.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every importing and configuration file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-14-43-christopherbell-dev-whats-for-lunch-importing-and-configuration-conform-to-chris.md)) |
+| AC-3 | ✅ Met | 10 of 10 runtime cases passed on candidate `530ec57`, including USER rejections and a clean startup log with no import run ([report](../test-reports/2026-10-09-14-43-christopherbell-dev-whats-for-lunch-importing-and-configuration-conform-to-chris.md)) |
+| AC-4 | ✅ Met | [PR #1510](https://github.com/azurras/christopherbell.dev/pull/1510) merged as `7a1b097` after all checks passed; production `/actuator/info` reports `7a1b097` |
 
 ## Project
 christopherbell-dev
