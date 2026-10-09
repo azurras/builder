@@ -1,7 +1,7 @@
 # What's for Lunch Front End Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -125,7 +125,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1514 (`06297e6`) and auto-deployed. Production serves `06297e6`, and `/wfl` returns 200.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | All 390 JavaScript tests and the full check passed ([report](../test-reports/2026-10-09-15-15-christopherbell-dev-whats-for-lunch-front-end-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | The browser walk-through on candidate `89bed8e` matched production where compared, with only expected console errors ([report](../test-reports/2026-10-09-15-15-christopherbell-dev-whats-for-lunch-front-end-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1514](https://github.com/azurras/christopherbell.dev/pull/1514) merged as `06297e6` after all checks passed; production `/actuator/info` reports `06297e6` |
 
 ## Project
 christopherbell-dev
