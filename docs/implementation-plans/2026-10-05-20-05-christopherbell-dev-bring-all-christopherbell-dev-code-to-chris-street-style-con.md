@@ -88,7 +88,7 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 13 | music | 81 / 25 | 7,239 | done: [plan](2026-10-09-10-18-christopherbell-dev-music-slice-conforms-to-chris-street-style.md), PR #1503 `00d898a` |
 | 14 | account | 60 / 26 | 7,435 | done: [plan](2026-10-09-10-33-christopherbell-dev-account-slice-conforms-to-chris-street-style.md), PR #1504 `8d5c68f` |
 | 15 | admin | 41 / 25 | 8,506 | 15a Java in progress: [plan](2026-10-09-10-54-christopherbell-dev-admin-java-slice-conforms-to-chris-street-style.md); 15b back-office JavaScript in progress: [plan](2026-10-09-11-10-christopherbell-dev-back-office-javascript-slice-conforms-to-chris-street-style.md) |
-| 16 | post | 68 / 35 | 8,653 | pending; split when planned |
+| 16 | post | 68 / 35 | 8,653 | 16a Java in progress: [plan](2026-10-09-11-20-christopherbell-dev-post-java-slice-conforms-to-chris-street-style.md); 16b post and Void JavaScript and templates pending |
 | 17 | whatsforlunch | 96 / 18 | 11,800 | pending; split when planned |
 | 18 | configuration | 90 / 70 | 17,691 | pending; split by subpackage (filter, mail, mongo, persistence, security, root) |
 | 19 | sharedfolder | 101 / 35 | 26,570 | pending; split when planned |
