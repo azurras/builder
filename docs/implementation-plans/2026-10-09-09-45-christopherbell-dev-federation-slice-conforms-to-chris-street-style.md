@@ -1,7 +1,7 @@
 # Federation Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -135,8 +135,23 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** I worked ahead so the check could run during planning.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-09 - Outbox record holds the account ID
+
+- **Change:** The first full check failed `legacyInternalCrossAreaAccessDoesNotGrow`. The new private `ActorOutbox` record held an `account.model.Account`, which is a new federation-to-account reference. The record now holds `accountId`, the only value its callers used.
+- **Reason:** Cross-area access must not grow; the frozen store is not updated to admit new references.
+- **Impact:** None on behavior; the rerun passed.
+
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1501 (`be88be2`) and auto-deployed. All nine production federation responses captured before the deploy are byte-identical after it.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed after the outbox fix logged above ([report](../test-reports/2026-10-09-09-56-christopherbell-dev-federation-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 25 of 25 runtime cases, including shape comparisons with production ([report](../test-reports/2026-10-09-09-56-christopherbell-dev-federation-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1501](https://github.com/azurras/christopherbell.dev/pull/1501) merged as `be88be2` after all checks passed; production `/actuator/info` reports `be88be2`; NodeInfo, WebFinger, actor, outbox, outbox page, followers, following and the unknown-actor 404 were identical to the pre-deploy capture |
 
 ## Project
 christopherbell-dev
