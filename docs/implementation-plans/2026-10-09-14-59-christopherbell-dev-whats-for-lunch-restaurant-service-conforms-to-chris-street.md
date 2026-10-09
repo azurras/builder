@@ -1,7 +1,7 @@
 # What's for Lunch Restaurant Service Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -157,7 +157,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** The umbrella ledger row 17 lists the new parts.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1513 (`67abb24`) and auto-deployed. Production serves `67abb24`, and `/wfl` returns 200. Picks over real restaurants, duplicate cleanup and import apply rely on the 62 service tests, because restaurants cannot be created locally.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for the service and both tests touched |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-15-06-christopherbell-dev-whats-for-lunch-restaurant-service-conforms-to-chris-street.md)) |
+| AC-3 | ✅ Met | 15 of 15 runtime cases, including all 13 USER sub-checks, passed on candidate `8eeb23f` ([report](../test-reports/2026-10-09-15-06-christopherbell-dev-whats-for-lunch-restaurant-service-conforms-to-chris-street.md)) |
+| AC-4 | ✅ Met | [PR #1513](https://github.com/azurras/christopherbell.dev/pull/1513) merged as `67abb24` after all checks passed; production `/actuator/info` reports `67abb24` |
 
 ## Project
 christopherbell-dev
