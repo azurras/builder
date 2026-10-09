@@ -1,7 +1,7 @@
 # Admin Java Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -141,7 +141,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1505 (`3f4af8b`) and auto-deployed. Production `/actuator/info` reports the merge commit and `/back-office` returns 200. Admin success paths remain covered by tests only, because no local ADMIN exists.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every admin Java file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-10-54-christopherbell-dev-admin-java-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 13 of 13 runtime cases passed on candidate `3887b55` ([report](../test-reports/2026-10-09-10-54-christopherbell-dev-admin-java-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1505](https://github.com/azurras/christopherbell.dev/pull/1505) merged as `3f4af8b` after all checks passed; production `/actuator/info` reports `3f4af8b` |
 
 ## Project
 christopherbell-dev
