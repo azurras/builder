@@ -1,7 +1,7 @@
 # Notification Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -135,7 +135,17 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1499 (`4ba1cf6`) and auto-deployed. Production serves the merge commit and `/notifications` returns 200 after the deploy.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed and the frozen store only lost four entries ([report](../test-reports/2026-10-06-21-13-christopherbell-dev-notification-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | Message notification, list, paged inbox, mark read, mark all read, opt-out and anonymous rejection recorded ([report](../test-reports/2026-10-06-21-13-christopherbell-dev-notification-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1499](https://github.com/azurras/christopherbell.dev/pull/1499) merged as `4ba1cf6` after all six checks passed; production `/actuator/info` reported `4ba1cf6` and `/notifications` returned 200 |
+
 
 ## Project
 christopherbell-dev

@@ -81,8 +81,8 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 6 | sitemonitor | 17 / 6 | 1,778 | done: [plan](2026-10-06-20-33-christopherbell-dev-sitemonitor-slice-conforms-to-chris-street-style.md), PR #1496 `1d1516f` |
 | 7 | message | 19 / 9 | 1,786 | done: [plan](2026-10-06-20-47-christopherbell-dev-message-slice-conforms-to-chris-street-style.md), PR #1497 `38907c6` |
 | 8 | view | 13 / 3 | 1,794 | done: [plan](2026-10-06-20-56-christopherbell-dev-view-slice-conforms-to-chris-street-style.md), PR #1498 `d83f96c` |
-| 9 | notification | 29 / 13 | 2,323 | in progress: [plan](2026-10-06-21-07-christopherbell-dev-notification-slice-conforms-to-chris-street-style.md), PR #1499 |
-| 10 | canesboxtracker | 13 / 4 | 2,953 | in progress: [plan](2026-10-06-21-21-christopherbell-dev-canesboxtracker-slice-conforms-to-chris-street-style.md), PR #1500 |
+| 9 | notification | 29 / 13 | 2,323 | done: [plan](2026-10-06-21-07-christopherbell-dev-notification-slice-conforms-to-chris-street-style.md), PR #1499 `4ba1cf6` |
+| 10 | canesboxtracker | 13 / 4 | 2,953 | done: [plan](2026-10-06-21-21-christopherbell-dev-canesboxtracker-slice-conforms-to-chris-street-style.md), PR #1500 `5038999` |
 | 11 | federation | 40 / 23 | 5,033 | pending |
 | 12 | vehicle | 44 / 14 | 6,880 | pending |
 | 13 | music | 81 / 25 | 7,239 | pending |

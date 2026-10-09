@@ -1,7 +1,7 @@
 # Canesboxtracker Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -132,7 +132,17 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change: store
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1500 (`5038999`) and auto-deployed. The production history response after the deploy is identical, apart from timestamps, to the one captured before it (12 weeks, latest 2026-10-05).
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed; the four canes suites passed ([report](../test-reports/2026-10-06-21-26-christopherbell-dev-canesboxtracker-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | Empty history envelope matched production's shape, the page rendered, and anonymous and USER admin actions were rejected ([report](../test-reports/2026-10-06-21-26-christopherbell-dev-canesboxtracker-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1500](https://github.com/azurras/christopherbell.dev/pull/1500) merged as `5038999` after all six checks passed; production `/actuator/info` reports `5038999`, and on 2026-10-09 the production history equaled the pre-deploy capture |
+
 
 ## Project
 christopherbell-dev
