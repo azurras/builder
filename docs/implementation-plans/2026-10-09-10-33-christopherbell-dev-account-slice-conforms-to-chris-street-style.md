@@ -1,7 +1,7 @@
 # Account Slice Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -170,7 +170,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
   - Follow-up for the user: local disposable databases lack the manifest indexes.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1504 (`8d5c68f`) and auto-deployed. Production serves the merge commit; a public profile returns 200 and anonymous account-list and `/me` reads still return 403. Login itself was verified locally (cookie and bearer modes); a production sign-in by the owner remains the final confirmation.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every slice file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-10-40-christopherbell-dev-account-slice-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 21 of 21 runtime cases on a fresh database, after the discarded first run logged above ([report](../test-reports/2026-10-09-10-40-christopherbell-dev-account-slice-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1504](https://github.com/azurras/christopherbell.dev/pull/1504) merged as `8d5c68f` after its branch was updated with main and all checks passed; production `/actuator/info` reports `8d5c68f` |
 
 ## Project
 christopherbell-dev
