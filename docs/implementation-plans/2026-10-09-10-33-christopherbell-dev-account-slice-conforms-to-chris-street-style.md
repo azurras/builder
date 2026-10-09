@@ -158,6 +158,17 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** I worked ahead while earlier slices were in CI.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-09 - First runtime run discarded
+
+- **Change:** The first runtime run reported two failures, so I discarded it and ran again on a fresh database.
+  - The fresh disposable database had no unique `email` or `username` index on `accounts`, so a duplicate sign-up succeeded. Every later check that looked up `acct_cookie` then hit two matching accounts.
+  - Two expected messages were wrong: the shared `ControllerExceptionHandler` answers `INVALID_TOKEN` with "Authentication is required." for both a wrong password and a bogus reset token.
+  - The rerun dropped the duplicate sign-up case and expects `INVALID_TOKEN` with status 401. All 21 cases passed.
+- **Reason:** Production applies the domain manifest indexes through `ops/production/windows/scripts/DomainCollectionManifest.js`, and `V015RequireDomainCollectionSchema` blocks startup until the cutover ledger is ready. No migration creates these indexes in a fresh local database, so duplicate rejection cannot be shown locally without writing to the database directly, which this migration avoids.
+- **Impact:**
+  - Duplicate sign-up rejection is covered by the code path (`DuplicateKeyException` maps to 409) and production's indexes, not by local runtime evidence.
+  - Follow-up for the user: local disposable databases lack the manifest indexes.
+
 ## Outcome
 Pending.
 
