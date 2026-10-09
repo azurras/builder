@@ -1,7 +1,7 @@
 # Configuration Filters Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -130,7 +130,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** None on the code; the report records the discarded runs.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1517 (`e72f811`) and auto-deployed. Production serves `e72f811`, and `/robots.txt` returns 200.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every filter file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-15-48-christopherbell-dev-configuration-filters-conform-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 3 of 3 runtime cases passed on candidate `95b7e54`, including rate-limit headers, correlation ids, login throttling with `Retry-After` and the 413 size limit, after the two discarded runs logged above ([report](../test-reports/2026-10-09-15-48-christopherbell-dev-configuration-filters-conform-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1517](https://github.com/azurras/christopherbell.dev/pull/1517) merged as `e72f811` after all checks passed; production `/actuator/info` reports `e72f811` |
 
 ## Project
 christopherbell-dev
