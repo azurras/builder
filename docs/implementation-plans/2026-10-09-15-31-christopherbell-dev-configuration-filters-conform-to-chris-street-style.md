@@ -123,6 +123,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** I worked ahead on files that no open slice touches.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-09 - Two runtime runs discarded
+
+- **Change:** The 413 sub-check first targeted `posts/create`, which security rejects for an anonymous caller (403) before the size limit applies, and then the VIN decoder, whose anonymous POST CSRF rejects (403). It now targets the CSRF-exempt login endpoint, which reaches the size filter because that filter runs before the rate limiter. Each rerun waited for the login bucket to refill.
+- **Reason:** The check must reach the filter it is meant to prove.
+- **Impact:** None on the code; the report records the discarded runs.
+
 ## Outcome
 Pending.
 
