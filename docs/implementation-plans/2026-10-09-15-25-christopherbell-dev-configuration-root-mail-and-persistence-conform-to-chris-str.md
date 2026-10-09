@@ -1,7 +1,7 @@
 # Configuration Root, Mail and Persistence Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -141,7 +141,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** None on the code; the report records the discarded run.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1516 (`080a67e`) and auto-deployed. Production serves `080a67e`, and `/robots.txt` returns 200. The production-only initializers ran in production startup with the new code, which the deploy itself confirms.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in the three packages |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-15-33-christopherbell-dev-configuration-root-mail-and-persistence-conform-to-chris-str.md)) |
+| AC-3 | ✅ Met | 5 of 5 runtime cases passed on candidate `4287ffe`, after the discarded first run logged above ([report](../test-reports/2026-10-09-15-33-christopherbell-dev-configuration-root-mail-and-persistence-conform-to-chris-str.md)) |
+| AC-4 | ✅ Met | [PR #1516](https://github.com/azurras/christopherbell.dev/pull/1516) merged as `080a67e` after all checks passed; production `/actuator/info` reports `080a67e` |
 
 ## Project
 christopherbell-dev
