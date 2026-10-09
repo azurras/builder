@@ -1,7 +1,7 @@
 # Security Configuration Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -147,7 +147,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** None on the code; the report records the discarded run.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1518 (`f19a275`) and auto-deployed. Production serves `5b7ef3c`, which contains it, and `/robots.txt` returns 200. Later merges landed before the deploy finished, so production went straight to the newer head.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every root security file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-16-02-christopherbell-dev-security-configuration-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 5 of 5 runtime cases passed on candidate `2cd4670`, after the discarded first run logged above ([report](../test-reports/2026-10-09-16-02-christopherbell-dev-security-configuration-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1518](https://github.com/azurras/christopherbell.dev/pull/1518) merged as `f19a275` after all checks passed; production `/actuator/info` reports `5b7ef3c`, which contains it |
 
 ## Project
 christopherbell-dev

@@ -1,7 +1,7 @@
 # Mongo Runtime Configuration Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -122,7 +122,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1520 (`5b7ef3c`) and auto-deployed. Production serves `5b7ef3c`, and `/robots.txt` returns 200.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in the two packages |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-16-10-christopherbell-dev-mongo-runtime-configuration-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 4 of 4 runtime cases passed on candidate `47b65fe`, including auditing timestamps and a clean lease log ([report](../test-reports/2026-10-09-16-10-christopherbell-dev-mongo-runtime-configuration-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1520](https://github.com/azurras/christopherbell.dev/pull/1520) merged as `5b7ef3c` after all checks passed; production `/actuator/info` reports `5b7ef3c` |
 
 ## Project
 christopherbell-dev
