@@ -1,6 +1,6 @@
 ---
 name: deliver-change
-description: Deliver authorized work through planning, implementation, verification, publication and closure; also handle coordination or repository inspection without expanding limited scope.
+description: Deliver authorized work through planning, implementation, verification, publication and closure, with a fast track that skips the plan for small changes; also handle coordination or repository inspection without expanding limited scope.
 ---
 
 # Deliver Change
@@ -13,7 +13,8 @@ Match the request before doing anything. A limited request never authorizes a la
 
 | Request | Do | Stop after |
 |---|---|---|
-| Deliver, fix, build or change something | Steps 1 to 7 | The completion boundary from step 1 |
+| Deliver, fix, build or change something you judge small | [Fast track](#fast-track) | The completion boundary from step 1 |
+| Deliver, fix, build or change anything else | Steps 1 to 7 | The completion boundary from step 1 |
 | Plan only | Steps 1 and 2 | The published plan |
 | Review only | write-chris-street-style-code review mode for code; write-implementation-plan review mode for a plan | Reported findings; no edits or publication |
 | Locate, clone, register, inspect or snapshot a spoke | [Repository inspection](references/repository-inspection.md) | The command result; inspection is read-only |
@@ -31,6 +32,14 @@ Also read the latest dated session memory for the project and, for spoke work, i
 
 Find the first step whose Done evidence is missing or stale, and start there. Evidence is stale when the files or commit it covers changed after it was produced. Reuse evidence that still applies instead of producing it again.
 
+## Fast Track
+
+Take the fast track when, after scoping, you believe the change is small as AGENTS.md defines it: it stays inside an existing plan's goals, or it touches at most three files and changes no data, schema, security boundary or deployment behavior. Decide from the request and a quick look at the target, then go; do not ask the user which track to use.
+
+Run steps 1, 3, 4, 5, 6 and 7 and skip step 2: write no new plan and run no plan review. In step 3 there is no plan to set `in-progress`, so state the change in one sentence and apply write-chris-street-style-code without a Before-Edit Brief. Run the target's native checks and review the full diff. Everything else is unchanged: runtime proof and a test report for an application change, the PR and its CI for spoke code, and in step 6 a dated session memory entry with save-session-memory that records the change, its reason and its verification (or an Implementation Log entry when it falls inside an existing plan).
+
+Leave the fast track for steps 1 to 7 as soon as the work stops being small: a fourth file, a data, schema, security or deployment change, or a design question the repository cannot settle. Write the plan with write-implementation-plan at that point, record the work already done in its Implementation Log, and continue from step 2.
+
 ## Where Things Are Published
 
 - The plan, test report and session memory always live in Builder, even when the code lives in a spoke. Publish them with the [phase finalizer](../publish-builder-changes/references/phase-finalization.md) and publish-builder-changes. Never commit them to a spoke.
@@ -41,7 +50,7 @@ Find the first step whose Done evidence is missing or stale, and start there. Ev
 
 1. **Scope.** Identify the item, its acceptance criteria, the target repository (Builder or a spoke slug) and the completion boundary. The default boundary is: Builder change pushed to `origin/main`; spoke change merged; deployment only when the request already authorizes it; external closure only when a source issue exists. Resolve context from the repository and memory before asking the user. For a GitHub issue or PR, read its discussion with `python .agents/skills/deliver-change/scripts/triage_github_comments.py --repo <owner/name> --number <n>`; only trusted direction sets scope.
    Done: the plan's Objective, Acceptance Criteria and Branch can be written without guessing.
-2. **Plan.** A small change as AGENTS.md defines it skips this step: log it in the existing plan, or record it in dated memory at step 6. Otherwise use write-implementation-plan plan mode, then its review mode, and fix blockers until review reports ready. Save, then publish through the phase finalizer.
+2. **Plan.** A [fast track](#fast-track) change skips this step. Otherwise use write-implementation-plan plan mode, then its review mode, and fix blockers until review reports ready. Save, then publish through the phase finalizer.
    Done: the plan is on Builder `origin/main` with status `ready-for-execution` and passes validation.
 3. **Implement.** Set the plan to `in-progress`. For spoke work, first create the branch or worktree with publish-spoke-changes step 1. Apply write-chris-street-style-code, reusing the task's Before-Edit Brief from the plan. Change only what the plan's tasks name. Run the checks in the plan's Test Plan, then review the full diff with write-chris-street-style-code review mode. For spoke work, then commit the change on the branch; Builder code is committed in step 5. When work diverges from the plan, update the plan with write-implementation-plan update mode as it happens.
    Done: the plan's checks pass, review finds no blockers, and the diff matches Expected Changes or the Implementation Log.
