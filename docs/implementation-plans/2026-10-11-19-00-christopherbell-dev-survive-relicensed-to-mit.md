@@ -1,7 +1,7 @@
 # Survive relicensed to MIT across its repository and the website
 
 ## Document Status
-ready-for-execution
+blocked
 
 ## Objective
 > [!IMPORTANT]
@@ -118,10 +118,37 @@ Revert the website PR and the Survive PR. No data changes. Licenses already gran
 | An external link to the old GPL path breaks | Low | Acceptable; the label would be wrong anyway |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-11 - Local Gradle and MongoDB environment
+
+- **Change:** Gradle ran with `TEMP`/`TMP` set to a folder under `A:/Temp` and an isolated `GRADLE_USER_HOME`. The candidate run prepended the MongoDB 8.3 `bin` folder to PATH.
+- **Reason:** With the session's default temp folder the Gradle daemon failed with "Unable to establish loopback connection", and `mongod.exe` is not on PATH on this machine.
+- **Impact:** None to scope or acceptance criteria. One full test run reported a failed test task without writing new results; the rerun passed 2130 tests with 0 failures, and the cause was not reproduced.
+
+### 2026-10-11 - Survive CI and review gate
+
+- **Change:** azurras/survive PR 16 is open. Its optional `build` check fails because the 2019 workflow pins Python 3.7, which GitHub runners no longer provide. Branch protection requires one approving review, and the author cannot approve their own PR.
+- **Reason:** These conditions predate the change. Repairing the workflow is outside this plan's scope.
+- **Impact:** AC-1 waits on the user's review gate (approve an admin-bypass merge, or merge it themselves). The failing workflow is a follow-up.
+
+### 2026-10-11 - Website delivered; Survive merge awaits review gate
+
+- **Change:** None to the design. azurras/christopherbell.dev PR 1526 merged as `a18b81b` and production now serves that commit. azurras/survive PR 16 is still open.
+- **Reason:** Survive's `master` requires one approving review. Merging with the admin bypass is a user gate under AGENTS.md.
+- **Impact:** AC-2 to AC-4 are met. AC-1 is blocked until the user approves an admin-bypass merge of PR 16, or merges it themselves.
 
 ## Outcome
-Pending.
+> [!WARNING]
+> The website is relicensed and live in production. Survive's own `LICENSE` change waits on its required review.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ❌ Not met yet | [azurras/survive PR 16](https://github.com/azurras/survive/pull/16) is open with `REVIEW_REQUIRED`; it needs the user to approve an admin-bypass merge or merge it themselves |
+| AC-2 | ✅ Met | Production `GET /licenses/survive-MIT.txt` returns 200 with the MIT text; `/licenses/survive-GPL-3.0.txt` returns 403 |
+| AC-3 | ✅ Met | Production `/survive` contains `<a href="/licenses/survive-MIT.txt">MIT license</a>`; `SecurityConfigTest` covers both paths |
+| AC-4 | ✅ Met | [Test report](../test-reports/2026-10-11-19-12-christopherbell-dev-survive-relicensed-to-mit.md); [PR 1526](https://github.com/azurras/christopherbell.dev/pull/1526) merged as `a18b81b`; production `/actuator/info` shows `a18b81b` |
+
+**Follow-up:** Survive's `pythonapp.yml` workflow pins Python 3.7, which GitHub runners no longer provide, so its optional `build` check fails on every PR.
 
 ## Project
 christopherbell-dev
