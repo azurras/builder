@@ -37,7 +37,7 @@ This is slice 19d of the [full conformance migration](2026-10-05-20-05-christoph
 |---|---|
 | AC-1 | Expected Changes records a verdict for every recycle file |
 | AC-2 | `:website:check :cbell-lib:check :website:bootJar` pass and a style review of the full diff finds no blocker |
-| AC-3 | On isolated MongoDB `test`, the published test report records that the recycle admin routes and every other shared-folder route reject anonymous callers as production does and reject a USER without a grant, responses carry no-store caching, and the log has no errors |
+| AC-3 | On isolated MongoDB `test`, the published test report records that the test administrator recycles, restores and purges a folder, a wrong purge confirmation is refused, the audit log records RESTORE and PURGE, a USER without a grant is refused while a granted USER can read, responses carry no-store caching, and the log has no errors |
 | AC-4 | The PR merges after required checks pass and production `/actuator/info` reports the merge commit |
 
 ## Inputs
@@ -69,6 +69,7 @@ None.
 | `website/src/main/java/dev/christopherbell/sharedfolder/recycle/SharedFolderRecycleService.java` | changed | Block `if`s, named status sets, catch names, imports, documented lookups |
 | `website/src/main/java/dev/christopherbell/sharedfolder/recycle/MongoSharedFolderRecycleRepository.java` | changed | Layout and imports |
 | The other 5 recycle files | conforming | No change |
+| `config/checkstyle/suppressions.xml` | changed | The recycle line is removed now that the slice conforms |
 
 ## Task Breakdown
 
@@ -95,7 +96,7 @@ Required skill: write-chris-street-style-code
 |---|---|---|
 | AC-1 | Plan review against the diff | Not applicable: documentation |
 | AC-2 | Full check; full-diff style review | Covered by AC-3 |
-| AC-3 | Recycle service and reconciliation tests | verify-local-app: the slice 19b access, no-store and log checks. Recycling and restoring need a write grant or an ADMIN, neither of which has a supported local path |
+| AC-3 | Recycle service and reconciliation tests | verify-local-app with `Start-Candidate.ps1 -WithTestAdministrator -EnableSharedFolder`: real recycle, restore and purge as ADMIN, grant checks, no-store and log checks |
 | AC-4 | Required PR checks | `wait_for_github.py live`, merged through the deploy gate |
 
 ## Rollback or Recovery
@@ -114,6 +115,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Change:** This plan was saved after the edits, while slices 19a and 19b waited in the deploy gate.
 - **Reason:** I worked ahead on files that no open slice touches.
 - **Impact:** No PR exists yet; the plan and report are published before it.
+
+### 2026-10-11 - Checkstyle and administrator-backed runtime
+
+- **Change:** The branch merged `origin/main` `3217ce5`, which brought in the Checkstyle gate. It then deleted the recycle suppression line and braced five more single-statement `if`s in `SharedFolderRecycleService`, in commit `51187f89`. AC-3 now covers real recycle, restore and purge through the new test administrator.
+- **Reason:** Checkstyle found branches the slice's brace regex had missed: multi-line `audit.record...(` calls and two field guards. The test administrator (PR #1528) gives this slice the ADMIN path its Test Plan had called unavailable.
+- **Impact:** AC-3, the Test Plan and Expected Changes were updated. One runtime run was discarded because the check script parsed the audit list as an object; every product step in it had already passed.
 
 ## Outcome
 Pending.

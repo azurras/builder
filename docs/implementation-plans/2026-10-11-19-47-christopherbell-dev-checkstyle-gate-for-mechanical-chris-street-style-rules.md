@@ -1,7 +1,7 @@
 # Checkstyle Gate for Mechanical Chris Street Style Rules
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -134,7 +134,17 @@ Revert the squash-merge commit.
 - **Impact:** None on the product. The reported run has no ERROR lines. Earlier, a calibration run against main plus the test administrator had corrected three of the sweep's guessed expectations.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1529 (`3217ce5`) through the deploy-aware queue; production serves `3217ce5`. CI now fails any mechanical style regression outside the suppressed, not-yet-migrated slices.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Checkstyle 14.3.0 runs under `check` for both projects' main and test sources; a planted violation failed `checkstyleMain` on NeedBraces and fullyQualifiedName; strict dependency verification passed with the new metadata |
+| AC-2 | ✅ Met | Full check passed with zero violations; suppressions name only slices 19d to 19h, 20 and 21; 5 of 5 runtime cases passed on `8f1b90e` ([report](../test-reports/2026-10-11-20-33-christopherbell-dev-checkstyle-gate.md)) |
+| AC-3 | ✅ Met | The umbrella plan's log records each remaining slice's duty to delete its suppression line |
+
+Follow-up inside the migration: slices 19d to 19i, 20 and 21 each remove their suppression line.
 
 ## Project
 christopherbell-dev
