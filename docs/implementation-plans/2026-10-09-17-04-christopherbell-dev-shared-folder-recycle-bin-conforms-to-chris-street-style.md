@@ -1,7 +1,7 @@
 # Shared Folder Recycle Bin Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -123,7 +123,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** AC-3, the Test Plan and Expected Changes were updated. One runtime run was discarded because the check script parsed the audit list as an object; every product step in it had already passed.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1530 (`c0dec3e`) through the deploy-aware queue; production serves `c0dec3e`. Checkstyle now guards the recycle package.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every recycle file and the suppression line |
+| AC-2 | ✅ Met | Full check passed with Checkstyle covering `recycle` ([report](../test-reports/2026-10-11-21-03-christopherbell-dev-shared-folder-recycle-bin-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 7 of 7 runtime cases passed on `51187f8`, including real recycle, restore and purge as the test administrator ([report](../test-reports/2026-10-11-21-03-christopherbell-dev-shared-folder-recycle-bin-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1530](https://github.com/azurras/christopherbell.dev/pull/1530) merged as `c0dec3e` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev
