@@ -462,8 +462,8 @@ Connection: close
 - Case 8 started 2026-10-11T19:12:30-05:00, took 47 ms, candidate `57c53e0`
 
 ## Bugs / Follow-ups
-- Gradle on this machine needed `TEMP`/`TMP` pointed at `A:\Tempelicense-tmp` and an isolated `GRADLE_USER_HOME`; with the session's default temp folder the daemon failed with "Unable to establish loopback connection".
-- `mongod` 8.3 is not on PATH; the run prepended `C:\Program Files\MongoDB\Server\8.3in`.
+- Gradle on this machine needed `TEMP`/`TMP` pointed at `A:\Temp\relicense-tmp` and an isolated `GRADLE_USER_HOME`; with the session's default temp folder the daemon failed with "Unable to establish loopback connection".
+- `mongod` 8.3 is not on PATH; the run prepended `C:\Program Files\MongoDB\Server\8.3\bin`.
 
 ## Document Status
 complete
