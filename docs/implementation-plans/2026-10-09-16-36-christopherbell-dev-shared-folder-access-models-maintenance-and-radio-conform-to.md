@@ -1,7 +1,7 @@
 # Shared Folder Access, Models, Maintenance and Radio Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -147,7 +147,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1523 (`b492f6a`) through the deploy gate. Production serves `280b3c6`, which contains `b492f6a`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in the five packages |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-16-42-christopherbell-dev-shared-folder-access-models-maintenance-and-radio-conform-to.md)) |
+| AC-3 | ✅ Met | 12 of 12 runtime cases passed on candidate `fad0142` ([report](../test-reports/2026-10-09-16-42-christopherbell-dev-shared-folder-access-models-maintenance-and-radio-conform-to.md)) |
+| AC-4 | ✅ Met | [PR #1523](https://github.com/azurras/christopherbell.dev/pull/1523) merged as `b492f6a` after all checks passed; `wait_for_github.py deployed` confirmed it is live |
 
 ## Project
 christopherbell-dev

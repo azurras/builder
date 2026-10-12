@@ -1,7 +1,7 @@
 # Shared Folder Audit and Web Layer Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -122,7 +122,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** The umbrella ledger row 19 lists the combined part.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1524 (`280b3c6`) through the deploy gate. Production serves `280b3c6`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every audit and web file |
+| AC-2 | ✅ Met | Full check passed ([report](../test-reports/2026-10-09-16-58-christopherbell-dev-shared-folder-audit-and-web-layer-conform-to-chris-street-st.md)) |
+| AC-3 | ✅ Met | 13 of 13 runtime cases passed on candidate `5928bc8` ([report](../test-reports/2026-10-09-16-58-christopherbell-dev-shared-folder-audit-and-web-layer-conform-to-chris-street-st.md)) |
+| AC-4 | ✅ Met | [PR #1524](https://github.com/azurras/christopherbell.dev/pull/1524) merged as `280b3c6` after all checks passed; `wait_for_github.py deployed` confirmed it is live |
 
 ## Project
 christopherbell-dev
