@@ -138,6 +138,12 @@ Revert the squash-merge commit. Production never activates the test profile, so 
 - **Reason:** `LegacyModuleDependencyRules` lets a business area such as `account` depend only on another area's published API or on the shared `configuration.persistence` and `configuration.mongo.domain` packages. The ledger is in `configuration.mongo.migration`.
 - **Impact:** AC-2, Design, Expected Changes and Task 1 Symbols were updated. The Java work was drafted while the candidate scripts were in review, and this plan was published before any commit.
 
+### 2026-10-11 - Shared folder enabled for local candidates
+
+- **Change:** `Start-Candidate.ps1` gains `-EnableSharedFolder`. It enables the shared folder with shared and system roots inside the disposable root and a 1GB free-space floor.
+- **Reason:** In the first runtime run the administrator logged in, read the audit log and granted access. The recycle read returned 503 "Shared-folder recycle is unavailable", though, and the granted listing returned 404, because the shared folder is disabled by default and its roots did not exist. Neither was an authorization failure, but neither proved the grant does real work.
+- **Impact:** Design and AC-3 cover the extra switch, in commit `9e92ad15`. The architecture baseline `LegacyMongoAccessBaselineTest` also lists `IsolatedTestDatabase` as approved direct-Mongo infrastructure, because it carries the connection check the ledger already ran.
+
 ## Outcome
 Pending.
 

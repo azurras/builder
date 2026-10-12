@@ -58,7 +58,12 @@ Proceed only when deployment is already authorized and candidate verification pa
 
 ## Known Environment Fixes
 
-- **Gradle on Java 25 fails before any task runs** in an agent shell, with a daemon connection or Unix domain socket bind error under `%TEMP%`: the JDK cannot create its socket in the sandboxed temp folder. Create `C:\Temp\jdk-unix-sockets` and add `-Djdk.net.unixdomain.tmpdir=C:\Temp\jdk-unix-sockets` to `GRADLE_OPTS`, persistently with `[Environment]::SetEnvironmentVariable('GRADLE_OPTS', <existing value plus the flag>, 'User')`. A shorter `TEMP` does not help.
+- **Gradle on Java 25 fails before any task runs** in an agent shell with "A new daemon was started but could not be connected to" or a Unix domain socket bind error under `%TEMP%`. The cause is that the JDK cannot create its NIO sockets in the sandboxed temp folder.
+  - Use the repository's own Gradle wrapper script when its instructions name one.
+  - Otherwise, set `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:\Temp\jdk-unix-sockets` for that Gradle command only, after creating the folder. The Gradle daemon and the test JVMs it forks inherit it.
+  - `GRADLE_OPTS` alone does not work, because it reaches only the Gradle client.
+  - A shorter `TEMP` does not help.
+  - Avoid setting `JAVA_TOOL_OPTIONS` user-wide, because it changes every Java program.
 
 ## Completion Evidence
 

@@ -46,7 +46,7 @@ Nothing stops new code from reintroducing them. The user asked for item 5: lint 
   - The umbrella ledger rows 19 to 25.
 
 ## Branch
-`claude/style-lint-20261011` from spoke `origin/main` `a18b81b2`.
+`claude/style-lint-20261011` from spoke `origin/main` `a18b81b2`; it merges `origin/main` after the candidate scripts and test administrator land, so the runtime check can use them.
 
 ## Assumptions
 None.
@@ -86,18 +86,16 @@ Required skill: write-chris-street-style-code
 | **Invariants** | No production behavior changes |
 | **Boundary/API** | Build only |
 | **Effects and failures** | Violations fail the build with file and line |
-| **Tests and evidence** | A deliberate violation in a scratch copy fails the task; the clean tree passes |
+| **Tests and evidence** | A deliberate violation in a scratch copy fails the task; the clean tree passes; local runtime proof because application sources change |
 | **Verification** | `.\ops\local\Invoke-Gradle.ps1 :website:check :cbell-lib:check :website:bootJar` |
 
 ## Test Plan
 
-**Runtime proof not applicable:** the change adds a build-time lint and mechanical source edits without behavior change; the full check, including every test suite, is the proof.
-
-| AC | Check |
-|---|---|
-| AC-1 | `checkstyleMain` and `checkstyleTest` run under `check`; a planted violation fails |
-| AC-2 | Full check |
-| AC-3 | Plan and ledger review |
+| AC | Native check | Local runtime check |
+|---|---|---|
+| AC-1 | `checkstyleMain` and `checkstyleTest` run under `check`; a planted violation fails | Not applicable: build configuration |
+| AC-2 | Full check, including every test suite | verify-local-app on the rebased candidate with `Start-Candidate.ps1 -WithTestAdministrator`: readiness, then anonymous, USER and ADMIN reads across the touched areas (account, admin, post, message, music, sitemonitor, survive, shared-folder audit and web), compared with production where anonymous |
+| AC-3 | Plan and ledger review | Not applicable: documentation |
 
 ## Rollback or Recovery
 Revert the squash-merge commit.
@@ -122,6 +120,12 @@ Revert the squash-merge commit.
 - **Change:** The `survive` package and its tests are made to conform here.
 - **Reason:** `survive` (PRs #1489 to #1491) arrived after the umbrella plan counted packages, so no ledger row covers it, yet it is first-party code under the "all code" goal.
 - **Impact:** The umbrella ledger gains a note that `survive` conformed under this plan.
+
+### 2026-10-11 - Runtime proof required
+
+- **Change:** The Test Plan now requires local runtime proof, and the branch merges the candidate scripts and the test administrator before that proof.
+- **Reason:** The fixes edit application sources in about 110 files, and verify-local-app never lets an application code change skip runtime proof.
+- **Impact:** Test Plan, Task 1 evidence and Branch were updated, and merge order is now candidate scripts, test administrator, then this gate.
 
 ## Outcome
 Pending.
