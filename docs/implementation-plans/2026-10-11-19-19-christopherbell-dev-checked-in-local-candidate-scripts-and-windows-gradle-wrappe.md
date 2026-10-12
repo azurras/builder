@@ -1,7 +1,7 @@
 # Checked-In Local Candidate Scripts and Windows Gradle Wrapper
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -140,7 +140,18 @@ Revert the squash-merge commit. The scripts are operator tools, and the deployed
 | Stop removes the wrong directory | Very low | Removal requires a direct child of the expected parent with the generated name |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-11 - Candidate launched through cmd
+
+- **Change:** `Start-Candidate.ps1` now starts the jar through `cmd /d /s /c` with `>` and `2>` redirection, not `Start-Process -RedirectStandardOutput`. `candidatePid` records the `cmd` launcher, and the stop script's tree kill still stops `java`.
+- **Reason:** The first runtime run hung. With `Start-Process` redirection, `java` inherited the script's own output handles, so any caller capturing `Start-Candidate.ps1` output (here `record_run.py`) waited until the candidate exited. That candidate was ready in about 8 seconds and was stopped with `Stop-Candidate.ps1`, which freed both ports and removed both directories.
+- **Impact:** Design for `Start-Candidate.ps1`; commit `e30f63f2`. The full check ran on `d88278d8`, which differs only in that launch; the runtime report covers `e30f63f2`.
+
+### 2026-10-11 - Discarded runtime run with a broad log check
+
+- **Change:** One runtime run was discarded. Its log check counted two OSHI `WARN` lines containing "Error 0x80070057" as errors.
+- **Reason:** The harness's `Select-String` was case-insensitive. The check now matches only the `ERROR` log level.
+- **Impact:** None on the product. The reported run has no ERROR-level lines.
 
 ## Outcome
 Pending.
