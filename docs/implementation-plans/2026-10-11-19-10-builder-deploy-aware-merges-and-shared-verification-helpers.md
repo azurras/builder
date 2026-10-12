@@ -1,7 +1,7 @@
 # Deploy-Aware Merges and Shared Verification Helpers
 
 ## Document Status
-ready-for-execution
+complete
 
 ## Objective
 
@@ -169,7 +169,19 @@ Revert the Builder commit. The registry field is optional, so older readers igno
 No entries yet.
 
 ## Outcome
-Pending.
+
+> [!NOTE]
+> Delivered as planned. Builder can now serialize spoke merges behind an auto-deploy, confirm that a merge is live, compare a candidate with production and update umbrella ledger rows. The Java guide records the migration's settled decisions.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | Pass | `AutoDeploy` validation and two new registry tests; christopherbell-dev declares `autoDeploy`, and its pattern read production commit `280b3c6` from `/actuator/info` |
+| AC-2 | Pass | Seven new waiter tests (behind branch, deployed, queue order, queue stop, repository parsing); `deployed --spoke christopherbell-dev --commit b492f6a0` against production exited 0 ("Production serves 280b3c6, which contains b492f6a") |
+| AC-3 | Pass | `test_compare_responses.py`: 6 tests against a local `ThreadingHTTPServer` |
+| AC-4 | Pass | `test_update_ledger_row.py`: 3 tests, including CRLF preservation and unchanged files on failure |
+| AC-5 | Pass | `python .agents/run_tests.py`: 16 of 16 files, 174 tests; `check_hub.py`: hub state validation passed |
+
+Follow-up: the spoke-side items (candidate scripts and Windows build setup, the test admin fixture and Checkstyle) ship under their own christopherbell-dev plans.
 
 ## Project
 builder

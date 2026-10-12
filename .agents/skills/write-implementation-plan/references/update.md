@@ -40,6 +40,16 @@ Pass the entry body on stdin. `--status` optionally moves Document Status in the
 
 The helper appends at the end of Implementation Log (replacing the `No entries yet.` placeholder, or creating the section before Outcome in an older plan), preserves every other byte and line ending, validates the result and leaves the file unchanged when validation fails. Edit the other sections with ordinary file edits.
 
+## Umbrella Ledgers
+
+A large change split into child plans keeps an umbrella plan with a ledger table. The first cell of each row identifies the row (a slice number, for example), and another cell links each child plan with its state. When a child plan changes state, update its row with:
+
+```bash
+python .agents/skills/write-implementation-plan/scripts/update_ledger_row.py --plan <umbrella plan> --row <first cell> --replace "in progress: [plan](<child>.md)" --with "done: [plan](<child>.md), PR #<n> \`<sha>\`"
+```
+
+The text must occur exactly once in that row. The helper keeps every other byte, validates the plan and leaves it unchanged on failure.
+
 ## Publication
 
 Publish plan updates with the next phase checkpoint through the [phase finalizer](../../publish-builder-changes/references/phase-finalization.md); an individual log entry does not need its own commit. The completed plan is published with the delivery memory before closure.

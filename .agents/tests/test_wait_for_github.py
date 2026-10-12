@@ -168,5 +168,139 @@ class LiveWaitTests(unittest.TestCase):
         self.assertIn("did not contain 49700a7", outcome.message)
 
 
+class BehindBranchTests(unittest.TestCase):
+    def test_behind_branch_is_updated_once_per_head_and_merged_only_when_current(self):
+        behind = dict(pull_request_view(check_run("build")), mergeStateStatus="BEHIND")
+        current = dict(pull_request_view(check_run("build")), mergeStateStatus="CLEAN")
+        fake_github = FakeGitHub(behind, behind, current,
+                                 pull_request_view(check_run("build"), state="MERGED", merge_commit="abc1234"))
+
+        outcome = wait_for(fake_github, merge_method="squash")
+
+        self.assertEqual(outcome.exit_code, 0, outcome.message)
+        self.assertEqual(fake_github.calls_starting("pr", "update-branch"),
+                         [["pr", "update-branch", "7", "--repo", REPOSITORY]])
+        self.assertEqual(len(fake_github.calls_starting("pr", "merge")), 1)
+        self.assertEqual(outcome.merge_commit, "abc1234")
+
+
+MAIN_HEAD = "a" * 40
+NEXT_HEAD = "b" * 40
+AUTO_DEPLOY = wait_for_github.AutoDeploy("https://site.example/actuator/info",
+                                         wait_for_github.re.compile(r"-dev\.([0-9a-f]{40})"))
+
+
+def info_body(commit):
+    return json.dumps({"build": {"version": f"0.0.0-dev.{commit}"}})
+
+
+class FakeProduction:
+    """Serves the live commit and answers the GitHub API calls the deploy-aware modes make."""
+
+    def __init__(self, live_commits, *, heads=(MAIN_HEAD,), compare_status="ahead", pull_requests=None):
+        self.live_commits = list(live_commits)
+        self.heads = list(heads)
+        self.compare_status = compare_status
+        self.pull_requests = pull_requests or {}
+        self.calls = []
+
+    def fetch(self, url):
+        commit = self.live_commits.pop(0) if len(self.live_commits) > 1 else self.live_commits[0]
+        self.calls.append(["live", commit])
+        return info_body(commit)
+
+    def __call__(self, arguments):
+        self.calls.append(arguments)
+        if arguments[0] == "api" and "/commits/" in arguments[1]:
+            head = self.heads.pop(0) if len(self.heads) > 1 else self.heads[0]
+            return subprocess.CompletedProcess(arguments, 0, head + "\n", "")
+        if arguments[0] == "api" and "/compare/" in arguments[1]:
+            return subprocess.CompletedProcess(arguments, 0, self.compare_status + "\n", "")
+        if arguments[:2] == ["pr", "view"]:
+            views = self.pull_requests[arguments[2]]
+            view = views.pop(0) if len(views) > 1 else views[0]
+            return subprocess.CompletedProcess(arguments, 0, json.dumps(view), "")
+        return subprocess.CompletedProcess(arguments, 0, "", "")
+
+
+class DeployedWaitTests(unittest.TestCase):
+    def deployed(self, production, commit, timeout_seconds=600):
+        clock = FakeClock()
+        return wait_for_github.wait_for_deployed_commit(REPOSITORY, AUTO_DEPLOY, commit,
+                                                        timeout_seconds=timeout_seconds, interval_seconds=60,
+                                                        run_command=production, fetch=production.fetch,
+                                                        sleep=clock.sleep, clock=clock)
+
+    def test_exact_live_commit_needs_no_compare(self):
+        production = FakeProduction([MAIN_HEAD])
+
+        outcome = self.deployed(production, MAIN_HEAD[:7])
+
+        self.assertEqual(outcome.exit_code, 0, outcome.message)
+        self.assertFalse([call for call in production.calls if call[0] == "api"])
+
+    def test_a_later_live_commit_that_contains_the_merge_counts_as_live(self):
+        production = FakeProduction([NEXT_HEAD], compare_status="ahead")
+
+        outcome = self.deployed(production, MAIN_HEAD)
+
+        self.assertEqual(outcome.exit_code, 0, outcome.message)
+        self.assertIn(["api", f"repos/{REPOSITORY}/compare/{MAIN_HEAD}...{NEXT_HEAD}", "--jq", ".status"],
+                      production.calls)
+
+    def test_an_older_live_commit_times_out_naming_what_production_serves(self):
+        production = FakeProduction([NEXT_HEAD], compare_status="behind")
+
+        outcome = self.deployed(production, MAIN_HEAD, timeout_seconds=120)
+
+        self.assertEqual(outcome.exit_code, 2)
+        self.assertIn(f"production still serves {NEXT_HEAD[:7]}", outcome.message)
+
+
+class MergeQueueTests(unittest.TestCase):
+    def test_each_pr_waits_for_production_to_serve_the_previous_merge(self):
+        green = dict(pull_request_view(check_run("build")), mergeStateStatus="CLEAN")
+        production = FakeProduction(
+            ["0" * 40, MAIN_HEAD, MAIN_HEAD, MAIN_HEAD, NEXT_HEAD, NEXT_HEAD],
+            heads=(MAIN_HEAD, MAIN_HEAD, NEXT_HEAD, NEXT_HEAD, NEXT_HEAD),
+            pull_requests={"7": [green, pull_request_view(check_run("build"), state="MERGED", merge_commit=NEXT_HEAD)],
+                           "8": [green, pull_request_view(check_run("build"), state="MERGED", merge_commit="c" * 40)]})
+        production.compare_status = "identical"
+        clock = FakeClock()
+
+        outcome = wait_for_github.merge_queue(REPOSITORY, "main", AUTO_DEPLOY, [7, 8], merge_method="squash",
+                                              timeout_seconds=900, interval_seconds=60, run_command=production,
+                                              fetch=production.fetch, sleep=clock.sleep, clock=clock)
+
+        self.assertEqual(outcome.exit_code, 0, outcome.message)
+        merges = [index for index, call in enumerate(production.calls) if call[:2] == ["pr", "merge"]]
+        self.assertEqual([production.calls[index][2] for index in merges], ["7", "8"])
+        live_before_second_merge = [call[1] for call in production.calls[:merges[1]] if call[0] == "live"]
+        self.assertEqual(live_before_second_merge[-1], NEXT_HEAD)
+        self.assertEqual(outcome.merge_commit, "c" * 40)
+
+    def test_a_failed_pr_stops_the_queue_before_later_prs(self):
+        failed = pull_request_view(check_run("build", conclusion="FAILURE"))
+        production = FakeProduction([MAIN_HEAD], pull_requests={"7": [failed], "8": [failed]})
+        clock = FakeClock()
+
+        outcome = wait_for_github.merge_queue(REPOSITORY, "main", AUTO_DEPLOY, [7, 8], merge_method="squash",
+                                              timeout_seconds=900, interval_seconds=60, run_command=production,
+                                              fetch=production.fetch, sleep=clock.sleep, clock=clock)
+
+        self.assertEqual(outcome.exit_code, 1)
+        self.assertFalse([call for call in production.calls if call[:3] == ["pr", "view", "8"]])
+
+
+class GitHubRepositoryTests(unittest.TestCase):
+    def test_registered_remotes_resolve_to_owner_and_name(self):
+        self.assertEqual(wait_for_github.github_repository_of("https://github.com/azurras/site.dev.git"),
+                         "azurras/site.dev")
+        self.assertEqual(wait_for_github.github_repository_of("git@github.com:azurras/site.dev.git"),
+                         "azurras/site.dev")
+        with self.assertRaises(ValueError):
+            wait_for_github.github_repository_of("https://gitlab.com/azurras/site.dev.git")
+
+
 if __name__ == "__main__":
     unittest.main()

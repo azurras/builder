@@ -71,6 +71,33 @@ class SpokeRegistryTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     load_spokes(self.builder)
 
+    def test_auto_deploy_declares_where_to_read_the_live_commit(self):
+        self.write_registry(spoke_entry(autoDeploy={"liveCommitUrl": "https://site.example/actuator/info",
+                                                    "liveCommitPattern": r"-dev\.([0-9a-f]{40})"}))
+
+        auto_deploy = find_spoke(self.builder, "site-dev").auto_deploy
+
+        self.assertEqual(auto_deploy.live_commit_url, "https://site.example/actuator/info")
+        self.assertEqual(auto_deploy.live_commit_pattern.search("0.0.0-dev." + "a" * 40).group(1), "a" * 40)
+        self.write_registry(spoke_entry())
+        self.assertIsNone(find_spoke(self.builder, "site-dev").auto_deploy)
+
+    def test_rejects_invalid_auto_deploy(self):
+        valid = {"liveCommitUrl": "https://site.example/info", "liveCommitPattern": "([0-9a-f]{40})"}
+        invalid_declarations = (
+            "yes",
+            dict(valid, liveCommitUrl="http://site.example/info"),
+            dict(valid, liveCommitPattern="[0-9a-f]{40}"),
+            dict(valid, liveCommitPattern="(a)(b)"),
+            dict(valid, liveCommitPattern="(unclosed"),
+            dict(valid, statusCommand="prod.cmd auto-status"),
+        )
+        for declaration in invalid_declarations:
+            with self.subTest(declaration=declaration):
+                self.write_registry(spoke_entry(autoDeploy=declaration))
+                with self.assertRaisesRegex(ValueError, "autoDeploy"):
+                    load_spokes(self.builder)
+
     def test_project_slugs_are_the_hub_spokes_and_standalone_projects(self):
         self.write_registry(spoke_entry(), projects=[project_entry(), project_entry(slug="old-shop", status="retired")])
         self.assertEqual(project_statuses_of(self.builder), {

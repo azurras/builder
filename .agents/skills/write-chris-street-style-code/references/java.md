@@ -38,6 +38,24 @@ Use the repository's Java version, build, formatter, and nullability conventions
 - Interfaces or factories with exactly one implementation and no seam a test needs.
 - Tests that `verify` private interaction order instead of observable results.
 
+## Settled Decisions
+
+A whole-repository conformance pass hit each of these calls dozens of times. Apply them without re-arguing them in each plan; record a deviation only when the code has a reason the rule does not cover.
+
+| Situation | Decision | Why |
+|---|---|---|
+| `if (x) return y;` or any single-statement body on one line | Always use braces, on their own lines | One shape for every branch; adding a statement can never silently fall outside the condition |
+| Fully qualified names in code (`java.util.Optional<...>`) | Import the type; qualify only when two imported types share a simple name | Lines read as domain language, not package paths |
+| A lookup that can find nothing | Return `Optional<T>`. Keep a nullable private helper only inside a state machine whose branches treat each lookup as a presence fact; name it `...OrNull` and document why | `Optional` makes absence visible at the call site; inside a dense state machine, nested `Optional` chains hide the branches |
+| `isPresent()` then `get()`, or `orElse(null)` then a null check | `map`, `filter`, `ifPresentOrElse` or `orElseThrow(() -> new SpecificException(...))` | The failure names what was missing |
+| Codes from an external system (OS, HTTP or vendor statuses) compared inline | A named `Set` or enum of the codes, each meaning documented, then `contains` | The reader learns what the numbers mean; the classification lives in one place |
+| A priority-ordered classification mixing exact paths, patterns and methods | Keep the `if` chain, in priority order, with one block per rule | A lookup table would hide the order that decides the result |
+| A catch named `ignored` or `e` whose handler acts | Name what failed: `reconciliationFailure`, `duplicateIdentity` | The handler reads as the response to a specific failure |
+| `Instant.now()`, `LocalDate.now()` or `System.currentTimeMillis()` in services and schedulers | Inject a `Clock` bean | Time-dependent rules become testable |
+| A repeated string literal that names a fallback or marker (`"unknown"`) | A named constant with a one-line Javadoc | One meaning, one name |
+
+When the repository runs a linter such as Checkstyle, it enforces the mechanical rows (braces, imports, unused code). Review then focuses on the judgment calls.
+
 ## Good and Bad Pairs
 
 The cross-language catalogue already has Java pairs for [invariants in records](good-and-bad-examples.md#3-model-an-invariant-instead-of-trusting-a-comment), [exhaustive switch](good-and-bad-examples.md#11-exhaustive-branches-no-silent-default), [units with Duration](good-and-bad-examples.md#13-units-live-in-the-type-or-the-name), [identity types](good-and-bad-examples.md#14-distinct-identity-types-stop-swapped-arguments), [swallowed failures](good-and-bad-examples.md#18-do-not-swallow-failures), [leaked internals](good-and-bad-examples.md#23-do-not-leak-mutable-internals), and [unearned abstraction](good-and-bad-examples.md#25-earn-the-abstraction). The pairs below are Java-specific.

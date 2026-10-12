@@ -27,6 +27,15 @@ PROJECT_REQUIRED_FIELDS = ("slug", "name", "status", "description")
 # The hub is a project but not a registry entry: it is the repository holding the registry.
 HUB_PROJECT_SLUG = "builder"
 REMOTE_REPOSITORY_RE = re.compile(r"(?:https|ssh)://[^\s/]+/\S+|[^@\s/\\]+@[^:\s/\\]+:[^\s\\]+")
+HTTPS_URL_RE = re.compile(r"https://[^\s/]+/\S*")
+AUTO_DEPLOY_FIELDS = ("liveCommitUrl", "liveCommitPattern")
+
+
+@dataclass(frozen=True)
+class AutoDeploy:
+    """A spoke whose default branch deploys itself once CI passes, and where to read the live commit."""
+    live_commit_url: str
+    live_commit_pattern: re.Pattern[str]
 
 
 @dataclass(frozen=True)
@@ -37,6 +46,7 @@ class Spoke:
     default_branch: str
     description: str
     directory: str
+    auto_deploy: AutoDeploy | None = None
 
 
 class ProjectStatus(Enum):
@@ -90,7 +100,29 @@ def _spoke_from_entry(entry: object, index: int) -> Spoke:
     directory = entry.get("directory") or repository_directory_name(entry["repository"])
     if not isinstance(directory, str) or Path(directory).name != directory or directory in {".", ".."}:
         raise ValueError(f"{REGISTRY_FILE}: spokes[{index}] directory must be a single folder name")
-    return Spoke(slug, entry["name"], entry["repository"], entry["defaultBranch"], entry["description"], directory)
+    auto_deploy = _auto_deploy_from_entry(entry.get("autoDeploy"), f"spokes[{index}]")
+    return Spoke(slug, entry["name"], entry["repository"], entry["defaultBranch"], entry["description"], directory,
+                 auto_deploy)
+
+
+def _auto_deploy_from_entry(value: object, entry_label: str) -> AutoDeploy | None:
+    if value is None:
+        return None
+    label = f"{REGISTRY_FILE}: {entry_label} autoDeploy"
+    if not isinstance(value, dict) or set(value) != set(AUTO_DEPLOY_FIELDS):
+        raise ValueError(f"{label} must be an object with exactly {', '.join(AUTO_DEPLOY_FIELDS)}")
+    live_commit_url, pattern_text = value["liveCommitUrl"], value["liveCommitPattern"]
+    if not isinstance(live_commit_url, str) or not HTTPS_URL_RE.fullmatch(live_commit_url):
+        raise ValueError(f"{label} liveCommitUrl must be an https URL")
+    if not isinstance(pattern_text, str):
+        raise ValueError(f"{label} liveCommitPattern must be a regular expression string")
+    try:
+        live_commit_pattern = re.compile(pattern_text)
+    except re.error as cause:
+        raise ValueError(f"{label} liveCommitPattern is not a valid regular expression: {cause}") from cause
+    if live_commit_pattern.groups != 1:
+        raise ValueError(f"{label} liveCommitPattern must have exactly one capture group, the commit SHA")
+    return AutoDeploy(live_commit_url, live_commit_pattern)
 
 
 def _require_project_slug(slug: str, entry_label: str) -> None:
