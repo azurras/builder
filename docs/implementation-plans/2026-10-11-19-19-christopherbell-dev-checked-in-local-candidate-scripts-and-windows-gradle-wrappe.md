@@ -1,7 +1,7 @@
 # Checked-In Local Candidate Scripts and Windows Gradle Wrapper
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -154,7 +154,16 @@ Revert the squash-merge commit. The scripts are operator tools, and the deployed
 - **Impact:** None on the product. The reported run has no ERROR-level lines.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1527 (`fbfcf96`) through the new deploy-aware queue. `wait_for_github.py queue` reported "Production serves fbfcf96, which contains fbfcf96."
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Start-Candidate started an isolated `test` candidate and left the caller's environment unchanged ([report](../test-reports/2026-10-11-19-41-christopherbell-dev-local-candidate-scripts-and-windows-gradle-wrapper.md), case 2) |
+| AC-2 | ✅ Met | The full check and `automationPester` passed through `Invoke-Gradle.ps1` with `JAVA_TOOL_OPTIONS` and `GRADLE_OPTS` unset ([report](../test-reports/2026-10-11-19-41-christopherbell-dev-local-candidate-scripts-and-windows-gradle-wrapper.md), case 1) |
+| AC-3 | ✅ Met | Stop freed both ports and removed only the generated directories; a tampered state file left foreign directories alone ([report](../test-reports/2026-10-11-19-41-christopherbell-dev-local-candidate-scripts-and-windows-gradle-wrapper.md), cases 5 and 6) |
+| AC-4 | ✅ Met | 5 new Pester tests run in `automationPester`; 6 of 6 runtime cases passed on `e30f63f`; [PR #1527](https://github.com/azurras/christopherbell.dev/pull/1527) merged after all checks passed |
 
 ## Project
 christopherbell-dev

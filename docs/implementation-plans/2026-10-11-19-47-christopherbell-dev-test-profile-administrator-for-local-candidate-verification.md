@@ -1,7 +1,7 @@
 # Test-Profile Administrator for Local Candidate Verification
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -145,7 +145,16 @@ Revert the squash-merge commit. Production never activates the test profile, so 
 - **Impact:** Design and AC-3 cover the extra switch, in commit `9e92ad15`. The architecture baseline `LegacyMongoAccessBaselineTest` also lists `IsolatedTestDatabase` as approved direct-Mongo infrastructure, because it carries the connection check the ledger already ran.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1528 (`f9789ca`) through the deploy-aware queue; production serves `f9789ca`. Local candidates can now verify admin routes and shared-folder grants.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `TestAdministratorBootstrapTest` covers no settings, partial settings, a refused guard, creation and a duplicate; at runtime the log names the created administrator ([report](../test-reports/2026-10-11-20-03-christopherbell-dev-test-profile-administrator.md)) |
+| AC-2 | ✅ Met | `IsolatedTestDatabaseTest` and the unchanged ledger tests pass; the architecture baseline approves the guard |
+| AC-3 | ✅ Met | The state file names a credential file inside the disposable root; the password never reached the log, and stop removed the root ([report](../test-reports/2026-10-11-20-03-christopherbell-dev-test-profile-administrator.md)) |
+| AC-4 | ✅ Met | The ADMIN read the admin recycle bin and audit log and granted a USER read, which could then list entries but not write; the full check passed; [PR #1528](https://github.com/azurras/christopherbell.dev/pull/1528) merged after all checks |
 
 ## Project
 christopherbell-dev

@@ -127,6 +127,12 @@ Revert the squash-merge commit.
 - **Reason:** The fixes edit application sources in about 110 files, and verify-local-app never lets an application code change skip runtime proof.
 - **Impact:** Test Plan, Task 1 evidence and Branch were updated, and merge order is now candidate scripts, test administrator, then this gate.
 
+### 2026-10-11 - Discarded sweep run
+
+- **Change:** One runtime run was discarded. The sweep's own request for the music catalog logged the expected 503 "Music is unavailable." as an ERROR line, which failed the log check. The call was removed.
+- **Reason:** The music catalog returns 503 on main too when no library is configured, and it stops at `requireEnabled` before reaching any edited code, so it proved nothing about this change.
+- **Impact:** None on the product. The reported run has no ERROR lines. Earlier, a calibration run against main plus the test administrator had corrected three of the sweep's guessed expectations.
+
 ## Outcome
 Pending.
 

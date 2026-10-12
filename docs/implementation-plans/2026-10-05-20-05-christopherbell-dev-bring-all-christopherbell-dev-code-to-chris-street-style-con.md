@@ -209,6 +209,12 @@ Each slice is one squash-merged PR; revert that merge commit and let auto-deploy
 - **Reason:** The application has no supported way to create a local ADMIN. A temporary promotion endpoint was refused by the session's safety classifier, and direct database writes are prohibited.
 - **Impact:** This affects the admin-heavy slices (admin, report moderation, the command center). A supported, reviewed local-admin bootstrap would close the gap, but it is a security decision for the user.
 
+### 2026-10-11 - Checkstyle gate and suppression duty
+
+- **Change:** CI now enforces the mechanical rules through [the Checkstyle gate](2026-10-11-19-47-christopherbell-dev-checkstyle-gate-for-mechanical-chris-street-style-rules.md). The gate also fixed about 320 mechanical misses in slices already marked done, and brought `survive` to conformance. `survive` arrived after the ledger was counted, so no ledger row covers it.
+- **Reason:** The migration's brace regex handled only single-line `return` and `throw` bodies. The user asked for lint rules so that conformance is mechanical rather than review-only.
+- **Impact:** Every remaining slice (19d to 19i, 20 and 21) must delete its line from `config/checkstyle/suppressions.xml` in its own PR, and its check must pass with Checkstyle. Done slices stay protected against regressions.
+
 ## Outcome
 Pending.
 
