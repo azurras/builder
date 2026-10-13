@@ -113,6 +113,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** These slices follow the Java guide's Settled Decisions and the checked fixers, so editing ran alongside earlier merges.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-12 - Cancel expectation and merge
+
+- **Change:** The first runtime run was discarded. Its cancellation check expected an upload whose completion had just been refused with 409 to be cancelable, but cancel answered 409. The same check against unchanged upload code (the 19g build) also answered 409. The check now asserts that 409 and cancels an unfinished upload instead. The branch then merged `origin/main` `e5ee5d9`, resolving the suppressions file by keeping the lines both sides kept, and the runtime check was rerun on the merged candidate.
+- **Reason:** The 409 is existing behavior, not a regression from this slice. The merge changed the candidate commit.
+- **Impact:** AC-3's cancellation case covers an unfinished upload. The behavior that an upload whose completion was refused cannot be canceled is recorded as an observation for the shared-folder feature, not changed here.
+
 ## Outcome
 Pending.
 
