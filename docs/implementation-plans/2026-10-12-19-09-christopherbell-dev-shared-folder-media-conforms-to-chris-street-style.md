@@ -1,7 +1,7 @@
 # Shared Folder Media Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -121,7 +121,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1531 (`e5ee5d9`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for shared-folder media.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-19-15-christopherbell-dev-shared-folder-media-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 7 of 7 runtime cases passed on candidate `e04a243` ([report](../test-reports/2026-10-12-19-15-christopherbell-dev-shared-folder-media-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1531](https://github.com/azurras/christopherbell.dev/pull/1531) merged as `e5ee5d9` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev
