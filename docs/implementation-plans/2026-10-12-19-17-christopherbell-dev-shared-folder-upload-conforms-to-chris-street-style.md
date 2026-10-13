@@ -1,7 +1,7 @@
 # Shared Folder Upload Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -120,7 +120,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** AC-3's cancellation case covers an unfinished upload. The behavior that an upload whose completion was refused cannot be canceled is recorded as an observation for the shared-folder feature, not changed here.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1532 (`a0709b0`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for shared-folder upload.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-19-34-christopherbell-dev-shared-folder-upload-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 7 of 7 runtime cases passed on candidate `5f1d1c8` ([report](../test-reports/2026-10-12-19-34-christopherbell-dev-shared-folder-upload-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1532](https://github.com/azurras/christopherbell.dev/pull/1532) merged as `a0709b0` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev

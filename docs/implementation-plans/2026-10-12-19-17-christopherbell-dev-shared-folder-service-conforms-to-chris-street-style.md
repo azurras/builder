@@ -108,6 +108,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** These slices follow the Java guide's Settled Decisions and the checked fixers, so editing ran alongside earlier merges.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-12 - Merged main before the PR
+
+- **Change:** The branch merged `origin/main` `a0709b0`. The suppressions file was resolved by keeping the lines both sides kept. Compilation, Checkstyle, `bootJar` and the runtime check were then rerun on the merged candidate `52c74735`.
+- **Reason:** The upload and media slices removed neighboring suppression lines, and the merge changed the candidate commit.
+- **Impact:** None on scope. The full check ran on `d98e3294` before the merge.
+
 ## Outcome
 Pending.
 
