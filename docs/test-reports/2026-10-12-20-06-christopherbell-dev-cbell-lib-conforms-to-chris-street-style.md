@@ -1,15 +1,15 @@
 # Cbell-lib conforms to Chris Street Style: Test Report
 
 ## Story/Issue
-Runtime proof for [the plan](../implementation-plans/2026-10-12-20-06-christopherbell-dev-cbell-lib-conforms-to-chris-street-style.md): password hashing and verification through sign-up and login, and the application-wide sweep, behave as before.
+Runtime proof for [the plan](../implementation-plans/2026-10-12-20-06-christopherbell-dev-cbell-lib-conforms-to-chris-street-style.md): password hashing and verification through sign-up and login, the application-wide sweep, and the dev feed harness behave as before.
 
 ## Branch
-`claude/style-cbell-lib-20261012` at candidate `190e85e`
+`claude/style-cbell-lib-20261012` at candidate `ae1fbe1`
 
 ## Pass / Fail
 
 > [!TIP]
-> 8 of 8 cases passed on candidate `190e85e`.
+> 9 of 9 cases passed on candidate `ae1fbe1`.
 
 | # | Test case | Result | Why |
 |---|---|---|---|
@@ -17,20 +17,22 @@ Runtime proof for [the plan](../implementation-plans/2026-10-12-20-06-christophe
 | 2 | The candidate reports readiness UP | ✅ PASS | Expected status 200 and body containing '"UP"' |
 | 3 | Password hashing and verification through sign-up and login behave as before | ✅ PASS | Expected exit code 0 |
 | 4 | Anonymous, USER and ADMIN requests across the application behave as on main | ✅ PASS | Expected exit code 0 |
-| 5 | A USER without a grant is refused and a granted USER can read | ✅ PASS | Expected exit code 0 |
-| 6 | Shared-folder responses carry no-store caching | ✅ PASS | Expected exit code 0 |
-| 7 | The candidate log has no ERROR line and no administrator password | ✅ PASS | Expected exit code 0 |
-| 8 | Stop-Candidate stops the candidate and removes the root with the credential file | ✅ PASS | Expected exit code 0 |
+| 5 | The dev feed harness answers an anonymous visitor exactly as production does | ✅ PASS | Expected exit code 0 |
+| 6 | A USER without a grant is refused and a granted USER can read | ✅ PASS | Expected exit code 0 |
+| 7 | Shared-folder responses carry no-store caching | ✅ PASS | Expected exit code 0 |
+| 8 | The candidate log has no ERROR line and no administrator password | ✅ PASS | Expected exit code 0 |
+| 9 | Stop-Candidate stops the candidate and removes the root with the credential file | ✅ PASS | Expected exit code 0 |
 
 ## Test Cases
 1. **Start-Candidate -WithTestAdministrator -EnableSharedFolder starts an isolated candidate whose credential file lives in the disposable root**: command `pwsh -NoLogo -NoProfile -Command "& 'A:\Projects\christopherbell.dev-worktrees\style-cbell-lib\ops\local\Start-Candidate.ps1' -StateFile 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' -Checkout 'A:\Projects\christopherbell.dev-worktrees\style-cbell-lib' -WithTestAdministrator -EnableSharedFolder | Out-Null; $s = Get-Content -Raw 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' | ConvertFrom-Json; \"ready=$($s.ready) db=$($s.databaseName) credentialFileInRoot=$($s.testAdministratorFile.StartsWith($s.testMongoRoot))\"; if (-not ($s.ready -and $s.databaseName -eq 'test' -and $s.testAdministratorFile.StartsWith($s.testMongoRoot))) { exit 1 }"`
-2. **The candidate reports readiness UP**: http `GET http://127.0.0.1:53574/actuator/health/readiness`
+2. **The candidate reports readiness UP**: http `GET http://127.0.0.1:63611/actuator/health/readiness`
 3. **Password hashing and verification through sign-up and login behave as before**: command `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\password_checks.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json`
 4. **Anonymous, USER and ADMIN requests across the application behave as on main**: command `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s3_sweep.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json`
-5. **A USER without a grant is refused and a granted USER can read**: command `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s2_admin_checks.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json`
-6. **Shared-folder responses carry no-store caching**: command `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\shared_nostore_check.py http://127.0.0.1:53574`
-7. **The candidate log has no ERROR line and no administrator password**: command `pwsh -NoLogo -NoProfile -Command "$s = Get-Content -Raw 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' | ConvertFrom-Json; $a = Get-Content -Raw $s.testAdministratorFile | ConvertFrom-Json; $log = Get-Content -Raw $s.candidateLog; $created = $log.Contains('Created test administrator candidate-admin'); $leak = $log.Contains($a.password); $errors = @(Select-String -LiteralPath $s.candidateLog -CaseSensitive -Pattern '^\S+\s+ERROR\s').Count; \"created=$created passwordInLog=$leak errorLines=$errors\"; if (-not $created -or $leak -or $errors) { exit 1 }"`
-8. **Stop-Candidate stops the candidate and removes the root with the credential file**: command `pwsh -NoLogo -NoProfile -File C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s1_stop_check.ps1 A:\Projects\christopherbell.dev-worktrees\style-cbell-lib C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-logs`
+5. **The dev feed harness answers an anonymous visitor exactly as production does**: command `python A:/Projects/builder/.agents/skills/verify-local-app/scripts/compare_responses.py same --candidate http://127.0.0.1:63611/dev/feed-harness.html --reference https://www.christopherbell.dev/dev/feed-harness.html --expect-status 403`
+6. **A USER without a grant is refused and a granted USER can read**: command `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s2_admin_checks.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json`
+7. **Shared-folder responses carry no-store caching**: command `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\shared_nostore_check.py http://127.0.0.1:63611`
+8. **The candidate log has no ERROR line and no administrator password**: command `pwsh -NoLogo -NoProfile -Command "$s = Get-Content -Raw 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' | ConvertFrom-Json; $a = Get-Content -Raw $s.testAdministratorFile | ConvertFrom-Json; $log = Get-Content -Raw $s.candidateLog; $created = $log.Contains('Created test administrator candidate-admin'); $leak = $log.Contains($a.password); $errors = @(Select-String -LiteralPath $s.candidateLog -CaseSensitive -Pattern '^\S+\s+ERROR\s').Count; \"created=$created passwordInLog=$leak errorLines=$errors\"; if (-not $created -or $leak -or $errors) { exit 1 }"`
+9. **Stop-Candidate stops the candidate and removes the root with the credential file**: command `pwsh -NoLogo -NoProfile -File C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s1_stop_check.ps1 A:\Projects\christopherbell.dev-worktrees\style-cbell-lib C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-logs`
 
 ## App / Environment
 
@@ -39,19 +41,20 @@ Runtime proof for [the plan](../implementation-plans/2026-10-12-20-06-christophe
 | SPRING_PROFILES_ACTIVE | test (candidate process only) |
 | SPRING_MONGODB_URI | mongodb://127.0.0.1:<OS-selected port>/test (disposable mongod) |
 | Candidate options | -WithTestAdministrator -EnableSharedFolder |
-| Full check | passed on 190e85ec with Checkstyle covering cbell-lib |
+| Full check | passed on ae1fbe13 with no Checkstyle suppressions |
 | Legacy hashes | covered by PasswordUtilTest; no API creates them |
 
 ## Local Run Details
 - **Local command:** `pwsh -NoLogo -NoProfile -Command "& 'A:\Projects\christopherbell.dev-worktrees\style-cbell-lib\ops\local\Start-Candidate.ps1' -StateFile 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' -Checkout 'A:\Projects\christopherbell.dev-worktrees\style-cbell-lib' -WithTestAdministrator -EnableSharedFolder | Out-Null; $s = Get-Content -Raw 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' | ConvertFrom-Json; \"ready=$($s.ready) db=$($s.databaseName) credentialFileInRoot=$($s.testAdministratorFile.StartsWith($s.testMongoRoot))\"; if (-not ($s.ready -and $s.databaseName -eq 'test' -and $s.testAdministratorFile.StartsWith($s.testMongoRoot))) { exit 1 }"` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
-- **Local command:** `GET http://127.0.0.1:53574/actuator/health/readiness` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
+- **Local command:** `GET http://127.0.0.1:63611/actuator/health/readiness` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
 - **Local command:** `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\password_checks.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
 - **Local command:** `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s3_sweep.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
+- **Local command:** `python A:/Projects/builder/.agents/skills/verify-local-app/scripts/compare_responses.py same --candidate http://127.0.0.1:63611/dev/feed-harness.html --reference https://www.christopherbell.dev/dev/feed-harness.html --expect-status 403` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
 - **Local command:** `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s2_admin_checks.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
-- **Local command:** `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\shared_nostore_check.py http://127.0.0.1:53574` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
+- **Local command:** `python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\shared_nostore_check.py http://127.0.0.1:63611` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
 - **Local command:** `pwsh -NoLogo -NoProfile -Command "$s = Get-Content -Raw 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' | ConvertFrom-Json; $a = Get-Content -Raw $s.testAdministratorFile | ConvertFrom-Json; $log = Get-Content -Raw $s.candidateLog; $created = $log.Contains('Created test administrator candidate-admin'); $leak = $log.Contains($a.password); $errors = @(Select-String -LiteralPath $s.candidateLog -CaseSensitive -Pattern '^\S+\s+ERROR\s').Count; \"created=$created passwordInLog=$leak errorLines=$errors\"; if (-not $created -or $leak -or $errors) { exit 1 }"` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
 - **Local command:** `pwsh -NoLogo -NoProfile -File C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s1_stop_check.ps1 A:\Projects\christopherbell.dev-worktrees\style-cbell-lib C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-logs` in `A:\Projects\christopherbell.dev-worktrees\style-cbell-lib`
-- **Candidate identity:** `190e85e`
+- **Candidate identity:** `ae1fbe1`
 - **Cleanup:** Stop-Candidate.ps1 stopped both process trees, both ports had no listeners, and the disposable root and JDK socket directory were removed; production MongoDB on 27017 kept listening.
 
 ## Data Sent
@@ -65,7 +68,7 @@ pwsh -NoLogo -NoProfile -Command "& 'A:\Projects\christopherbell.dev-worktrees\s
 ### 2. The candidate reports readiness UP
 
 ```http
-GET http://127.0.0.1:53574/actuator/health/readiness
+GET http://127.0.0.1:63611/actuator/health/readiness
 ```
 
 ### 3. Password hashing and verification through sign-up and login behave as before
@@ -80,25 +83,31 @@ python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-
 python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s3_sweep.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json
 ```
 
-### 5. A USER without a grant is refused and a granted USER can read
+### 5. The dev feed harness answers an anonymous visitor exactly as production does
+
+```text
+python A:/Projects/builder/.agents/skills/verify-local-app/scripts/compare_responses.py same --candidate http://127.0.0.1:63611/dev/feed-harness.html --reference https://www.christopherbell.dev/dev/feed-harness.html --expect-status 403
+```
+
+### 6. A USER without a grant is refused and a granted USER can read
 
 ```text
 python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s2_admin_checks.py C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json
 ```
 
-### 6. Shared-folder responses carry no-store caching
+### 7. Shared-folder responses carry no-store caching
 
 ```text
-python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\shared_nostore_check.py http://127.0.0.1:53574
+python C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\shared_nostore_check.py http://127.0.0.1:63611
 ```
 
-### 7. The candidate log has no ERROR line and no administrator password
+### 8. The candidate log has no ERROR line and no administrator password
 
 ```text
 pwsh -NoLogo -NoProfile -Command "$s = Get-Content -Raw 'C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json' | ConvertFrom-Json; $a = Get-Content -Raw $s.testAdministratorFile | ConvertFrom-Json; $log = Get-Content -Raw $s.candidateLog; $created = $log.Contains('Created test administrator candidate-admin'); $leak = $log.Contains($a.password); $errors = @(Select-String -LiteralPath $s.candidateLog -CaseSensitive -Pattern '^\S+\s+ERROR\s').Count; \"created=$created passwordInLog=$leak errorLines=$errors\"; if (-not $created -or $leak -or $errors) { exit 1 }"
 ```
 
-### 8. Stop-Candidate stops the candidate and removes the root with the credential file
+### 9. Stop-Candidate stops the candidate and removes the root with the credential file
 
 ```text
 pwsh -NoLogo -NoProfile -File C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\s1_stop_check.ps1 A:\Projects\christopherbell.dev-worktrees\style-cbell-lib C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-state.json C:\Users\CHRIST~1\AppData\Local\Temp\claude\A--Projects-builder\bc02e5cc-a8b4-4d99-84a5-e48233135236\scratchpad\l-logs
@@ -118,11 +127,11 @@ ready=True db=test credentialFileInRoot=True
 
 ```text
 HTTP 200 
-X-Request-Id: c34a716e-ecfe-4de9-9294-9df387d60ecb
+X-Request-Id: 03158727-7afc-418f-a778-c51224842061
 Set-Cookie: [REDACTED]
 X-RateLimit-Limit: 10000
 X-RateLimit-Remaining: 9999
-X-RateLimit-Reset: 1791853576
+X-RateLimit-Reset: 1791865660
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -134,7 +143,7 @@ Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()
 Content-Type: application/vnd.spring-boot.actuator.v3+json
 Transfer-Encoding: chunked
-Date: Tue, 13 Oct 2026 01:05:16 GMT
+Date: Tue, 13 Oct 2026 04:26:40 GMT
 Connection: close
 
 {"status":"UP"}
@@ -198,7 +207,17 @@ PASS the moderated USER sees the new first name: Alicia
 
 </details>
 
-### 5. A USER without a grant is refused and a granted USER can read
+### 5. The dev feed harness answers an anonymous visitor exactly as production does
+
+```text
+exit code: 0
+--- stdout ---
+candidate 403 {"error": "Forbidden", "path": "/dev/feed-harness.html", "status": 403}
+reference 403 {"error": "Forbidden", "path": "/dev/feed-harness.html", "status": 403}
+same
+```
+
+### 6. A USER without a grant is refused and a granted USER can read
 
 ```text
 exit code: 0
@@ -215,7 +234,7 @@ PASS the granted USER lists shared-folder entries: 200
 PASS the read-only USER still cannot create a folder: 403
 ```
 
-### 6. Shared-folder responses carry no-store caching
+### 7. Shared-folder responses carry no-store caching
 
 ```text
 exit code: 0
@@ -225,7 +244,7 @@ PASS /api/shared-folder/2026-07-17/radio (403) carries no-store caching: 'privat
 PASS /shared (200) carries no-store caching: 'no-cache, no-store, max-age=0, must-revalidate'
 ```
 
-### 7. The candidate log has no ERROR line and no administrator password
+### 8. The candidate log has no ERROR line and no administrator password
 
 ```text
 exit code: 0
@@ -233,29 +252,30 @@ exit code: 0
 created=True passwordInLog=False errorLines=0
 ```
 
-### 8. Stop-Candidate stops the candidate and removes the root with the credential file
+### 9. Stop-Candidate stops the candidate and removes the root with the credential file
 
 ```text
 exit code: 0
 --- stdout ---
-port 53574 listeners: 0
-port 53573 listeners: 0
-removed C:\Users\Christopher\AppData\Local\Temp\christopherbell-test-mongo-c2f5e5861d7b4b96a783470f2b4a6011
-removed C:\Temp\cbell-jdk-3cd60c0ab5544812a495b33da3d6f014
+port 63611 listeners: 0
+port 63610 listeners: 0
+removed C:\Users\Christopher\AppData\Local\Temp\christopherbell-test-mongo-d3eb107bf6894f449c23b5a77deec39f
+removed C:\Temp\cbell-jdk-c153bb3384ad4348ac0790b5c6a73b82
 ports still listening: 0; processes still running: 0; directories left: 0
 candidate log copied: True; ERROR lines: 0
 production MongoDB 27017 still listening: True
 ```
 
 ## Evidence
-- Case 1 started 2026-10-12T20:05:07-05:00, took 8922 ms, candidate `190e85e`
-- Case 2 started 2026-10-12T20:05:16-05:00, took 46 ms, candidate `190e85e`
-- Case 3 started 2026-10-12T20:05:16-05:00, took 655 ms, candidate `190e85e`
-- Case 4 started 2026-10-12T20:05:17-05:00, took 766 ms, candidate `190e85e`
-- Case 5 started 2026-10-12T20:05:18-05:00, took 327 ms, candidate `190e85e`
-- Case 6 started 2026-10-12T20:05:19-05:00, took 108 ms, candidate `190e85e`
-- Case 7 started 2026-10-12T20:05:19-05:00, took 266 ms, candidate `190e85e`
-- Case 8 started 2026-10-12T20:05:19-05:00, took 5578 ms, candidate `190e85e`
+- Case 1 started 2026-10-12T23:26:31-05:00, took 8858 ms, candidate `ae1fbe1`
+- Case 2 started 2026-10-12T23:26:40-05:00, took 30 ms, candidate `ae1fbe1`
+- Case 3 started 2026-10-12T23:26:40-05:00, took 608 ms, candidate `ae1fbe1`
+- Case 4 started 2026-10-12T23:26:40-05:00, took 719 ms, candidate `ae1fbe1`
+- Case 5 started 2026-10-12T23:26:41-05:00, took 328 ms, candidate `ae1fbe1`
+- Case 6 started 2026-10-12T23:26:42-05:00, took 327 ms, candidate `ae1fbe1`
+- Case 7 started 2026-10-12T23:26:42-05:00, took 125 ms, candidate `ae1fbe1`
+- Case 8 started 2026-10-12T23:26:43-05:00, took 250 ms, candidate `ae1fbe1`
+- Case 9 started 2026-10-12T23:26:43-05:00, took 4907 ms, candidate `ae1fbe1`
 
 ## Bugs / Follow-ups
 None

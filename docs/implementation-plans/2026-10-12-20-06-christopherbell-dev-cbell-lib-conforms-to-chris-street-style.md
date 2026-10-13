@@ -55,7 +55,8 @@ None.
 | `cbell-lib/src/main/java/dev/christopherbell/libs/security/PasswordUtil.java` | changed | `Optional` parse; block bodies |
 | Other flagged `cbell-lib` main and test files | changed | Block bodies, imports, layout |
 | Remaining `cbell-lib` files | conforming | No change |
-| `config/checkstyle/suppressions.xml` | changed | The slice 21 line is removed |
+| `config/checkstyle/suppressions.xml` | removed | Its last line was cbell-lib; the file and the `SuppressionFilter` in `checkstyle.xml` are retired, and README says every Java source is covered |
+| `website/src/main/resources/static/dev/feed-harness.html` | changed | Loop values named `testPost` and `feedItem`; found by the umbrella recount |
 
 ## Task Breakdown
 
@@ -101,6 +102,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Change:** The plan was saved after the edits and before the PR.
 - **Reason:** These are mechanical or Settled-Decision edits made while earlier slices merged.
 - **Impact:** No PR exists yet; the plan and evidence are published before it.
+
+### 2026-10-12 - Suppressions retired; harness from the recount
+
+- **Change:** The branch merged `origin/main` `04376b8`, which left the suppressions file empty. The file and its `SuppressionFilter` were removed, and the README now says every Java source is covered. The umbrella recount found one uncovered first-party file, `static/dev/feed-harness.html`, so its one-letter loop names were renamed here. Runtime was rerun on `ae1fbe13`. One case was replaced after the harness turned out to answer anonymous visitors 403, exactly as production does, so a byte comparison could not apply.
+- **Reason:** This is the last slice, and the recount must close with every file covered.
+- **Impact:** Expected Changes was updated. The full check passed on `ae1fbe13`.
 
 ## Outcome
 Pending.

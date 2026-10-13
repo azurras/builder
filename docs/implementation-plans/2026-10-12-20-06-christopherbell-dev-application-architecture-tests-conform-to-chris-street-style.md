@@ -1,7 +1,7 @@
 # Application Architecture Tests Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -110,7 +110,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** None on scope. The full check passed on `0b8f4154` before the merge.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1540 (`04376b8`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for the application architecture tests.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed on `0b8f4154`; after merging main, Checkstyle and the architecture tests passed on `f4564de1` |
+| AC-3 | ✅ Met | The architecture suite passed inside the full check. Runtime proof is not applicable (test sources only) |
+| AC-4 | ✅ Met | [PR #1540](https://github.com/azurras/christopherbell.dev/pull/1540) merged as `04376b8` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev
