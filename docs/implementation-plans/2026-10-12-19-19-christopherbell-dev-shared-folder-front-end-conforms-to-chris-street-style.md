@@ -109,6 +109,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** These slices follow the Java guide's Settled Decisions and the checked fixers, so editing ran alongside earlier merges.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-12 - Second pass on unbraced bodies
+
+- **Change:** The queued PR #1533 was stopped before merging. Eight more unbraced bodies were fixed in commit `7000ac6e`: bare `else` lines after an `if` block, and single-line `if`s whose body starts with a capital letter, such as `Object.defineProperty`. The runtime check and report were then rerun.
+- **Reason:** The scan pattern that selected files and counted single-line conditionals matched only lowercase body starts, and the brace fixer handled `else` only when written as `} else`. Both gaps were found while widening the JavaScript slice.
+- **Impact:** Expected Changes now also lists `shared-folder-page-initialization.test.js` and `shared-folder-streaming.test.js`. AC-3 evidence covers `7000ac6`.
+
 ## Outcome
 Pending.
 
