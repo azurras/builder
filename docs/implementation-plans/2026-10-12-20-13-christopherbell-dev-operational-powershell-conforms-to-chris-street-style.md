@@ -1,7 +1,7 @@
 # Operational PowerShell Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -116,7 +116,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** AC-3 is as written; the reported run covers `73d0fbb4`.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1537 (`45d695a`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for operational PowerShell.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-20-26-christopherbell-dev-operational-powershell-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 6 of 6 runtime cases passed on candidate `73d0fbb` ([report](../test-reports/2026-10-12-20-26-christopherbell-dev-operational-powershell-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1537](https://github.com/azurras/christopherbell.dev/pull/1537) merged as `45d695a` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev

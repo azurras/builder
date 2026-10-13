@@ -1,7 +1,7 @@
 # Browser JavaScript Branches and Loops Are Braced
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -107,7 +107,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** The scope is unchanged; the reported run covers `738e55c9`.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1535 (`f40efb8`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for browser JavaScript.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-20-25-christopherbell-dev-browser-javascript-branches-and-loops-are-braced.md)) |
+| AC-3 | ✅ Met | 8 of 8 runtime cases passed on candidate `738e55c` ([report](../test-reports/2026-10-12-20-25-christopherbell-dev-browser-javascript-branches-and-loops-are-braced.md)) |
+| AC-4 | ✅ Met | [PR #1535](https://github.com/azurras/christopherbell.dev/pull/1535) merged as `f40efb8` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev

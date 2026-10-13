@@ -1,7 +1,7 @@
 # Shared Templates and Stylesheets Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -112,7 +112,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** Expected Changes and AC-3 were updated. The full check ran on `2dc44f14`; `09ed7742` changes only the stylesheet and was rebuilt with `bootJar`.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1536 (`3232412`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for shared templates and stylesheets.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-20-25-christopherbell-dev-shared-templates-and-stylesheets-conform-to-chris-street-sty.md)) |
+| AC-3 | ✅ Met | 5 of 5 runtime cases passed on candidate `09ed774` ([report](../test-reports/2026-10-12-20-25-christopherbell-dev-shared-templates-and-stylesheets-conform-to-chris-street-sty.md)) |
+| AC-4 | ✅ Met | [PR #1536](https://github.com/azurras/christopherbell.dev/pull/1536) merged as `3232412` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev
