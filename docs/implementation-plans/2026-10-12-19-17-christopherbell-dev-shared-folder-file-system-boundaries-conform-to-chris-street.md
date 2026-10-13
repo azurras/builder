@@ -1,7 +1,7 @@
 # Shared Folder File System Boundaries Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -114,7 +114,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** Design notes the private channel. The full check ran on `c510b22b` before the merge.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1539 (`f1c0269`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for the shared-folder file system boundaries.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-20-55-christopherbell-dev-shared-folder-file-system-boundaries-conform-to-chris-street.md)) |
+| AC-3 | ✅ Met | 9 of 9 runtime cases passed on candidate `218f0e1` ([report](../test-reports/2026-10-12-20-55-christopherbell-dev-shared-folder-file-system-boundaries-conform-to-chris-street.md)) |
+| AC-4 | ✅ Met | [PR #1539](https://github.com/azurras/christopherbell.dev/pull/1539) merged as `f1c0269` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev

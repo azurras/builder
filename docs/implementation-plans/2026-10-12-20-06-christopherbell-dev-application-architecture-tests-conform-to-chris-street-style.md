@@ -103,6 +103,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** These are mechanical or Settled-Decision edits made while earlier slices merged.
 - **Impact:** No PR exists yet; the plan and evidence are published before it.
 
+### 2026-10-12 - Merged main before the PR
+
+- **Change:** The branch merged `origin/main` `f1c0269`, resolving the suppressions file. Checkstyle and the architecture tests were rerun on `f4564de1`.
+- **Reason:** The shared-folder slices removed neighboring suppression lines.
+- **Impact:** None on scope. The full check passed on `0b8f4154` before the merge.
+
 ## Outcome
 Pending.
 
