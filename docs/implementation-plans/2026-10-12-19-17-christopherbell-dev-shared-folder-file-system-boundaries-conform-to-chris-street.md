@@ -107,6 +107,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** These slices follow the Java guide's Settled Decisions and the checked fixers, so editing ran alongside earlier merges.
 - **Impact:** No PR exists yet; the plan and report are published before it.
 
+### 2026-10-12 - Runtime correction and merge
+
+- **Change:** The first runtime run's upload case was discarded. It hit the same existing 409 for cancelling an upload whose completion was refused, as recorded in the upload slice, and the upload check was corrected there. The line splitter also turned two compact private-channel `try`/`finally` bodies into a dangling `finally` line; these were rewritten by hand. The branch then merged `origin/main` `fcd0d52` (suppressions file resolved), and compilation, Checkstyle, `bootJar` and the runtime check were rerun on `218f0e12`.
+- **Reason:** The 409 is existing behavior, and the merge changed the candidate.
+- **Impact:** Design notes the private channel. The full check ran on `c510b22b` before the merge.
+
 ## Outcome
 Pending.
 
