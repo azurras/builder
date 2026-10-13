@@ -1,7 +1,7 @@
 # Bring All christopherbell.dev Code to Chris Street Style Conformance
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -93,7 +93,7 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 18 | configuration | 90 / 70 | 17,691 | 18a root, mail and persistence done: [plan](2026-10-09-15-25-christopherbell-dev-configuration-root-mail-and-persistence-conform-to-chris-str.md), PR #1516 `080a67e`; 18b filter done: [plan](2026-10-09-15-31-christopherbell-dev-configuration-filters-conform-to-chris-street-style.md), PR #1517 `e72f811`; 18c root security done: [plan](2026-10-09-15-50-christopherbell-dev-security-configuration-conforms-to-chris-street-style.md), PR #1518 `f19a275`; 18d browser sessions done: [plan](2026-10-09-15-54-christopherbell-dev-browser-sessions-conform-to-chris-street-style.md), PR #1519 `6fe45a0`; 18e mongo root and runtime done: [plan](2026-10-09-16-01-christopherbell-dev-mongo-runtime-configuration-conforms-to-chris-street-style.md), PR #1520 `5b7ef3c`; 18f mongo migrations done: [plan](2026-10-09-16-11-christopherbell-dev-mongo-migrations-conform-to-chris-street-style.md), PR #1521 `96903df`; 18g mongo domain done: [plan](2026-10-09-16-22-christopherbell-dev-mongo-domain-persistence-conforms-to-chris-street-style.md), PR #1522 `4c5aaa7` |
 | 19 | sharedfolder | 101 / 35 | 26,570 | 19a access, models, maintenance and radio done: [plan](2026-10-09-16-36-christopherbell-dev-shared-folder-access-models-maintenance-and-radio-conform-to.md), PR #1523 `b492f6a`; 19b audit and web done: [plan](2026-10-09-16-51-christopherbell-dev-shared-folder-audit-and-web-layer-conform-to-chris-street-st.md), PR #1524 `280b3c6`; 19d recycle done: [plan](2026-10-09-17-04-christopherbell-dev-shared-folder-recycle-bin-conforms-to-chris-street-style.md), PR #1530 `c0dec3e`; 19e media done: [plan](2026-10-12-19-09-christopherbell-dev-shared-folder-media-conforms-to-chris-street-style.md), PR #1531 `e5ee5d9`; 19f upload done: [plan](2026-10-12-19-17-christopherbell-dev-shared-folder-upload-conforms-to-chris-street-style.md), PR #1532 `a0709b0`; 19g service done: [plan](2026-10-12-19-17-christopherbell-dev-shared-folder-service-conforms-to-chris-street-style.md), PR #1534 `fcd0d52`; 19h fs done: [plan](2026-10-12-19-17-christopherbell-dev-shared-folder-file-system-boundaries-conform-to-chris-street.md), PR #1539 `f1c0269`; 19i front end done: [plan](2026-10-12-19-19-christopherbell-dev-shared-folder-front-end-conforms-to-chris-street-style.md), PR #1533 `7bef6fe` |
 | 20 | Application and cross-feature tests (`architecture` and other test-only packages) | remaining | counted when planned | done: [plan](2026-10-12-20-06-christopherbell-dev-application-architecture-tests-conform-to-chris-street-style.md), PR #1540 `04376b8` |
-| 21 | cbell-lib | 65 Java files | 4,386 | in progress: [plan](2026-10-12-20-06-christopherbell-dev-cbell-lib-conforms-to-chris-street-style.md) |
+| 21 | cbell-lib | 65 Java files | 4,386 | done: [plan](2026-10-12-20-06-christopherbell-dev-cbell-lib-conforms-to-chris-street-style.md), PR #1541 `2528e37` |
 | 22 | Shared browser JavaScript (`lib`, `components`, `auth`, `app.js`) and JS tests not owned by a feature | part of 128 files | part of 22,935 | done: [plan](2026-10-12-20-06-christopherbell-dev-browser-javascript-branches-and-loops-are-braced.md), PR #1535 `f40efb8` |
 | 23 | Shared templates and CSS | part of 35 templates and 10 stylesheets | counted when planned | done: [plan](2026-10-12-20-06-christopherbell-dev-shared-templates-and-stylesheets-conform-to-chris-street-sty.md), PR #1536 `3232412` |
 | 24 | Operational PowerShell and `prod.cmd` | 35 files | 36,268 | done: [plan](2026-10-12-20-13-christopherbell-dev-operational-powershell-conforms-to-chris-street-style.md), PR #1537 `45d695a` |
@@ -216,7 +216,31 @@ Each slice is one squash-merged PR; revert that merge commit and let auto-deploy
 - **Impact:** Every remaining slice (19d to 19i, 20 and 21) must delete its line from `config/checkstyle/suppressions.xml` in its own PR, and its check must pass with Checkstyle. Done slices stay protected against regressions.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> All 25 ledger rows are done. 48 slice PRs merged through CI and the auto-deploy pipeline, and production serves the final merge, `2528e37` (#1541). Every tracked first-party code file in christopherbell.dev now has a recorded verdict and conforms to write-chris-street-style-code. Checkstyle enforces the mechanical Java rules in CI with no suppressions left.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | The slice ledger above names all 25 rows with their split parts, each linked to its plan, PR and merge commit |
+| AC-2 | ✅ Met | Each linked slice plan's Expected Changes records changed or conforming verdicts. Slice 24 also records two deliberate exceptions: the pinned service launcher and the checksum-pinned sensor script |
+| AC-3 | ✅ Met | Each slice plan's Outcome cites its full check (`:website:check :cbell-lib:check :website:bootJar`, with the wired Pester suites and, from PR #1529, Checkstyle) and a full-diff review |
+| AC-4 | ✅ Met | Each application slice has a published test report from an isolated `test` MongoDB candidate, linked from its plan. Slices 20 and 25 change only tests or build configuration and record why runtime proof does not apply. From 19d on, reports also exercise admin and grant paths through the test administrator (PR #1528) |
+| AC-5 | ✅ Met | Every slice PR merged after required checks. Since 2026-10-11, merges ran through `wait_for_github.py queue`, which read back each deployed commit; earlier slices recorded `/actuator/info` readback in their outcomes |
+| AC-6 | ✅ Met | A recount of spoke `main` `2528e37` mapped all 1,453 tracked first-party code files (Java, JavaScript, PowerShell, Kotlin scripts, YAML, HTML, CSS and command files) to a slice with 0 uncovered. It excludes `docs/`, the Gradle wrapper and the 28 `.superpowers/` design mockups, which are historical design documents under Non-Goals |
+
+### What the migration found beyond style
+
+- **Mechanical misses in done slices:** about 320 in Java and about 900 in browser JavaScript, all left by the early single-line-only brace script. The Checkstyle gate (PR #1529) and the JavaScript slice (PR #1535) fixed them, and Checkstyle now prevents regressions.
+- **Coverage gap:** `survive` arrived after the ledger was counted. The Checkstyle gate brought it to conformance.
+- **Unchanged files:** `ops/production/windows/service/Start-ChristopherBellDev.ps1` is copied into the protected production install, and `website/src/main/resources/lib/cpu-temperature.ps1` is checksum-pinned. Changing either needs a production operation this migration did not include.
+
+### Follow-ups, outside this plan's scope
+
+- **Pester suites not in CI:** eight Pester suites (Command, Common, Deploy, DomainCollections, MusicRuntime, Sensors, Security.Integration, WriterStart) are not wired into Gradle or CI.
+- **Upload cancellation:** once completion has been refused with 409, the upload can no longer be cancelled; cancel also answers 409.
+- **Wrong HTTP method:** a request with an unsupported method (PUT to a GET-only account route) answered 500 rather than 405 on main.
+- **No JavaScript linter:** none enforces the brace rule the way Checkstyle does for Java.
 
 ## Project
 christopherbell-dev

@@ -1,7 +1,7 @@
 # Cbell-lib Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -110,7 +110,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** Expected Changes was updated. The full check passed on `ae1fbe13`.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1541 (`2528e37`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for cbell-lib.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-20-06-christopherbell-dev-cbell-lib-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 9 of 9 runtime cases passed on candidate `ae1fbe1` ([report](../test-reports/2026-10-12-20-06-christopherbell-dev-cbell-lib-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1541](https://github.com/azurras/christopherbell.dev/pull/1541) merged as `2528e37` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev
