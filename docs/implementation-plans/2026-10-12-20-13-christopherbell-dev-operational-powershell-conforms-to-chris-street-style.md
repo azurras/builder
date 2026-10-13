@@ -109,6 +109,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** These are mechanical or Settled-Decision edits made while earlier slices merged.
 - **Impact:** No PR exists yet; the plan and evidence are published before it.
 
+### 2026-10-12 - Read-only command comparison
+
+- **Change:** Two runtime runs were discarded. In the first, the read-only `status`, `releases` and `sensor-status` commands failed with "Access to the path ... deploy.json is denied", which is identical on main because these reads need elevation. The check was changed to compare each command's exit code and first line with main. In the second run, that comparison script reused the name of its `[string]$Baseline` parameter for the result object; PowerShell variable names are case-insensitive, so the object was converted to a string. The variables were renamed.
+- **Reason:** The comparison isolates exactly the strict-mode change from the unelevated environment.
+- **Impact:** AC-3 is as written; the reported run covers `73d0fbb4`.
+
 ## Outcome
 Pending.
 
