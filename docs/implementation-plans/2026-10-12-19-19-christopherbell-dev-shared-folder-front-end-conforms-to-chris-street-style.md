@@ -61,8 +61,8 @@ None.
 | `website/src/main/resources/static/js/shared-folder.js` | changed | Block bodies |
 | `website/src/main/resources/static/js/lib/shared-folder.js`, `back-office-shared-folder.js`, `shared-folder-streaming.js`, `shared-folder-worker-runtime.js` | changed | Block bodies |
 | `website/src/main/resources/static/shared-folder-auth-sw.js` | changed | Block body |
-| `website/src/test/js/shared-folder.test.js` | changed | Block bodies |
-| Template, stylesheet and the other four JS tests | conforming | No change |
+| `website/src/test/js/shared-folder.test.js`, `shared-folder-page-initialization.test.js`, `shared-folder-streaming.test.js` | changed | Block bodies |
+| Template, stylesheet and the other two shared-folder JS tests | conforming | No change |
 
 ## Task Breakdown
 
