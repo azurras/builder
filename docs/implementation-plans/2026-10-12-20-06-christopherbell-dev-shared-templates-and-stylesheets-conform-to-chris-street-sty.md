@@ -32,7 +32,7 @@ Slice 23 of the [full conformance migration](2026-10-05-20-05-christopherbell-de
 |---|---|
 | AC-1 | Expected Changes records a verdict for every file in scope |
 | AC-2 | The full check passes and a full-diff style review finds no blocker |
-| AC-3 | On isolated MongoDB `test`, the published report records that both The Bell pages render with plain `<h1>` headings, that the stylesheet is served as committed with the 70px rule, that the rest of each page matches production after removing the inline style, and that the log has no errors |
+| AC-3 | On isolated MongoDB `test`, the published report records that both The Bell pages render with plain `<h1>` headings, that the stylesheet is served as committed apart from fingerprinted `url()` references, with the 70px rule and no empty `url()`, that the rest of each page matches production after removing the inline style, and that the log has no errors |
 | AC-4 | The PR merges through `wait_for_github.py queue` and production serves the merge |
 
 ## Inputs
@@ -56,7 +56,7 @@ None.
 
 | File | Verdict | Change and rule |
 |---|---|---|
-| `website/src/main/resources/static/css/thebell.css` | changed | `h1` size; dead declarations removed |
+| `website/src/main/resources/static/css/thebell.css` | changed | `h1` size; dead declarations removed (two empty `background-image` values, a `font-size` with no value and the invalid `font: bold` rule) |
 | `website/src/main/resources/templates/thebell/index.html`, `tony.html` | changed | Inline styles removed |
 | Remaining shared templates and stylesheets | conforming | No change |
 
@@ -104,6 +104,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Change:** The plan was saved after the edits and before the PR.
 - **Reason:** These are mechanical or Settled-Decision edits made while earlier slices merged.
 - **Impact:** No PR exists yet; the plan and evidence are published before it.
+
+### 2026-10-12 - More dead declarations; check corrections
+
+- **Change:** The runtime check found two more dead declarations in `thebell.css`: an empty `background-image:url()` on `.article-text`, and `.article-title { font: bold; }`, an invalid shorthand browsers ignore. Both were removed in `09ed7742`. Three runtime runs were discarded while the check was corrected. The production edge injects a Cloudflare analytics beacon that the origin never renders, the resource chain rewrites `url()` references to fingerprinted paths, and text decoding had hidden line endings.
+- **Reason:** Rendering is unchanged by removing ignored declarations, and the comparison has to mask only what the edge and the resource chain add.
+- **Impact:** Expected Changes and AC-3 were updated. The full check ran on `2dc44f14`; `09ed7742` changes only the stylesheet and was rebuilt with `bootJar`.
 
 ## Outcome
 Pending.

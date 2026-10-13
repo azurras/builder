@@ -100,6 +100,12 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Reason:** These are mechanical or Settled-Decision edits made while earlier slices merged.
 - **Impact:** No PR exists yet; the plan and evidence are published before it.
 
+### 2026-10-12 - Bare else pass and page list
+
+- **Change:** One runtime run was discarded because the page list wrongly included `/history`, a sub-route rather than a page. It was replaced by `/wfl/top-rated`. Bare `else statement;` lines after an `if` block were also joined into braced `} else {` blocks in `738e55c9`.
+- **Reason:** The first brace pass handled only `} else` and lowercase-starting bodies.
+- **Impact:** The scope is unchanged; the reported run covers `738e55c9`.
+
 ## Outcome
 Pending.
 
