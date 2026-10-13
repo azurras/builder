@@ -1,7 +1,7 @@
 # Shared Folder Front End Conforms to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -116,7 +116,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** Expected Changes now also lists `shared-folder-page-initialization.test.js` and `shared-folder-streaming.test.js`. AC-3 evidence covers `7000ac6`.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1533 (`7bef6fe`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for the shared-folder front end.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed ([report](../test-reports/2026-10-12-19-36-christopherbell-dev-shared-folder-front-end-conforms-to-chris-street-style.md)) |
+| AC-3 | ✅ Met | 8 of 8 runtime cases passed on candidate `7000ac6` ([report](../test-reports/2026-10-12-19-36-christopherbell-dev-shared-folder-front-end-conforms-to-chris-street-style.md)) |
+| AC-4 | ✅ Met | [PR #1533](https://github.com/azurras/christopherbell.dev/pull/1533) merged as `7bef6fe` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev

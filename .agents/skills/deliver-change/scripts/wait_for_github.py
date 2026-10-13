@@ -42,6 +42,7 @@ RUN_ID_RE = re.compile(r"/actions/runs/(?P<run_id>\d+)")
 PASSING_CONCLUSIONS = {"SUCCESS", "NEUTRAL", "SKIPPED"}
 INFRASTRUCTURE_CONCLUSIONS = {"CANCELLED", "STARTUP_FAILURE", "STALE"}
 MERGE_METHODS = ("squash", "merge", "rebase")
+OUT_OF_DATE_REFUSAL = "not up to date with the base branch"
 # GitHub compare statuses meaning the live commit is the expected commit or descends from it.
 LIVE_COMPARE_STATUSES = {"identical", "ahead"}
 
@@ -156,10 +157,18 @@ def wait_for_pull_request(repository: str, number: int, *, merge_method: str | N
             if is_green and not is_behind:
                 merge = run_command(["pr", "merge", str(number), "--repo", repository, f"--{merge_method}",
                                      "--match-head-commit", head_commit])
-                if merge.returncode:
-                    return WaitOutcome(1, f"Merging PR #{number} at {head_commit[:7]} was refused: "
-                                          f"{merge.stderr.strip() or merge.stdout.strip()}")
-                print(f"Merge requested for PR #{number} at {head_commit[:7]}.", flush=True)
+                refusal = merge.stderr.strip() or merge.stdout.strip()
+                # GitHub can report a mergeable state before noticing the base moved; update and wait.
+                if merge.returncode and OUT_OF_DATE_REFUSAL in refusal and head_commit not in updated_heads:
+                    update = run_command(["pr", "update-branch", str(number), "--repo", repository])
+                    updated_heads.add(head_commit)
+                    print(f"PR #{number} was not up to date at merge time; branch update "
+                          f"{'requested' if update.returncode == 0 else 'refused: ' + update.stderr.strip()}.",
+                          flush=True)
+                elif merge.returncode:
+                    return WaitOutcome(1, f"Merging PR #{number} at {head_commit[:7]} was refused: {refusal}")
+                else:
+                    print(f"Merge requested for PR #{number} at {head_commit[:7]}.", flush=True)
         if clock() >= deadline:
             detail = f" Last error: {last_error}" if last_error else ""
             return WaitOutcome(2, f"Timed out waiting for PR #{number}.{detail}")

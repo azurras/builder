@@ -37,7 +37,8 @@ class FakeGitHub:
             view = self.views.pop(0) if len(self.views) > 1 else self.views[0]
             return subprocess.CompletedProcess(arguments, 0, json.dumps(view), "")
         if arguments[:2] == ["pr", "merge"]:
-            return subprocess.CompletedProcess(arguments, self.merge_returncode, "", "head moved")
+            refusal = getattr(self, "merge_refusal", "head moved")
+            return subprocess.CompletedProcess(arguments, self.merge_returncode, "", refusal)
         return subprocess.CompletedProcess(arguments, 0, "", "")
 
     def calls_starting(self, *prefix):
@@ -182,6 +183,19 @@ class BehindBranchTests(unittest.TestCase):
                          [["pr", "update-branch", "7", "--repo", REPOSITORY]])
         self.assertEqual(len(fake_github.calls_starting("pr", "merge")), 1)
         self.assertEqual(outcome.merge_commit, "abc1234")
+
+
+class OutOfDateMergeTests(unittest.TestCase):
+    def test_a_merge_refused_as_out_of_date_updates_the_branch_and_keeps_waiting(self):
+        green = pull_request_view(check_run("build"))
+        fake_github = FakeGitHub(green, pull_request_view(check_run("build"), state="MERGED", merge_commit="abc1234"),
+                                 merge_returncode=1)
+        fake_github.merge_refusal = "the head branch is not up to date with the base branch"
+
+        outcome = wait_for(fake_github, merge_method="squash")
+
+        self.assertEqual(outcome.exit_code, 0, outcome.message)
+        self.assertEqual(len(fake_github.calls_starting("pr", "update-branch")), 1)
 
 
 MAIN_HEAD = "a" * 40
