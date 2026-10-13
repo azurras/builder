@@ -1,7 +1,7 @@
 # Gradle Build Scripts Conform to Chris Street Style
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -108,7 +108,16 @@ Revert the squash-merge commit; auto-deploy rolls forward. No data change.
 - **Impact:** No PR exists yet; the plan and evidence are published before it.
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Shipped in PR #1538 (`5764212`) through the deploy-aware queue; production serves it. Checkstyle and the style guide now hold for the Gradle build scripts.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Expected Changes records verdicts for every file in scope |
+| AC-2 | ✅ Met | The full check passed on `4d284eb8` |
+| AC-3 | ✅ Met | The four Pester tasks ran through the helper with unchanged counts: 189, 76, 208 and 208. Runtime proof is not applicable (build configuration only) |
+| AC-4 | ✅ Met | [PR #1538](https://github.com/azurras/christopherbell.dev/pull/1538) merged as `5764212` after all checks; `wait_for_github.py queue` confirmed it live |
 
 ## Project
 christopherbell-dev

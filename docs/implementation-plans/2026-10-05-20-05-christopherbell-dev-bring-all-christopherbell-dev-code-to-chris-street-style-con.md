@@ -97,7 +97,7 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 22 | Shared browser JavaScript (`lib`, `components`, `auth`, `app.js`) and JS tests not owned by a feature | part of 128 files | part of 22,935 | done: [plan](2026-10-12-20-06-christopherbell-dev-browser-javascript-branches-and-loops-are-braced.md), PR #1535 `f40efb8` |
 | 23 | Shared templates and CSS | part of 35 templates and 10 stylesheets | counted when planned | done: [plan](2026-10-12-20-06-christopherbell-dev-shared-templates-and-stylesheets-conform-to-chris-street-sty.md), PR #1536 `3232412` |
 | 24 | Operational PowerShell and `prod.cmd` | 35 files | 36,268 | done: [plan](2026-10-12-20-13-christopherbell-dev-operational-powershell-conforms-to-chris-street-style.md), PR #1537 `45d695a` |
-| 25 | Gradle, workflows and application YAML | 4 Gradle, 12 YAML and related | counted when planned | in progress: [plan](2026-10-12-20-13-christopherbell-dev-gradle-build-scripts-conform-to-chris-street-style.md) |
+| 25 | Gradle, workflows and application YAML | 4 Gradle, 12 YAML and related | counted when planned | done: [plan](2026-10-12-20-13-christopherbell-dev-gradle-build-scripts-conform-to-chris-street-style.md), PR #1538 `5764212` |
 
 ## Expected Changes
 

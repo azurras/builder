@@ -197,6 +197,28 @@ class OutOfDateMergeTests(unittest.TestCase):
         self.assertEqual(outcome.exit_code, 0, outcome.message)
         self.assertEqual(len(fake_github.calls_starting("pr", "update-branch")), 1)
 
+    def test_a_rule_refusal_on_a_pr_that_rereads_as_behind_updates_the_branch(self):
+        green = pull_request_view(check_run("build"))
+        behind = dict(pull_request_view(check_run("build")), mergeStateStatus="BEHIND")
+        fake_github = FakeGitHub(green, behind, pull_request_view(check_run("build"), state="MERGED",
+                                                                  merge_commit="abc1234"), merge_returncode=1)
+        fake_github.merge_refusal = "Repository rule violations found. 5 of 5 required status checks are expected."
+
+        outcome = wait_for(fake_github, merge_method="squash")
+
+        self.assertEqual(outcome.exit_code, 0, outcome.message)
+        self.assertEqual(len(fake_github.calls_starting("pr", "update-branch")), 1)
+
+    def test_a_rule_refusal_on_a_current_pr_still_fails(self):
+        green = pull_request_view(check_run("build"))
+        fake_github = FakeGitHub(green, merge_returncode=1)
+        fake_github.merge_refusal = "Repository rule violations found. Review required."
+
+        outcome = wait_for(fake_github, merge_method="squash")
+
+        self.assertEqual(outcome.exit_code, 1)
+        self.assertIn("Review required", outcome.message)
+
 
 MAIN_HEAD = "a" * 40
 NEXT_HEAD = "b" * 40

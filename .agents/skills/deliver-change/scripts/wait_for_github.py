@@ -110,6 +110,14 @@ def read_pull_request(repository: str, number: int, run_command: CommandRunner) 
     return json.loads(completed.stdout)
 
 
+def is_behind_now(repository: str, number: int, run_command: CommandRunner) -> bool:
+    try:
+        pull_request = read_pull_request(repository, number, run_command)
+    except (ValueError, json.JSONDecodeError):
+        return False
+    return str(pull_request.get("mergeStateStatus") or "").upper() == "BEHIND"
+
+
 def wait_for_pull_request(repository: str, number: int, *, merge_method: str | None, timeout_seconds: float,
                           interval_seconds: float, run_command: CommandRunner = run_gh,
                           sleep: Callable[[float], None] = time.sleep,
@@ -158,8 +166,10 @@ def wait_for_pull_request(repository: str, number: int, *, merge_method: str | N
                 merge = run_command(["pr", "merge", str(number), "--repo", repository, f"--{merge_method}",
                                      "--match-head-commit", head_commit])
                 refusal = merge.stderr.strip() or merge.stdout.strip()
-                # GitHub can report a mergeable state before noticing the base moved; update and wait.
-                if merge.returncode and OUT_OF_DATE_REFUSAL in refusal and head_commit not in updated_heads:
+                # GitHub can report a mergeable state before noticing the base moved, and words the
+                # refusal differently by rule; when the reread PR is behind, update and wait.
+                if merge.returncode and head_commit not in updated_heads and (
+                        OUT_OF_DATE_REFUSAL in refusal or is_behind_now(repository, number, run_command)):
                     update = run_command(["pr", "update-branch", str(number), "--repo", repository])
                     updated_heads.add(head_commit)
                     print(f"PR #{number} was not up to date at merge time; branch update "
