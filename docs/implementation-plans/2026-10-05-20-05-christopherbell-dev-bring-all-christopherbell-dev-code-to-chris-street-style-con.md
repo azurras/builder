@@ -96,8 +96,8 @@ Line counts are main plus test Java at `ef15adc0`; feature JavaScript, templates
 | 21 | cbell-lib | 65 Java files | 4,386 | in progress: [plan](2026-10-12-20-06-christopherbell-dev-cbell-lib-conforms-to-chris-street-style.md) |
 | 22 | Shared browser JavaScript (`lib`, `components`, `auth`, `app.js`) and JS tests not owned by a feature | part of 128 files | part of 22,935 | in progress: [plan](2026-10-12-20-06-christopherbell-dev-browser-javascript-branches-and-loops-are-braced.md) |
 | 23 | Shared templates and CSS | part of 35 templates and 10 stylesheets | counted when planned | in progress: [plan](2026-10-12-20-06-christopherbell-dev-shared-templates-and-stylesheets-conform-to-chris-street-sty.md) |
-| 24 | Operational PowerShell and `prod.cmd` | 35 files | 36,268 | pending; split when planned |
-| 25 | Gradle, workflows and application YAML | 4 Gradle, 12 YAML and related | counted when planned | pending |
+| 24 | Operational PowerShell and `prod.cmd` | 35 files | 36,268 | in progress: [plan](2026-10-12-20-13-christopherbell-dev-operational-powershell-conforms-to-chris-street-style.md) |
+| 25 | Gradle, workflows and application YAML | 4 Gradle, 12 YAML and related | counted when planned | in progress: [plan](2026-10-12-20-13-christopherbell-dev-gradle-build-scripts-conform-to-chris-street-style.md) |
 
 ## Expected Changes
 
