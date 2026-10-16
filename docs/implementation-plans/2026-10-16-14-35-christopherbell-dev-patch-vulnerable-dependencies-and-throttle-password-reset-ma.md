@@ -1,7 +1,7 @@
 # Patch Vulnerable Dependencies and Throttle Password Reset Mail on christopherbell.dev
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -145,7 +145,18 @@ Revert the merge commit on `main`; auto-deploy restores the previous libraries a
 - **Impact:** AC-2 still rests on unit tests for the confirm path plus runtime proof that the first token survives. Candidate `9b418a8` passed `:website:build` with strict verification (2,140 tests) and the [runtime report](../test-reports/2026-10-16-14-53-christopherbell-dev-patch-vulnerable-dependencies-and-throttle-password-reset-ma.md).
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Production serves patched Jackson, Tomcat and jsoup and throttles reset mail per account. [PR #1545](https://github.com/azurras/christopherbell.dev/pull/1545) merged head `9b418a8` as `c292533`, and production serves `c292533`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `runtimeClasspath` resolves Jackson 3.1.7 and 2.21.7, Tomcat 11.0.26 and jsoup 1.23.2; OSV returned no advisories for all 146 artifacts; strict `:website:build` on `9b418a8` passed with 2,140 tests and 0 failed; [runtime report](../test-reports/2026-10-16-14-53-christopherbell-dev-patch-vulnerable-dependencies-and-throttle-password-reset-ma.md) shows `Apache Tomcat/11.0.26` at startup and JSON parsing behaving |
+| AC-2 | ✅ Met | `AccountServiceTest` cooldown test (RED, then GREEN); [runtime report](../test-reports/2026-10-16-14-53-christopherbell-dev-patch-vulnerable-dependencies-and-throttle-password-reset-ma.md): the second request left the stored hash and expiry unchanged and the log shows one issued reset and one skipped |
+| AC-3 | ✅ Met | After-cooldown unit test and the existing reset tests; [runtime report](../test-reports/2026-10-16-14-53-christopherbell-dev-patch-vulnerable-dependencies-and-throttle-password-reset-ma.md): known and unknown emails got the same generic 200 body |
+| AC-4 | ✅ Met | [PR #1545](https://github.com/azurras/christopherbell.dev/pull/1545) `MERGED` as `c292533` after green CI (build, CodeQL, dependency review); `wait_for_github.py queue` confirmed production serves `c292533`; live `/actuator/info` reports `0.0.0-dev.c2925334`, and a live reset request for an unregistered address returned the generic 200 |
+
+Shipped as planned, with the runtime-evidence change in the Implementation Log. Follow-ups: submit the resolved Gradle graph to GitHub so Dependabot sees transitive CVEs; the user decides the two survive capacity questions; drop the BOM overrides once a Spring Boot release manages these versions.
 
 ## Project
 christopherbell-dev
