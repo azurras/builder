@@ -1,7 +1,7 @@
 # Mark Proxied Cookies Secure on christopherbell.dev
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -48,7 +48,7 @@ The authentication cookies already use the configured `app.browser-security.auth
 - **Inspected:** spoke `christopherbell.dev` at `main` `2528e371`: `SecurityConfig`, `JwtAuthenticationFilter`, `BrowserAuthenticationCookies`, `BrowserSecurityProperties`, `SurviveController`, `SurviveService`, `SurviveControllerTest`, `SecurityConfigTest`, `application.yml` and `application-prod.yml`.
 
 ## Branch
-`codex/secure-proxied-cookies` from `main` `2528e371` in a linked worktree.
+`claude/secure-proxied-cookies-20261016` from `main` `2528e371` in the linked worktree `christopherbell.dev.worktrees/secure-proxied-cookies`.
 
 ## Assumptions
 - Spring Security's `CookieCsrfTokenRepository` applies its cookie customizer after its own `secure(request.isSecure())` default, so the customizer decides the attribute.
@@ -58,7 +58,7 @@ The authentication cookies already use the configured `app.browser-security.auth
 None.
 
 ## Design
-Both cookies take their `Secure` attribute from `BrowserSecurityProperties.authenticationCookieSecure()`, the setting that already governs the authentication cookies. `SurviveController` receives the properties through its constructor. `SecurityConfig` builds `CookieCsrfTokenRepository.withHttpOnlyFalse()` with a cookie customizer that sets `secure` from the same property, and passes it to the CSRF configurer after `spa()`.
+Both cookies take their `Secure` attribute from `BrowserSecurityProperties.authenticationCookieSecure()`, the setting that already governs the authentication cookies. `SurviveController` reads the same property by name with `@Value`, because the architecture rules keep business areas from depending on `configuration` types. `SecurityConfig` builds `CookieCsrfTokenRepository.withHttpOnlyFalse()` with a cookie customizer that sets `secure` from the same property, and passes it to the CSRF configurer after `spa()`.
 
 | Alternative | Why not |
 |---|---|
@@ -70,7 +70,7 @@ Both cookies take their `Secure` attribute from `BrowserSecurityProperties.authe
 
 | File or area | Change |
 |---|---|
-| `website/src/main/java/dev/christopherbell/survive/SurviveController.java` | Inject `BrowserSecurityProperties`; set the survivor cookie's `Secure` from it; drop the `HttpServletRequest` parameter |
+| `website/src/main/java/dev/christopherbell/survive/SurviveController.java` | Read `app.browser-security.authentication-cookie-secure` with `@Value`; set the survivor cookie's `Secure` from it; drop the `HttpServletRequest` parameter |
 | `website/src/main/java/dev/christopherbell/configuration/security/SecurityConfig.java` | Configure the CSRF cookie repository with the configured `Secure` attribute |
 | `website/src/test/java/dev/christopherbell/survive/SurviveControllerTest.java` | Run with secure cookies configured; join without `.secure(true)` and assert both cookies carry `Secure` |
 
@@ -114,7 +114,12 @@ Revert the merge commit on `main`; auto-deploy restores the previous cookie attr
 | Overriding the repository after `spa()` drops the SPA token handler and breaks browser CSRF | Low | Existing CSRF tests plus a runtime join through the real form in the candidate |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-16 - Read the survive cookie setting through @Value
+
+- **Change:** `SurviveController` takes `@Value("${app.browser-security.authentication-cookie-secure}") boolean secureCookies` instead of injecting `BrowserSecurityProperties`. The branch is `claude/secure-proxied-cookies-20261016` (the publish-spoke-changes naming for Claude Code), not `codex/secure-proxied-cookies`.
+- **Reason:** The first full build failed two `ModularMonolithArchitectureTest` rules: the `survive` business area may not depend on `configuration`. Reading the same property by name keeps one setting with no cross-area type dependency, the pattern `LoginTokensConfiguration` already uses.
+- **Impact:** Design and Expected Changes now name `@Value`; acceptance criteria are unchanged. The rebuilt candidate `aeca69c` passed `:website:build` (2,138 tests) and the [runtime report](../test-reports/2026-10-16-14-02-christopherbell-dev-mark-proxied-cookies-secure.md).
 
 ## Outcome
 Pending.
