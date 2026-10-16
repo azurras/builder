@@ -1,7 +1,7 @@
 # Survive gains a day-night clock, raids, enemies, weapons, sleep and hunger
 
 ## Document Status
-ready-for-review
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -33,8 +33,8 @@ Survive today has no time, a single enemy (the hog) that appears only when a sur
 ## Acceptance Criteria
 | ID | Done when |
 |---|---|
-| AC-1 | Phase and day derive from the injected clock against a fixed world epoch with a 24-minute cycle (day 14, dusk 4, night 6 minutes); snapshots expose `phase`, `day` and `secondsToNextPhase`; GET and actions settle past nightfalls and dawns at most 3 at a time and record `lastSettledNight`; settlement is idempotent across reloads. |
-| AC-2 | `GUARD` is offered at dusk at camp; at each settled nightfall raid strength `3 + day/2` (capped at 20) meets the sum of guards' `1 + strength + weapon bonus`; a repelled raid rewards each guard 1 food if room else 1 XP; a lost raid destroys one structure plus one per 3 points of shortfall; guarding clears on dawn or any action outside camp; the journal records each raid. |
+| AC-1 | Phase and day derive from the injected clock against a fixed world epoch with a 24-minute cycle (day 14, dusk 4, night 6 minutes); snapshots expose `phase`, `day` and `secondsToNextPhase`; GET and actions settle past nightfalls and dawns, at most 3 nights at a time, and record `settledBoundaries`; the first settlement only starts the count; settlement is idempotent across reloads. |
+| AC-2 | `GUARD` is offered at dusk at camp; at each settled nightfall raid strength `4 + 2 x (night mod 7)` (4 to 16 over a seven-night week) meets the sum of guards' `1 + strength + weapon bonus`; a repelled raid rewards each guard 1 food if room else 1 XP; a lost raid destroys one structure plus one per 3 points of shortfall; guarding clears on dawn or any action outside camp; the journal records each raid. |
 | AC-3 | Enemies hog (5 health, bite 1, 1 food), wolf (8, 2, 1 food) and bear (14, 3, 3 food up to room) exist; hunting keeps 61% discovery with phase-weighted species (day all hog; night 50/35/15 hog/wolf/bear; dusk hog or wolf); gathering and hunting are first ambushed at 5/12/25 percent by phase; camp actions are never ambushed; flee costs the enemy's bite; defend blocks one bite. |
 | AC-4 | `GATHER_STONE` succeeds 40 percent and grants gathering XP; stone shares the 10-slot inventory; `STONE` gifts follow existing gift rules; `CRAFT_CLUB` (2 wood, +1, 8 uses), `CRAFT_AXE` (2 wood 2 stone, +2, 12 uses, wood 70 percent) and `CRAFT_SPEAR` (3 wood 3 stone, +3, 12 uses, first attack each fight takes no bite) are offered only when affordable, replace the held weapon, lose 1 durability per attack and break at 0. |
 | AC-5 | `SLEEP` is offered at dusk or night at camp when beds in use are fewer than `2 x shelters`; a sleeper has status `SLEEPING` and only `WAKE`; healing is 1 per 2 slept minutes capped at 10 and full at dawn, none while starving; dawn settlement wakes every sleeper; destroyed shelters wake their sleepers with 2 damage, which can kill; `REST` remains a +2 daytime heal with a shelter. |
@@ -65,7 +65,7 @@ Keep the single authoritative `SurviveWorld` aggregate and the service's synchro
 
 Enemies become an `Enemy` enum carrying health, bite and food reward. Weapons become a `Weapon` enum carrying wood and stone cost, damage bonus, durability and perk. `SurvivePlayer` gains `stone`, `hunger`, `enemy`, `weapon`, `weaponDurability`, `guarding`, `sleptAt` and a per-fight `struckFirst` flag for the spear. `SurviveWorld.perform` first applies hunger cost and starvation damage, then the ambush roll for outside actions, then the action. New actions are `GATHER_STONE`, `CRAFT_CLUB`, `CRAFT_AXE`, `CRAFT_SPEAR`, `GUARD`, `SLEEP` and `WAKE`; `actionsFor` gates them by phase, status, supplies and beds. Status gains `SLEEPING`. Raid destruction removes boats before shelters when both exist only if boats outnumber shelters, otherwise shelters first, so beds and escape are both at stake; destroyed shelters wake the survivors assigned to them, chosen as the most recent sleepers beyond the remaining bed count.
 
-Persistence stays one document. `SurviveSavedWorld` gains a boxed `lastSettledNight`; `SurviveSavedWorld.Player` gains boxed `stone`, `hunger`, `enemy`, `weapon`, `weaponDurability`, `guarding`, `sleptAt` and `struckFirst`, normalized from null to their defaults, with validation extended (inventory `wood + food + stone <= 10`, `enemyHealth <= enemy.health`, durability within the weapon's maximum and zero without a weapon, `SLEEPING` iff `sleptAt` is present). Existing combat without an enemy loads as a hog. The snapshot gains the fields the UI needs; credentials still never enter it. The browser keeps owning no rules: it renders new fields with text nodes, decrements the countdown locally and refetches at phase change.
+Persistence stays one document. `SurviveSavedWorld` gains a boxed `settledBoundaries`; `SurviveSavedWorld.Player` gains boxed `stone`, `hunger`, `enemy`, `weapon`, `weaponDurability`, `guarding`, `sleptAt` and `struckFirst`, normalized from null to their defaults, with validation extended (inventory `wood + food + stone <= 10`, `enemyHealth <= enemy.health`, durability within the weapon's maximum and zero without a weapon, `SLEEPING` iff `sleptAt` is present). Existing combat without an enemy loads as a hog. The snapshot gains the fields the UI needs; credentials still never enter it. The browser keeps owning no rules: it renders new fields with text nodes, decrements the countdown locally and refetches at phase change.
 
 | Alternative | Why not |
 |---|---|
@@ -168,7 +168,35 @@ Revert the merge commit on main; the deployment pipeline serves the previous bui
 | Snapshot growth breaks the UI tests | Low | Additive fields; JS tests updated in Task 3. |
 
 ## Implementation Log
-No entries yet.
+### 2026-10-16 - Raid strength follows a seven-night week
+
+- **Change:** Raid strength is `4 + 2 x (night mod 7)`, rising from 4 to 16 and starting again, instead of `3 + day/2` capped at 20.
+- **Reason:** A 24-minute cycle gives about 60 game days per real day, so the approved day-based formula would reach its cap within hours and every later raid would be unbeatable.
+- **Impact:** AC-2 updated; the field guide and README describe the weekly rise.
+
+### 2026-10-16 - Settlement counts boundaries and starts on first load
+
+- **Change:** The saved world stores `settledBoundaries`, the count of nightfalls and dawns applied, instead of `lastSettledNight`. A null count, as in every world saved before this change, is set to the current count without running raids.
+- **Reason:** Dawn wake-ups and nightfall raids are separate events that must apply in order, and counting from the epoch on the first load would raid the live camp several times at deployment.
+- **Impact:** AC-1 and Design updated; covered by `firstSettlementStartsTheClockAndMissedNightsAreCapped` and the pre-clock codec test.
+
+### 2026-10-16 - Starvation applies to effort, not camp actions
+
+- **Change:** At 0 fullness only effortful actions (outside actions, combat moves and guarding) cost 1 health. Eating, resting, building, crafting and sleeping do not.
+- **Reason:** A starving survivor must be able to eat or rest without being hurt by the act of eating; the user chose effort-based hunger.
+- **Impact:** AC-6 behavior clarified; covered by `effortDrainsHungerAndStarvationHurts`.
+
+### 2026-10-16 - Existing tests adjusted for new world time
+
+- **Change:** `SurviveServiceTest` checks that expiry keeps the camp journal instead of the shelter count. `SavedSurviveServiceTest` stops its combat loop when hunger ends the survivor. `SurviveControllerTest` uses an unknown `IRON` resource for its invalid-resource case.
+- **Reason:** Two idle hours now span real nightfalls whose raids can burn an unguarded shelter, hunger can end a long fight earlier, and `STONE` became a valid gift.
+- **Impact:** Regression intent unchanged; Test Plan unchanged.
+
+### 2026-10-16 - Escape clears guard duty
+
+- **Change:** Escaping clears `guarding`.
+- **Reason:** Review found a guard who escaped at dusk would be saved as an escaped guard, which saved-world validation rejects, failing the commit.
+- **Impact:** New regression test `escapingWhileOnGuardLeavesASaveableSurvivor`.
 
 ## Outcome
 Pending.
