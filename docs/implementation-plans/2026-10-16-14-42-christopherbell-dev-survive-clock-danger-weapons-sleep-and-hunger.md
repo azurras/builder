@@ -1,7 +1,7 @@
 # Survive gains a day-night clock, raids, enemies, weapons, sleep and hunger
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -198,8 +198,30 @@ Revert the merge commit on main; the deployment pipeline serves the previous bui
 - **Reason:** Review found a guard who escaped at dusk would be saved as an escaped guard, which saved-world validation rejects, failing the commit.
 - **Impact:** New regression test `escapingWhileOnGuardLeavesASaveableSurvivor`.
 
+### 2026-10-16 - Merge queue updated the branch before merging
+
+- **Change:** The deployment queue merged `main` at `c292533` (dependency patches from PR 1545) into the branch as head `c21ed78` before squash-merging, so CI and production ran that combined head rather than `0a3d242` alone.
+- **Reason:** PR 1547 was behind its base; the queue requests a branch update instead of merging a stale head.
+- **Impact:** No Survive file differs between the verified candidate `0a3d242` and merge `4e2a2b0`; required CI passed on the combined head and production readback ran on the merge.
+
 ## Outcome
-Pending.
+> [!TIP]
+> Survive on christopherbell.dev now has a shared day-night clock with nightfall raids, wolves, bears and ambushes, stone and wearing weapons, shelter sleep and hunger. Merged as `4e2a2b0` through [PR 1547](https://github.com/azurras/christopherbell.dev/pull/1547) and served by production.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `SurviveClockTest`, settlement tests in `SurviveWorldTest` and `SavedSurviveServiceTest`; [report](../test-reports/2026-10-16-16-01-christopherbell-dev-survive-clock-danger-weapons-sleep-and-hunger.md) cases 5 and 12 show the wall-clock phase and a raid settled once across reads |
+| AC-2 | ✅ Met | Raid world tests; report cases 11 to 13: a strength-10 raid overran a defense of 8, burned the shelter and dawn ended guard duty |
+| AC-3 | ✅ Met | Enemy and ambush world tests; report cases 8 and 11 met hogs and wolves through hunting and ambushes |
+| AC-4 | ✅ Met | Stone, crafting, wear and perk world tests; report cases 7 and 9 crafted a stone axe and gave stone |
+| AC-5 | ✅ Met | Sleep world tests; report cases 15 to 17: two beds filled, an early wake recovered 2 health and dawn woke a sleeper at full health |
+| AC-6 | ✅ Met | Hunger world tests; report cases 7, 8 and 16 show effort and sleep costing fullness and eating restoring it |
+| AC-7 | ✅ Met | `SurviveWorldMongoCodecTest` decodes a document stripped of every new field; JS tests and the report's browser check; production GET returned 204 after loading the live pre-change world |
+| AC-8 | ✅ Met | `:website:build` 2,164 tests, 0 failed; [report](../test-reports/2026-10-16-16-01-christopherbell-dev-survive-clock-danger-weapons-sleep-and-hunger.md) 17 of 17 on `0a3d242`; [PR 1547](https://github.com/azurras/christopherbell.dev/pull/1547) merged as `4e2a2b0` after required CI; production `/actuator/info` serves `4e2a2b0` and `/survive` shows the clock |
+
+**Shipped versus planned:** everything planned shipped, with the deviations logged above: weekly raid strength, boundary-counted settlement, effort-only starvation and escape clearing guard duty.
+
+**Follow-ups:** none required. Balance (hunger drain, raid strength, ambush rates) may need tuning once real players try it.
 
 ## Project
 christopherbell-dev
