@@ -1,7 +1,7 @@
 # Patch Vulnerable Dependencies and Throttle Password Reset Mail on christopherbell.dev
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 
@@ -137,7 +137,12 @@ Revert the merge commit on `main`; auto-deploy restores the previous libraries a
 | An honest user who lost the first email waits five minutes for another | Medium | The first link stays valid for an hour; five minutes is short |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-16 - Runtime proof reads the stored token instead of using the first link
+
+- **Change:** The AC-2 runtime check confirms the stored hash and expiry are unchanged after the second request and that the log shows one issued and one skipped reset, rather than resetting the password with the first link.
+- **Reason:** The test profile disables mail, and only the token's hash is stored, so the plain first token is never visible to the harness. Enabling mail would send real email.
+- **Impact:** AC-2 still rests on unit tests for the confirm path plus runtime proof that the first token survives. Candidate `9b418a8` passed `:website:build` with strict verification (2,140 tests) and the [runtime report](../test-reports/2026-10-16-14-53-christopherbell-dev-patch-vulnerable-dependencies-and-throttle-password-reset-ma.md).
 
 ## Outcome
 Pending.
