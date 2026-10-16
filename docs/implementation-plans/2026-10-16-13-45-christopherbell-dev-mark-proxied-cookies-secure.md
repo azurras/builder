@@ -1,7 +1,7 @@
 # Mark Proxied Cookies Secure on christopherbell.dev
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 
@@ -122,7 +122,18 @@ Revert the merge commit on `main`; auto-deploy restores the previous cookie attr
 - **Impact:** Design and Expected Changes now name `@Value`; acceptance criteria are unchanged. The rebuilt candidate `aeca69c` passed `:website:build` (2,138 tests) and the [runtime report](../test-reports/2026-10-16-14-02-christopherbell-dev-mark-proxied-cookies-secure.md).
 
 ## Outcome
-Pending.
+
+> [!TIP]
+> Both cookies carry `Secure` in production. [PR #1544](https://github.com/azurras/christopherbell.dev/pull/1544) merged head `aeca69c` as `c702553`, and production serves `c702553`.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `SurviveControllerTest` (RED, then GREEN); [runtime report](../test-reports/2026-10-16-14-02-christopherbell-dev-mark-proxied-cookies-secure.md) case 3 shows `CBELL_SURVIVOR=...; Path=/api/survive/v1; Secure; HttpOnly; SameSite=Strict` on a plain-HTTP join |
+| AC-2 | ✅ Met | Same test; [runtime report](../test-reports/2026-10-16-14-02-christopherbell-dev-mark-proxied-cookies-secure.md) case 3 shows `XSRF-TOKEN=...; Path=/; Secure` with no `HttpOnly` |
+| AC-3 | ✅ Met | `:website:build` on `aeca69c`, 2,138 tests and 0 failed; [runtime report](../test-reports/2026-10-16-14-02-christopherbell-dev-mark-proxied-cookies-secure.md) cases 6 to 8: with the default setting, local HTTP joins and plays a turn, and a join without the CSRF header gets 403 |
+| AC-4 | ✅ Met | [PR #1544](https://github.com/azurras/christopherbell.dev/pull/1544) `MERGED` as `c702553` after required CI; `wait_for_github.py queue` confirmed production serves `c702553`; a live readback on 2026-10-16 showed `Secure` on both cookies and 403 for a join without CSRF |
+
+Shipped as planned, except that the survive setting is read with `@Value` (see the Implementation Log). The live checks left two guest survivors named `sec-review-probe` in the production camp; they expire after two idle hours. The review's unfixed observations are listed in the 2026-10-16 session memory.
 
 ## Project
 christopherbell-dev
