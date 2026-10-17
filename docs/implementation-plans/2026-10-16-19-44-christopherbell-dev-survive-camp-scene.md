@@ -1,7 +1,7 @@
 # Survive gets an illustrated, clickable camp scene
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -142,7 +142,20 @@ Revert the merge commit; the deployment pipeline serves the previous build. The 
 - **Impact:** Design hotspot sizing updated; new size test `every hotspot is large enough to tap at phone width`; runtime proof rerun on `8627fff`.
 
 ## Outcome
-Pending.
+> [!TIP]
+> Survive on christopherbell.dev now opens on an illustrated SVG camp scene that follows the shared clock and can be played by clicking. Merged as `ad110ad` through [PR 1548](https://github.com/azurras/christopherbell.dev/pull/1548) and served by production.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | `survive-scene.test.js` layer tests; [report](../test-reports/2026-10-16-20-19-christopherbell-dev-survive-camp-scene.md) cases 8, 13, 18, 19 and 20 show night, combat with the health bar, the torch, a raid flash with smoke and a burned tent, and sleeping |
+| AC-2 | ✅ Met | Interaction tests in `survive.test.js`; report cases 9 to 15 and 18 to 21: every hotspot sent its action, and disallowed clicks sent nothing |
+| AC-3 | ✅ Met | Description, markup and hotspot-size tests; report cases 16 and 17 (smallest hotspot 44.9 px at 375 px, no horizontal scroll, a phone tap) and case 4 for reduced motion, which was checked through the stylesheet rather than emulated |
+| AC-4 | ✅ Met | Hostile-name test with the `innerHTML` trap; report case 7: the name rendered as text with no element created |
+| AC-5 | ✅ Met | `:website:build` with 2,166 Java and 408 JS tests, 0 failed; [report](../test-reports/2026-10-16-20-19-christopherbell-dev-survive-camp-scene.md) 22 of 22 on `8627fff`; [PR 1548](https://github.com/azurras/christopherbell.dev/pull/1548) merged as `ad110ad` after required CI; production `/actuator/info` serves `ad110ad` and `/survive` embeds the scene |
+
+**Shipped versus planned:** everything planned shipped. Hotspots grew to 145 scene units after the first runtime check, as logged above.
+
+**Follow-ups:** none required. Players' reactions may suggest art or layout refinements.
 
 ## Project
 christopherbell-dev
