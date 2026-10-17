@@ -1,7 +1,7 @@
 # Survive gets an illustrated, clickable camp scene
 
 ## Document Status
-ready-for-review
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -134,7 +134,12 @@ Revert the merge commit; the deployment pipeline serves the previous build. The 
 | Art looks crude | Medium | Layered silhouettes, consistent palettes per phase, review screenshots before the PR. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-16 - Hotspots sized for the scene width inside the panel
+
+- **Change:** Every hotspot's smaller side grew from 120 to at least 145 scene units, and the 44-pixel target is measured at the scene's real width inside the panel (301 px on a 375 px phone) instead of the full 375 px.
+- **Reason:** The runtime check on `2d41ee9` measured the smallest hotspot at 37 px, because the adventure panel's padding makes the scene narrower than the viewport.
+- **Impact:** Design hotspot sizing updated; new size test `every hotspot is large enough to tap at phone width`; runtime proof rerun on `8627fff`.
 
 ## Outcome
 Pending.
