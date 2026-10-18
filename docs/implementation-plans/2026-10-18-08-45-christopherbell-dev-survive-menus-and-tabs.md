@@ -1,7 +1,7 @@
 # Survive moves into menus and a tabbed side panel
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -150,7 +150,20 @@ Revert the merge commit; the deployment pipeline serves the previous build. Fron
 - **Impact:** AC-2 focus behavior now covers the bar changing shape; new test `focus that was in the bar moves to the first usable control when the bar changes shape`.
 
 ## Outcome
-Pending.
+> [!TIP]
+> Survive's moves now live in Explore, Build (with Craft) and Camp menus that list only what is possible, situation moves appear on their own, and details sit in Survivor, Camp, Journal and Guide tabs under always-visible vitals. Merged as `43e0be3` through [PR 1549](https://github.com/azurras/christopherbell.dev/pull/1549) and served by production.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Page render tests; [report](../test-reports/2026-10-18-09-37-christopherbell-dev-survive-menus-and-tabs.md) cases 8 to 11 and 13 to 14: counts, disabled empty menus, Build with Craft, Sleep and Wake, and a fight with only Attack, Defend and Flee |
+| AC-2 | ✅ Met | `survive-menus.test.js` keyboard, outside-click, polling and focus tests; report cases 9, 10, 12, 13 and 14: keyboard paths, focus surviving a poll, Escape, Craft Arrow Right and Left, and focus kept when the bar changes shape |
+| AC-3 | ✅ Met | Tab tests; report cases 16 to 18: arrow keys, Home and End, the journal marker, the remembered tab after a reload, and costs in Guide |
+| AC-4 | ✅ Met | Existing Survive JS tests (adjusted for the structure); report cases 15 and 16: a scene click and a gift from the Camp tab |
+| AC-5 | ✅ Met | `:website:build` with 2,166 Java and 422 JS tests, 0 failed; [report](../test-reports/2026-10-18-09-37-christopherbell-dev-survive-menus-and-tabs.md) 20 of 20 on `56d2db9`; [PR 1549](https://github.com/azurras/christopherbell.dev/pull/1549) merged as `43e0be3` after required CI; production `/actuator/info` serves `43e0be3` and `/survive` has the menus and tabs |
+
+**Shipped versus planned:** everything planned shipped, with three focus refinements found in the browser and logged above.
+
+**Follow-ups:** none required. On a 375 px phone the three menu buttons wrap onto two rows; a tighter phone layout is optional polish.
 
 ## Project
 christopherbell-dev
