@@ -124,7 +124,30 @@ Revert the merge commit; the deployment pipeline serves the previous build. Fron
 | Keyboard traps in nested menus | Low | Escape and Tab always close; tests for each key. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-10-18 - Pending requests mark the action bar busy instead of disabling moves
+
+- **Change:** While a request is pending, `renderSurviveState` now marks `#surviveActionBar` with `aria-busy="true"` and a busy style instead of setting `disabled` on every allowed move. The click handler's pending guard still blocks double sends.
+- **Reason:** The browser run on `eed2dd1` showed every 5-second poll dropping keyboard focus out of an open menu, because disabling the focused button blurs it. Escape then had nothing to close.
+- **Impact:** Design and AC-2 behavior hold; page tests now assert `aria-busy` instead of disabled moves.
+
+### 2026-10-18 - Focus stays in the action bar when a menu empties
+
+- **Change:** `syncActionMenus` moves focus to the first enabled menu button when the focused menu button becomes disabled.
+- **Reason:** In the same run, crafting the last affordable item disabled the Build button that had just received focus, and focus fell to the page body.
+- **Impact:** New test `focus moves to an enabled menu button when the focused menu empties`.
+
+### 2026-10-18 - Shared camp heading kept in the Camp tab
+
+- **Change:** The Camp tab keeps a "Shared camp" heading.
+- **Reason:** `ViewControllerTest` asserts the page names the shared camp, and the tab reads better with a heading.
+- **Impact:** Template only.
+
+### 2026-10-18 - Focus returns to the action bar when it changes shape
+
+- **Change:** New `keepFocusInActionBar`: when focus was in the action bar before a render and the focused control is now hidden or disabled, focus moves to the bar's first usable control.
+- **Reason:** The browser run on `c3c620d` showed focus falling to the page body when a fight started (the menus group hides), when sleeping, and when the fight ended (Attack hides).
+- **Impact:** AC-2 focus behavior now covers the bar changing shape; new test `focus that was in the bar moves to the first usable control when the bar changes shape`.
 
 ## Outcome
 Pending.
