@@ -1,7 +1,7 @@
 # Survive side panel becomes a status card with collapsible extras
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -107,7 +107,20 @@ Revert the merge commit; the deployment pipeline serves the previous build. Fron
 No entries yet.
 
 ## Outcome
-Pending.
+> [!TIP]
+> The Survive side panel has no tabs: an always-visible status card holds everything used every turn, and camp, journal and guide are remembered collapsible sections. Merged as `5e1126f` through [PR 1550](https://github.com/azurras/christopherbell.dev/pull/1550) and served by production.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met | Status card page test; [report](../test-reports/2026-10-19-09-23-christopherbell-dev-survive-status-card.md) cases 5, 8 and 9: every field with no clicks, live updates, the newest 3 events and no tablist |
+| AC-2 | ✅ Met | `survive-panel.test.js` restore, remember, fallback, link and render tests; report cases 10 to 12: Full journal, Enter on a summary, a poll and a reload |
+| AC-3 | ✅ Met | Summary and marker tests; report cases 9, 10 and 13: journal marker while closed and cleared on open, camp summary counts |
+| AC-4 | ✅ Met | Menus, scene and page tests; report cases 9, 13 and 14: a menu move, a gift from the Camp section, a scene click |
+| AC-5 | ✅ Met | `:website:build` with 2,166 Java and 426 JS tests, 0 failed; [report](../test-reports/2026-10-19-09-23-christopherbell-dev-survive-status-card.md) 16 of 16 on `0112cc7`; [PR 1550](https://github.com/azurras/christopherbell.dev/pull/1550) merged as `5e1126f` after required CI; production serves `5e1126f` with the status card and no tablist |
+
+**Shipped versus planned:** everything as planned; no deviations.
+
+**Follow-ups:** none required.
 
 ## Project
 christopherbell-dev
