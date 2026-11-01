@@ -1,7 +1,7 @@
 # Review and batch-block spam accounts on X
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -92,7 +92,7 @@ Required skill: write-chris-street-style-code
 | Inspection | New repository baseline and Chrome storage documentation inspected; no prior persistence contracts. |
 | Behavior | Confirm selection, take a cross-tab lease, block sequentially with pacing, verify success, record outcomes and allow stopping. |
 | Invariants | Match author before menu and confirmation; no blind retries; no overlapping batches; at most 20 accounts; stop on uncertainty. |
-| Boundary/API | Chrome runtime messages validate trusted extension senders and payloads; DOM controls must match expected identity. |
+| Boundary/API | Chrome runtime messages validate trusted extension senders and payloads; DOM controls must match expected identity; settings revisions reject stale editors and allowlist additions are atomic. |
 | Effects and failures | Serialized local storage writes; lease expires after owner loss; cancellation prevents the next irreversible click. |
 | Tests and evidence | Exercise allowlist, changed authors, mismatched confirmation, uncertainty, cancellation, persistence and cross-tab exclusion. |
 | Verification | Native tests and isolated Chromium exercising the actual unpacked extension; capture candidate SHA, output and cleanup. |
@@ -135,7 +135,23 @@ Disable or remove the unpacked extension to stop scanning; cancel a batch to sto
 | Account changes while queued | Medium | Revalidate current article author and target controls immediately before each click. |
 
 ## Implementation Log
-No entries yet.
+### 2026-11-01 - Implement local review and guarded blocking
+
+- **Change:** Implemented all three tasks in the new standalone spoke, using the clean branch checkout rather than a linked worktree because it has no unrelated changes. Selected local rules and review-first flow follow the user's choices.
+- **Reason:** The new repository has no existing application or shared checkout work to preserve; product sources remain separate from Builder records.
+- **Impact:** Native rule tests first failed for the missing module and then passed; isolated browser execution exercises the actual loaded extension, not only JavaScript helpers.
+
+### 2026-11-01 - Use installed Chrome for isolated runtime proof
+
+- **Change:** Browser verification supports an explicit browser channel and loads the unpacked extension through Chrome's DevTools Extensions.loadUnpacked interface. Local runs use installed Chrome 156.0.8078.74; CI uses Playwright Chromium.
+- **Reason:** Downloaded Chrome for Testing 156.0.8078.4 fails before startup with a missing side-by-side assembly. Installed Chrome launches, but its removed load-extension flag does not load extensions; its supported debugging interface does.
+- **Impact:** Browser isolation and routed fixtures remain unchanged. No user profile or Chrome installation is altered. Live signed-in X compatibility remains unverified.
+
+### 2026-11-01 - Close review races before publication
+
+- **Change:** A fresh read-only reviewer reproduced confirmation-target replacement during asynchronous checks and identified concurrent allowlist lost updates. Revalidate the unique connected confirmation and current target after the final await, add an atomic allowlist mutation, and reject stale full-settings writes using revisions.
+- **Reason:** A wrong-account confirmation must never be clicked, and separate tabs must not silently remove each other's protections.
+- **Impact:** Added failing-then-passing concurrent storage regression and browser target-change regression; rerun affected native and candidate browser checks before PR publication. No scope expansion.
 
 ## Outcome
 Pending.
