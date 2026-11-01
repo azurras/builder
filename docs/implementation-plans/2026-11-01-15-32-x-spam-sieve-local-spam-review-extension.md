@@ -177,6 +177,12 @@ Disable or remove the unpacked extension to stop scanning; cancel a batch to sto
 - **Reason:** A timer could run after a fast Linux browser had already completed a valid confirmation, making the old test falsely expect rejection. The focused callback regression guarantees the target changes at the boundary being protected, without delaying production or weakening safeguards.
 - **Impact:** Added tests/fixture.html to this follow-up's files under Fix what you hit. Local browser execution, 11 native tests, syntax/manifest and package checks rerun; replace the same-day runtime report before updating PR #3. Earlier candidate remains superseded in report follow-ups.
 
+### 2026-11-01 - Read back toolbar review delivery
+
+- **Change:** PR #3 read back MERGED as 8dc44bd751a923257a67bdc85f4d7d53c2a4a391 after successful CI on candidate 6ebb7a0. Local main matches the verified product source; unpacked package and ZIP updated.
+- **Reason:** Completes the user's request to stop Sieve obstructing Messages. The floating page launcher is superseded by Chrome's toolbar action; the closed extension occupies no page area.
+- **Impact:** [Runtime report](../test-reports/2026-11-01-16-09-x-spam-sieve-toolbar-review-without-messages-obstruction.md) records 11 native contracts, actual toolbar action execution, six successful Messages clicks across three viewports, and blocking guard regressions. User must reload the extension and X tab and use the Extensions menu; no user browser UI changed. Live signed-in X remains unverified; no source issue or external closure.
+
 ## Outcome
 > [!TIP]
 > Delivered the private standalone extension through [PR #1](https://github.com/azurras/x-spam-sieve/pull/1), merged as `8e8c17c2b4842024d08c660bfee603edfd0b99cd` after successful CI on reviewed candidate `e4b7d89`. The extension folder loads directly in Chrome without a build or API key.
