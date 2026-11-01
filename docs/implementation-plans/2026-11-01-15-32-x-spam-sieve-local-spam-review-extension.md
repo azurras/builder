@@ -159,6 +159,12 @@ Disable or remove the unpacked extension to stop scanning; cancel a batch to sto
 - **Reason:** Keep the X timeline untouched while preserving manual account review. No changes to detection, storage, permissions or blocking safeguards. Reviewed complete diff with write-chris-street-style-code; the regression failed with five per-post buttons before the fix, then passed with zero.
 - **Impact:** Candidate 58d7ed0 passes actual isolated Chrome execution, all 10 native tests, syntax/manifest checks and packaging. Live signed-in X remains unverified. The initial release's per-post manual controls are superseded by panel-only controls; the original completed delivery and its evidence remain historical.
 
+### 2026-11-01 - Read back panel-only review delivery
+
+- **Change:** Panel-only review follow-up merged through PR #2 as 37d2788403f6688dcf497e38cd79ab793ae229be after successful CI on candidate 58d7ed0; merged source matches the locally verified extension.
+- **Reason:** Completes the user's request to remove intrusive controls beside posts while preserving manual review inside Sieve.
+- **Impact:** [Follow-up runtime report](../test-reports/2026-11-01-16-00-x-spam-sieve-quiet-post-controls.md) covers zero per-post controls and unchanged blocking safeguards. Updated source folder, packaged folder and ZIP are available locally. User must reload the unpacked extension and X tab to apply it; no browser UI was automated for this follow-up.
+
 ## Outcome
 > [!TIP]
 > Delivered the private standalone extension through [PR #1](https://github.com/azurras/x-spam-sieve/pull/1), merged as `8e8c17c2b4842024d08c660bfee603edfd0b99cd` after successful CI on reviewed candidate `e4b7d89`. The extension folder loads directly in Chrome without a build or API key.
