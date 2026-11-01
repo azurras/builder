@@ -171,6 +171,12 @@ Disable or remove the unpacked extension to stop scanning; cancel a batch to sto
 - **Reason:** Moving a floating launcher to another page corner could repeat the obstruction. Chrome already provides a dedicated extension control outside X's interface. This follow-up remains inside the original review UI goals, introduces no additional permissions or storage/schema changes, and needs no new plan.
 - **Impact:** Six-file correction on candidate aad2484; initial native toolbar regression failed before implementation and passes afterward. Actual Chrome toolbar actions use Extensions.triggerAction on unique tab targets, after extension readiness. Messages is clicked with panel open and closed at 1280x1000, 390x740 and 1024x500; all prior guarded blocking regressions also pass. Live signed-in X remains unverified. Full diff reviewed with write-chris-street-style-code; no blockers found.
 
+### 2026-11-01 - Make the existing confirmation fixture deterministic
+
+- **Change:** CI on candidate aad2484 passed the toolbar/Message layout checks but exposed a timing-dependent existing confirmation-mutation fixture. Replaced zero-delay timers with deterministic microtasks for pre-check mutations and added a focused browser check of the production DOM adapter that replaces the target inside its final asynchronous callback. Candidate is now 6ebb7a0.
+- **Reason:** A timer could run after a fast Linux browser had already completed a valid confirmation, making the old test falsely expect rejection. The focused callback regression guarantees the target changes at the boundary being protected, without delaying production or weakening safeguards.
+- **Impact:** Added tests/fixture.html to this follow-up's files under Fix what you hit. Local browser execution, 11 native tests, syntax/manifest and package checks rerun; replace the same-day runtime report before updating PR #3. Earlier candidate remains superseded in report follow-ups.
+
 ## Outcome
 > [!TIP]
 > Delivered the private standalone extension through [PR #1](https://github.com/azurras/x-spam-sieve/pull/1), merged as `8e8c17c2b4842024d08c660bfee603edfd0b99cd` after successful CI on reviewed candidate `e4b7d89`. The extension folder loads directly in Chrome without a build or API key.
