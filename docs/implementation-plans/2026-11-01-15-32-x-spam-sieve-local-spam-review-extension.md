@@ -1,7 +1,7 @@
 # Review and batch-block spam accounts on X
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -154,7 +154,17 @@ Disable or remove the unpacked extension to stop scanning; cancel a batch to sto
 - **Impact:** Added failing-then-passing concurrent storage regression and browser target-change regression; rerun affected native and candidate browser checks before PR publication. No scope expansion.
 
 ## Outcome
-Pending.
+> [!TIP]
+> Delivered the private standalone extension through [PR #1](https://github.com/azurras/x-spam-sieve/pull/1), merged as `8e8c17c2b4842024d08c660bfee603edfd0b99cd` after successful CI on reviewed candidate `e4b7d89`. The extension folder loads directly in Chrome without a build or API key.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met against the supported synthetic interface | [Candidate runtime report](../test-reports/2026-11-01-15-50-x-spam-sieve-local-spam-review-extension.md): explained suggestions, manual queueing, inert post text and no automatic selection. |
+| AC-2 | ✅ Met against the supported synthetic interface | Runtime checks exercised explicit selection and confirmation, sequential pacing, cross-tab exclusion, cancellation, changed author and wrong/changed/replaced/duplicate confirmations, plus uncertain-result stop. |
+| AC-3 | ✅ Met | Ten native tests include concurrent writes, bounded history, atomic allowlist additions and stale settings rejection; browser reload confirms saved rules, allowlist and history. |
+| AC-4 | ✅ Met | [CI run](https://github.com/azurras/x-spam-sieve/actions/runs/41354097230) passed native tests, syntax/manifest checks, Linux Chromium runtime and packaging; PR readback is MERGED; source and package manifest SHA-256 match. |
+
+Shipped local text rules and manual review, not definitive AI/bot classification. No remaining code-review blockers. Live signed-in X behavior remains unverified; unsupported markup or post disappearance can safely stop a batch. No Chrome Web Store publication or installation into the user's browser was performed. Successful browser runs cleaned their owned profiles; automatic approval review rejected cleanup of the initial failed-run temporary profile as blocked by policy, so that profile remains. The local checkout is on merged main; no source issue exists and external closure does not apply.
 
 ## Project
 x-spam-sieve
