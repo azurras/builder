@@ -153,6 +153,12 @@ Disable or remove the unpacked extension to stop scanning; cancel a batch to sto
 - **Reason:** A wrong-account confirmation must never be clicked, and separate tabs must not silently remove each other's protections.
 - **Impact:** Added failing-then-passing concurrent storage regression and browser target-change regression; rerun affected native and candidate browser checks before PR publication. No scope expansion.
 
+### 2026-11-01 - Move intrusive post controls into the panel
+
+- **Change:** User found per-post controls intrusive. Removed all injected review buttons from tweet articles and moved manual queueing to Review loaded accounts inside the existing Sieve panel; updated README and browser regression. This is a three-file fast-track follow-up inside the original review workflow goals.
+- **Reason:** Keep the X timeline untouched while preserving manual account review. No changes to detection, storage, permissions or blocking safeguards. Reviewed complete diff with write-chris-street-style-code; the regression failed with five per-post buttons before the fix, then passed with zero.
+- **Impact:** Candidate 58d7ed0 passes actual isolated Chrome execution, all 10 native tests, syntax/manifest checks and packaging. Live signed-in X remains unverified. The initial release's per-post manual controls are superseded by panel-only controls; the original completed delivery and its evidence remain historical.
+
 ## Outcome
 > [!TIP]
 > Delivered the private standalone extension through [PR #1](https://github.com/azurras/x-spam-sieve/pull/1), merged as `8e8c17c2b4842024d08c660bfee603edfd0b99cd` after successful CI on reviewed candidate `e4b7d89`. The extension folder loads directly in Chrome without a build or API key.
