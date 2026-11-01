@@ -165,6 +165,12 @@ Disable or remove the unpacked extension to stop scanning; cancel a batch to sto
 - **Reason:** Completes the user's request to remove intrusive controls beside posts while preserving manual review inside Sieve.
 - **Impact:** [Follow-up runtime report](../test-reports/2026-11-01-16-00-x-spam-sieve-quiet-post-controls.md) covers zero per-post controls and unchanged blocking safeguards. Updated source folder, packaged folder and ZIP are available locally. User must reload the unpacked extension and X tab to apply it; no browser UI was automated for this follow-up.
 
+### 2026-11-01 - Remove the floating launcher from X
+
+- **Change:** User reported that the floating Sieve button obstructed X's Messages control. Removed the floating page button entirely and added a Chrome toolbar action that toggles the existing panel. Closed panel host occupies no page area; the opened panel is top-aligned and height-bounded to leave the lower messaging area free. Updated README and native/browser checks.
+- **Reason:** Moving a floating launcher to another page corner could repeat the obstruction. Chrome already provides a dedicated extension control outside X's interface. This follow-up remains inside the original review UI goals, introduces no additional permissions or storage/schema changes, and needs no new plan.
+- **Impact:** Six-file correction on candidate aad2484; initial native toolbar regression failed before implementation and passes afterward. Actual Chrome toolbar actions use Extensions.triggerAction on unique tab targets, after extension readiness. Messages is clicked with panel open and closed at 1280x1000, 390x740 and 1024x500; all prior guarded blocking regressions also pass. Live signed-in X remains unverified. Full diff reviewed with write-chris-street-style-code; no blockers found.
+
 ## Outcome
 > [!TIP]
 > Delivered the private standalone extension through [PR #1](https://github.com/azurras/x-spam-sieve/pull/1), merged as `8e8c17c2b4842024d08c660bfee603edfd0b99cd` after successful CI on reviewed candidate `e4b7d89`. The extension folder loads directly in Chrome without a build or API key.
