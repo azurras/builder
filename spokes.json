@@ -10,6 +10,13 @@
         "liveCommitUrl": "https://www.christopherbell.dev/actuator/info",
         "liveCommitPattern": "-dev\\.([0-9a-f]{40})"
       }
+    },
+    {
+      "slug": "x-spam-sieve",
+      "name": "x-spam-sieve",
+      "repository": "https://github.com/azurras/x-spam-sieve.git",
+      "defaultBranch": "main",
+      "description": "Local-first Chrome extension for reviewing and batch-blocking spam accounts on X; its README owns build and run instructions."
     }
   ],
   "projects": [
