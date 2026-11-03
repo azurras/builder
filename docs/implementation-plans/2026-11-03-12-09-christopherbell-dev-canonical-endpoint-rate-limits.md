@@ -1,7 +1,7 @@
 # Canonical endpoint rate limits
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -91,7 +91,30 @@ Revert the scoped commit through a verified PR if necessary. No production data 
 | Unit fixtures conceal production semantics | Medium | Real Mongo/servlet/browser proof on the local candidate |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-11-03 - Encoded paths reproduced and repaired
+
+**Change:** Regression suite reproduced the encoded alias and malformed-path failures; segment-aware parsed matching now shares literal endpoint buckets.
+
+**Reason:** Preserve MVC path segmentation instead of decoding separators globally.
+
+**Impact:** 43 combined routing/session tests pass; actual servlet proof remains before PR.
+
+### 2026-11-03 - Preserve configured Ant grammar during canonical matching
+
+**Change:** Fresh security review reproduced a custom-rule regression: Ant's formerly supported nonterminal ** pattern was rejected by PathPatternParser. Retained Ant's matcher with explicit decoded request-segment tokenization and unchanged pattern tokenization, preserving separator boundaries, whitespace and case. Added nonterminal **, whitespace and literal-percent regression checks.
+
+**Reason:** The fix must canonicalize requests without changing the configured pattern language. Ant's raw-prefix shortcut cannot examine encoded tokens; the private matcher disables that shortcut while both explicit tokenizers retain the original whitespace behavior. Regression checks cover encoded literals in first and later segments so framework changes cannot silently reintroduce the bypass.
+
+**Impact:** The custom-pattern failure was observed before correction, then all 18 focused filter tests and style checks passed. Final full native checks and application execution follow the corrective commit. Builds run before startup because the check task also rebuilds bootJar; concurrent building invalidated an earlier server artifact and that run is not accepted as evidence.
+
+### 2026-11-03 - Final candidate verification
+
+**Change:** Completed native checks before launching committed candidate `406620306cf4e4a97e6c7240747b0a7f057a91f6`; then executed isolated HTTP, browser and production catalog-consumer proof without rebuilding the running artifact.
+
+**Reason:** Final evidence must identify the exact reviewed candidate. Earlier timed-out or build-invalidated attempts are superseded explicitly in the report.
+
+**Impact:** Native checks passed (2,192 website tests, 126 library tests; zero failures). All scoped runtime cases and owned-process/listener cleanup passed. Published runtime reports retain inputs, outputs and limits; PR/CI and automatic deployment remain the next delivery phase.
 
 ## Outcome
 Pending.

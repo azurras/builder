@@ -1,7 +1,7 @@
 # Preserve messages during overlapping browser actions
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -91,7 +91,22 @@ Revert the scoped commit through a verified PR if necessary. No production data 
 | Unit fixtures conceal production semantics | Medium | Real Mongo/servlet/browser proof on the local candidate |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-11-03 - Late completions and refresh failures guarded
+
+**Change:** Two Node regressions reproduced archive selection loss and send draft loss; completion guards now include selection/input generations. Review found suppressed current refresh errors; fixed with stage-specific generations and three additional tests.
+
+**Reason:** Keep newer user work authoritative while preserving visible failures for the current view.
+
+**Impact:** All14 focused Node checks pass; browser proof remains. Tests live in existing message fixture.
+
+### 2026-11-03 - Final candidate verification
+
+**Change:** Completed native checks before launching committed candidate `406620306cf4e4a97e6c7240747b0a7f057a91f6`; then executed isolated HTTP, browser and production catalog-consumer proof without rebuilding the running artifact.
+
+**Reason:** Final evidence must identify the exact reviewed candidate. Earlier timed-out or build-invalidated attempts are superseded explicitly in the report.
+
+**Impact:** Native checks passed (2,192 website tests, 126 library tests; zero failures). All scoped runtime cases and owned-process/listener cleanup passed. Published runtime reports retain inputs, outputs and limits; PR/CI and automatic deployment remain the next delivery phase.
 
 ## Outcome
 Pending.

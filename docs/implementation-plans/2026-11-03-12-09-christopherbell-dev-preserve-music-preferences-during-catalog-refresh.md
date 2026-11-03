@@ -1,7 +1,7 @@
 # Preserve music preferences during catalog refresh
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -91,7 +91,22 @@ Revert the scoped commit through a verified PR if necessary. No production data 
 | Unit fixtures conceal production semantics | Medium | Real Mongo/servlet/browser proof on the local candidate |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-11-03 - Metadata write ownership narrowed
+
+**Change:** Three real standalone Mongo regressions reproduced flags lost during success, failure and missing-file saves; metadata-only updates preserve both current preferences.
+
+**Reason:** Repository save is shared by scanner and metadata refresh, so one atomic field-owned write fixes all callers.
+
+**Impact:** No schema migration; test fixture requires exact loopback test database and cleans only owned track paths.
+
+### 2026-11-03 - Final candidate verification
+
+**Change:** Completed native checks before launching committed candidate `406620306cf4e4a97e6c7240747b0a7f057a91f6`; then executed isolated HTTP, browser and production catalog-consumer proof without rebuilding the running artifact.
+
+**Reason:** Final evidence must identify the exact reviewed candidate. Earlier timed-out or build-invalidated attempts are superseded explicitly in the report.
+
+**Impact:** Native checks passed (2,192 website tests, 126 library tests; zero failures). All scoped runtime cases and owned-process/listener cleanup passed. Published runtime reports retain inputs, outputs and limits; PR/CI and automatic deployment remain the next delivery phase.
 
 ## Outcome
 Pending.

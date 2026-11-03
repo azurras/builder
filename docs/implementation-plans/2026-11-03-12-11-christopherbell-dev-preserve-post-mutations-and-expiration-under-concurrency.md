@@ -1,7 +1,7 @@
 # Preserve post mutations and expiration under concurrency
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -93,7 +93,38 @@ Revert the scoped commit through a verified PR if necessary. No production data 
 | Unit fixtures conceal production semantics | Medium | Real Mongo/servlet/browser proof on the local candidate |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-11-03 - Atomic persistence design refined
+
+**Change:** Use commuting signed intermediate engagement deltas with atomic derived expiry; targeted post edit CAS; cleanup conditionally removes due roots only. Add optional PostLike.creationToken for exact limiter rollback.
+
+**Reason:** A process-local mutex or unchecked lease cannot protect standalone Mongo writes across instances; floor-at-zero loses a reordered negative delta.
+
+**Impact:** Optional field is backward compatible; inspect manifest allowlist, no migration required. Generic crash recovery and subtree admission redesign are not claimed; selected races must pass real-Mongo regressions.
+
+### 2026-11-03 - Preserve sibling read-path and architecture contracts
+
+**Change:** Canonical reply expiration now also covers topics/people discovery, sitemap counts/pages and federation outbox/delivery. A shared post.api.PostExpirationAggregation supplies the supported query boundary. Added real Mongo regressions for stale past/future reply projections and active-root pagination.
+
+**Reason:** Removing stale bulk reply copies requires every active-content reader to consult the authoritative root before filtering/counting/paging. Architecture checks reject new federation dependencies on internal post.expiration, so the shared boundary lives in post.api rather than weakening the freeze rule.
+
+**Impact:** Broader sibling read-path updates are required for compatibility within the same four post findings. Legacy contract fixtures now use valid root IDs and assert canonical deadlines; no architecture safeguard is bypassed. Three discovery and two federation regressions were observed failing before correction and passing afterward. Full-check failures are being repaired before publication.
+
+### 2026-11-03 - Preserve committed state after validation read failures
+
+**Change:** Final independent review identified an error path where a transient validation read after a committed like removed its edge but retained the committed counter/deadline. Added a real-Mongo service regression before correcting the rollback boundary.
+
+**Reason:** Post-commit read failures are distinct from pre-counter admission rejection. Removing an already committed edge actively creates the phantom extension that finding 5 requires us to prevent.
+
+**Impact:** Keep committed like state when later reads fail; retain exact-incarnation rollback only for admission rejection before the counter effect. Candidate runtime and affected checks are rerun on the final corrective commit. Earlier successful evidence remains historical and is not presented as proof of the final commit.
+
+### 2026-11-03 - Final candidate verification
+
+**Change:** Completed native checks before launching committed candidate `406620306cf4e4a97e6c7240747b0a7f057a91f6`; then executed isolated HTTP, browser and production catalog-consumer proof without rebuilding the running artifact.
+
+**Reason:** Final evidence must identify the exact reviewed candidate. Earlier timed-out or build-invalidated attempts are superseded explicitly in the report.
+
+**Impact:** Native checks passed (2,192 website tests, 126 library tests; zero failures). All scoped runtime cases and owned-process/listener cleanup passed. Published runtime reports retain inputs, outputs and limits; PR/CI and automatic deployment remain the next delivery phase.
 
 ## Outcome
 Pending.
