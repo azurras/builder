@@ -1,7 +1,7 @@
 # Preserve sessions during concurrent renewal
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -109,7 +109,15 @@ Revert the scoped commit through a verified PR if necessary. No production data 
 **Impact:** Native checks passed (2,192 website tests, 126 library tests; zero failures). All scoped runtime cases and owned-process/listener cleanup passed. Published runtime reports retain inputs, outputs and limits; PR/CI and automatic deployment remain the next delivery phase.
 
 ## Outcome
-Pending.
+> [!TIP]
+> Delivered findings 3; verified candidate `40662030` merged and deployed through the supported CI-gated pipeline.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | ✅ Met: selected invariants and negative cases pass native regression checks and actual local execution | [Runtime report](../test-reports/2026-11-03-16-13-christopherbell-dev-preserve-sessions-during-concurrent-renewal.md) |
+| AC-2 | ✅ Met: [PR #1557](https://github.com/azurras/christopherbell.dev/pull/1557) is MERGED as `908a51597d30f58b823cbf5c006529f5769cc2af`; required CI passed; automatic deployment readback passed; dated delivery memory published with this completed plan | [PR](https://github.com/azurras/christopherbell.dev/pull/1557), [production identity](https://www.christopherbell.dev/actuator/info), [dated memory](../session-memory/2026-11-03.md) |
+
+No source issue; external closure does not apply. Details of independent review findings, corrections, failed attempts and reruns are preserved in Implementation Log and the runtime report. No further defect from this selected group is left pending.
 
 ## Project
 christopherbell-dev
