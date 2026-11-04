@@ -205,7 +205,7 @@ removed <temporary-root>\cbell-jdk-8e93601afdc641f4878c0f2c1aa273c8
 ```
 
 ## Evidence
-- Machine-specific temporary path prefixes are abbreviated as <scratch> and <temporary-root>; original absolute paths remain in local raw evidence.
+- Machine-specific temporary path prefixes are abbreviated as `<scratch>` and `<temporary-root>`; original absolute paths remain in local raw evidence.
 - Candidate-specific API/startup/identity/cleanup were recorded as they ran using record_run.py; browser inputs and actual observations were recorded during CUA verification.
 - Native commands: Invoke-Gradle.ps1 :website:build; node --check for touched JS modules; final all-JS runner; committed Invoke-Gradle.ps1 :website:jsTest :website:bootJar.
 - Full native build: BUILD SUCCESSFUL in 7m 1s. Java XML summary: tests=2199, failures=0, errors=0, skipped=126. JS final: 438 passed, 0 failed.
@@ -214,7 +214,7 @@ removed <temporary-root>\cbell-jdk-8e93601afdc641f4878c0f2c1aa273c8
 ## Bugs / Follow-ups
 - Resolved verification-harness attempt: the first API probe used protected /actuator/health and correctly received 403. It was corrected to documented /actuator/health/readiness (200 UP), and the complete API case passed on the same unchanged candidate. The failed attempt remains in the raw evidence; final cases above use its successful retest.
 - Accepted first-release limits: positions are transient and reset after idle reconnection/restart; presence assumes one app process; existing 300 mutations/minute/IP limit can cause visible backoff for larger shared-IP groups. No production data was accessed during local verification.
-- The 126 native Java skips are configured database-contract cases, not passes. The changed HTTP and persistence-facing behavior was exercised against the disposable local test database.
+- Native Java reported 126 configured skips: 123 Mongo contract/integration cases and 3 platform/environment-specific filesystem cases. None are counted as passes. The changed HTTP and persistence-facing behavior was exercised against the disposable local test database.
 
 ## Document Status
 complete

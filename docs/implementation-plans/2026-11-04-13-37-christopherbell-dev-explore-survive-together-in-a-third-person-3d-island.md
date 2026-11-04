@@ -1,7 +1,7 @@
 # Explore Survive together in a third-person 3D island
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -66,7 +66,7 @@ A joined 3D session opts into location rules enforced at the existing action ser
 |---|---|
 | survive/SurvivePresence.java and model/SurviveMovement.java | Bounded poses, movement validation and landmark rules. |
 | survive/SurviveService.java and SurviveController.java | Resolve ownership, movement pulse, spatial action enforcement. |
-| configuration/security/SecurityConfig.java and static/js/lib/api.js | Exact public movement route and browser API constant. |
+| configuration/security/SecurityConfig.java, its README.md and static/js/lib/api.js | Exact public movement route and browser API constant. |
 | static/js/survive-world.js, survive-world-renderer.js, survive-world-model.js | Scene geometry, camera, input, presence transport and contextual interactions. |
 | static/js/survive.js, templates/survive.html, static/css/survive.css | Mount/dispose world, state updates, responsive canvas and fallback. |
 | survive Java tests and JS world tests | Identity, movement, proximity, lifecycle and input regressions. |
@@ -166,8 +166,46 @@ Revert the spoke change through a checked PR. No saved-world schema changes are 
 - **Reason:** The user-facing multiplayer and 3D claims require actual rendered and cross-client evidence on the proposed commit. The scratch API probe initially requested protected /actuator/health; corrected it to the documented public readiness route, retained the failed attempt and passed the corrected probe without changing product code.
 - **Impact:** Runtime uses only disposable loopback Mongo database test. Both browser test tabs closed and viewport override reset. Native database-contract skips are recorded, not represented as passes. Runtime report is being saved/published before PR creation.
 
+### 2026-11-04 - Publish candidate and start deployment-aware merge queue
+
+- **Change:** Published the complete eight-case runtime report on Builder main in 7fe4464, passed the candidate-specific spoke preflight, pushed 3eb9788e and opened christopherbell.dev PR #1558. Trusted-comment triage found no requested changes. Started the supported deployment-aware merge queue for PR 1558 after confirming production serves current main 908a515.
+- **Reason:** The authorized delivery includes required CI, merge and supported automatic deployment; no handoff or separate merge approval is needed.
+- **Impact:** Waiting on CI/deployment through the bounded queue helper. The code and verification are complete; merge and production readback remain outstanding.
+
+### 2026-11-04 - Merge verified island after green CI
+
+- **Change:** PR #1558 merged as 7b91e7697621c4480a7f52174082f6d23e97b190 with head 3eb9788e7acefddec1a9a113751d607101f3273c. Readback shows MERGED. Build, dependency-review, CodeQL and all language analyses passed; Windows build took 8m37s.
+- **Reason:** Required checks passed on the reviewed, locally proven candidate, and the deployment-aware queue released the merge only after production served its previous main head.
+- **Impact:** The supported automatic deployment of the merged main commit is now pending. The bounded queue continues until production serves the merge; no direct deployment or production-data changes are being performed.
+
+### 2026-11-04 - Pass merged-main CI and clarify skipped checks
+
+- **Change:** The merged main commit's CI Build run 41904580163 completed successfully. Native-check skip classification was read back from XML: 123 Mongo contract/integration cases and 3 platform/environment-specific filesystem cases; corrected the report's earlier overly broad skip description.
+- **Reason:** Production release is CI-gated on the merged commit, and evidence must distinguish actual passes from configured skips accurately.
+- **Impact:** The deployment-aware queue is still checking live commit identity. GitHub's Gradle cache-save annotations were non-blocking warnings; the build and tests succeeded. No runtime or product-code changes were made after candidate verification.
+
+### 2026-11-04 - Verify live island and complete delivery
+
+- **Change:** Production now serves exact merge 7b91e7697621c4480a7f52174082f6d23e97b190. The deployment-aware queue exited 0; independent read-only smoke checks returned 200 for the page and four game modules with candidate-matching content, and 204 for anonymous game GET. Recorded all acceptance criteria as met.
+- **Reason:** Successful merge alone was insufficient; delivery required live commit and served-behavior readback after the supported automatic deployment.
+- **Impact:** Delivery is complete with the documented first-release limits. Local candidate/Mongo and browser cleanup passed. Final plan, corrected skip accounting and dated memory are being published; no source issue requires external closure.
+
 ## Outcome
-Pending.
+> [!TIP]
+> Delivered and live. [PR #1558](https://github.com/azurras/christopherbell.dev/pull/1558) merged as `7b91e7697621c4480a7f52174082f6d23e97b190`; production reports that exact commit.
+
+| AC | Result | Evidence |
+|---|---|---|
+| AC-1 | Met: generated perspective 3D island, following third-person camera, keyboard, held pointer and destination movement; responsive layout and accessible fallback. | [Runtime report](../test-reports/2026-11-04-14-03-christopherbell-dev-shared-3d-survive-island.md), cases 4-6; seven world regressions and real desktop/phone rendering. |
+| AC-2 | Met: independent Chrome and IAB survivors observed each other moving; ownership, finite coordinates, speed, sequence, expiry and status rules enforced by Java. | Runtime report cases 3 and 5; presence/service/controller tests; stale-avatar failure reproduced and corrected, then independent review confirmed no remaining blockers. |
+| AC-3 | Met: forest, quarry, hunting grounds, camp and shore provide contextual actions while durable survival and existing saves remain intact. | Runtime report cases 3, 5-7: wood gathering, stone gathering, hunt, defend, flee, day/dusk, refresh inventory and departure; native saved-service regressions pass. |
+| AC-4 | Met: committed local proof was published before PR; native checks, PR and merged-main CI passed; merge and automatic deployment verified. | Candidate `3eb9788e`, Builder report checkpoint `7fe4464`, PR #1558, merge `7b91e76`, CI Build runs 41903051616 and 41904580163, deployment-aware queue exited 0, production smoke readback below. |
+
+Production GET checks returned 200 for `/survive` and all four game modules. After normalizing line endings, their contents match the verified candidate: survive.js `9ce628684b06297a`, survive-world.js `b09c3ec9bb312f3c`, survive-world-model.js `9b1d5c25795ac58b`, survive-world-renderer.js `6c9cc3d9859b79ff` (SHA-256 prefixes). Anonymous game GET returned 204 without creating a survivor. Production verification sent GETs only.
+
+Local build: 2199 Java tests, zero failures/errors and 126 configured skips (123 Mongo cases and 3 filesystem/environment cases); all 438 JS tests and Windows Pester/Checkstyle gates passed. Both candidate processes and disposable Mongo listeners were stopped and owned directories removed; browser tabs closed and viewport override reset.
+
+Accepted first-release limits remain those in Design/Risks: transient positions, one application process and existing per-IP rate limits with visible backoff. No source issue; external closure does not apply.
 
 ## Project
 christopherbell-dev
