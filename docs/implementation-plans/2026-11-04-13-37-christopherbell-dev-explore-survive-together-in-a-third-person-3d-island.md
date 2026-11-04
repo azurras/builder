@@ -1,7 +1,7 @@
 # Explore Survive together in a third-person 3D island
 
 ## Document Status
-ready-for-execution
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -141,7 +141,30 @@ Revert the spoke change through a checked PR. No saved-world schema changes are 
 | Large shared-IP groups hit existing rate limit | Medium | Two pulses/second per active client, pause hidden tabs and back off visibly on failure; do not weaken limits. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-11-04 - Begin approved island implementation
+
+- **Change:** Started implementation in the managed worktree after independent design/plan review reported ready; initial behavioral tests expose missing movement and 3D model components.
+- **Reason:** The user approved the third-person shared island. Review identified timeout, stale sequence, per-IP backoff and non-writing presence requirements, which are retained in implementation.
+- **Impact:** The authoritative checkout remains untouched. Pulse uses read-only ownership resolution, adaptive backoff and explicit sequence reconciliation; survival commands retain durable atomicity.
+
+### 2026-11-04 - Implement island and recoverable presence
+
+- **Change:** Added an authenticated movement/leave fallback route, controller/service regression coverage and the native 3D world modules. Early checks passed four presence tests and 434 JavaScript tests; subsequent expanded checks exposed a CSRF-test fixture ordering dependency and a fake-DOM canvas capability mismatch, both corrected without weakening assertions.
+- **Reason:** Graphics loss must release only the caller's transient pose so accessible text controls remain usable. Reviewer requirements also prompted bounded aborts, adaptive shared-IP backoff, sequence reconciliation and physical command checks under the service lock.
+- **Impact:** No stored schema changes. Flee relocation occurs after durable commit. World rendering preserves status-card and SVG fallback behavior; test-only context isolation now prevents movement CSRF setup from contaminating the original cookie test.
+
+### 2026-11-04 - Review and developmental layout findings
+
+- **Change:** Independent implementation review found stale remote avatars after movement outages; a new lifecycle regression failed with six labels instead of five, then passed after clearing disconnected poses. Seven world tests now pass, including abort/dispose, prediction, projection, landmark filtering and fallback. A developmental browser layout check confirmed genuine perspective 3D and exposed SVG hidden-property incompatibility, corrected with the actual hidden attribute and a regression.
+- **Reason:** Runtime and independent review must establish visible behavior, not only successful compilation. The layout run was developmental on the earlier packaged artifact and is not the final committed-candidate proof.
+- **Impact:** Developmental candidate and disposable Mongo were stopped, both ports read back with zero listeners and owned temporary paths removed. The final candidate still requires fresh packaging, committed runtime verification, published report and delivery. The security README now includes both exact movement routes.
+
+### 2026-11-04 - Prove committed candidate locally
+
+- **Change:** Candidate 3eb9788e passed the full :website:build (2199 Java tests, zero failures/errors, 126 configured skips), all 438 JavaScript tests, Checkstyle and Windows Pester gates. Repackaged the committed candidate and verified its actuator build identity. Local API checks and independent Chrome/IAB browser sessions proved movement, physical action guards, sequence/teleport rejection, forest gathering, quarry, hunting, defend/flee, phase change, refresh preservation, player departure and phone-sized held pointer/keyboard controls.
+- **Reason:** The user-facing multiplayer and 3D claims require actual rendered and cross-client evidence on the proposed commit. The scratch API probe initially requested protected /actuator/health; corrected it to the documented public readiness route, retained the failed attempt and passed the corrected probe without changing product code.
+- **Impact:** Runtime uses only disposable loopback Mongo database test. Both browser test tabs closed and viewport override reset. Native database-contract skips are recorded, not represented as passes. Runtime report is being saved/published before PR creation.
 
 ## Outcome
 Pending.
