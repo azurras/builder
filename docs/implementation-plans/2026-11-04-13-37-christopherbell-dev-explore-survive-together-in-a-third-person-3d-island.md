@@ -1,7 +1,7 @@
 # Explore Survive together in a third-person 3D island
 
 ## Document Status
-complete
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -195,6 +195,14 @@ Revert the spoke change through a checked PR. No saved-world schema changes are 
 - **Change:** Deleted the merged remote feature branch and verified the local worktree has no modified files. The native app refused archive_worktree with: The task's primary checkout cannot be removed.
 - **Reason:** The worktree created for this delivery is now the chat's protected primary checkout. Removing it manually would work around the app's protection, so the clean checkout is retained.
 - **Impact:** Product delivery remains complete and live, all Builder records are published, and candidate/Mongo/browser cleanup passed. Only the clean app-owned checkout remains; no unrelated checkout was changed or removed.
+
+### 2026-11-04 - Make actions rewards and fights visible inside the island
+
+- **Change:** The user requested more obvious in-world feedback for actions, gains and combat. Extend the existing island presentation with a viewport result/pending notice, projected resource/damage numbers, a persistent enemy name/health warning, and action buttons inside the viewport. Place combat enemies in front of the follow camera rather than behind the survivor's facing direction. Continue in codex/survive-world-feedback-20261104 from current origin/main 7b91e76 in the retained clean worktree.
+- **Reason:** Current results appear below the canvas and combat placement follows character heading, so an encounter may occur outside the camera view. The user should understand outcomes without reading the side panel. This is a presentation correction inside AC-1 and AC-3, with no gameplay or storage change.
+- **Impact:** Add survive-world-feedback.js and its tests; update survive-world.js, survive-world-model.js, survive-world-renderer.js, survive.js, survive.html, survive.css and frontend documentation. Existing server snapshots remain authoritative. New transient notices use verified per-survivor revision changes, suppress initial/repeated polls, expire on the animation clock, reset on survivor changes and respect reduced motion. Persistent combat UI remains until combat ends, including initial resume. Existing native application and delivery evidence stays historical; the new committed candidate needs JS checks, semantic review and a fresh isolated runtime report before PR.
+
+**Before-Edit Brief:** Behavior: show pending and confirmed outcomes in the viewport, gains/damage anchored to player/enemy, and visible combat state/controls. Invariants: no fabricated gains, repeated-poll replay, credential exposure, rule changes or obscured keyboard/touch controls. Boundary/API: consume existing state/revision only; no new endpoints. Effects and failures: presentation owns bounded DOM notices and frame-based expiry, displays command errors, and resets on identity changes/disposal; disconnected/rejected commands never award anything. Tests and evidence: meaningful transition/deduplication/reset/combat tests, node --check, :website:jsTest, and committed local browser checks for success, failure, gain and combat at desktop/phone sizes, followed by CI and automatic-deployment readback.
 
 ## Outcome
 > [!TIP]
