@@ -190,6 +190,12 @@ Revert the spoke change through a checked PR. No saved-world schema changes are 
 - **Reason:** Successful merge alone was insufficient; delivery required live commit and served-behavior readback after the supported automatic deployment.
 - **Impact:** Delivery is complete with the documented first-release limits. Local candidate/Mongo and browser cleanup passed. Final plan, corrected skip accounting and dated memory are being published; no source issue requires external closure.
 
+### 2026-11-04 - Read back workspace cleanup protection
+
+- **Change:** Deleted the merged remote feature branch and verified the local worktree has no modified files. The native app refused archive_worktree with: The task's primary checkout cannot be removed.
+- **Reason:** The worktree created for this delivery is now the chat's protected primary checkout. Removing it manually would work around the app's protection, so the clean checkout is retained.
+- **Impact:** Product delivery remains complete and live, all Builder records are published, and candidate/Mongo/browser cleanup passed. Only the clean app-owned checkout remains; no unrelated checkout was changed or removed.
+
 ## Outcome
 > [!TIP]
 > Delivered and live. [PR #1558](https://github.com/azurras/christopherbell.dev/pull/1558) merged as `7b91e7697621c4480a7f52174082f6d23e97b190`; production reports that exact commit.
