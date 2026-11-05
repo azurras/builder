@@ -108,6 +108,34 @@ Update each row with a child plan and evidence. Use planned, in progress, verifi
 | 05 · World, travel and community | Planned. Expand outward after the first assignment and party loop work. |
 | P · Performance and reliability | Ongoing across all slices. Record browser and server evidence separately. See the implementation log for baseline fixes. |
 
+### First outing playbook
+
+These are proposed Survive rules for the first outing and follow-up slices. FFXI supplies the interaction reference. The child plan will record tuning values and how the rules apply to older saves.
+
+| Step | First playable outing | Evidence |
+|---|---|---|
+| 1 · Meet at camp | Target another player, invite from Commands and accept or decline through the party menu. Put the invitation and membership changes in chat. Keep a compact party status display in the game view. | Keyboard and controller can form the same party. A stale invite cannot join a new party or the wrong character. |
+| 2 · Take an assignment | Confirm on the waystation NPC to speak. Give each player their own assignment state and use a named landmark on the map. Make acceptance and completion readable in chat. | Either player can reread the objective, find the route from the map and return to the same NPC. |
+| 3 · Check and pull | Check explains relative danger. The field has a passive creature and a threatening patrol. Free, party-claimed and other-party targets stay visible and have a readable label or marker alongside any color cue. Use existing movement and Engage for the first pull. | Both players can avoid an aggressive patrol, or choose one and bring it into a clear area. A third session can identify the claim and cannot take the final blow. |
+| 4 · Fight together | Party members attack one enemy with one health pool. A second player's compatible TP skill within the timing window completes the chain. Chat shows the sequence and the field shows the hit and chain effect. | Both clients agree on enemy identity, HP, chain outcome and defeat. Repeat with a late closer and with one client hidden. |
+| 5 · Recover or retreat | Disengage stops that player's auto-attacks. Remaining participants keep fighting. Define how a chase ends and when the enemy resets after the last participant leaves. The follow-up roles slice adds field healing with a visible recovery pose and interruption by movement or damage. | With one player disengaged, the other can finish. If everyone retreats, the enemy returns to its route and the encounter yields no reward. |
+| 6 · Award and return | Record fight credit separately from NPC turn-in. Use the same defeat for all eligible players and issue each assignment reward once. Report inventory limits or a missed credit in chat. | Simultaneous finishing attacks, repeated turn-in and a reconnect after a confirmed result yield one defeat and one reward per eligible character. |
+
+The Windows manual documents contextual Confirm actions, party invites through the log, distinct target colors, Call for Help, and healing that stops when the player moves or takes a hit. The official battle guide describes coordinated weapon skills and magic bursts. These are the references for the interactions above. [Windows manual, printed pp. 20–27](https://support.na.square-enix.com/document/manual/20/FFXI_manual_vc09_AE5.pdf) · [Official battle guide](https://www.playonline.com/ff11us/guide/system/battle.html?pageID=system)
+
+### Follow-up decisions to keep visible
+
+| Decision | Where it belongs |
+|---|---|
+| Party discovery, leader transfer, chat filters and support for up to six players | SOC-01. Two players prove the first outing. Test a full party before calling party controls complete. |
+| Ranged pulls, social aggro, threat from damage and healing, and Call for Help | COM-02. Document enemy-family behavior and what opening a claim does to fight credit before enabling outside attacks. |
+| Knockout, return point, Raise-style assistance and recovery costs | JOB-01 and COM-02. Survive currently has terminal death. Decide how MMO knockout applies to existing characters and survival rules before changing that behavior. |
+| XP eligibility, drop distribution and lot/pass for rare party loot | JOB-01 and ECON-01. Keep assignment rewards separate and settle distance, disconnect, full inventory and tie cases before introducing contested loot. |
+
+### How to record changes and fixes
+
+Give each newly discovered need a ledger ID or attach it to the closest existing row. For a fix, record the player-visible symptom, the reproduction, the owning child plan and the check that proves recovery. Record what changed in the child and append a dated entry here when it changes scope, an acceptance check or the delivery state. Link the evidence before marking a row verified local or verified live.
+
 ## Expected Changes
 
 | File or area | Change |
@@ -156,7 +184,7 @@ This planning change modifies Builder documents only. Application runtime proof 
 
 | AC | Native check | Local runtime check |
 |---|---|---|
-| AC-1 | Shared HP, claim, concurrency, restart, chain timing and idempotent reward tests. | Two independent browser sessions complete the outing, then repeat a disconnect and contested final strike. |
+| AC-1 | Invitation lifecycle, shared HP, claim, concurrency, restart, chain timing and idempotent reward tests. | Two independent browser sessions complete the outing, then repeat a disconnect, contested final strike and full retreat. Use a third session to verify claim visibility and outsider access. |
 | AC-2 | Asset, renderer and control checks plus capture reproducibility. | Repeat fixed desktop views and moving combat in daylight and dusk. Save matched captures, action clips and review decisions. |
 | AC-3 | Tests for threat, range, TP, spell interrupts, XP and chat order. | Play the roles together and reproduce a valid chain/burst and a mistimed attempt. |
 | AC-4 | Tests for skill gates, tool requirements, inventory, trade atomicity and old saves. | Complete the gather-to-trade loop and reconnect between steps. |
@@ -190,6 +218,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** The North Gate route and exact target selection shipped. Browser allocation work in #1574 reused rendering buffers and was verified live by build identity. #1575 merged the version-checked movement snapshot path. Its isolated check measured 100 indexed version checks and zero full world reads for 100 accepted pulses.
 - **Reason:** The user wants a richer world with less browser and server overhead while preserving capacity.
 - **Impact:** WORLD-01 and UI-01 have usable foundations. COM-01 remains open. PERF-01 still needs live readback for #1575 and representative sustained browser and multiplayer measurements. [Route report](../test-reports/2026-11-05-13-29-christopherbell-dev-survive-north-gate-route-and-camera.md) · [Targeting report](../test-reports/2026-11-05-13-45-christopherbell-dev-survive-exact-field-targets.md) · [Browser allocation report](../test-reports/2026-11-05-14-19-christopherbell-dev-survive-render-allocation.md) · [Movement database report](../test-reports/2026-11-05-14-27-christopherbell-dev-survive-movement-database-reads.md)
+
+### 2026-11-05 - Specify the first party outing
+
+- **Change:** Added the first-outing playbook, follow-up combat decisions and instructions for recording needs and fixes. Added third-player claim and full-retreat checks.
+- **Reason:** The first shared fight needs player-visible rules for forming a party, reading claims, disengaging and collecting credit.
+- **Impact:** AC-1 keeps the same delivery boundary and gains concrete checks. Later role and economy slices own knockout, field healing and contested loot.
 
 ## Outcome
 
