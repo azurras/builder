@@ -45,6 +45,8 @@ port 53747 listeners: 0
 ## Evidence
 455 JavaScript tests passed. Node syntax checks and git diff --check passed. Browser screenshots showed the closer rear-view avatar, weathered stone arch, leaf silhouettes, dark patches under trees and separate grass and path textures. The browser closed and the isolated runtime was removed.
 
+PR #1566 merged as c8fe7e444c2b616e61fb2187b0b1771bffcbbbc6. Merged CI and CodeQL passed. Production served the exact build, both texture files at their expected byte counts, and the WebGL material loader.
+
 ## Bugs / Follow-ups
 Character, prop and terrain geometry still have less detail than the references. The gate is visual scenery and does not change collision, combat or movement rules. No direct performance benchmark or physical phone-controller test was run for this art change.
 
