@@ -1,7 +1,7 @@
 # Target and engage enemies in Survive
 
 ## Document Status
-ready-for-execution
+ready-for-review
 
 ## Objective
 > [!IMPORTANT]
@@ -124,6 +124,12 @@ Use the existing deploy path. Old code must be able to read all retained status 
 - **Change:** Begin the server work on trusted main while the feedback PR runs CI. Integrate the feedback changes before browser work.
 - **Reason:** The feedback diff is confined to frontend files. Server work can proceed independently without disturbing its verified candidate.
 - **Impact:** Maintain separate branch and runtime evidence. Browser integration and delivery require refreshed main with PR #1559 merged.
+
+### 2026-11-05 - Verify the first MMO combat slice
+
+Change: Implemented targeting, Check, Engage, TP, weapon skills, Defend and Disengage. Verified a browser encounter and a disconnected fight on the committed candidate.
+Reason: The user confirmed Final Fantasy XI as the ongoing reference for a shared MMO and chose combat first, including continuing while away.
+Impact: Combat uses durable server deadlines. This slice has personal encounters. Shared enemies and party combat remain future MMO work.
 
 ## Outcome
 Pending.
