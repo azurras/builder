@@ -1,7 +1,7 @@
 # Explore Survive together in a third-person 3D island
 
 ## Document Status
-in-progress
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -204,6 +204,12 @@ Revert the spoke change through a checked PR. No saved-world schema changes are 
 
 **Before-Edit Brief:** Behavior: show pending and confirmed outcomes in the viewport, gains/damage anchored to player/enemy, and visible combat state/controls. Invariants: no fabricated gains, repeated-poll replay, credential exposure, rule changes or obscured keyboard/touch controls. Boundary/API: consume existing state/revision only; no new endpoints. Effects and failures: presentation owns bounded DOM notices and frame-based expiry, displays command errors, and resets on identity changes/disposal; disconnected/rejected commands never award anything. Tests and evidence: meaningful transition/deduplication/reset/combat tests, node --check, :website:jsTest, and committed local browser checks for success, failure, gain and combat at desktop/phone sizes, followed by CI and automatic-deployment readback.
 
+### 2026-11-05 - Verify in-world feedback in production
+
+Change: PR #1559 merged as 4e9058442edc9eacdf8bed4c24d2177e32a276c8 and the automatic deployment completed.
+Reason: Show action results, gains and fights where players are looking while exploring.
+Impact: Live /survive and /js/survive-world-feedback.js both returned HTTP 200. The page includes the in-world notice element and the actuator reports the exact merge commit.
+
 ## Outcome
 > [!TIP]
 > Delivered and live. [PR #1558](https://github.com/azurras/christopherbell.dev/pull/1558) merged as `7b91e7697621c4480a7f52174082f6d23e97b190`; production reports that exact commit.
@@ -220,6 +226,10 @@ Production GET checks returned 200 for `/survive` and all four game modules. Aft
 Local build: 2199 Java tests, zero failures/errors and 126 configured skips (123 Mongo cases and 3 filesystem/environment cases); all 438 JS tests and Windows Pester/Checkstyle gates passed. Both candidate processes and disposable Mongo listeners were stopped and owned directories removed; browser tabs closed and viewport override reset.
 
 Accepted first-release limits remain those in Design/Risks: transient positions, one application process and existing per-IP rate limits with visible backoff. No source issue; external closure does not apply.
+
+### In-world feedback follow-up
+
+[PR #1559](https://github.com/azurras/christopherbell.dev/pull/1559) is live at merge commit `4e9058442edc9eacdf8bed4c24d2177e32a276c8`. The deployment-aware queue exited 0. Production readback confirmed the page notice element and HTTP 200 for the feedback module. The [feedback runtime report](../test-reports/2026-11-05-07-40-christopherbell-dev-survive-in-world-feedback.md) records phone-sized combat proof and 447 passing JavaScript tests.
 
 ## Project
 christopherbell-dev
