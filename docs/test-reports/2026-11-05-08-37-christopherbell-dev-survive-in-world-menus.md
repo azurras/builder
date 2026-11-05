@@ -45,6 +45,8 @@ port 53089 listeners: 0
 ## Evidence
 All 451 JavaScript tests passed. Node syntax checks and git diff --check passed. The responsive browser viewport was reset and the isolated candidate directories removed.
 
+PR #1561 merged as a4cc762f3b65e344eeec8f6779104f9c122dcb0e. Production returned HTTP 200 for Survive with the Main Menu and Commands controls and no sidebar.
+
 ## Bugs / Follow-ups
 The earlier candidate exposed decorative arrows in accessible action names. The final candidate uses decorative CSS borders and was verified using the exact accessible names Hunt, Check and Engage. Map lists the existing destinations.
 

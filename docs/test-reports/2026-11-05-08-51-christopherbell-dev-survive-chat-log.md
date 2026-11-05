@@ -44,6 +44,8 @@ port 56631 listeners: 0
 ## Evidence
 All 452 JavaScript tests passed. Node syntax checks and git diff --check passed. The browser check used ordinary game commands. The phone viewport reset and isolated runtime cleanup succeeded.
 
+PR #1562 merged as 1d31740c48e97416a530bb958f6fdba4ce02dc76. Merged CI and CodeQL passed. Production returned HTTP 200 for Survive and survive-log.js, and the page included the chat scrollback and Main Menu.
+
 ## Bugs / Follow-ups
 The window shows world events and local system messages. Player-to-player chat and channel filters are separate MMO features.
 
