@@ -1,7 +1,7 @@
 # Build an FFXI-inspired starting zone in Survive
 
 ## Document Status
-draft
+in-progress
 
 ## Objective
 > [!IMPORTANT]
@@ -139,7 +139,12 @@ Release the camera independently from durable combat. Preserve additive fields i
 | Shared encounters duplicate results | High | Use explicit identity, durable transitions and concurrent tests. |
 
 ## Implementation Log
-No entries yet.
+
+### 2026-11-05 - Verify the first north gate route
+
+- **Change:** Built the initial north gate route and checked it on the committed desktop candidate 3ec810b75b5b2eb544b506e0a4957ad53c1e9ffa. It includes raised banks, a timber bridge, a waystation, and lower framing with zoom and combat camera lock.
+- **Reason:** The user wanted recognizable world and movement cues before expanding MMO systems.
+- **Impact:** The route, camera and map are implemented. Target identity, shared combat and the NPC assignment remain open.
 
 ## Outcome
 Pending.
