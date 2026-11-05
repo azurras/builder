@@ -42,6 +42,8 @@ port 51172 listeners: 0
 ## Evidence
 All 448 JavaScript tests passed. Node syntax checks and git diff --check passed. Visual inspection showed the articulated adventurer, raised ridge, forest path, varied foliage and a distinct wolf. The resized log history remained accessible with Expand. The browser viewport was reset and the test runtime directories were removed.
 
+PR #1563 merged as 1b3bc974bc9a2edd45bacb7babb311f0503cc97f. Merged CI and CodeQL passed. Production returned HTTP 200 for Survive and the art module and served the chat log without the old notice or floating-number elements.
+
 ## Bugs / Follow-ups
 This is a first art pass with original procedural meshes. Nearby remote models are drawn within 60 metres, with the closest 24 rendered to bound graphics work. Character and enemy animation detail can be developed further. After resizing an open game, older log lines can remain in view until the player scrolls to the end.
 
