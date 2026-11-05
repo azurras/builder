@@ -154,6 +154,12 @@ Release the camera independently from durable combat. Preserve additive fields i
 - **Reason:** The previous nearest-animal flow could act on a different creature from the one in view.
 - **Impact:** The target-selection part of AC-2 is implemented. Shared health, party roles, timed follow-ups and the NPC assignment remain open.
 
+### 2026-11-05 - Verify the first party commands
+
+- **Change:** Implemented and verified durable two-player invitation, acceptance, decline, cancellation and leave in the Party menu. The candidate uses the active survivor roster to invite and shows private state changes in chat.
+- **Reason:** Shared combat needs explicit party membership to decide who can participate and earn credit. The menu gives the current desktop and text clients a common entry point.
+- **Impact:** Party formation is verified locally at 3a14da91. In-world player targeting, shared HP, threat, skillchain coordination and the NPC assignment remain open. The initial BSON UUID write failure was corrected and retested. [Runtime report](../test-reports/2026-11-05-15-19-christopherbell-dev-survive-two-player-parties.md)
+
 ## Outcome
 Pending.
 
