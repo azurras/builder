@@ -95,7 +95,7 @@ Update each row with a child plan and evidence. Use planned, in progress, verifi
 | ART-03 | Motion and sound | Existing action poses and world feedback need a full playthrough review. | Read locomotion, weapon draw, wind-up, impact, hit reaction and defeat at play speed. Show tool contact for logging and mining, cast/bite/reel for fishing, and readable synthesis and sleep. Add original environmental beds and distinct action cues with volume controls. |
 | ECON-01 | Gathering and trade | Location-based resource commands, one-roll fishing, basic crafting and camp gifts. | Add targetable nodes, tool and skill checks, timed fishing, recipe inputs and meaningful outputs. Use direct trade first, then evaluate bazaars and auction listings with ownership and duplication checks. |
 | SOC-01 | Social and travel | Shared presence and camp, process-local positions and routes. | Add party invitations and recovery, party chat, persistent travel checkpoints, region transitions and distinct mission versus quest progression. Evaluate public chat, linkshell-like groups and travel unlocks once the first route works. |
-| PERF-01 | Browser and server | Render reuse is live. Version-checked movement reads are merged at baseline. | Profile long sessions and concurrent play with the same scene and action mix. Track browser memory slope and frame-time percentiles, server heap and p95 latency, DB bytes and writes, bandwidth and shared-IP behavior. Distinguish stored-character capacity from measured concurrency. |
+| PERF-01 | Browser and server | Render reuse and version-checked movement reads are verified live by build identity. | Profile long sessions and concurrent play with the same scene and action mix. Track browser memory slope and frame-time percentiles, server heap and p95 latency, DB bytes and writes, bandwidth and shared-IP behavior. Distinguish stored-character capacity from measured concurrency. |
 
 ### Child plan ledger
 
@@ -196,6 +196,22 @@ The child plan owns when an area crossing commits, how an active encounter affec
 
 Later slices can add travel unlocks, ferry routes, more story ranks and regional participation after this round trip is proven. Keep story assignments and optional requests discoverable through NPCs and the existing menus. Record updates and outcomes in chat.
 
+### Performance and capacity playbook
+
+Use the published desktop route and first party outing as repeatable workloads. Compare the current shipped build with the committed candidate against separate disposable test databases seeded with equivalent saves. Record browser, hardware, viewport, graphics settings, server resources, network conditions and workload duration. Keep scene quality, movement cadence and player limits fixed for the comparison. Run load only against an isolated local candidate and baseline.
+
+| Workload | What to measure | What the run must demonstrate |
+|---|---|---|
+| Cold start and warm return | Asset bytes and requests, time until movement and Commands work, browser process memory after entry. | Separate cold-cache from warm-cache results. Report the cost of new models, textures and audio alongside time to play. |
+| Desktop route and soak | Frame-time p50, p95 and p99, browser process memory and JS heap. Start with a five-minute warm-up and 30 minutes of repeated camp, gate and woodland movement. | Compare the warmed baseline, peak and final memory plus the trend across loops. Run with recording off and repeat idle, active and hidden-to-visible cases separately. |
+| Two players in one encounter | Time from input to accepted command and visible result, state payload bytes, movement acceptance and combat event order. | Compare the same workload on both builds. Once shared combat exists, verify agreement on health, skillchain and reward while one player reconnects. Record current private encounters as their own baseline. |
+| Increasing concurrency | Successful actions, movement p95 latency, errors, conflicts and throttles, process CPU, heap and GC, Mongo reads, writes and response bytes. | Step through 2, 5, 10 and 20 simulated sessions as exploratory test points. Keep the action mix and sampling window fixed. Report offered and accepted rates and the first bottleneck. |
+| Shared-network and reconnect burst | Per-IP rate-limit responses, retries, traffic, time until movement resumes and correctness of recovered state. | Run shared-IP and distributed-IP cases separately with normal limits enabled. Verify reconnects and conflicting requests preserve saved progress and never repeat a reward. |
+
+Record client and server costs separately. Use a real desktop browser for frame and memory checks, and lightweight sessions for server load. Compare the same workload at least three times before classifying a difference that overlaps run-to-run variation. Include failed requests and timeouts when reporting throughput and errors. The workload counts above are measurement points. The cap of 1,000 saved characters remains distinct from the supported number of simultaneous players.
+
+The first profiling child sets measurable budgets from the baseline and records the acceptance thresholds before optimization. Investigate misses using the traces for the affected path. If a richer scene exceeds its budget, profile allocation, draw work and asset transfer. If movement or combat exceeds its budget, profile request volume, world restoration, conflicts and database writes. Re-run the same case after each fix and keep its evidence with the affected ledger row.
+
 ### How to record changes and fixes
 
 Give each newly discovered need a ledger ID or attach it to the closest existing row. For a fix, record the player-visible symptom, the reproduction, the owning child plan and the check that proves recovery. Record what changed in the child and append a dated entry here when it changes scope, an acceptance check or the delivery state. Link the evidence before marking a row verified local or verified live.
@@ -253,7 +269,7 @@ This planning change modifies Builder documents only. Application runtime proof 
 | AC-3 | Tests for threat changes, targeting, spell interrupts, chain and burst timing, XP eligibility, job switching and old saves. | Run the three-role fight in independent sessions. Repeat a threat handoff, interrupted heal and mistimed burst, then switch jobs at camp and verify progression after reconnecting. |
 | AC-4 | Tests for tools, node contention, catch expiry, recipe consumption and output, trade offer revisions and atomicity, and old saves. | Gather fuel, land a fish, cook and trade the meal in two sessions. Repeat an interrupted cast, full inventory, changed offer and reconnect before collecting results. |
 | AC-5 | Tests for party membership and chat access, region crossing, checkpoint recovery, independent quest transitions and replayed turn-in. | Take two accounts on the first trip beyond North Gate. Split at the boundary, regroup, complete different objectives, reconnect and return. Repeat a failed crossing and verify party chat isolation with a third account. |
-| AC-6 | Run affected Gradle and browser checks and validate Builder reports. | Use a committed candidate against isolated test-profile Mongo. Compare a fixed desktop route, idle and active soak and repeatable multiplayer workload. Verify live build identity after deployment. |
+| AC-6 | Run affected Gradle and browser checks and validate Builder reports. | Run the performance playbook on baseline and committed candidate builds against isolated test-profile Mongo. Record latency, errors, memory, frame times and database cost. Verify live build identity after deployment. |
 
 ## Rollback or Recovery
 
@@ -312,6 +328,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Added a first trip beyond North Gate covering map navigation, region crossing, party chat, optional requests, a story assignment and saved checkpoints.
 - **Reason:** The first expansion needs to show how a party explores an inhabited world and resumes travel together.
 - **Impact:** SOC-01 and AC-5 now have a concrete round trip and checks for split parties, failed transitions, old saves and private party chat.
+
+### 2026-11-05 - Define performance workloads and verify movement build
+
+- **Change:** Added a repeatable browser and server performance playbook. Read back the deployed build and matched it to the merge commit for #1575.
+- **Reason:** The user asked to improve performance while retaining game capacity and quality. The movement read optimization has live build evidence, while sustained memory and concurrency still need measurement.
+- **Impact:** PERF-01 and AC-6 now specify workloads, metrics and comparison rules. No live load test or concurrency target is claimed. [Movement read PR](https://github.com/azurras/christopherbell.dev/pull/1575)
 
 ## Outcome
 
