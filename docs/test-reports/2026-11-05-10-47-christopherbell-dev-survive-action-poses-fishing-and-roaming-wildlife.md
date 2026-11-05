@@ -44,6 +44,8 @@ port 50067 listeners: 0
 ## Evidence
 450 JavaScript tests, the focused Survive Java tests and both Checkstyle checks passed. Node syntax checks and git diff --check passed. Local runtime checks used the normal client API and browser controls. Browser viewport reset and the isolated runtime was removed.
 
+The full Java suite ran 2,204 cases with zero failures or errors and 126 configured skips. PR #1564 merged as 936c59148222e638291415945ae6b4beb0039366. Merged CI and CodeQL passed, and production served the exact build and the Fishing bank control.
+
 ## Bugs / Follow-ups
 Fishing is one cast command with an animated outcome. There is no gear or timing minigame. Action gestures are local. Roaming paths and reservations belong to one application process. Active combat still uses durable survivor state. The updated procedural meshes and effects are an art pass toward the FFXI target.
 
