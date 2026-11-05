@@ -180,6 +180,22 @@ Use a camp job menu to change jobs outside combat. Keep job level and XP per job
 
 Keep the first reward rules small. Define who earns job XP and weapon skill credit and when each is settled. Test a nearby contributor, a distant party member, and a reconnect after defeat. Capture health, MP, TP and the combat log in three independent sessions. Support jobs, Level Sync, additional spell families, and knockout penalties stay separate decisions. Choose exact threat values, cast and chain timings, and progression rates in the child plan after establishing a repeatable fight.
 
+### First trip beyond North Gate
+
+Expand after the first party outing works. Use one neighboring field and one inhabited stop, with the existing waystation as the departure point. FFXI distinguishes personal requests from assignments given by a nation. Survive can use that distinction at island scale with one camp story assignment and one optional request from a resident. The route and content below are proposals. [FFXI quests, missions and conquest](https://www.playonline.com/ff11us/guide/system/quests.html) · [FFXI transportation](https://www.playonline.com/ff11eu/guide/system/other.html)
+
+| Step | Proposed experience | What to verify |
+|---|---|---|
+| Leave the waystation | A visible camp representative sends the party to deliver a message to the next settlement. The road, signs and map show where it goes. Open the map to check position, crossings and named landmarks. | Fresh players can find the road and the destination from the map and scenery. Opening, inspecting or closing the map leaves the character in place. |
+| Cross into the next field | Each player walks across a marked boundary and arrives on the connected road. Show the area name in chat. Party membership and party chat span the boundary. | One player can cross first, send a party message and wait for the other. Repeat with a failed area load and a reconnect during the crossing. Each character resumes at one valid side. |
+| Discover the settlement | Give the field a different approach, skyline and enemy mix from camp. A named resident at the stop offers an optional request, such as repairing a trail sign. The story contact advances the camp assignment independently. | One player can complete the story step while the other takes the optional request. Neither receives credit for the other's turn-in. Shared objectives award credit according to their own rules. |
+| Register a return point | Interact with a visible landmark at the settlement to register a saved checkpoint. Use it to resume travel on a later sign-in. Put the registration and arrival results in chat. | After crossing, claiming the checkpoint and signing back in, each player returns to the correct region with their quest state and inventory. An older save with no checkpoint still starts at camp. |
+| Walk back together | Keep the return route open. Party chat can help players regroup after splitting up. Existing map and input rules apply in both areas. | Rejoin on the correct side of the boundary, return to the waystation, and finish the story assignment once even if a turn-in is retried. |
+
+The child plan owns when an area crossing commits, how an active encounter affects crossing, and how returning players are placed if their previous checkpoint becomes unavailable. Keep the committed region, checkpoint and quest state consistent across failed saves and reconnects. Preserve party chat privacy and verify that a nonmember receives none of the party's messages. Exercise the boundary on keyboard and mouse and on controller. Compare asset loading, memory and movement latency on repeat crossings before expanding the map again.
+
+Later slices can add travel unlocks, ferry routes, more story ranks and regional participation after this round trip is proven. Keep story assignments and optional requests discoverable through NPCs and the existing menus. Record updates and outcomes in chat.
+
 ### How to record changes and fixes
 
 Give each newly discovered need a ledger ID or attach it to the closest existing row. For a fix, record the player-visible symptom, the reproduction, the owning child plan and the check that proves recovery. Record what changed in the child and append a dated entry here when it changes scope, an acceptance check or the delivery state. Link the evidence before marking a row verified local or verified live.
@@ -236,7 +252,7 @@ This planning change modifies Builder documents only. Application runtime proof 
 | AC-2 | Asset, renderer and control checks plus capture reproducibility. | Run the desktop art and animation review stops. Save matched captures, solo and co-op clips, and review decisions. Compare route timing separately from recording. |
 | AC-3 | Tests for threat changes, targeting, spell interrupts, chain and burst timing, XP eligibility, job switching and old saves. | Run the three-role fight in independent sessions. Repeat a threat handoff, interrupted heal and mistimed burst, then switch jobs at camp and verify progression after reconnecting. |
 | AC-4 | Tests for tools, node contention, catch expiry, recipe consumption and output, trade offer revisions and atomicity, and old saves. | Gather fuel, land a fish, cook and trade the meal in two sessions. Repeat an interrupted cast, full inventory, changed offer and reconnect before collecting results. |
-| AC-5 | Tests for party membership, travel, quest transitions and access. | Take separate accounts through invitations, a route transition, a quest and a reconnect. |
+| AC-5 | Tests for party membership and chat access, region crossing, checkpoint recovery, independent quest transitions and replayed turn-in. | Take two accounts on the first trip beyond North Gate. Split at the boundary, regroup, complete different objectives, reconnect and return. Repeat a failed crossing and verify party chat isolation with a third account. |
 | AC-6 | Run affected Gradle and browser checks and validate Builder reports. | Use a committed candidate against isolated test-profile Mongo. Compare a fixed desktop route, idle and active soak and repeatable multiplayer workload. Verify live build identity after deployment. |
 
 ## Rollback or Recovery
@@ -290,6 +306,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Added a three-role fight and the first job progression rules, with distinct checks for threat, healing, skillchain timing and a magic burst.
 - **Reason:** Party roles need to change what players do together, and job progression needs to unlock a choice players can demonstrate.
 - **Impact:** JOB-01 and COM-02 now share a concrete AC-3 playtest. The child plan owns balance values, gear compatibility and old-save defaults.
+
+### 2026-11-05 - Specify the first trip beyond North Gate
+
+- **Change:** Added a first trip beyond North Gate covering map navigation, region crossing, party chat, optional requests, a story assignment and saved checkpoints.
+- **Reason:** The first expansion needs to show how a party explores an inhabited world and resumes travel together.
+- **Impact:** SOC-01 and AC-5 now have a concrete round trip and checks for split parties, failed transitions, old saves and private party chat.
 
 ## Outcome
 
