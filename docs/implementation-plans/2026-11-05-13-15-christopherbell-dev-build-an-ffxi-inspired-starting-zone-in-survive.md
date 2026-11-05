@@ -146,6 +146,12 @@ Release the camera independently from durable combat. Preserve additive fields i
 - **Reason:** The user wanted recognizable world and movement cues before expanding MMO systems.
 - **Impact:** The route, camera and map are implemented. Target identity, shared combat and the NPC assignment remain open.
 
+### 2026-11-05 - Preserve the selected field target
+
+- **Change:** Implemented target cycling, pointer selection, Check in chat and exact-ID Engage. The Java server refuses missing, claimed and distant targets.
+- **Reason:** The previous nearest-animal flow could act on a different creature from the one in view.
+- **Impact:** The target-selection part of AC-2 is implemented. Shared health, party roles, timed follow-ups and the NPC assignment remain open.
+
 ## Outcome
 Pending.
 
