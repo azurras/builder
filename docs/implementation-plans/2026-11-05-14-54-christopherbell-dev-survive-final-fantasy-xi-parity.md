@@ -164,6 +164,22 @@ Start with one wood resource, one fish and one meal. Add skill growth that can b
 
 Keep the first loop within the existing island and inventory capacity. Define old-save defaults and behavior for the text fallback before implementation. Put action cues on the character, tool or target and confirmed results in chat. Record the browser and server cost of the timed fishing flow alongside the two-player trade checks.
 
+### First job progression and party fight
+
+Build this slice after the two-player outing proves shared combat. Start with three jobs on the same character, using the role names below as working labels. FFXI's jobs guide distinguishes protection, recovery and offensive magic. Its battle guide ties job abilities to level, weapon skills to the equipped weapon and magic bursts to coordinated timing. The fight and progression rules below are proposed for Survive. [FFXI jobs](https://www.playonline.com/ff11us/intro/about/job01.html?pageid=about) · [FFXI battle](https://www.playonline.com/ff11us/guide/system/battle.html?pageID=system)
+
+| Role | First decisions | What to verify |
+|---|---|---|
+| Protector | Engage with a melee weapon, use a threat ability to regain attention, and guard against a telegraphed heavy attack. Open a skillchain when the other melee weapon is ready. | Damage or healing can pull attention away. The protector can regain it, and the enemy's target is readable in the world and chat. |
+| Healer | Select an ally, spend MP on a heal with a cast time, and decide whether to heal now or wait through a dangerous enemy wind-up. | The intended ally receives the heal. Invalid targets and interrupted casts settle with a clear reason and consistent resource costs. |
+| Damage dealer | Use melee attacks to build TP, close a compatible skillchain, then time an elemental cast to land during the burst window. | An early or late cast still resolves according to its normal spell rules. A matching spell that lands in the window adds one burst. |
+
+Teach the sequence on a tougher roaming enemy near the existing route. Its wind-up and target changes should be visible from the default camera. Keep a passive encounter nearby for solo practice. Give the first coordinated fight enough time to use each role and repeat it with a deliberately mistimed chain or burst. Server deadlines determine the result, while animation, sound and ordered chat explain it. Preserve the existing policy that an engaged fight can continue when a browser is hidden or disconnected.
+
+Use a camp job menu to change jobs outside combat. Keep job level and XP per job on the same character. Track weapon skill separately from job XP and decide how job and weapon proficiency limit available techniques. The first unlock should introduce a visible tactical choice, such as an alternate weapon skill that changes which chain the party can make. Show why a job, spell, ability or piece of gear is unavailable before the player commits. Test returning to a previously trained job after reconnecting, and specify old-save defaults for existing equipment and progression in the implementation plan.
+
+Keep the first reward rules small. Define who earns job XP and weapon skill credit and when each is settled. Test a nearby contributor, a distant party member, and a reconnect after defeat. Capture health, MP, TP and the combat log in three independent sessions. Support jobs, Level Sync, additional spell families, and knockout penalties stay separate decisions. Choose exact threat values, cast and chain timings, and progression rates in the child plan after establishing a repeatable fight.
+
 ### How to record changes and fixes
 
 Give each newly discovered need a ledger ID or attach it to the closest existing row. For a fix, record the player-visible symptom, the reproduction, the owning child plan and the check that proves recovery. Record what changed in the child and append a dated entry here when it changes scope, an acceptance check or the delivery state. Link the evidence before marking a row verified local or verified live.
@@ -218,7 +234,7 @@ This planning change modifies Builder documents only. Application runtime proof 
 |---|---|---|
 | AC-1 | Invitation lifecycle, shared HP, claim, concurrency, restart, chain timing and idempotent reward tests. | Two independent browser sessions complete the outing, then repeat a disconnect, contested final strike and full retreat. Use a third session to verify claim visibility and outsider access. |
 | AC-2 | Asset, renderer and control checks plus capture reproducibility. | Run the desktop art and animation review stops. Save matched captures, solo and co-op clips, and review decisions. Compare route timing separately from recording. |
-| AC-3 | Tests for threat, range, TP, spell interrupts, XP and chat order. | Play the roles together and reproduce a valid chain/burst and a mistimed attempt. |
+| AC-3 | Tests for threat changes, targeting, spell interrupts, chain and burst timing, XP eligibility, job switching and old saves. | Run the three-role fight in independent sessions. Repeat a threat handoff, interrupted heal and mistimed burst, then switch jobs at camp and verify progression after reconnecting. |
 | AC-4 | Tests for tools, node contention, catch expiry, recipe consumption and output, trade offer revisions and atomicity, and old saves. | Gather fuel, land a fish, cook and trade the meal in two sessions. Repeat an interrupted cast, full inventory, changed offer and reconnect before collecting results. |
 | AC-5 | Tests for party membership, travel, quest transitions and access. | Take separate accounts through invitations, a route transition, a quest and a reconnect. |
 | AC-6 | Run affected Gradle and browser checks and validate Builder reports. | Use a committed candidate against isolated test-profile Mongo. Compare a fixed desktop route, idle and active soak and repeatable multiplayer workload. Verify live build identity after deployment. |
@@ -268,6 +284,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Added a first economy loop from camp equipment through a visible gathering node, timed fishing, cooking and two-player trade.
 - **Reason:** The current generic supplies and single-roll catch do not yet connect field actions to the camp or other players in the way the parity plan requires.
 - **Impact:** ECON-01 and AC-4 now have a concrete first playthrough and failure checks. Exact fishing timing, skill curves and synthesis catalysts remain child-plan decisions.
+
+### 2026-11-05 - Specify the first jobs and party fight
+
+- **Change:** Added a three-role fight and the first job progression rules, with distinct checks for threat, healing, skillchain timing and a magic burst.
+- **Reason:** Party roles need to change what players do together, and job progression needs to unlock a choice players can demonstrate.
+- **Impact:** JOB-01 and COM-02 now share a concrete AC-3 playtest. The child plan owns balance values, gear compatibility and old-save defaults.
 
 ## Outcome
 
