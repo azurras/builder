@@ -8,6 +8,8 @@ in-progress
 > Give Survive a starting zone where two players can meet in a distinctive settlement, follow a route into the field, assess the same enemy, and win a fight together.
 
 ## Background
+
+This is the first playable slice in the [living Survive FFXI parity plan](2026-11-05-14-54-christopherbell-dev-survive-final-fantasy-xi-parity.md). Use this child plan for implementation and test evidence, and update the parity ledger when the slice changes scope or delivery state.
 The user recognizes the FFXI influence in the menus. The reference screenshots frame a human-proportioned adventurer low in the landscape. Paths, high banks, masonry, a bridge and water divide the scene into places with different uses. Survive's camera looks down on a mostly open clearing. The new actors and canopy add detail, while the landscape still feels similar in several directions.
 
 FFXI's official controls make targeting, camera orbit, zoom, lock-on and confirm distinct actions. The manual describes approaching a target, auto-attacking with an equipped weapon and forming a party. The battle guide describes TP weapon skills and follow-ups timed by different players. Survive's current enemies reserve a private fight and disappear for others, so exploring together rarely becomes fighting together. [Controls](https://www.playonline.com/ff11newplayer/tips/en/list.html) [Manual](https://support.na.square-enix.com/document/manual/20/FFXI_manual_vc09_AE5.pdf) [Battle](https://www.playonline.com/ff11us/guide/system/battle.html?pageID=system)
