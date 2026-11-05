@@ -132,6 +132,22 @@ The Windows manual documents contextual Confirm actions, party invites through t
 | Knockout, return point, Raise-style assistance and recovery costs | JOB-01 and COM-02. Survive currently has terminal death. Decide how MMO knockout applies to existing characters and survival rules before changing that behavior. |
 | XP eligibility, drop distribution and lot/pass for rare party loot | JOB-01 and ECON-01. Keep assignment rewards separate and settle distance, disconnect, full inventory and tie cases before introducing contested loot. |
 
+### Desktop art and animation review
+
+Use the supplied adventurer and waterway screenshots as the quality reference. The first pass prioritizes the player and enemies because the player called them out after the world improved. Review the rest of the island along the same route so new art and existing resources hold up together. FFXI art director Ryosuke Aiba describes painted shading, visible equipment and region-specific colors and textures. Use those principles to guide original Survive assets. [Art director interview](https://we-are-vanadiel.finalfantasyxi.com/post/?id=569&lang=en) · [Starting-area and character art galleries](https://we-are-vanadiel.finalfantasyxi.com/gallery/season/?lang=en&s=11&vol=5)
+
+| Review stop | What has to read during play | Evidence |
+|---|---|---|
+| Camp spawn and road | The adventurer has believable proportions, distinct layered gear and a grounded shadow. Hair, clothing, leather and metal read as different materials. Feet plant on the road and sloped banks during idle, walking and turns. | Rear and three-quarter views at default follow distance, then one clip walking uphill, turning and stopping. Include a remote player in the same frame. |
+| North Gate, bridge and waystation | Paths lead the eye from one landmark to the next. Banks have readable relief and the bridge, stonework and water meet at believable edges. The route and NPC are readable at dusk. | Repeat the same approach at daylight and dusk. Walk across the bridge and turn the camera past the gate to check clipping and abrupt texture or lighting changes. |
+| Woodland and hunting route | Hog, wolf and bear have distinct proportions, gaits and attack tells at the distance where the player decides to approach or avoid them. A raider reads as armed and hostile during the night approach. | Capture patrol, alert, attack and defeat from the player's camera. Repeat one attack with two players and compare the animation, health change and chat order. |
+| Forest, quarry and fishing bank | Mature trees, harvestable trunks, mineral faces and the fishable bank have clear shapes and surfaces. The axe or pick makes contact with the selected resource. The line, bite and reel are readable during fishing. | Record one success and one interrupted or rejected attempt for each action the child changes. Confirm the animation and chat distinguish a completed action from a failed one. |
+| Camp work and rest | Crafting shows a tool or material being worked. Sleep and wake have clear poses at the shelter. Action, result and recovery stay readable without adding notification windows. | Capture a short sequence for each action as it becomes available, including the matching chat line. |
+
+For each stop, save a before and after capture from the same position, camera heading, zoom, resolution and lighting on named builds. Use the normal HUD and chat view for acceptance. Review close-ups separately when diagnosing defects. Record each failed check with a clip or frame and the asset or action responsible, then repeat it on the fix. An improved still frame leaves the motion check open until the clip passes.
+
+Run the same route once for visual capture and again for timing with capture overhead removed. Compare frame time, memory over repeated loops and initial asset transfer on the same desktop and browser. Exercise both solo and two-player views. Record any budget change and its measured cost in the performance row. Favor painted materials, reusable rigs and shared scenery when they pass the play-distance checks.
+
 ### How to record changes and fixes
 
 Give each newly discovered need a ledger ID or attach it to the closest existing row. For a fix, record the player-visible symptom, the reproduction, the owning child plan and the check that proves recovery. Record what changed in the child and append a dated entry here when it changes scope, an acceptance check or the delivery state. Link the evidence before marking a row verified local or verified live.
@@ -185,7 +201,7 @@ This planning change modifies Builder documents only. Application runtime proof 
 | AC | Native check | Local runtime check |
 |---|---|---|
 | AC-1 | Invitation lifecycle, shared HP, claim, concurrency, restart, chain timing and idempotent reward tests. | Two independent browser sessions complete the outing, then repeat a disconnect, contested final strike and full retreat. Use a third session to verify claim visibility and outsider access. |
-| AC-2 | Asset, renderer and control checks plus capture reproducibility. | Repeat fixed desktop views and moving combat in daylight and dusk. Save matched captures, action clips and review decisions. |
+| AC-2 | Asset, renderer and control checks plus capture reproducibility. | Run the desktop art and animation review stops. Save matched captures, solo and co-op clips, and review decisions. Compare route timing separately from recording. |
 | AC-3 | Tests for threat, range, TP, spell interrupts, XP and chat order. | Play the roles together and reproduce a valid chain/burst and a mistimed attempt. |
 | AC-4 | Tests for skill gates, tool requirements, inventory, trade atomicity and old saves. | Complete the gather-to-trade loop and reconnect between steps. |
 | AC-5 | Tests for party membership, travel, quest transitions and access. | Take separate accounts through invitations, a route transition, a quest and a reconnect. |
@@ -224,6 +240,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Added the first-outing playbook, follow-up combat decisions and instructions for recording needs and fixes. Added third-player claim and full-retreat checks.
 - **Reason:** The first shared fight needs player-visible rules for forming a party, reading claims, disengaging and collecting credit.
 - **Impact:** AC-1 keeps the same delivery boundary and gains concrete checks. Later role and economy slices own knockout, field healing and contested loot.
+
+### 2026-11-05 - Define the desktop visual review route
+
+- **Change:** Added the desktop art and animation review route, with the adventurer and enemies first, and matched captures for scenery, resources and action feedback.
+- **Reason:** The player reported that the world improved while the character and enemies still fell short of the FFXI benchmark. The art pass also needs to preserve desktop performance.
+- **Impact:** ART-01 through ART-03 now share an observable AC-2 review route. PERF-01 compares the same route in separate timing runs.
 
 ## Outcome
 
