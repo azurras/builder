@@ -148,6 +148,22 @@ For each stop, save a before and after capture from the same position, camera he
 
 Run the same route once for visual capture and again for timing with capture overhead removed. Compare frame time, memory over repeated loops and initial asset transfer on the same desktop and browser. Exercise both solo and two-player views. Record any budget change and its measured cost in the performance row. Favor painted materials, reusable rigs and shared scenery when they pass the play-distance checks.
 
+### First gathering, fishing and trade loop
+
+Survive currently awards generic supplies through location commands, turns a successful cast into food, and supports camp gifts. The first economy slice should give a small set of items a reason to exist. FFXI documents rod and bait, fishing skill, crystal synthesis and direct trade. Its 2014 fishing update is a separate reference for readable input cues and fish resistance. The proposed Survive loop below uses those ideas and keeps hunger as the reason to prepare a meal. [FFXI Windows manual](https://support.na.square-enix.com/document/manual/20/FFXI_manual_vc09_AE5.pdf) · [Synthesis and trade](https://www.playonline.com/ff11eu/guide/system/other.html) · [2014 fishing update](https://forum.square-enix.com/ffxi/threads/40665-dev1191-Fishing-System-Renovation?mode=hybrid)
+
+| Step | Proposed first loop | What to verify |
+|---|---|---|
+| Get equipped | Offer a starter rod, bait and hatchet through an existing camp or waystation interaction. Show what is equipped and how much bait remains in the existing menus. | A fresh character can reach the first catch without a market purchase. Missing tools and bait produce clear chat messages without spending supplies. |
+| Gather at a visible node | Target a marked deadwood trunk at the forest edge and select Gather. Show the axe strike at the trunk, then put the material and result in chat. Use the same interaction for ore in a follow-up. | A player out of reach cannot gather. Two players reaching the same node observe one consistent availability state. A retry cannot repeat a grant. |
+| Land a fish | Cast at the fishing bank, wait for the bite, respond to a readable rod cue and reel. Use the same actions on keyboard and controller. Rod, bait and fishing skill affect what can be landed. Keep bites and actions timed independently of rendering speed. | A successful reel lands a named fish once. An expired bite, interrupted cast or disconnected session settles without awarding a phantom catch. The child documents when bait is spent. |
+| Make something useful | Use the fish and gathered fuel at the camp cooking spot for a portable meal that restores fullness. Show the inputs and output before confirming. Follow this with a simple tool or gear recipe once the first recipe works. | Verify input consumption and output together. If the pack cannot hold the result after consumption, preserve the inputs and explain the refusal in chat. Eating the meal updates fullness once. |
+| Trade the meal | Target a nearby player, open Trade and show both offers. Each player confirms the same offer. Any edit clears both confirmations. Keep existing camp gifts available for their current purpose. | The meal can change hands in two browser sessions. A changed offer, full pack, departure or replay cannot produce a partial transfer or duplicate item. |
+
+Start with one wood resource, one fish and one meal. Add skill growth that can be felt in repeat outings before expanding fish tables, tool tiers, synthesis ingredients, guilds or market listings. Keep fishing skill separate from cooking skill. Decide how early synthesis will introduce crystal-like catalysts when the first equipment recipe has a clear use. Treat loss on failure, yield bonuses and shared-node respawn timing as tuning decisions to measure in the child plan.
+
+Keep the first loop within the existing island and inventory capacity. Define old-save defaults and behavior for the text fallback before implementation. Put action cues on the character, tool or target and confirmed results in chat. Record the browser and server cost of the timed fishing flow alongside the two-player trade checks.
+
 ### How to record changes and fixes
 
 Give each newly discovered need a ledger ID or attach it to the closest existing row. For a fix, record the player-visible symptom, the reproduction, the owning child plan and the check that proves recovery. Record what changed in the child and append a dated entry here when it changes scope, an acceptance check or the delivery state. Link the evidence before marking a row verified local or verified live.
@@ -203,7 +219,7 @@ This planning change modifies Builder documents only. Application runtime proof 
 | AC-1 | Invitation lifecycle, shared HP, claim, concurrency, restart, chain timing and idempotent reward tests. | Two independent browser sessions complete the outing, then repeat a disconnect, contested final strike and full retreat. Use a third session to verify claim visibility and outsider access. |
 | AC-2 | Asset, renderer and control checks plus capture reproducibility. | Run the desktop art and animation review stops. Save matched captures, solo and co-op clips, and review decisions. Compare route timing separately from recording. |
 | AC-3 | Tests for threat, range, TP, spell interrupts, XP and chat order. | Play the roles together and reproduce a valid chain/burst and a mistimed attempt. |
-| AC-4 | Tests for skill gates, tool requirements, inventory, trade atomicity and old saves. | Complete the gather-to-trade loop and reconnect between steps. |
+| AC-4 | Tests for tools, node contention, catch expiry, recipe consumption and output, trade offer revisions and atomicity, and old saves. | Gather fuel, land a fish, cook and trade the meal in two sessions. Repeat an interrupted cast, full inventory, changed offer and reconnect before collecting results. |
 | AC-5 | Tests for party membership, travel, quest transitions and access. | Take separate accounts through invitations, a route transition, a quest and a reconnect. |
 | AC-6 | Run affected Gradle and browser checks and validate Builder reports. | Use a committed candidate against isolated test-profile Mongo. Compare a fixed desktop route, idle and active soak and repeatable multiplayer workload. Verify live build identity after deployment. |
 
@@ -246,6 +262,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Added the desktop art and animation review route, with the adventurer and enemies first, and matched captures for scenery, resources and action feedback.
 - **Reason:** The player reported that the world improved while the character and enemies still fell short of the FFXI benchmark. The art pass also needs to preserve desktop performance.
 - **Impact:** ART-01 through ART-03 now share an observable AC-2 review route. PERF-01 compares the same route in separate timing runs.
+
+### 2026-11-05 - Specify the first gathering and trade loop
+
+- **Change:** Added a first economy loop from camp equipment through a visible gathering node, timed fishing, cooking and two-player trade.
+- **Reason:** The current generic supplies and single-roll catch do not yet connect field actions to the camp or other players in the way the parity plan requires.
+- **Impact:** ECON-01 and AC-4 now have a concrete first playthrough and failure checks. Exact fishing timing, skill curves and synthesis catalysts remain child-plan decisions.
 
 ## Outcome
 
