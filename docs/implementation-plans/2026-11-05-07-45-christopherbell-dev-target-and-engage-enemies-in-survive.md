@@ -1,7 +1,7 @@
 # Target and engage enemies in Survive
 
 ## Document Status
-ready-for-review
+complete
 
 ## Objective
 > [!IMPORTANT]
@@ -131,8 +131,23 @@ Change: Implemented targeting, Check, Engage, TP, weapon skills, Defend and Dise
 Reason: The user confirmed Final Fantasy XI as the ongoing reference for a shared MMO and chose combat first, including continuing while away.
 Impact: Combat uses durable server deadlines. This slice has personal encounters. Shared enemies and party combat remain future MMO work.
 
+### 2026-11-05 - Verify targeted combat in production
+
+Change: Confirmed the exact combat merge on the live site.
+Reason: Verify production delivery.
+Impact: The game page and targeting module returned 200 and anonymous game returned 204.
+
 ## Outcome
-Pending.
+
+[PR #1560](https://github.com/azurras/christopherbell.dev/pull/1560) is live at 36a247c7d77e135f2fc05cd8d43e8c9eb211df62. Merged CI Build 42042572008 and CodeQL 42042571993 passed.
+
+| Criterion | Result |
+| --- | --- |
+| AC-1 | Target, Check and Engage worked in the desktop and phone-width browser checks. |
+| AC-2 | Timed attacks built TP and Heavy Strike finished a hog. Reconnecting after 13 seconds showed a saved victory. Guard, disengage, stale revisions and duplicate spending were covered. |
+| AC-3 | Legacy-save and codec tests passed. The committed candidate passed local proof and CI. Live readback matched the merge and confirmed the targeting assets. |
+
+See the [runtime report](../test-reports/2026-11-05-08-01-christopherbell-dev-survive-targeted-combat.md). Shared enemies and coordinated parties remain future MMO work.
 
 ## Project
 christopherbell-dev
