@@ -4,7 +4,7 @@
 Let the player select, Check and Engage an exact roaming creature.
 
 ## Branch
-codex/survive-exact-field-targets at 713644f6cbc5a5b215384747eb067e344608494e.
+codex/survive-exact-field-targets at c32415127265e8fb519069fff315ed7ffd11f3b9.
 
 ## Pass / Fail
 Pass.
@@ -17,10 +17,10 @@ Pass.
 5. Verify the final committed build and shut down the isolated runtime.
 
 ## App / Environment
-Desktop WebGL and HTTP on http://127.0.0.1:49170/survive using the test profile and disposable loopback Mongo. Rebased runtime at http://127.0.0.1:55296/survive.
+Desktop WebGL and HTTP on http://127.0.0.1:49170/survive using the test profile and disposable loopback Mongo. Final runtime at http://127.0.0.1:62156/survive.
 
 ## Local Run Details
-Built with Invoke-Gradle.ps1 bootJar, test and jsTest. Used Start-Candidate.ps1 and Stop-Candidate.ps1. Rebase preserved the exact tree used for browser and HTTP verification.
+Built with Invoke-Gradle.ps1 bootJar, test and jsTest. Used Start-Candidate.ps1 and Stop-Candidate.ps1. Browser and HTTP verification used the same runtime files. The final commit adds braces in a Java test and repeated exact runtime smoke.
 
 ## Data Sent
 ```text
@@ -39,7 +39,7 @@ Browser warnings or errors []
 ```
 
 ## Evidence
-All 459 JavaScript tests and the Survive Java tests passed. Node syntax and diff checks passed. Browser verification covered keyboard selection, contextual commands and chat. The isolated HTTP test covered successful Engage and the first timed round. Targeting tests cover selecting a farther creature without falling back to a closer one.
+All 459 JavaScript tests and the Survive Java tests passed. Node syntax, Java Checkstyle and diff checks passed. Browser verification covered keyboard selection, contextual commands and chat. The isolated HTTP test covered successful Engage and the first timed round. Targeting tests cover selecting a farther creature without falling back to a closer one.
 
 ## Bugs / Follow-ups
 A moving target can leave reach between opening the command menu and choosing Engage. The menu updates its availability and the server checks distance again. Shared encounter health and coordinated skills remain separate work.
@@ -49,3 +49,4 @@ complete
 
 ## Project
 christopherbell-dev
+
