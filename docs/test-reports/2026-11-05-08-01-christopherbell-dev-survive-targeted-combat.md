@@ -35,8 +35,10 @@ port 55261 listeners: 0
 ## Evidence
 448 JavaScript tests passed. Focused Java tests for Survive and the Mongo codec passed, along with main and test Checkstyle. Node syntax checks and git diff --check passed.
 
+The full Java suite reported 2,201 cases, with 126 configured skips and zero failures or errors. A second isolated run of the same build at 390 × 844 verified Select target, Check, Engage, Defend, and Disengage. The guard-ready message appeared after Defend. Disengage returned to Animal nearby and showed that automatic attacks stopped. The viewport was reset and both local listeners stopped.
+
 ## Bugs / Follow-ups
-Browser verification used the default viewport. This slice uses individual encounters. Shared enemies and coordinated parties are future MMO work.
+This slice uses individual encounters. Shared enemies and coordinated parties are future MMO work.
 
 ## Document Status
 complete
