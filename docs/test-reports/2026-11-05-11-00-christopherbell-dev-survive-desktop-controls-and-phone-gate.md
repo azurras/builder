@@ -43,6 +43,8 @@ port 59084 listeners: 0
 ## Evidence
 454 JavaScript tests passed, including phone detection, gate transitions and desktop controller mapping. Node syntax checks and git diff --check passed. The final browser viewport was reset. The loopback fixture was stopped and the candidate directories removed.
 
+PR #1565 merged as eec0fb34850d6af35204c02ae920377e7769988e. Merged CI and CodeQL passed. The live build matched the merge and returned HTTP 200 for Survive and the controller module. The page included the phone gate.
+
 ## Bugs / Follow-ups
 Phone browsers without fullscreen, WebGL, or a standard controller mapping cannot unlock gameplay. Hardware compatibility was not verified.
 
