@@ -476,6 +476,18 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Flat triangle lighting made small face and armor surfaces read as harder facets at the desktop camera.
 - **Impact:** Candidate c7721fbc passed the geometry tests and a desktop Chrome render. ART-02 remains open for matched lighting comparisons and face, hand and cloth artwork. [Runtime report](../test-reports/2026-11-06-16-27-christopherbell-dev-survive-adventurer-shading.md)
 
+### 2026-11-06 - Verify the armed stance release
+
+- **Change:** PR #1585 merged as a2fd1c4. Live build readback matched that commit.
+- **Reason:** The armed ready pose passed its release checks.
+- **Impact:** The local ready stance is live. Remote combat playback and transitions remain open. [Stance PR](https://github.com/azurras/christopherbell.dev/pull/1585)
+
+### 2026-11-06 - Verify campfire and local firelight
+
+- **Change:** Replaced the starting fire's opaque facets with soft flames and embers, added warm local falloff and textured the stone and timber pit.
+- **Reason:** The campfire is prominent from the opening desktop camera on the North Gate review route.
+- **Impact:** Candidate 8216f232 passed the Chrome motion comparison. ART-02 remains open for night, full-route and matched-lighting review. GPU cost remains unmeasured. [Runtime report](../test-reports/2026-11-06-17-11-christopherbell-dev-survive-campfire-and-local-firelight.md)
+
 ## Outcome
 
 Pending.
