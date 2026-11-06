@@ -365,6 +365,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The first shared outing needs a timing decision that lets two players produce a combined result.
 - **Impact:** COM-02 and starting-zone AC-3 have local proof of a two-player chain and one defeat at 3616ac27. The initial pairing adds three damage. Magic bursts, enmity and the NPC objective remain open. [Runtime report](../test-reports/2026-11-05-22-16-christopherbell-dev-survive-impact-skillchain.md)
 
+### 2026-11-05 - Verify Impact in production
+
+- **Change:** PR #1578 passed CI and deployed as 57396651a22fc46ace1e94284a5f7dc62421f0f6. Production build readback matched the merge.
+- **Reason:** The first shared outing needs a weapon skill sequence that rewards two players for timing their actions.
+- **Impact:** Impact is live. The first NPC assignment and the complete outing playtest remain open. [PR #1578](https://github.com/azurras/christopherbell.dev/pull/1578)
+
 ## Outcome
 
 Pending.
