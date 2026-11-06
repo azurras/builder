@@ -46,7 +46,7 @@ port 55865 listeners: 0
 ```
 
 ## Evidence
-- Targeted Survive Java and saved-world codec tests, 468 JavaScript tests, changed-script syntax checks and bootJar passed.
+- Full Java suite, including Survive and saved-world codec tests, 468 JavaScript tests, changed-script syntax checks and bootJar passed.
 - Inspected the desktop bite capture. The rod and line are visible, with the cue offset from the avatar and focus on Reel In.
 - The browser check accepts either a successful catch or the game’s existing chance-based miss. The deterministic Java test establishes the one-food award.
 

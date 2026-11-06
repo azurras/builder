@@ -536,6 +536,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Record the delivery state independently of candidate checks.
 - **Impact:** The starting camp has soft flames and local firelight. Shared strike playback still depends on the stance release. [Campfire PR](https://github.com/azurras/christopherbell.dev/pull/1587) · [Stance PR](https://github.com/azurras/christopherbell.dev/pull/1588)
 
+### 2026-11-06 - Measure nearby movement payloads
+
+- **Change:** Movement returns remote player poses within 64 metres and keeps the online count island-wide.
+- **Reason:** Sending distant poses on every pulse wastes bandwidth and browser work while the renderer already stops drawing players past 60 metres.
+- **Impact:** A matched eight-player layout dropped the camp pulse from 2,444 to 1,236 bytes. Chrome still showed eight online. PERF-01 remains open for sustained, clustered, browser, server and database measurements. [Runtime report](../test-reports/2026-11-06-17-55-christopherbell-dev-survive-nearby-presence-payload.md)
+
 ## Outcome
 
 Pending.
