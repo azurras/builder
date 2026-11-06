@@ -377,6 +377,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The starting route needs a visible reason to leave camp and a clear return objective.
 - **Impact:** Candidate 95c6f1b5 passed desktop NPC interaction and the two-session patrol and turn-in flow. The first reward uses supplies and experience. A full two-browser outing and physical controller play remain open. [Runtime report](../test-reports/2026-11-05-22-56-christopherbell-dev-survive-north-gate-patrol.md)
 
+### 2026-11-05 - Verify North Gate Patrol in production
+
+- **Change:** PR #1579 passed CI and deployed as 1b5de80cafad03cb1ec33de06af1ac9e766d1608. The live build matches the merge.
+- **Reason:** North Gate Patrol connects the starting route, shared enemy and skillchain with a return reward.
+- **Impact:** The assignment is live. The desktop NPC check and two-session HTTP round trip passed. Keep the child plan open for a complete two-browser outing and physical controller evidence. [PR #1579](https://github.com/azurras/christopherbell.dev/pull/1579)
+
 ## Outcome
 
 Pending.
