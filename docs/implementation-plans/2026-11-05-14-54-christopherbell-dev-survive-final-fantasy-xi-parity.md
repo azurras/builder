@@ -440,6 +440,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The player reported the game still looked and felt far from FFXI. The desktop capture showed that the website frame and unfinished scene both contributed.
 - **Impact:** Candidate db8c9969 passed the desktop view checks. The art review now names the character and waystation changes needed for the next pass. [Runtime report](../test-reports/2026-11-06-08-17-christopherbell-dev-survive-desktop-game-view.md)
 
+### 2026-11-06 - Verify desktop game framing in production
+
+- **Change:** PR #1582 passed CI and deployed as e73b4e0d83414e5c17cb31774f726471016b6d20.
+- **Reason:** Active desktop play needs the browser space for the world and its HUD.
+- **Impact:** Browser-filling play and the page-view switch are live. The camp-to-keeper art and motion pass remains open. [PR #1582](https://github.com/azurras/christopherbell.dev/pull/1582)
+
 ## Outcome
 
 Pending.
