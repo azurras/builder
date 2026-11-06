@@ -518,6 +518,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Confirm the adventurer shading release reached the game.
 - **Impact:** Smooth face and armor lighting is live. ART-01 and ART-02 remain open for geometry, materials and matched desktop captures. [Shading PR](https://github.com/azurras/christopherbell.dev/pull/1586)
 
+### 2026-11-06 - Verify enemy defeat motion
+
+- **Change:** A confirmed victory leaves the defeated enemy visible briefly to fall at the contact point while targeting and chat update immediately.
+- **Reason:** The finishing attack needs a readable result in the world.
+- **Impact:** Chrome captured a standing, fallen and cleared meadow hog on candidate 5baf77f6. ART-03 still requires shared and raider defeat captures, player collapse, audio and reduced-motion verification. [Runtime report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md)
+
 ## Outcome
 
 Pending.

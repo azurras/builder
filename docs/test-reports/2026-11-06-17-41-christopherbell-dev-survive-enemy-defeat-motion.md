@@ -1,0 +1,57 @@
+# Survive enemy defeat motion: Test Report
+
+## Story/Issue
+Keep the defeated target visible through a short fall in the [desktop parity plan](../implementation-plans/2026-11-05-14-54-christopherbell-dev-survive-final-fantasy-xi-parity.md#desktop-art-and-animation-review).
+
+## Branch
+`codex/survive-enemy-defeat-motion` at `5baf77f6a1dcdcb275ee954cdd739ba3fe5b2468`, based on the player hit-reaction branch.
+
+## Pass / Fail
+> [!TIP]
+> **2 of 2 passed** on candidate `5baf77f6`.
+
+| # | Test case | Result | Why |
+|---|---|---|
+| 1 | Distinguish victory from other exits and roll wildlife | ✅ PASS | Tests cover personal and party wins, flee, player death, cue expiry and boar geometry. |
+| 2 | Defeat a roaming hog in desktop Chrome | ✅ PASS | Frames show the hog standing, fallen with the ring gone and cleared, with victory and reward in chat. |
+
+## Test Cases
+1. Verify victory detection, fall timing and UVs in the boar mesh.
+2. Join, approach meadow-hog, engage, guard the first bite and wait for the finishing strike.
+
+## App / Environment
+| Setting | Value |
+|---|---|
+| Runtime | Test profile at http://127.0.0.1:51238 |
+| Database | Disposable MongoDB at 127.0.0.1:51237/test |
+| Browser | Desktop Chrome with software WebGL |
+
+## Local Run Details
+- Verified exact actuator version before opening Chrome. Both ports closed and temporary directories were removed.
+
+## Data Sent
+```text
+Join as Motion Scout
+Walk to meadow-hog, ENGAGE, DEFEND
+Capture the WebGL view before and during the fall, then capture the cleared field and chat
+```
+
+## Response Received
+```text
+PASS: Chrome defeated the meadow hog, confirmed victory in chat and captured the falling and cleared target.
+port 51238 listeners: 0
+port 51237 listeners: 0
+```
+
+## Evidence
+- All 470 JavaScript tests, changed-script syntax checks and candidate build passed.
+- Inspected the standing, fallen and cleared images. The fallen frame shows the hog on its side at contact range with no red target ring. The cleared frame shows the victory and one food in chat.
+
+## Bugs / Follow-ups
+The runtime check covers a personal hog victory. Party victory detection is unit-tested. Shared-fight, raider, player collapse and reduced-motion defeat visuals still need direct browser checks or implementation. The defeat cue is local presentation without a new shared event.
+
+## Document Status
+complete
+
+## Project
+christopherbell-dev
