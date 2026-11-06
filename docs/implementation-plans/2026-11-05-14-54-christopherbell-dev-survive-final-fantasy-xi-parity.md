@@ -408,6 +408,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The user asked for FFXI-style inventory and equipment. Current crafting replaces the active weapon and the equipment menu is read-only.
 - **Impact:** JOB-01 and ECON-01 now have a shared equipment path. Start with retained weapons, a slot picker and old-save compatibility.
 
+### 2026-11-06 - Verify Main equipment and packed weapons
+
+- **Change:** Implemented the Main slot chooser and retained crafted spare weapons. Items shows packed gear and counts it toward the ten-unit cap.
+- **Reason:** Players need to keep and compare useful weapons before the gear catalog expands.
+- **Impact:** The first equipment slice is verified locally at 616b11b7. Sorting, armor, tools, job requirements and storage remain open. [Runtime report](../test-reports/2026-11-06-06-34-christopherbell-dev-survive-main-weapon-slot.md)
+
 ## Outcome
 
 Pending.
