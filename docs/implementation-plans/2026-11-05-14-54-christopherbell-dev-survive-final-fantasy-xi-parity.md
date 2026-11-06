@@ -446,6 +446,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Active desktop play needs the browser space for the world and its HUD.
 - **Impact:** Browser-filling play and the page-view switch are live. The camp-to-keeper art and motion pass remains open. [PR #1582](https://github.com/azurras/christopherbell.dev/pull/1582)
 
+### 2026-11-06 - Verify the first North Gate art pass
+
+- **Change:** Adjusted adventurer head and leg proportions across baked clips, differentiated the keeper with a mantle and cap, and added roof courses, stone trim, a pennant and clustered plants to the approach.
+- **Reason:** The default desktop camera showed overly similar character silhouettes and an underdeveloped waystation.
+- **Impact:** Candidate 2789796a passed the route probe and art tests. ART-01 through ART-03 remain open for cloth, stronger environmental materials, combat motion and comparable captures. [Runtime report](../test-reports/2026-11-06-08-50-christopherbell-dev-survive-north-gate-art.md)
+
 ## Outcome
 
 Pending.
