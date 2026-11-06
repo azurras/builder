@@ -106,6 +106,16 @@ Required skill: write-chris-street-style-code
 | **Tests and evidence** | Shared damage, threat, skill timing, disconnect and restart. |
 | **Verification** | Java and browser tests plus two isolated browser sessions. |
 
+#### Shared fight handoff
+
+Party membership is saved with the world. The current field claim still lives in SurviveWildlife and hides the enemy from everyone except the claimant. The current combat loop stores health and attack deadlines on each player. The next implementation slice needs to replace these two sources of truth for party fights in the same change.
+
+- Key a party fight by its route ID and a unique fight ID. Save its claim, initial pose, shared health, participants and deadlines in the versioned world. Resolve the selected route against the server's acknowledged player position when starting or joining the fight.
+- Keep claimed enemies visible with one identity. Members can Check and Engage within range. Outsiders can see the claim and Check it. The server rejects their attempts to join or attack.
+- Settle due player strikes and enemy retaliation in deterministic order. Keep TP and equipment wear on the acting character. Resolve a finish and the eligible rewards in one world save. A retry, restart or simultaneous strike must read the committed outcome.
+- Keep the existing text encounters and night raid on their current paths. After a party fight ends, derive release and respawn from saved state so restarting the server cannot immediately restore a defeated spawn.
+- Prove shared health first with three independent sessions. Have two members land damage, reject a third player's Engage, then repeat through a disconnect and a final-strike race. Add the timed two-player skillchain and NPC objective once this proof is green.
+
 ### Task 3 - Complete the first outing
 Required skill: write-chris-street-style-code
 
@@ -159,6 +169,12 @@ Release the camera independently from durable combat. Preserve additive fields i
 - **Change:** Implemented and verified durable two-player invitation, acceptance, decline, cancellation and leave in the Party menu. The candidate uses the active survivor roster to invite and shows private state changes in chat.
 - **Reason:** Shared combat needs explicit party membership to decide who can participate and earn credit. The menu gives the current desktop and text clients a common entry point.
 - **Impact:** Party formation is verified locally at 3a14da91. In-world player targeting, shared HP, threat, skillchain coordination and the NPC assignment remain open. The initial BSON UUID write failure was corrected and retested. [Runtime report](../test-reports/2026-11-05-15-19-christopherbell-dev-survive-two-player-parties.md)
+
+### 2026-11-05 - Specify the shared fight handoff
+
+- **Change:** Added a shared fight handoff based on the current server combat and wildlife code.
+- **Reason:** The existing field claim and player-owned health are separate, so a party-only health view could still allow duplicate fights or rewards.
+- **Impact:** Task 2 now specifies the shared fight state, exact route validation, one durable outcome and the three-session verification order.
 
 ## Outcome
 Pending.
