@@ -452,6 +452,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The default desktop camera showed overly similar character silhouettes and an underdeveloped waystation.
 - **Impact:** Candidate 2789796a passed the route probe and art tests. ART-01 through ART-03 remain open for cloth, stronger environmental materials, combat motion and comparable captures. [Runtime report](../test-reports/2026-11-06-08-50-christopherbell-dev-survive-north-gate-art.md)
 
+### 2026-11-06 - Verify independent enemy counters
+
+- **Change:** Separated the enemy counter from player swings. A confirmed bite or consumed guard now drives a wind-back and lunge, and the raider no longer swings from the player's pose.
+- **Reason:** A viewer should be able to tell who attacked and when the enemy responded.
+- **Impact:** Candidate 6f1de67e passed the Chrome fight and motion tests. ART-03 remains open for telegraphs, hit reactions, ally playback and sound. [Runtime report](../test-reports/2026-11-06-09-05-christopherbell-dev-survive-enemy-counter-motion.md)
+
 ## Outcome
 
 Pending.
