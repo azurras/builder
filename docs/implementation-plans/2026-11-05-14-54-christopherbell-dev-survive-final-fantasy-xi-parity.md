@@ -94,7 +94,7 @@ Update each row with a child plan and evidence. Use planned, in progress, verifi
 | ART-02 | Landscape | Textured island with a clearer North Gate route. | Author distinct route grades and silhouettes, material transitions, weathered structures, foliage layers, water edges and lighting by time of day. Use same-height desktop captures with route landmarks visible. |
 | ART-03 | Motion and sound | Existing action poses and world feedback need a full playthrough review. | Read locomotion, weapon draw, wind-up, impact, hit reaction and defeat at play speed. Show tool contact for logging and mining, cast/bite/reel for fishing, and readable synthesis and sleep. Add original environmental beds and distinct action cues with volume controls. |
 | ECON-01 | Gathering and trade | Location-based resource commands, one-roll fishing, basic crafting and camp gifts. | Add targetable nodes, tool and skill checks, timed fishing, recipe inputs and meaningful outputs. Use direct trade first, then evaluate bazaars and auction listings with ownership and duplication checks. |
-| SOC-01 | Social and travel | Shared presence and camp, process-local positions and routes. | Add party invitations and recovery, party chat, persistent travel checkpoints, region transitions and distinct mission versus quest progression. Evaluate public chat, linkshell-like groups and travel unlocks once the first route works. |
+| SOC-01 | Social and travel | Shared presence and camp, process-local positions and routes. Two-player party commands verified live in [#1576](https://github.com/azurras/christopherbell.dev/pull/1576). | Extend party formation to field targeting, add party chat and recovery, then add persistent travel checkpoints, region transitions and distinct mission versus quest progression. |
 | PERF-01 | Browser and server | Render reuse and version-checked movement reads are verified live by build identity. | Profile long sessions and concurrent play with the same scene and action mix. Track browser memory slope and frame-time percentiles, server heap and p95 latency, DB bytes and writes, bandwidth and shared-IP behavior. Distinguish stored-character capacity from measured concurrency. |
 
 ### Child plan ledger
@@ -340,6 +340,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Implemented and verified durable two-player invitation, acceptance, decline, cancellation and leave in the Party menu. The candidate uses the active survivor roster to invite and shows private state changes in chat.
 - **Reason:** Shared combat needs explicit party membership to decide who can participate and earn credit. The menu gives the current desktop and text clients a common entry point.
 - **Impact:** Party formation is verified locally at 3a14da91. In-world player targeting, shared HP, threat, skillchain coordination and the NPC assignment remain open. The initial BSON UUID write failure was corrected and retested. [Runtime report](../test-reports/2026-11-05-15-19-christopherbell-dev-survive-two-player-parties.md)
+
+### 2026-11-05 - Verify party formation in production
+
+- **Change:** PR #1576 passed CI and deployed as 074d39ca04a4cef759771b62063df1dcd9abb9c0. Production build readback matched the merge.
+- **Reason:** The first shared outing needs durable membership before an encounter can grant party access and rewards.
+- **Impact:** The two-player menu and private invitations are live. Shared HP, coordinated weapon skills and the NPC assignment remain open. [PR #1576](https://github.com/azurras/christopherbell.dev/pull/1576) · [Runtime report](../test-reports/2026-11-05-15-19-christopherbell-dev-survive-two-player-parties.md)
 
 ## Outcome
 

@@ -176,6 +176,12 @@ Release the camera independently from durable combat. Preserve additive fields i
 - **Reason:** The existing field claim and player-owned health are separate, so a party-only health view could still allow duplicate fights or rewards.
 - **Impact:** Task 2 now specifies the shared fight state, exact route validation, one durable outcome and the three-session verification order.
 
+### 2026-11-05 - Verify party formation in production
+
+- **Change:** PR #1576 passed CI and deployed as 074d39ca04a4cef759771b62063df1dcd9abb9c0. Production build readback matched the merge.
+- **Reason:** The first shared outing needs durable membership before an encounter can grant party access and rewards.
+- **Impact:** The two-player menu and private invitations are live. Shared HP, coordinated weapon skills and the NPC assignment remain open. [PR #1576](https://github.com/azurras/christopherbell.dev/pull/1576) · [Runtime report](../test-reports/2026-11-05-15-19-christopherbell-dev-survive-two-player-parties.md)
+
 ## Outcome
 Pending.
 
