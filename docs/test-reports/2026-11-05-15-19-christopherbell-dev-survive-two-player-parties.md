@@ -6,12 +6,12 @@ Verify the party-formation step in the [FFXI starting-zone plan](../implementati
 
 ## Branch
 
-`codex/survive-party-invites` at `3a14da91fbf1bb9c17b01347ca29f79b701608ff`.
+`codex/survive-party-invites` at `d4f15bf2b6fa76a0d2a5d414cac295bb7732a52f`.
 
 ## Pass / Fail
 
 > [!TIP]
-> **2 of 2 passed** on candidate `3a14da91`.
+> **2 of 2 passed** on candidate `d4f15bf2`.
 
 | # | Test case | Result | Why |
 |---|---|---|---|
@@ -28,15 +28,15 @@ Verify the party-formation step in the [FFXI starting-zone plan](../implementati
 | Setting | Value |
 |---|---|
 | App | christopherbell.dev Survive |
-| Runtime | Test profile at `http://127.0.0.1:50968` |
-| Database | Disposable MongoDB bound to loopback at `127.0.0.1:50967/test` |
+| Runtime | Test profile at `http://127.0.0.1:58218` |
+| Database | Disposable MongoDB bound to loopback at `127.0.0.1:58217/test` |
 | Browser | Desktop Chrome headless at 1366×900 with independent browser contexts |
 
 ## Local Run Details
 
 - **Local command:** `.\ops\local\Start-Candidate.ps1 -StateFile $stateFile`.
 - **Working directory:** Survive 3D worktree on the branch above.
-- **Identity:** Actuator returned `0.0.0-dev.3a14da91fbf1bb9c17b01347ca29f79b701608ff`. Startup confirmed database `test`.
+- **Identity:** Actuator returned `0.0.0-dev.d4f15bf2b6fa76a0d2a5d414cac295bb7732a52f`. Startup confirmed database `test`.
 - **Cleanup:** Stop-Candidate confirmed zero listeners on both ports and removed the temporary database and JDK socket directories. The browser probe closed its Chrome process and removed its profile.
 
 ## Data Sent
@@ -76,11 +76,11 @@ Unauthorized participant and stale invitation attempts returned 409.
 ## Evidence
 
 - 71 targeted Java tests passed, including service restart, invite expiry, CSRF and Mongo mapping. All 460 JavaScript tests and touched JavaScript syntax checks passed.
-- Candidate JAR was built before startup, and both probes used the same verified runtime.
+- Candidate JAR and Checkstyle passed before startup, and both probes used the same verified runtime.
 
 ## Bugs / Follow-ups
 
-Candidate `36b429b1` failed the first Mongo-backed invite because the driver had no BSON UUID representation configured. The verified candidate stores party IDs as canonical strings, matching survivor IDs, and covers that mapping in a regression test. Physical controller input, shared enemy health and quest rewards are still open.
+Candidate `36b429b1` failed the first Mongo-backed invite because the driver had no BSON UUID representation configured. The verified candidate stores party IDs as canonical strings, matching survivor IDs, and covers that mapping in a regression test. Candidate 3a14da91 was superseded after CI required an import style correction. Both probes passed again on d4f15bf2. Physical controller input, shared enemy health and quest rewards are still open.
 
 ## Document Status
 
