@@ -488,6 +488,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The campfire is prominent from the opening desktop camera on the North Gate review route.
 - **Impact:** Candidate 8216f232 passed the Chrome motion comparison. ART-02 remains open for night, full-route and matched-lighting review. GPU cost remains unmeasured. [Runtime report](../test-reports/2026-11-06-17-11-christopherbell-dev-survive-campfire-and-local-firelight.md)
 
+### 2026-11-06 - Verify nearby fighters draw and guard
+
+- **Change:** Nearby adventurers show their confirmed equipped weapon and draw it when engaged. Guarding has a distinct pose, and fighters face a known encounter.
+- **Reason:** Party members need to read each other's combat state from the world view.
+- **Impact:** Two desktop Chrome contexts verified weapon draw and stance updates on candidate b3362b39 in a personal encounter. ART-03 remains open for shared-fight captures, strike playback and hit reactions. [Runtime report](../test-reports/2026-11-06-17-19-christopherbell-dev-survive-remote-combat-stance.md)
+
 ## Outcome
 
 Pending.
