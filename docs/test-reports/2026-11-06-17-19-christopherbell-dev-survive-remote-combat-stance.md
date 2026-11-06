@@ -52,6 +52,9 @@ port 53644 listeners: 0
 ## Bugs / Follow-ups
 The first field setup timed out while walking the observer into place. The passing browser case used a personal encounter near camp. Shared-target facing and actual remote attack playback still require direct browser proof, and the latter is not implemented by this change.
 
+## Refreshed release candidate
+Merged the campfire release into the stance branch, resolving the test imports by retaining both suites. Candidate 84544d76576d18c98970c5198b0defb1446b937b passed the movement service tests, JavaScript suite and bootJar build. Its exact actuator version was verified at http://127.0.0.1:51872 against disposable MongoDB on 127.0.0.1:51871/test. Two isolated Chrome contexts repeated the equipped club, engagement, guard and disengagement checks successfully. Both listeners closed at teardown.
+
 ## Document Status
 complete
 
