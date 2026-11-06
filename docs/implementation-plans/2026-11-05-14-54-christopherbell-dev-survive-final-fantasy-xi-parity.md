@@ -212,6 +212,19 @@ Record client and server costs separately. Use a real desktop browser for frame 
 
 The first profiling child sets measurable budgets from the baseline and records the acceptance thresholds before optimization. Investigate misses using the traces for the affected path. If a richer scene exceeds its budget, profile allocation, draw work and asset transfer. If movement or combat exceeds its budget, profile request volume, world restoration, conflicts and database writes. Re-run the same case after each fix and keep its evidence with the affected ledger row.
 
+### Inventory and equipment parity
+
+The first equipment pass makes the Main slot interactive. Players can keep a crafted spare, inspect its damage and durability, and equip or remove it without losing the previous weapon. Keep the existing Items and Equipment windows and return command results through chat. FFXI's manual describes sortable carried items and a slot-first Equipment window that filters candidates and shows their stats and requirements. [FFXI Windows manual, printed pp. 24–25](https://support.na.square-enix.com/document/manual/20/FFXI_manual_vc09_AE5.pdf)
+
+| Slice | Player-facing result | Evidence |
+|---|---|---|
+| Main slot and spare weapons | Crafting into an occupied Main slot places the new weapon in the pack. Select Main to see owned weapons with damage and condition. Equip swaps with the packed weapon and Remove stows the equipped weapon if there is room. | Keep two different weapons, switch between them, confirm damage and skill names, reconnect and verify exact condition. Reject a stale item ID and a full-pack removal. |
+| Item list | Show named rows, quantities, descriptions and usable actions. Add sorting while preserving selection, and use separate item records for fish, food and crafting materials. | Verify stable focus on keyboard and controller, item use, stack limits and preserved quantities from old saves. |
+| Armor, tools and accessories | Add slots with real items and compatible choices as crafting and jobs provide them. Show requirements and stat differences before confirm. Worn gear should appear on the character when the asset exists. | Equip a useful armor piece and field tool, reject an incompatible item, and verify the difference in play. |
+| Storage and loadouts | Add camp storage and equipment sets once the gear catalog justifies them. | Move items between containers, preserve ownership on retries and reconnects, and recover an incomplete loadout cleanly. |
+
+Keep current resource counts and the active weapon on old saves. The first pass keeps the ten-unit carrying limit and existing durability. Packed weapons take one unit each, and the equipped weapon remains outside that count. Decide stack sizes, job requirements and a durability policy when the item catalog and job progression are ready.
+
 ### How to record changes and fixes
 
 Give each newly discovered need a ledger ID or attach it to the closest existing row. For a fix, record the player-visible symptom, the reproduction, the owning child plan and the check that proves recovery. Record what changed in the child and append a dated entry here when it changes scope, an acceptance check or the delivery state. Link the evidence before marking a row verified local or verified live.
@@ -388,6 +401,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Verified the complete two-browser North Gate Patrol outing on deployed revision 1b5de80c using isolated test Mongo. Both players used the game UI for party formation, movement, assignment acceptance, Impact and reward turn-in.
 - **Reason:** The previous report covered the full round trip through the HTTP contract and only the keeper interaction in a browser.
 - **Impact:** The desktop two-browser evidence is recorded for AC-3 and AC-4. Physical controller play remains open. [Runtime report](../test-reports/2026-11-06-06-26-christopherbell-dev-survive-north-gate-two-browser-playthrough.md)
+
+### 2026-11-06 - Define inventory and equipment parity
+
+- **Change:** Added inventory and equipment parity slices and a first Main-slot acceptance check.
+- **Reason:** The user asked for FFXI-style inventory and equipment. Current crafting replaces the active weapon and the equipment menu is read-only.
+- **Impact:** JOB-01 and ECON-01 now have a shared equipment path. Start with retained weapons, a slot picker and old-save compatibility.
 
 ## Outcome
 
