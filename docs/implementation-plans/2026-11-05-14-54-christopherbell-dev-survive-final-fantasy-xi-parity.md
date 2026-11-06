@@ -420,6 +420,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The first inventory and equipment release lets players retain and manage the weapons they craft.
 - **Impact:** The Main slot and spare-weapon list are live. Named item use and sorting, armor and tools, and storage remain open. [PR #1580](https://github.com/azurras/christopherbell.dev/pull/1580)
 
+### 2026-11-06 - Verify sortable Items and food use
+
+- **Change:** Added a sortable Items list for carried resources and spare weapons. Item descriptions and Use Food share the existing confirmed game action flow.
+- **Reason:** Players need to inspect and use carried items from the menu.
+- **Impact:** Candidate 578ed55a passed desktop sorting, refresh focus and food use. New item types and armor, tools and storage remain open. [Runtime report](../test-reports/2026-11-06-07-05-christopherbell-dev-survive-sortable-items.md)
+
 ## Outcome
 
 Pending.
