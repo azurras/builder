@@ -383,6 +383,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** North Gate Patrol connects the starting route, shared enemy and skillchain with a return reward.
 - **Impact:** The assignment is live. The desktop NPC check and two-session HTTP round trip passed. Keep the child plan open for a complete two-browser outing and physical controller evidence. [PR #1579](https://github.com/azurras/christopherbell.dev/pull/1579)
 
+### 2026-11-06 - Verify the two-browser North Gate outing
+
+- **Change:** Verified the complete two-browser North Gate Patrol outing on deployed revision 1b5de80c using isolated test Mongo. Both players used the game UI for party formation, movement, assignment acceptance, Impact and reward turn-in.
+- **Reason:** The previous report covered the full round trip through the HTTP contract and only the keeper interaction in a browser.
+- **Impact:** The desktop two-browser evidence is recorded for AC-3 and AC-4. Physical controller play remains open. [Runtime report](../test-reports/2026-11-06-06-26-christopherbell-dev-survive-north-gate-two-browser-playthrough.md)
+
 ## Outcome
 
 Pending.
