@@ -458,6 +458,18 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A viewer should be able to tell who attacked and when the enemy responded.
 - **Impact:** Candidate 6f1de67e passed the Chrome fight and motion tests. ART-03 remains open for telegraphs, hit reactions, ally playback and sound. [Runtime report](../test-reports/2026-11-06-09-05-christopherbell-dev-survive-enemy-counter-motion.md)
 
+### 2026-11-06 - Verify the art and enemy counter releases
+
+- **Change:** PR #1583 merged as ad3ab6b and PR #1584 merged as 9ff6562. Live build readback confirmed 9ff6562 contains both changes.
+- **Reason:** The desktop visual pass and independent enemy counter passed their release checks.
+- **Impact:** North Gate art and enemy counters are live. ART-01 through ART-03 remain open for the remaining visual and motion benchmark. [Art PR](https://github.com/azurras/christopherbell.dev/pull/1583) · [Motion PR](https://github.com/azurras/christopherbell.dev/pull/1584)
+
+### 2026-11-06 - Verify the engaged stance
+
+- **Change:** The local adventurer draws their equipped weapon in an engaged ready stance between attacks and stows it after Disengage.
+- **Reason:** Engage needs a persistent visual signal between timed strikes.
+- **Impact:** Desktop Chrome verified both poses on candidate 193449c2. ART-03 remains open for remote playback, hit reactions and sound. [Runtime report](../test-reports/2026-11-06-16-24-christopherbell-dev-survive-engaged-stance.md)
+
 ## Outcome
 
 Pending.
