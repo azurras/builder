@@ -524,6 +524,18 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The finishing attack needs a readable result in the world.
 - **Impact:** Chrome captured a standing, fallen and cleared meadow hog on candidate 5baf77f6. ART-03 still requires shared and raider defeat captures, player collapse, audio and reduced-motion verification. [Runtime report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md)
 
+### 2026-11-06 - Verify timed island fishing
+
+- **Change:** Island fishing now saves a cast deadline, projects a bite by the bobber and accepts Reel In for five seconds after the bite. A missed bite, movement out of range or cancellation ends the cast.
+- **Reason:** AC-4 and ART-03 require an observable cast, bite and reel instead of an instant food roll on the island.
+- **Impact:** Chrome verified the cue, focus and expiry on candidate cb05119b. Server tests verified the catch and duplicate protection. Named fish, bait, skills, cooking, trade and controller proof remain open. [Runtime report](../test-reports/2026-11-06-17-51-christopherbell-dev-survive-timed-fishing.md)
+
+### 2026-11-06 - Verify the campfire release
+
+- **Change:** Campfire PR #1587 is live at 0c000f7. Nearby combat stance PR #1588 merged as 9b84b43 and is awaiting production readback.
+- **Reason:** Record the delivery state independently of candidate checks.
+- **Impact:** The starting camp has soft flames and local firelight. Shared strike playback still depends on the stance release. [Campfire PR](https://github.com/azurras/christopherbell.dev/pull/1587) · [Stance PR](https://github.com/azurras/christopherbell.dev/pull/1588)
+
 ## Outcome
 
 Pending.
