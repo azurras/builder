@@ -494,6 +494,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Party members need to read each other's combat state from the world view.
 - **Impact:** Two desktop Chrome contexts verified weapon draw and stance updates on candidate b3362b39 in a personal encounter. ART-03 remains open for shared-fight captures, strike playback and hit reactions. [Runtime report](../test-reports/2026-11-06-17-19-christopherbell-dev-survive-remote-combat-stance.md)
 
+### 2026-11-06 - Verify nearby automatic strike playback
+
+- **Change:** Committed strikes carry a short-lived cue, and nearby clients animate each cue once using the weapon that landed the hit.
+- **Reason:** Observers need to see resolved attacks and should not replay repeated polls or old rounds settled after an absence.
+- **Impact:** Two Chrome contexts confirmed an automatic strike and its visible swing on candidate a5de7699. ART-03 remains open for shared fights, weapon-skill browser proof and hit reactions. This branch builds on the nearby stance change. [Runtime report](../test-reports/2026-11-06-17-28-christopherbell-dev-survive-remote-strike-playback.md)
+
 ## Outcome
 
 Pending.
