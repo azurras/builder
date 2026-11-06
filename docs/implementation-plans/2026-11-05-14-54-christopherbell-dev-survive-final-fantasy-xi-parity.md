@@ -371,6 +371,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The first shared outing needs a weapon skill sequence that rewards two players for timing their actions.
 - **Impact:** Impact is live. The first NPC assignment and the complete outing playtest remain open. [PR #1578](https://github.com/azurras/christopherbell.dev/pull/1578)
 
+### 2026-11-05 - Verify the first waystation patrol
+
+- **Change:** Added the Waystation Keeper and North Gate Patrol. Each survivor accepts, contributes to a shared roaming victory and returns for two food and one experience point.
+- **Reason:** The starting route needs a visible reason to leave camp and a clear return objective.
+- **Impact:** Candidate 95c6f1b5 passed desktop NPC interaction and the two-session patrol and turn-in flow. The first reward uses supplies and experience. A full two-browser outing and physical controller play remain open. [Runtime report](../test-reports/2026-11-05-22-56-christopherbell-dev-survive-north-gate-patrol.md)
+
 ## Outcome
 
 Pending.
