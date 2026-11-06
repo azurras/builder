@@ -414,6 +414,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Players need to keep and compare useful weapons before the gear catalog expands.
 - **Impact:** The first equipment slice is verified locally at 616b11b7. Sorting, armor, tools, job requirements and storage remain open. [Runtime report](../test-reports/2026-11-06-06-34-christopherbell-dev-survive-main-weapon-slot.md)
 
+### 2026-11-06 - Verify Main equipment in production
+
+- **Change:** PR #1580 passed CI and deployed as 355b10e62d7c9b41d407cf7f6d2a81166ed3ab6c. The production build matches the merge.
+- **Reason:** The first inventory and equipment release lets players retain and manage the weapons they craft.
+- **Impact:** The Main slot and spare-weapon list are live. Named item use and sorting, armor and tools, and storage remain open. [PR #1580](https://github.com/azurras/christopherbell.dev/pull/1580)
+
 ## Outcome
 
 Pending.
