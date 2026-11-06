@@ -359,6 +359,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A durable shared fight is the foundation for coordinated weapon skills and the first NPC assignment.
 - **Impact:** Shared health, visible claims and one defeat with a bounded food drop are live. The starting-zone AC-3 remains open for the two-player skillchain. [PR #1577](https://github.com/azurras/christopherbell.dev/pull/1577) · [Runtime report](../test-reports/2026-11-05-21-39-christopherbell-dev-survive-shared-roaming-combat.md)
 
+### 2026-11-05 - Verify the first party skillchain
+
+- **Change:** Implemented the Impact skillchain. Unarmed Heavy Strike opens a saved window and a different member can close it with a club's Crushing Blow at least one second and less than five seconds later.
+- **Reason:** The first shared outing needs a timing decision that lets two players produce a combined result.
+- **Impact:** COM-02 and starting-zone AC-3 have local proof of a two-player chain and one defeat at 3616ac27. The initial pairing adds three damage. Magic bursts, enmity and the NPC objective remain open. [Runtime report](../test-reports/2026-11-05-22-16-christopherbell-dev-survive-impact-skillchain.md)
+
 ## Outcome
 
 Pending.
