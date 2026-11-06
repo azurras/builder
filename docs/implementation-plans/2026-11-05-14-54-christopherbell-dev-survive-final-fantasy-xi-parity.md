@@ -470,6 +470,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Engage needs a persistent visual signal between timed strikes.
 - **Impact:** Desktop Chrome verified both poses on candidate 193449c2. ART-03 remains open for remote playback, hit reactions and sound. [Runtime report](../test-reports/2026-11-06-16-24-christopherbell-dev-survive-engaged-stance.md)
 
+### 2026-11-06 - Verify the adventurer shading pass
+
+- **Change:** Baked smooth adventurer shading across shallow edges while retaining creases, with the original triangle count and atlas.
+- **Reason:** Flat triangle lighting made small face and armor surfaces read as harder facets at the desktop camera.
+- **Impact:** Candidate c7721fbc passed the geometry tests and a desktop Chrome render. ART-02 remains open for matched lighting comparisons and face, hand and cloth artwork. [Runtime report](../test-reports/2026-11-06-16-27-christopherbell-dev-survive-adventurer-shading.md)
+
 ## Outcome
 
 Pending.
