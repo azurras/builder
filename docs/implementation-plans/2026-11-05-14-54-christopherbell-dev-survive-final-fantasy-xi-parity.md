@@ -87,7 +87,7 @@ Update each row with a child plan and evidence. Use planned, in progress, verifi
 |---|---|---|---|
 | WORLD-01 | First outing | In progress. North Gate, crossing and waystation are playable. | Put an NPC, reason for the route and reward at specific locations. Two fresh characters can complete the round trip without external instructions. |
 | UI-01 | Input and HUD | Context menus, chat, map, calendar and creature targeting exist. | Extend selection to NPCs, party members, nodes and interactables. Verify confirm, cancel, target cycling, lock-on, chat focus, party HP/MP/TP and log filters on all desktop inputs. Add configurable shortcuts and macro palettes as the command set grows. |
-| COM-01 | Shared encounters | Personal health after claim. Passive hogs and aggressive wolves and bears already roam. | Give one spawn one authoritative encounter, HP and respawn. Add party claims, range and facing, species-specific detection and leash, and deterministic simultaneous actions. Verify outsider access, late join, disconnect and two clients attempting the final blow. |
+| COM-01 | Shared encounters | Two-player parties share roaming enemy health, claim and respawn. This slice is live in [#1577](https://github.com/azurras/christopherbell.dev/pull/1577). | Extend range and facing, species-specific detection, chase and leash. Verify full retreat and contested finishing blows across the complete outing. |
 | COM-02 | Tactical combat | Three-second timed exchanges and a TP skill. | Give weapons distinct cadence, enemies readable moves, and parties threat management, spell timing and recovery. Prove a compatible two-player skillchain and a correctly timed magic burst, including invalid timing and interrupted casts. |
 | JOB-01 | Jobs and progression | Strength/stamina growth and a private weapon slot. | Introduce a small set of changeable roles, job XP, weapon skill, equipment slots, spells and skill eligibility. Evaluate support jobs and level sync after party roles work. |
 | ART-01 | Actors and resources | Authored adventurer and wildlife, painted textures, mixed asset finish. | Review player and enemy turntables at gameplay distance, then captures in motion. Improve faces, gear layering, contact poses, creature anatomy and authored resource silhouettes, including trees, ore, shoreline and tools. |
@@ -352,6 +352,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Implemented durable party claims and shared enemy health for roaming fights. Party members can join within five metres, outsiders can see the claim, and one defeat commits the food drop and cooldown.
 - **Reason:** The starting-zone outing requires a single server-owned fight before a two-player weapon skill sequence can be added.
 - **Impact:** COM-01 and starting-zone AC-3 have local runtime evidence at 7913c3e8. Retaliation currently targets the attacker, and coordinated skillchains and the NPC objective remain open. [Runtime report](../test-reports/2026-11-05-21-39-christopherbell-dev-survive-shared-roaming-combat.md)
+
+### 2026-11-05 - Verify shared roaming combat in production
+
+- **Change:** PR #1577 passed CI and deployed as 191ca3d5c229cc1ada69f203617f3ccc0e0201ce. Production build readback matched the merge.
+- **Reason:** A durable shared fight is the foundation for coordinated weapon skills and the first NPC assignment.
+- **Impact:** Shared health, visible claims and one defeat with a bounded food drop are live. The starting-zone AC-3 remains open for the two-player skillchain. [PR #1577](https://github.com/azurras/christopherbell.dev/pull/1577) · [Runtime report](../test-reports/2026-11-05-21-39-christopherbell-dev-survive-shared-roaming-combat.md)
 
 ## Outcome
 

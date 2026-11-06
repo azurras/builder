@@ -188,6 +188,12 @@ Release the camera independently from durable combat. Preserve additive fields i
 - **Reason:** The starting-zone outing requires a single server-owned fight before a two-player weapon skill sequence can be added.
 - **Impact:** COM-01 and starting-zone AC-3 have local runtime evidence at 7913c3e8. Retaliation currently targets the attacker, and coordinated skillchains and the NPC objective remain open. [Runtime report](../test-reports/2026-11-05-21-39-christopherbell-dev-survive-shared-roaming-combat.md)
 
+### 2026-11-05 - Verify shared roaming combat in production
+
+- **Change:** PR #1577 passed CI and deployed as 191ca3d5c229cc1ada69f203617f3ccc0e0201ce. Production build readback matched the merge.
+- **Reason:** A durable shared fight is the foundation for coordinated weapon skills and the first NPC assignment.
+- **Impact:** Shared health, visible claims and one defeat with a bounded food drop are live. The starting-zone AC-3 remains open for the two-player skillchain. [PR #1577](https://github.com/azurras/christopherbell.dev/pull/1577) · [Runtime report](../test-reports/2026-11-05-21-39-christopherbell-dev-survive-shared-roaming-combat.md)
+
 ## Outcome
 Pending.
 
