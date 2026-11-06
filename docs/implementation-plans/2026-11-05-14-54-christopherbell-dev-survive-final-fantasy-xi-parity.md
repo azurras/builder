@@ -146,6 +146,8 @@ Use the supplied adventurer and waterway screenshots as the quality reference. T
 
 For each stop, save a before and after capture from the same position, camera heading, zoom, resolution and lighting on named builds. Use the normal HUD and chat view for acceptance. Review close-ups separately when diagnosing defects. Record each failed check with a clip or frame and the asset or action responsible, then repeat it on the fix. An improved still frame leaves the motion check open until the clip passes.
 
+The November 6 desktop review found three visible gaps on the starting route. The site framing took nearly half the browser height before the world began. The adventurer's large head and short lower legs weakened the silhouette, and the keeper read as another copy of the player. The camp props and waystation had simple shapes and the ground had little variation beyond the path. Address the framing separately, then use the camp-to-keeper stretch for a single art pass that pairs an improved adventurer rig and distinct keeper with a stronger building silhouette and denser vegetation at the route edges. Compare those changes in motion at the default camera distance before extending the pass across the island.
+
 Run the same route once for visual capture and again for timing with capture overhead removed. Compare frame time, memory over repeated loops and initial asset transfer on the same desktop and browser. Exercise both solo and two-player views. Record any budget change and its measured cost in the performance row. Favor painted materials, reusable rigs and shared scenery when they pass the play-distance checks.
 
 ### First gathering, fishing and trade loop
@@ -431,6 +433,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** PR #1581 passed CI and deployed as 0c217e70306dd107c780d6ebc4e16e9e319e683a.
 - **Reason:** The Items window needs usable selections and stable refresh behavior before expanding the item catalog.
 - **Impact:** Sorting, descriptions and direct food use are live. Armor, tools and storage remain open. [PR #1581](https://github.com/azurras/christopherbell.dev/pull/1581)
+
+### 2026-11-06 - Review the desktop look and verify game framing
+
+- **Change:** Captured the starting route and verified a browser-filling desktop view with a reversible page-view switch.
+- **Reason:** The player reported the game still looked and felt far from FFXI. The desktop capture showed that the website frame and unfinished scene both contributed.
+- **Impact:** Candidate db8c9969 passed the desktop view checks. The art review now names the character and waystation changes needed for the next pass. [Runtime report](../test-reports/2026-11-06-08-17-christopherbell-dev-survive-desktop-game-view.md)
 
 ## Outcome
 
