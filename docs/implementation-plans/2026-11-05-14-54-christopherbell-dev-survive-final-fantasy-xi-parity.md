@@ -426,6 +426,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Players need to inspect and use carried items from the menu.
 - **Impact:** Candidate 578ed55a passed desktop sorting, refresh focus and food use. New item types and armor, tools and storage remain open. [Runtime report](../test-reports/2026-11-06-07-05-christopherbell-dev-survive-sortable-items.md)
 
+### 2026-11-06 - Verify sortable Items in production
+
+- **Change:** PR #1581 passed CI and deployed as 0c217e70306dd107c780d6ebc4e16e9e319e683a.
+- **Reason:** The Items window needs usable selections and stable refresh behavior before expanding the item catalog.
+- **Impact:** Sorting, descriptions and direct food use are live. Armor, tools and storage remain open. [PR #1581](https://github.com/azurras/christopherbell.dev/pull/1581)
+
 ## Outcome
 
 Pending.
