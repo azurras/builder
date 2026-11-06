@@ -347,6 +347,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The first shared outing needs durable membership before an encounter can grant party access and rewards.
 - **Impact:** The two-player menu and private invitations are live. Shared HP, coordinated weapon skills and the NPC assignment remain open. [PR #1576](https://github.com/azurras/christopherbell.dev/pull/1576) · [Runtime report](../test-reports/2026-11-05-15-19-christopherbell-dev-survive-two-player-parties.md)
 
+### 2026-11-05 - Verify one shared roaming encounter
+
+- **Change:** Implemented durable party claims and shared enemy health for roaming fights. Party members can join within five metres, outsiders can see the claim, and one defeat commits the food drop and cooldown.
+- **Reason:** The starting-zone outing requires a single server-owned fight before a two-player weapon skill sequence can be added.
+- **Impact:** COM-01 and starting-zone AC-3 have local runtime evidence at 7913c3e8. Retaliation currently targets the attacker, and coordinated skillchains and the NPC objective remain open. [Runtime report](../test-reports/2026-11-05-21-39-christopherbell-dev-survive-shared-roaming-combat.md)
+
 ## Outcome
 
 Pending.
