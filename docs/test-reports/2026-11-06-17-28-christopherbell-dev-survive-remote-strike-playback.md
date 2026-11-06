@@ -47,11 +47,17 @@ port 57585 listeners: 0
 ```
 
 ## Evidence
-- Targeted Survive Java tests, Mongo saved-world tests, all 467 JavaScript tests, changed-script syntax checks and candidate build passed.
+- The full Java suite, including Survive and Mongo saved-world tests, all 467 JavaScript tests, changed-script syntax checks and candidate build passed.
 - The observer capture shows the fighter turning their body and extending the club during the strike. The ready and recovered captures show the standing stance.
 
 ## Bugs / Follow-ups
-Browser proof covers an automatic club strike in a personal encounter. Shared-fight playback, weapon skills, kill and weapon-break rendering, and reduced-motion behavior still need direct browser checks. The cue keeps only the latest confirmed strike per fighter, so a slow observer can miss an older strike.
+The captured swing covers an automatic club strike in a personal encounter. The shared browser run verified both weapon-skill cues, chat and progression. It did not capture both skill animations during the shared fight. Kill and weapon-break rendering and reduced-motion behavior still need direct browser checks. The cue keeps only the latest confirmed strike per fighter, so a slow observer can miss an older strike.
+
+## Shared North Gate Patrol follow-up
+- Started the same committed candidate at http://127.0.0.1:59669 with disposable MongoDB at 127.0.0.1:59668/test. Both ports closed at teardown.
+- Two Chrome contexts formed a party, accepted the patrol, joined the same bear fight, opened Impact with Heavy Strike, closed with Crushing Blow and turned in both assignments.
+- Each browser received the other player's confirmed weapon-skill cue. The closing cue carried CLUB.
+- The first attempt waited for the opening cue before trying to close Impact and timed out. The successful attempt let the browser record cues during the normal command sequence and checked them after the close.
 
 ## Document Status
 complete

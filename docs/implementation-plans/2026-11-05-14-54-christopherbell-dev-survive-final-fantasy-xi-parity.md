@@ -500,6 +500,24 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Observers need to see resolved attacks and should not replay repeated polls or old rounds settled after an absence.
 - **Impact:** Two Chrome contexts confirmed an automatic strike and its visible swing on candidate a5de7699. ART-03 remains open for shared fights, weapon-skill browser proof and hit reactions. This branch builds on the nearby stance change. [Runtime report](../test-reports/2026-11-06-17-28-christopherbell-dev-survive-remote-strike-playback.md)
 
+### 2026-11-06 - Verify weapon-skill cues across a shared fight
+
+- **Change:** Ran the shared North Gate Patrol on the strike-playback candidate and verified that each participant received the other's weapon-skill cue.
+- **Reason:** A personal encounter cannot verify visibility of the opening and closing attacks of a party skillchain.
+- **Impact:** Both players completed Impact and turned in the patrol. The full Java suite passed. Shared-fight animation captures and the remaining hit and defeat cases stay open. [Runtime report](../test-reports/2026-11-06-17-28-christopherbell-dev-survive-remote-strike-playback.md)
+
+### 2026-11-06 - Verify the local hit reaction
+
+- **Change:** A confirmed damaging counter adds an upper-body recoil timed to enemy contact. Foot placement, camera and collision stay anchored.
+- **Reason:** Players need to tell a landed bite from a blocked bite by watching the combatants.
+- **Impact:** Chrome captured both exchanges on candidate 96838ea7. ART-03 still requires defeat and remote hit reactions. [Runtime report](../test-reports/2026-11-06-17-35-christopherbell-dev-survive-player-hit-recoil.md)
+
+### 2026-11-06 - Verify the character shading release
+
+- **Change:** PR #1586 merged as e76399b and the production build readback matched.
+- **Reason:** Confirm the adventurer shading release reached the game.
+- **Impact:** Smooth face and armor lighting is live. ART-01 and ART-02 remain open for geometry, materials and matched desktop captures. [Shading PR](https://github.com/azurras/christopherbell.dev/pull/1586)
+
 ## Outcome
 
 Pending.
