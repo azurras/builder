@@ -45,7 +45,7 @@ port 53682 listeners: 0
 ```
 
 ## Evidence
-- Targeted Survive Java and codec tests, 469 JavaScript tests, changed-script syntax and bootJar passed.
+- Full Java suite, including Survive and codec tests, 469 JavaScript tests, changed-script syntax and bootJar passed.
 - Bare hands use 3 seconds, clubs 3.2, axes 3.8 and spears 4.2. These are initial Survive balance values.
 - Existing saved next-strike deadlines retain their time. The following strike uses the current weapon delay.
 

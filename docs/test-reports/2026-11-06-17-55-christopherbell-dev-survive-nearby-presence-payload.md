@@ -54,6 +54,9 @@ This is one sample per build with time-varying wildlife positions, not a latency
 ## Full Java follow-up
 The initial full run was invalidated when another branch rebuilt classes in its checkout. It reported mixed-class NoSuchFieldError failures. The exact 8d559142 candidate was rerun in a separate checkout and the full Java suite passed in 5m 15s.
 
+## Shared-strike integration
+Candidate b290916f4aa6526cb6ac0098719112a29be8c9aa includes the merged strike cues. Targeted Survive Java tests, 469 JavaScript tests and bootJar passed. Exact actuator identity was checked at http://127.0.0.1:64384 with disposable MongoDB on 127.0.0.1:64383/test. The eight-player layout returned one nearby pose and onlineCount 8 in a 1,246-byte camp response. Chrome confirmed the count and nearby scout. Both ports closed at teardown.
+
 ## Document Status
 complete
 

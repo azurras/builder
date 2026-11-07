@@ -566,6 +566,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** COM-02 calls for weapons with distinct combat cadence.
 - **Impact:** Candidate 2c94362c passed the club deadline and Equipment browser check. Club 3.2s, axe 3.8s and spear 4.2s are initial Survive balance values. COM-02 remains open for TP scaling, shared-fight balance, spell timing and recovery. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
 
+### 2026-11-06 - Verify fishing and presence with shared strikes
+
+- **Change:** Refreshed fishing and nearby-pose candidates against merged strike playback. Cast state and strike cues now coexist in saved progress.
+- **Reason:** New releases must preserve both gameplay state and nearby combat presentation.
+- **Impact:** Fishing repeated the bite, reel and expiry checks. The eight-player layout still sent one nearby pose and counted eight online. Weapon cadence passed its full Java suite. [Fishing report](../test-reports/2026-11-06-17-51-christopherbell-dev-survive-timed-fishing.md) · [Presence report](../test-reports/2026-11-06-17-55-christopherbell-dev-survive-nearby-presence-payload.md)
+
 ## Outcome
 
 Pending.
