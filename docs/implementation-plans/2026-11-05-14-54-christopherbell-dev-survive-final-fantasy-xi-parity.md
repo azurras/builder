@@ -680,6 +680,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Record deployment separately from the isolated traffic measurements.
 - **Impact:** Dedicated movement and early owner admission are shipped. PERF-01 still requires sustained desktop, distributed and mixed combat workloads. [Movement PR](https://github.com/azurras/christopherbell.dev/pull/1599) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
 
+### 2026-11-07 - Verify party HP and TP in the viewport
+
+- **Change:** Added a private accepted-party HP and TP row to the viewport status panel.
+- **Reason:** A party member's remaining HP and TP inform guard and weapon-skill timing during exploration and combat.
+- **Impact:** Candidate 55edfdee verified two desktop clients, hidden invitations, an HP and TP update after a combat round and clearing both rows on leave. The existing status poll carries the values. Larger parties and MP remain open. [Runtime report](../test-reports/2026-11-07-13-39-christopherbell-dev-survive-party-vitals.md)
+
 ## Outcome
 
 Pending.
