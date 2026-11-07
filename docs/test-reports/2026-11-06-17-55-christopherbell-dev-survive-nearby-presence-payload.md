@@ -51,6 +51,9 @@ PASS: desktop Chrome showed eight online while receiving only the nearby scout.
 ## Bugs / Follow-ups
 This is one sample per build with time-varying wildlife positions, not a latency or concurrency benchmark. Dense groups still send every nearby pose. Full-route frame times, heap, database throughput and sustained multiplayer measurements remain open.
 
+## Full Java follow-up
+The initial full run was invalidated when another branch rebuilt classes in its checkout. It reported mixed-class NoSuchFieldError failures. The exact 8d559142 candidate was rerun in a separate checkout and the full Java suite passed in 5m 15s.
+
 ## Document Status
 complete
 

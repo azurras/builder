@@ -64,6 +64,9 @@ Candidate 88cdbed74c1ba552f756d5a3c0d697ce6b28fcb8 includes the campfire, merged
 
 Two desktop Chrome contexts completed the shared bear fight, received each other's Heavy Strike and Crushing Blow cues and turned in both assignments. Both ports closed at teardown. The integrated run checks skill resolution and cue delivery regardless of whether the closing blow is already lethal. The earlier candidate's separate Impact bonus proof remains above.
 
+## Main-ready candidate
+Candidate e821ea0afabc508682fc95d90c67d006ed21aabf merges the live main commit and has the identical source tree as 88cdbed7. Its exact actuator version was checked at http://127.0.0.1:49299 with disposable MongoDB on 127.0.0.1:49298/test. The fresh build and JavaScript suite passed. A second Chrome context received automatic club strike revision 17 and its expiry. Both ports closed at teardown.
+
 ## Document Status
 complete
 

@@ -548,6 +548,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The draft needed current-base evidence before it could follow the hit reaction into release.
 - **Impact:** Candidate 88cdbed7 passed both shared weapon-skill cue checks and both patrol turn-ins. The missing main CI run for stance commit 9b84b43 was dispatched as run 42315295304. [Runtime report](../test-reports/2026-11-06-17-28-christopherbell-dev-survive-remote-strike-playback.md)
 
+### 2026-11-06 - Verify live combat poses and ready shared strikes
+
+- **Change:** Stance PR #1588 and hit reaction PR #1590 are live at 129c2c13. Strike candidate e821ea0a was verified against this main tree.
+- **Reason:** Confirm released behavior independently of candidate tests and ready the shared strike follow-up.
+- **Impact:** Shared strike delivery and the fresh personal strike check passed. The nearby-payload candidate passed a full Java rerun in its own checkout after the earlier mixed-class run was invalidated. [Strike report](../test-reports/2026-11-06-17-28-christopherbell-dev-survive-remote-strike-playback.md) · [Presence report](../test-reports/2026-11-06-17-55-christopherbell-dev-survive-nearby-presence-payload.md)
+
 ## Outcome
 
 Pending.
