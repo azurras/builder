@@ -590,6 +590,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Keep release state distinct from candidate proof.
 - **Impact:** Other players' confirmed strikes are live. The local strike-ownership correction passed its full Java suite. [Strike PR](https://github.com/azurras/christopherbell.dev/pull/1589) · [Presence PR](https://github.com/azurras/christopherbell.dev/pull/1593)
 
+### 2026-11-06 - Verify gameplay on nearby-presence main
+
+- **Change:** Integrated fishing and weapon cadence with the merged nearby-presence payload and reran their normal browser entry points.
+- **Reason:** The next gameplay releases must work with the current multiplayer response.
+- **Impact:** Fishing repeated bite, reel and expiry. Weapon cadence repeated the club interval and Equipment label. Both candidates passed targeted Java, JavaScript and build checks. [Fishing report](../test-reports/2026-11-06-17-51-christopherbell-dev-survive-timed-fishing.md) · [Cadence report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
+
 ## Outcome
 
 Pending.

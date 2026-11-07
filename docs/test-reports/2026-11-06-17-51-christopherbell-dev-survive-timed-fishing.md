@@ -59,6 +59,9 @@ Integrated the live stance and hit reaction as candidate 01c4a57e4060bd4de09adfe
 ## Shared-strike integration
 Candidate 2dabe64cad848fb8a77715e16c500ef2aba7f38b retains both saved cast timing and committed strike cues. Targeted Survive Java and codec tests, JavaScript tests and bootJar passed. Its exact actuator version was checked at http://127.0.0.1:50893 with disposable MongoDB at 127.0.0.1:50892/test. Chrome repeated bite visibility, Reel In focus, timely reel and missed-bite expiry. Both ports closed at teardown.
 
+## Nearby-presence integration
+Candidate 8753b1327ab9211c8326082aaba1edba1a83f09e integrates the nearby-pose payload change. Targeted Survive Java and codec tests, JavaScript tests and bootJar passed. Exact actuator identity was checked at http://127.0.0.1:61379 with disposable MongoDB on 127.0.0.1:61378/test. Chrome repeated bite visibility, focused Reel In, timely reel and missed-bite expiry. Both listeners closed at teardown.
+
 ## Document Status
 complete
 

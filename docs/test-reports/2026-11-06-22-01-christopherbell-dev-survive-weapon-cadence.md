@@ -52,6 +52,9 @@ port 53682 listeners: 0
 ## Bugs / Follow-ups
 Browser proof covers the club in a personal encounter. Axe, spear, shared-fight cadence, long catch-up, and combat balance need broader playtesting. TP gain still uses the existing per-hit amount.
 
+## Nearby-presence integration
+Candidate 8b3a59e4f09997776fac10f6666ce5a4a1edc2e8 integrates the nearby-pose payload change. Targeted Survive Java and codec tests, JavaScript tests and bootJar passed. Exact actuator identity was checked at http://127.0.0.1:59425 with disposable MongoDB on 127.0.0.1:59424/test. Chrome repeated the 3,200 ms club interval and Equipment-label checks. Both listeners closed at teardown.
+
 ## Document Status
 complete
 
