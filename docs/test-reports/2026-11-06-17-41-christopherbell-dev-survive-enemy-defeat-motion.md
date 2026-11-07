@@ -60,6 +60,8 @@ Normal motion ran at http://127.0.0.1:59391 with MongoDB on 127.0.0.1:59390/test
 
 ## Nearby-presence integration verification
 Candidate d791612d0e16921369f43ba7b0924f51ea5c82d0 includes merged main 012bb295. All 471 JavaScript tests and bootJar passed. Exact actuator identity was verified at http://127.0.0.1:55392 with disposable MongoDB at 127.0.0.1:55391/test. Chrome repeated the standing, falling and cleared meadow-hog sequence and victory chat. Inspected the captured fall: the hog is on its side at the finishing position. Both listeners closed during cleanup. Reduced motion was previously verified on 812ac98 with the same defeat implementation; this integration run repeated normal motion only.
+## Timed-fishing integration verification
+Candidate c672dee1d618e4b526ace9e45e77d36bc4756dbb includes live main 125bd326. The merge retained both fishing and defeat state in the render loop. All 472 JavaScript tests and bootJar passed. Verified exact actuator identity at http://127.0.0.1:54947 with disposable MongoDB at 127.0.0.1:54946/test. Chrome repeated the hog fall and victory chat, then independently reached the fishing bank, showed the bite, reeled in time and let a second cast expire. Both listeners closed. Reduced motion was verified on the earlier 812ac98 build.
 ## Document Status
 complete
 

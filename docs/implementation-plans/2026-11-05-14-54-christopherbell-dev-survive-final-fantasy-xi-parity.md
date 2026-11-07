@@ -93,9 +93,9 @@ Update each row with a child plan and evidence. Use planned, in progress, verifi
 | ART-01 | Actors and resources | Authored adventurer and wildlife, painted textures, mixed asset finish. | Review player and enemy turntables at gameplay distance, then captures in motion. Improve faces, gear layering, contact poses, creature anatomy and authored resource silhouettes, including trees, ore, shoreline and tools. |
 | ART-02 | Landscape | Textured island with a clearer North Gate route. | Author distinct route grades and silhouettes, material transitions, weathered structures, foliage layers, water edges and lighting by time of day. Use same-height desktop captures with route landmarks visible. |
 | ART-03 | Motion and sound | Engaged stance, confirmed shared strikes and local hit recoil are live. Defeat motion (#1591) and local strike ownership (#1596) are verified locally; release pending. | Read locomotion, weapon draw, wind-up, impact, hit reaction and defeat at play speed. Show tool contact for logging and mining, cast/bite/reel for fishing, and readable synthesis and sleep. Add original environmental beds and distinct action cues with volume controls. |
-| ECON-01 | Gathering and trade | Location-based resource commands, basic crafting and camp gifts are live. Timed cast, bite, reel and expiry are verified locally in #1592; rod/bait inventory and named fish remain missing. | Add targetable nodes, tool and skill checks, timed fishing, recipe inputs and meaningful outputs. Use direct trade first, then evaluate bazaars and auction listings with ownership and duplication checks. |
+| ECON-01 | Gathering and trade | Location-based resource commands, basic crafting and camp gifts are live. Timed cast, bite, reel and expiry are live in #1592; rod/bait inventory and named fish remain missing. | Add targetable nodes, tool and skill checks, timed fishing, recipe inputs and meaningful outputs. Use direct trade first, then evaluate bazaars and auction listings with ownership and duplication checks. |
 | SOC-01 | Social and travel | Shared presence and camp, process-local positions and routes. Two-player party commands verified live in [#1576](https://github.com/azurras/christopherbell.dev/pull/1576). | Extend party formation to field targeting, add party chat and recovery, then add persistent travel checkpoints, region transitions and distinct mission versus quest progression. |
-| PERF-01 | Browser and server | Render reuse and version-checked movement reads are verified live. Nearby-pose filtering merged in #1593; production readback still pending. | Profile long sessions and concurrent play with the same scene and action mix. Track browser memory slope and frame-time percentiles, server heap and p95 latency, DB bytes and writes, bandwidth and shared-IP behavior. Distinguish stored-character capacity from measured concurrency. |
+| PERF-01 | Browser and server | Render reuse and version-checked movement reads are verified live. Nearby-pose filtering is live in #1593. | Profile long sessions and concurrent play with the same scene and action mix. Track browser memory slope and frame-time percentiles, server heap and p95 latency, DB bytes and writes, bandwidth and shared-IP behavior. Distinguish stored-character capacity from measured concurrency. |
 
 ### Child plan ledger
 
@@ -607,6 +607,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Integrated the fishing bank artwork with current main and repeated the desktop bank capture.
 - **Reason:** Static world artwork must coexist with current shared-strike rendering and nearby-player payloads.
 - **Impact:** Candidate 41fbd62e passed 469 JavaScript tests and the corrected browser invocation. The dock composition is verified; water, terrain, actor quality and measured hardware performance remain open. [Bank report](../test-reports/2026-11-06-21-56-christopherbell-dev-survive-fishing-bank-artwork.md)
+
+### 2026-11-07 - Verify live fishing and its defeat motion integration
+
+- **Change:** Nearby-player payload filtering and timed fishing reached production at 125bd326. Rebased the enemy fall candidate by merging that live main.
+- **Reason:** Keep the defeat and fishing cues working together in the same graphics loop.
+- **Impact:** Candidate c672dee1 passed 472 JavaScript tests and the normal hog fall, projected bite, reel and expiry paths in isolated Chrome. Rod, bait, named catch and party defeat review remain open. [Defeat integration report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md) · [Fishing PR](https://github.com/azurras/christopherbell.dev/pull/1592)
 
 ## Outcome
 
