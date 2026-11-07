@@ -572,6 +572,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** New releases must preserve both gameplay state and nearby combat presentation.
 - **Impact:** Fishing repeated the bite, reel and expiry checks. The eight-player layout still sent one nearby pose and counted eight online. Weapon cadence passed its full Java suite. [Fishing report](../test-reports/2026-11-06-17-51-christopherbell-dev-survive-timed-fishing.md) · [Presence report](../test-reports/2026-11-06-17-55-christopherbell-dev-survive-nearby-presence-payload.md)
 
+### 2026-11-06 - Verify local strike ownership
+
+- **Change:** The local adventurer animates their own committed strike cue instead of inferring an attack from shared enemy HP.
+- **Reason:** A party member's hit could make the local fighter swing without attacking.
+- **Impact:** The mounted-world regression and two-browser cue check passed on candidate 222271f0. A shared-party visual capture remains open. [Runtime report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md)
+
 ## Outcome
 
 Pending.
