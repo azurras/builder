@@ -578,6 +578,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A party member's hit could make the local fighter swing without attacking.
 - **Impact:** The mounted-world regression and two-browser cue check passed on candidate 222271f0. A shared-party visual capture remains open. [Runtime report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md)
 
+### 2026-11-06 - Verify defeat motion and its reduced-motion path
+
+- **Change:** Integrated enemy defeat motion with shared-strike playback and verified normal and reduced motion in separate browser runs.
+- **Reason:** The finishing blow needs readable motion while respecting the player's motion preference.
+- **Impact:** Candidate 812ac98e showed the fall normally and cleared the defeated target in reduced motion. Shared-fight and raider captures and player collapse remain open. [Runtime report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md)
+
 ## Outcome
 
 Pending.

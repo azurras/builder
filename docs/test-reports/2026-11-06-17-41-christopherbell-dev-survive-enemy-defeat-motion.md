@@ -48,10 +48,15 @@ port 51237 listeners: 0
 - Inspected the standing, fallen and cleared images. The fallen frame shows the hog on its side at contact range with no red target ring. The cleared frame shows the victory and one food in chat.
 
 ## Bugs / Follow-ups
-The runtime check covers a personal hog victory. Party victory detection is unit-tested. Shared-fight, raider, player collapse and reduced-motion defeat visuals still need direct browser checks or implementation. The defeat cue is local presentation without a new shared event.
+The runtime check covers a personal hog victory. Party victory detection is unit-tested. Shared-fight, raider and player collapse visuals still need direct browser checks or implementation. The defeat cue is local presentation without a new shared event.
 
 ## Refreshed release candidate
 Candidate 5cb9e0bde7fa9a1f0b63516fa3a87a1df693cfb3 includes the live main stance and hit reaction. All 470 JavaScript tests, changed-script syntax checks and bootJar passed. Its exact actuator version was checked at http://127.0.0.1:59683 with disposable MongoDB at 127.0.0.1:59682/test. Chrome repeated the standing, falling and cleared meadow-hog case. Both listeners closed at teardown.
+
+## Strike integration and reduced motion
+Candidate 812ac98ea72a23e8d5b2f154bcc18ed69c40a9cf includes the merged shared-strike code. All 471 JavaScript tests, changed-script syntax and bootJar passed. Exact actuator identity was checked in two separate test runtimes.
+
+Normal motion ran at http://127.0.0.1:59391 with MongoDB on 127.0.0.1:59390/test. Reduced motion ran at http://127.0.0.1:51418 with MongoDB on 127.0.0.1:51417/test. Both Chrome runs defeated the meadow hog and confirmed reward chat. The normal frame shows the hog on its side during the fall. The reduced-motion frame at the same point after victory shows the target already cleared. All four listeners closed at teardown.
 
 ## Document Status
 complete
