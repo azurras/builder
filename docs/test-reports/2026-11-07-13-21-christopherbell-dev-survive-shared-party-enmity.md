@@ -49,6 +49,10 @@ port 62308 listeners: 0
 ## Bugs / Follow-ups
 The starting Survive coefficients are 1,000 durable and 3,000 fading points per damage, one fading point lost per millisecond, and 1,000 durable points lost per HP received. Ties favor the earlier fighter. Retaliation still follows surviving strikes. Jobs, Provoke, healing threat, independent monster attack timing and visual facing remain open. The browser run verifies routing and state, with the animation behavior covered by the mounted test.
 
+## Main integration rerun
+Exact candidate `cba4a7ac3c4860abca1f0a475daf5ccb4d0f008b` integrated main `cec581eb` after #1596 merged. The candidate tree matched the previously verified stack. JavaScript tests and bootJar passed after integration. Actuator confirmed the new build identity before launching both desktop Chrome contexts. The bear countered the enmity leader, consumed guard and preserved agreement on enemy HP. The candidate and MongoDB listeners at 64648 and 64647 closed, and both disposable directories were removed.
+
+
 ## Document Status
 complete
 

@@ -686,6 +686,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A party member's remaining HP and TP inform guard and weapon-skill timing during exploration and combat.
 - **Impact:** Candidate 55edfdee verified two desktop clients, hidden invitations, an HP and TP update after a combat round and clearing both rows on leave. The existing status poll carries the values. Larger parties and MP remain open. [Runtime report](../test-reports/2026-11-07-13-39-christopherbell-dev-survive-party-vitals.md)
 
+### 2026-11-07 - Verify enmity after strike ownership merged
+
+- **Change:** Integrated the enmity candidate after the strike ownership fix merged to main.
+- **Reason:** Both sides of the shared counter need to retain correct strike ownership and health after integration.
+- **Impact:** Candidate cba4a7ac repeated the two-player bear proof with correct guard consumption and matching enemy health. CI and production are pending. [Runtime report](../test-reports/2026-11-07-13-21-christopherbell-dev-survive-shared-party-enmity.md)
+
 ## Outcome
 
 Pending.

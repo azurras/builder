@@ -91,6 +91,12 @@ Retaliation still occurs per surviving strike. Concentrated damage changes party
 - **Reason:** Party roles need durable enemy attention and truthful combat feedback. The child uses initial Survive weights for the two-component design described by Square Enix.
 - **Impact:** The stacked candidate 453f361c passed two-player state proof, including a consumed guard, shared HP and no new defender strike. It depends on the local strike ownership fix. Independent enemy timing, Provoke, healing threat and visual facing remain open. [Child plan](2026-11-07-13-09-christopherbell-dev-survive-party-enmity.md) · [Runtime report](../test-reports/2026-11-07-13-21-christopherbell-dev-survive-shared-party-enmity.md)
 
+### 2026-11-07 - Verify enmity after strike ownership merged
+
+- **Change:** Integrated the enmity candidate after the strike ownership fix merged to main.
+- **Reason:** Both sides of the shared counter need to retain correct strike ownership and health after integration.
+- **Impact:** Candidate cba4a7ac repeated the two-player bear proof with correct guard consumption and matching enemy health. CI and production are pending. [Runtime report](../test-reports/2026-11-07-13-21-christopherbell-dev-survive-shared-party-enmity.md)
+
 ## Outcome
 Pending.
 
