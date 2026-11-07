@@ -542,6 +542,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Sending distant poses on every pulse wastes bandwidth and browser work while the renderer already stops drawing players past 60 metres.
 - **Impact:** A matched eight-player layout dropped the camp pulse from 2,444 to 1,236 bytes. Chrome still showed eight online. PERF-01 remains open for sustained, clustered, browser, server and database measurements. [Runtime report](../test-reports/2026-11-06-17-55-christopherbell-dev-survive-nearby-presence-payload.md)
 
+### 2026-11-06 - Refresh shared strike integration evidence
+
+- **Change:** Integrated the strike branch with the merged stance, campfire and pending hit reaction, then reran the two-player patrol.
+- **Reason:** The draft needed current-base evidence before it could follow the hit reaction into release.
+- **Impact:** Candidate 88cdbed7 passed both shared weapon-skill cue checks and both patrol turn-ins. The missing main CI run for stance commit 9b84b43 was dispatched as run 42315295304. [Runtime report](../test-reports/2026-11-06-17-28-christopherbell-dev-survive-remote-strike-playback.md)
+
 ## Outcome
 
 Pending.

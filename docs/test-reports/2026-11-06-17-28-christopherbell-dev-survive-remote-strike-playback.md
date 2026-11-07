@@ -59,6 +59,11 @@ The captured swing covers an automatic club strike in a personal encounter. The 
 - Each browser received the other player's confirmed weapon-skill cue. The closing cue carried CLUB.
 - The first attempt waited for the opening cue before trying to close Impact and timed out. The successful attempt let the browser record cues during the normal command sequence and checked them after the close.
 
+## Integrated release candidate
+Candidate 88cdbed74c1ba552f756d5a3c0d697ce6b28fcb8 includes the campfire, merged stance, and pending local hit reaction. Targeted Survive Java and codec tests, 469 JavaScript tests, syntax checks and bootJar passed. Exact actuator identity was verified on http://127.0.0.1:57362 with disposable MongoDB at 127.0.0.1:57361/test.
+
+Two desktop Chrome contexts completed the shared bear fight, received each other's Heavy Strike and Crushing Blow cues and turned in both assignments. Both ports closed at teardown. The integrated run checks skill resolution and cue delivery regardless of whether the closing blow is already lethal. The earlier candidate's separate Impact bonus proof remains above.
+
 ## Document Status
 complete
 
