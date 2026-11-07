@@ -638,6 +638,18 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Track production behavior separately from isolated runtime proof.
 - **Impact:** Personal hog defeat is live. Shared-fight and raider defeat capture remain open. [Defeat PR](https://github.com/azurras/christopherbell.dev/pull/1591) · [Face PR](https://github.com/azurras/christopherbell.dev/pull/1598)
 
+### 2026-11-07 - Verify live adventurer facial detail
+
+- **Change:** Verified production build e5d948e2 from PR #1598 and confirmed the public material module serves the face paint.
+- **Reason:** Keep the shipped art state distinct from isolated desktop capture evidence.
+- **Impact:** Eyes and brows are live. Head geometry, mouth definition and character silhouettes remain open under ART-01. [Face PR](https://github.com/azurras/christopherbell.dev/pull/1598)
+
+### 2026-11-07 - Verify guarded shared-network movement
+
+- **Change:** Added durable owner admission ahead of the dedicated movement budget's database path. Fixed compatibility with legacy persisted UUID spellings.
+- **Reason:** Unknown and expired credentials should stop before the shared game monitor or Mongo. Movement still verifies the latest owner after admission.
+- **Impact:** Final candidate 33e8270b accepted 888 of 888 pulses and all departures in the short ladder. The positive control accessed the world once, and 102 invalid credentials accessed it zero times. The full native suites and isolated proof passed. Release and longer workloads remain open. [Child plan](2026-11-07-12-34-christopherbell-dev-survive-movement-rate-limit.md) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
+
 ## Outcome
 
 Pending.

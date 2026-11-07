@@ -1,7 +1,7 @@
 # Define the Survive adventurer face
 
 ## Document Status
-ready-for-review
+in-progress
 
 ## Objective
 Make the original adventurer's facial features readable from the desktop camera during normal play.
@@ -84,8 +84,20 @@ Atlas coordinates need review if the head UV chart is replaced. The visual compa
 - **Reason:** Front desktop captures exposed an almost featureless face despite the modeled nose and cheeks.
 - **Impact:** Candidate 4ef4f6e5 passed 473 JavaScript tests and repeated the desktop orbit with merged enemy defeat. Eyes and brows are clearer. Mouth definition, head geometry, character variation and matched lighting at all angles remain open. [Child plan](2026-11-07-12-23-christopherbell-dev-survive-adventurer-face.md) · [Runtime report](../test-reports/2026-11-07-12-27-christopherbell-dev-survive-adventurer-face.md)
 
+### 2026-11-07 - Verify production build and material module
+
+- **Change:** Verified production build e5d948e2 from PR #1598 and confirmed the public material module serves the face paint.
+- **Reason:** Keep the shipped art state distinct from isolated desktop capture evidence.
+- **Impact:** Eyes and brows are live. Head geometry, mouth definition and character silhouettes remain open under ART-01. [Face PR](https://github.com/azurras/christopherbell.dev/pull/1598)
+
 ## Outcome
-Pending.
+PR #1598 shipped at e5d948e2.
+
+| Criterion | Result |
+|---|---|
+| AC-1 | Partial. The front comparison shows improved eyes and brows. The three-quarter views need matched lighting. |
+| AC-2 | Passed. Existing texture slot, dimensions and native tests verified. |
+| AC-3 | Passed. CI, candidate and live readback recorded. |
 
 ## Project
 christopherbell-dev

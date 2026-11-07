@@ -1,7 +1,7 @@
 # Separate Survive movement and command rate limits
 
 ## Document Status
-in-progress
+ready-for-review
 
 ## Objective
 Let a group on a shared network move at the normal browser cadence without exhausting their game command quota.
@@ -21,7 +21,7 @@ The isolated camp workload hit the generic API mutation budget. At 20 sessions i
 ## Acceptance Criteria
 | ID | Done when |
 |---|---|
-| AC-1 | The movement POST has a bounded dedicated bucket. Saturating it still permits an action and leave on the same IP. |
+| AC-1 | The movement POST has a bounded dedicated bucket. Saturating it still permits an action and leave on the same IP. Missing, forged and expired owner credentials never read Mongo for movement. |
 | AC-2 | 20 clustered sessions at 2 Hz complete the measured stages, with percentiles, errors and Mongo counts recorded. |
 | AC-3 | Native checks, isolated candidate proof, report, CI and deployment are recorded. |
 
@@ -30,7 +30,7 @@ The isolated camp workload hit the generic API mutation budget. At 20 sessions i
 - Current main bf51abaf, RateLimitProperties, RateLimitFilter and Survive movement cadence.
 
 ## Branch
-codex/survive-movement-rate-limit from bf51abaf.
+The experiment started on codex/survive-movement-rate-limit at bf51abaf. The release candidate is codex/survive-movement-admission-compat, integrated with e5d948e2.
 
 ## Assumptions
 20 browsers at 2 Hz offer 40 requests per second. The proposed movement budget refills at 50 per second with a 250-request burst, below the old generic 300-request burst on that route.
@@ -39,7 +39,7 @@ codex/survive-movement-rate-limit from bf51abaf.
 Production sizing and distributed clients remain part of the parent performance plan.
 
 ## Design
-Insert a default rate rule for POST /api/survive/v1/movement before the generic mutation rule. Reuse IP resolution and the existing bounded bucket store. Leave, game actions, and unrelated endpoints retain their current rules.
+Insert a default rate rule for POST /api/survive/v1/movement before the generic mutation rule. Reuse IP resolution and the existing bounded bucket store. Reject unrecognized or expired owners against a published index of durable saves before the world monitor. Recheck under the monitor and after the version-checked read. Leave, game actions, and unrelated endpoints retain their current rules.
 
 ## Expected Changes
 | Area | Change |
@@ -75,7 +75,7 @@ Required skill: write-chris-street-style-code
 Revert the dedicated rule. No data migration.
 
 ## Risks
-The dedicated refill allows more unauthenticated traffic to reach owner validation. Keep the burst bounded and measure accepted latency and server work before increasing it further.
+The dedicated refill admits more invalid HTTP requests to the cheap owner check. The owner index must keep these requests outside the world lock and Mongo. A fresh process needs a join or status read before movement resumes.
 
 ## Implementation Log
 
@@ -84,6 +84,18 @@ The dedicated refill allows more unauthenticated traffic to reach owner validati
 - **Change:** Tested the dedicated rule and commissioned a read-only review of its admission boundary.
 - **Reason:** The original rule capped legitimate group movement. The higher candidate refill also admits invalid survivor requests before the existing database-backed owner check.
 - **Impact:** AC-2 passed for the short legitimate workload. AC-1 still needs an admission check that prevents missing and forged credentials from repeatedly reaching Mongo at the higher quota. Preserve compatibility for active sessions and the normal owner check after admission. Add a zero-Mongo regression for invalid input and assert the production quota values before rerunning. AC-3 awaits a corrected candidate. [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
+
+### 2026-11-07 - Admit movement from the durable owner index
+
+- **Change:** Add a lock-free admission check over owner keys and last-seen timestamps from the last durable snapshot. Recheck while holding the monitor, then keep the version check and durable owner validation.
+- **Reason:** Invalid or expired credentials must fail before the shared game monitor and Mongo. Using the existing status read avoids adding a second credential and leaves one authoritative saved owner.
+- **Impact:** After a cold restart, a join or game read primes the index before movement. The browser already reads the game on entry and during play. Direct movement clients need the same bootstrap. Treat persisted guest spellings as durable keys so a legacy UUID cannot break another player's status. Verify zero Mongo accesses on missing, malformed and forged credentials with the profiler and repeat the fixed legitimate workload.
+
+### 2026-11-07 - Verify owner admission and legacy saves
+
+- **Change:** Added durable owner admission ahead of the dedicated movement budget's database path. Fixed compatibility with legacy persisted UUID spellings.
+- **Reason:** Unknown and expired credentials should stop before the shared game monitor or Mongo. Movement still verifies the latest owner after admission.
+- **Impact:** Final candidate 33e8270b accepted 888 of 888 pulses and all departures in the short ladder. The positive control accessed the world once, and 102 invalid credentials accessed it zero times. The full native suites and isolated proof passed. Release and longer workloads remain open. [Child plan](2026-11-07-12-34-christopherbell-dev-survive-movement-rate-limit.md) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
 
 ## Outcome
 Pending.

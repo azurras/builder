@@ -12,7 +12,7 @@ Local experiment `codex/survive-movement-rate-limit` at `e0dbaed5db9a5f1382c4cb3
 | Reproduce shared-IP throttling | PASS. Both baseline builds rejected 420 of 480 movement requests at the 20-session step. |
 | Dedicated candidate quota | PASS. Three ladders accepted all 2,664 measured pulses and all 111 departures. |
 | Command and leave isolation | PASS in the rate-limit filter regression with the movement bucket exhausted. |
-| Release readiness | HOLD. Review identified database access and a shared service lock before owner validation. |
+| Initial experiment release readiness | HOLD. Review identified database access and a shared service lock before owner validation. |
 
 ## Test Cases
 Join 20 independent guest sessions and reuse their HTTP connections. Stage 2, 5, 10 and 20 at camp, all on one loopback IP. Alternate x between 0 and 0.15 m. Give each step two seconds of warm-up and 12 measured seconds at 2 Hz, then release the step's poses. Stop after a throttled stage to avoid carrying depleted quota into another trial. Run the candidate ladder three times.
@@ -58,6 +58,18 @@ port 58026 listeners: 0
 ## Bugs / Follow-ups
 The proposed quota raises sustained admission to the public movement route from 5 to 50 per second per IP. The service enters a shared monitor and performs a Mongo version read before checking the survivor. The measured legitimate workload passes, but it does not test invalid-owner traffic or malicious contention. The candidate remains local pending an admission check that protects database and command work. Distributed IPs, mixed command load, reconnects, and the long desktop soak are still open.
 
+## Owner admission and legacy save confirmation
+The release branch `codex/survive-movement-admission-compat` contains `33e8270bf9b4257ce74ba8aebe1232045f588bf9` based on main `e5d948e2`. The earlier `0e412195` owner-index build passed three ladders with all 2,664 pulses accepted, p95 11.08–15.40 ms at 20 sessions and zero invalid-owner world accesses. Review caught an uppercase persisted UUID edge case. The regression reproduced the load failure and passed after the index used the durable key spelling.
+
+Full Java suite, 473 JavaScript tests and bootJar passed on 33e8270b. Exact identity was verified at 127.0.0.1:64790 with MongoDB 127.0.0.1:64789/test. The final ladder accepted 888 of 888 measured requests and all 37 departures. At 20 sessions the median payload was 5,194 bytes with 19 nearby poses. Pulse p50/p95/p99 was 7.70/14.42/22.29 ms, and Mongo returned 560 documents including warm-up with zero document writes during that step. The profiler ran separately after the timed workload.
+
+```text
+PASS: valid pulse made 1 world access(es); 102 invalid movement credentials returned 404 with 0 world accesses.
+port 64790 listeners: 0
+port 64789 listeners: 0
+```
+
+The profiler probe sent one missing token, one malformed token and 100 randomly forged UUIDs. It counted accesses to `test.application_runtime` in the separate control and rejection windows. Unit tests also cover expiry, restart and replacement. A cold process requires a join or game status read before movement. The shipped browser already performs that read on load and periodically during play. Review found no actionable issue after the compatibility fix. Short clustered loopback runs leave production sizing, distributed sources and the long-session workload open.
 ## Document Status
 complete
 

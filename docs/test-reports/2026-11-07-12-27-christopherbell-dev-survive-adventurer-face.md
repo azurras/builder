@@ -51,6 +51,8 @@ port 51436 listeners: 0
 ## Bugs / Follow-ups
 The paint follows the existing mirrored UV chart. It improves eye and brow definition while the mouth is subtle, the head is still faceted, and players share the same silhouette. A matched-lighting three-quarter review and broader character art remain open under ART-01.
 
+## Production readback
+PR #1598 shipped as `e5d948e26f3ac54245f4450d108656687695a2d9`. Verified the production actuator identity and HTTP 200 from the public material module containing `paintAdventurerFace`. The matched-lighting three-quarter comparison remains open.
 ## Document Status
 complete
 
