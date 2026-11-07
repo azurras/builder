@@ -620,6 +620,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Other players' attacks and their consequences both need to read in the world, including when their own browser is not controlling the observed animation.
 - **Impact:** Candidate 6cebcc6b passed 472 JavaScript tests, targeted Java checks and two Chrome observer captures. Shared-party capture, enemy playback and collapse remain open. The capture also exposes weak facial definition and identical player silhouettes for ART-01. [Child plan](2026-11-06-22-27-christopherbell-dev-survive-remote-hit-recoil.md) · [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
 
+### 2026-11-07 - Verify mapped adventurer facial detail
+
+- **Change:** Painted eyes, brows and soft lip contours on the original adventurer's mirrored face chart before the existing atlas upload.
+- **Reason:** Front desktop captures exposed an almost featureless face despite the modeled nose and cheeks.
+- **Impact:** Candidate 4ef4f6e5 passed 473 JavaScript tests and repeated the desktop orbit with merged enemy defeat. Eyes and brows are clearer. Mouth definition, head geometry, character variation and matched lighting at all angles remain open. [Child plan](2026-11-07-12-23-christopherbell-dev-survive-adventurer-face.md) · [Runtime report](../test-reports/2026-11-07-12-27-christopherbell-dev-survive-adventurer-face.md)
+
 ## Outcome
 
 Pending.
