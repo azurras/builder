@@ -51,6 +51,10 @@ port 63091 listeners: 0
 ## Bugs / Follow-ups
 This improves the bank composition but leaves the broader actor and environment benchmark open. The sand transition is subtle at the default camera. Night, full-route and physical GPU performance comparisons remain unmeasured. Driftwood is partly obscured from the captured angle.
 
+## Current-main integration verification
+Candidate 41fbd62e06ea7b5019cfde2f0933aba2025162e6 includes main 012bb295. All 469 JavaScript tests, changed-script syntax checks and bootJar passed. Exact actuator identity was verified at http://127.0.0.1:63504 with disposable MongoDB at 127.0.0.1:63503/test. Prepared the angler using acknowledged game movement, resumed in Chrome and inspected the default-distance bank capture. Reeds and stones frame the dock; broader water, terrain and actor finish remain below the benchmark. Both listeners closed and temporary runtime directories were removed.
+
+An earlier integration-browser invocation omitted the required cookie-file argument and exited before launching Chrome. Its runtime at ports 52181/52180 was stopped. The corrected invocation above passed against the same committed candidate.
 ## Document Status
 complete
 

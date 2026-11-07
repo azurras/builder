@@ -602,6 +602,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Attack and defeat presentation must remain correct after multiplayer payload filtering.
 - **Impact:** Normal hog fall and owner/observer strike revision 18 passed on exact candidates d791612d and 14e40a7b. Shared-party defeat and broader motion/asset parity remain open. [Defeat report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md) · [Ownership report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md)
 
+### 2026-11-06 - Verify bank artwork on current multiplayer main
+
+- **Change:** Integrated the fishing bank artwork with current main and repeated the desktop bank capture.
+- **Reason:** Static world artwork must coexist with current shared-strike rendering and nearby-player payloads.
+- **Impact:** Candidate 41fbd62e passed 469 JavaScript tests and the corrected browser invocation. The dock composition is verified; water, terrain, actor quality and measured hardware performance remain open. [Bank report](../test-reports/2026-11-06-21-56-christopherbell-dev-survive-fishing-bank-artwork.md)
+
 ## Outcome
 
 Pending.
