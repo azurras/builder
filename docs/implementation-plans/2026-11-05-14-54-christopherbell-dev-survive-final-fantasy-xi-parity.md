@@ -584,6 +584,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The finishing blow needs readable motion while respecting the player's motion preference.
 - **Impact:** Candidate 812ac98e showed the fall normally and cleared the defeated target in reduced motion. Shared-fight and raider captures and player collapse remain open. [Runtime report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md)
 
+### 2026-11-06 - Verify live shared strike playback
+
+- **Change:** Shared strike playback PR #1589 is live at 48d17010. Nearby-payload PR #1593 merged as 012bb295 and awaits production verification.
+- **Reason:** Keep release state distinct from candidate proof.
+- **Impact:** Other players' confirmed strikes are live. The local strike-ownership correction passed its full Java suite. [Strike PR](https://github.com/azurras/christopherbell.dev/pull/1589) · [Presence PR](https://github.com/azurras/christopherbell.dev/pull/1593)
+
 ## Outcome
 
 Pending.

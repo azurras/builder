@@ -45,7 +45,7 @@ port 61563 listeners: 0
 ```
 
 ## Evidence
-- Targeted Survive Java and codec tests, all 470 JavaScript tests, syntax checks and bootJar passed.
+- Full Java suite, including Survive and codec tests, all 470 JavaScript tests, syntax checks and bootJar passed.
 - The owner snapshot uses the same committed recent strike record as observer presence.
 - Missing cue fields retain the older browser fallback during a mixed-version rollout.
 
