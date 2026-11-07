@@ -56,6 +56,9 @@ The island cast uses a two-second wait, a five-second reel window and the existi
 ## Refreshed release candidate
 Integrated the live stance and hit reaction as candidate 01c4a57e4060bd4de09adfef5ebb66ce39d1ed67. Targeted Survive Java, codec and JavaScript tests and bootJar passed. Exact actuator identity was verified at http://127.0.0.1:51834 with disposable MongoDB on 127.0.0.1:51833/test. Chrome repeated the projected bite, focused Reel In, timely reel and untouched-cast expiry checks. Both listeners closed at teardown.
 
+## Shared-strike integration
+Candidate 2dabe64cad848fb8a77715e16c500ef2aba7f38b retains both saved cast timing and committed strike cues. Targeted Survive Java and codec tests, JavaScript tests and bootJar passed. Its exact actuator version was checked at http://127.0.0.1:50893 with disposable MongoDB at 127.0.0.1:50892/test. Chrome repeated bite visibility, Reel In focus, timely reel and missed-bite expiry. Both ports closed at teardown.
+
 ## Document Status
 complete
 
