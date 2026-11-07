@@ -66,6 +66,10 @@ Candidate `210f4d3a53bd39f4592d1c7d95863000f9f9e838` includes main `e5d948e2`, t
 Two desktop Chrome contexts accepted an invite and North Gate Patrol, entered the same roaming bear encounter, and received each other's Heavy Strike and Crushing Blow cues. An observer saw the ally's combat health decrease from 9 to 6 in consecutive movement responses. Both players received patrol credit and turned in their assignments through the game UI. Both listeners closed and temporary runtime directories were removed.
 
 This run verifies the shared-fight input to the recoil renderer and the full patrol loop. The earlier personal-encounter frames remain the evidence for the normal and reduced-motion poses. The shared run did not capture the recoil frame or require an actual Impact bonus when the closing strike was lethal.
+## Confirmed strike integration
+Candidate `2eddf372d7c140b7f1fdaacd0b6727746861dc8e` integrates main `cec581eb` and retains the tests for both nearby recoil and confirmed local strike ownership. Survive Java tests, Checkstyle main and test, 476 JavaScript tests and bootJar passed. Two desktop Chrome sessions with exact actuator identity at 127.0.0.1:57253 repeated North Gate Patrol, received each other's weapon-skill cues, saw confirmed ally HP fall from 4 to 1 and turned in both quests. The image captured 324 ms after damage did not show the fighters clearly, so it does not verify shared-fight pose readability. Earlier personal-fight frames and the mounted tests remain the visual evidence. Candidate and MongoDB listeners at 57253 and 57252 closed and both disposable runtime directories were removed.
+
+
 ## Document Status
 complete
 

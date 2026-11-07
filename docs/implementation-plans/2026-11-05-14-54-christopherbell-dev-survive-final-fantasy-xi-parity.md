@@ -704,6 +704,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A shared fight can change a survivor's health or revision without that survivor swinging.
 - **Impact:** Local attack playback now follows the owning survivor's confirmed strike. The released change is the baseline for the enmity and nearby hit feedback checks. [Strike PR](https://github.com/azurras/christopherbell.dev/pull/1596) · [Runtime report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md)
 
+### 2026-11-07 - Verify nearby ally damage alongside confirmed strikes
+
+- **Change:** Integrated nearby adventurer hit feedback with confirmed local strike ownership.
+- **Reason:** Shared combat must distinguish the attacking survivor from the ally who receives damage.
+- **Impact:** Candidate 2eddf372 repeated confirmed ally damage and two completed patrols. The shared capture did not clearly show the fighters, so shared pose readability stays open. [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
+
 ## Outcome
 
 Pending.
