@@ -92,7 +92,7 @@ Update each row with a child plan and evidence. Use planned, in progress, verifi
 | JOB-01 | Jobs and progression | Strength/stamina growth and a private weapon slot. | Introduce a small set of changeable roles, job XP, weapon skill, equipment slots, spells and skill eligibility. Evaluate support jobs and level sync after party roles work. |
 | ART-01 | Actors and resources | Authored adventurer and wildlife, painted textures, mixed asset finish. | Review player and enemy turntables at gameplay distance, then captures in motion. Improve faces, gear layering, contact poses, creature anatomy and authored resource silhouettes, including trees, ore, shoreline and tools. |
 | ART-02 | Landscape | Textured island with a clearer North Gate route. | Author distinct route grades and silhouettes, material transitions, weathered structures, foliage layers, water edges and lighting by time of day. Use same-height desktop captures with route landmarks visible. |
-| ART-03 | Motion and sound | Engaged stance, confirmed shared strikes and local hit recoil are live. Defeat motion (#1591) and local strike ownership (#1596) are verified locally; release pending. | Read locomotion, weapon draw, wind-up, impact, hit reaction and defeat at play speed. Show tool contact for logging and mining, cast/bite/reel for fishing, and readable synthesis and sleep. Add original environmental beds and distinct action cues with volume controls. |
+| ART-03 | Motion and sound | Engaged stance, confirmed shared strikes and local hit recoil are live. Defeat motion (#1591) and local strike ownership (#1596) are live. | Read locomotion, weapon draw, wind-up, impact, hit reaction and defeat at play speed. Show tool contact for logging and mining, cast/bite/reel for fishing, and readable synthesis and sleep. Add original environmental beds and distinct action cues with volume controls. |
 | ECON-01 | Gathering and trade | Location-based resource commands, basic crafting and camp gifts are live. Timed cast, bite, reel and expiry are live in #1592; rod/bait inventory and named fish remain missing. | Add targetable nodes, tool and skill checks, timed fishing, recipe inputs and meaningful outputs. Use direct trade first, then evaluate bazaars and auction listings with ownership and duplication checks. |
 | SOC-01 | Social and travel | Shared presence and camp, process-local positions and routes. Two-player party commands verified live in [#1576](https://github.com/azurras/christopherbell.dev/pull/1576). | Extend party formation to field targeting, add party chat and recovery, then add persistent travel checkpoints, region transitions and distinct mission versus quest progression. |
 | PERF-01 | Browser and server | Render reuse and version-checked movement reads are verified live. Nearby-pose filtering is live in #1593. | Profile long sessions and concurrent play with the same scene and action mix. Track browser memory slope and frame-time percentiles, server heap and p95 latency, DB bytes and writes, bandwidth and shared-IP behavior. Distinguish stored-character capacity from measured concurrency. |
@@ -697,6 +697,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Integrated distinct weapon attack delays alongside confirmed local strikes.
 - **Reason:** Equipment delay and the animation cue must both survive the same combat response.
 - **Impact:** Exact candidate 2b1437da repeated the club and axe deadline checks in desktop Chrome. Spear and shared-fight cadence still need direct browser coverage. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
+
+### 2026-11-07 - Verify live confirmed local strikes
+
+- **Change:** Verified PR #1596 live at production build cec581eb.
+- **Reason:** A shared fight can change a survivor's health or revision without that survivor swinging.
+- **Impact:** Local attack playback now follows the owning survivor's confirmed strike. The released change is the baseline for the enmity and nearby hit feedback checks. [Strike PR](https://github.com/azurras/christopherbell.dev/pull/1596) · [Runtime report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md)
 
 ## Outcome
 
