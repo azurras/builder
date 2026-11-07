@@ -1,7 +1,7 @@
 # Separate Survive movement and command rate limits
 
 ## Document Status
-ready-for-review
+complete
 
 ## Objective
 Let a group on a shared network move at the normal browser cadence without exhausting their game command quota.
@@ -97,8 +97,18 @@ The dedicated refill admits more invalid HTTP requests to the cheap owner check.
 - **Reason:** Unknown and expired credentials should stop before the shared game monitor or Mongo. Movement still verifies the latest owner after admission.
 - **Impact:** Final candidate 33e8270b accepted 888 of 888 pulses and all departures in the short ladder. The positive control accessed the world once, and 102 invalid credentials accessed it zero times. The full native suites and isolated proof passed. Release and longer workloads remain open. [Child plan](2026-11-07-12-34-christopherbell-dev-survive-movement-rate-limit.md) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
 
+### 2026-11-07 - Verify guarded movement in production
+
+- **Change:** Verified the guarded shared-network movement quota live at 99b7edfe from PR #1599.
+- **Reason:** Record deployment separately from the isolated traffic measurements.
+- **Impact:** Dedicated movement and early owner admission are shipped. PERF-01 still requires sustained desktop, distributed and mixed combat workloads. [Movement PR](https://github.com/azurras/christopherbell.dev/pull/1599) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
+
 ## Outcome
-Pending.
+| Criterion | Result |
+|---|---|
+| AC-1 | Passed. The dedicated movement bucket preserves command quota. The final profiler check rejected 102 invalid requests with zero world accesses. |
+| AC-2 | Passed. The isolated ladder accepted every pulse and departure through the 20-session step. Production capacity and long sessions remain in PERF-01. |
+| AC-3 | Passed. Native checks, exact candidate proof, CI and live build 99b7edfe are recorded. |
 
 ## Project
 christopherbell-dev

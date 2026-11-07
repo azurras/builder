@@ -674,6 +674,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Party roles need durable enemy attention and truthful combat feedback. The child uses initial Survive weights for the two-component design described by Square Enix.
 - **Impact:** The stacked candidate 453f361c passed two-player state proof, including a consumed guard, shared HP and no new defender strike. It depends on the local strike ownership fix. Independent enemy timing, Provoke, healing threat and visual facing remain open. [Child plan](2026-11-07-13-09-christopherbell-dev-survive-party-enmity.md) · [Runtime report](../test-reports/2026-11-07-13-21-christopherbell-dev-survive-shared-party-enmity.md)
 
+### 2026-11-07 - Verify live shared-network movement quota
+
+- **Change:** Verified the guarded shared-network movement quota live at 99b7edfe from PR #1599.
+- **Reason:** Record deployment separately from the isolated traffic measurements.
+- **Impact:** Dedicated movement and early owner admission are shipped. PERF-01 still requires sustained desktop, distributed and mixed combat workloads. [Movement PR](https://github.com/azurras/christopherbell.dev/pull/1599) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
+
 ## Outcome
 
 Pending.
