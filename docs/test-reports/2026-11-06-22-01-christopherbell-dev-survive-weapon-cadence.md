@@ -61,6 +61,10 @@ Candidate `31563f153d259e088cfba9eaa4efe3104bfbb5f2` includes main `e5d948e2`. T
 Two isolated desktop Chrome runs verified the exact candidate. The club test at 127.0.0.1:60935 with MongoDB 127.0.0.1:60934/test measured 3,200 ms between confirmed deadlines and showed 3.2s in Equipment. The axe test at 127.0.0.1:64569 with MongoDB 127.0.0.1:64568/test equipped the packed axe from the Main picker, measured 3,800 ms and showed 3.8s in Equipment. Both runs approached and engaged a roaming hog. All four listeners closed.
 
 The first axe harness at 60548/60547 compared raw timestamp strings and treated a differently formatted value at the same parsed millisecond as a new deadline. It stopped with a measured delta of 0. The corrected harness waited for a later parsed instant and passed on the same build. Those two listeners also closed. Spear and shared-fight timing still need direct browser evidence.
+## Confirmed strike integration
+Candidate `2b1437da3562b91d3b13ad61c8ee7d1215b43cc4` preserves both the weapon interval and confirmed strike cue in the survivor snapshot after merging main `cec581eb`. Survive Java tests, Checkstyle main and test, 474 JavaScript tests and bootJar passed. Desktop Chrome checked the exact candidate for both weapons. At 55659, the club showed 3.2s in Equipment and used 3,200 ms between strike deadlines. At 56013, selecting the packed axe showed 3.8s in Equipment and used 3,800 ms between deadlines. The initial axe browser attempt timed out during movement. The rerun used a longer route observation window on the same build. Both pairs of candidate and database listeners closed, and disposable directories were removed.
+
+
 ## Document Status
 complete
 

@@ -692,6 +692,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Both sides of the shared counter need to retain correct strike ownership and health after integration.
 - **Impact:** Candidate cba4a7ac repeated the two-player bear proof with correct guard consumption and matching enemy health. CI and production are pending. [Runtime report](../test-reports/2026-11-07-13-21-christopherbell-dev-survive-shared-party-enmity.md)
 
+### 2026-11-07 - Verify weapon cadence alongside confirmed strikes
+
+- **Change:** Integrated distinct weapon attack delays alongside confirmed local strikes.
+- **Reason:** Equipment delay and the animation cue must both survive the same combat response.
+- **Impact:** Exact candidate 2b1437da repeated the club and axe deadline checks in desktop Chrome. Spear and shared-fight cadence still need direct browser coverage. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
+
 ## Outcome
 
 Pending.
