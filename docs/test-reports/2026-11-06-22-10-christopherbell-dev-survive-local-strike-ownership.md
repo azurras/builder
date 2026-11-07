@@ -54,6 +54,8 @@ The ally-hit regression is covered through the mounted-world test. The live brow
 
 ## Nearby-presence integration verification
 Candidate 14e40a7b46ed635d68c305221054d3833ab11065 includes merged main 012bb295. Targeted Survive and state-codec Java tests, all 470 JavaScript tests and bootJar passed. Exact actuator identity was verified at http://127.0.0.1:56082 with disposable MongoDB at 127.0.0.1:56081/test. Two Chrome contexts received the same owner club strike revision 18 and confirmed cue expiry. Both listeners closed and temporary runtime directories were removed. The earlier full Java suite remains recorded above; this integration run used targeted Java checks.
+## Fishing, defeat and face integration
+Candidate `d0959e5622a01e637d214b2b0896472d1362f7f4` includes main `e5d948e2`. The merge preserves fishing timing and defeat state beside strike ownership. Targeted Survive and Mongo codec tests, 474 JavaScript tests, changed-script syntax and bootJar passed. Exact actuator identity verified at 127.0.0.1:54958 with MongoDB 127.0.0.1:54957/test. Two Chrome contexts received the same club strike revision 16 and observed cue expiry. Both listeners closed. The live check was a personal encounter. The mounted-world regression continues to cover ally damage without a fabricated local swing.
 ## Document Status
 complete
 

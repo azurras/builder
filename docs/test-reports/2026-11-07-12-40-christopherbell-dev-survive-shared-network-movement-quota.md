@@ -70,6 +70,8 @@ port 64789 listeners: 0
 ```
 
 The profiler probe sent one missing token, one malformed token and 100 randomly forged UUIDs. It counted accesses to `test.application_runtime` in the separate control and rejection windows. Unit tests also cover expiry, restart and replacement. A cold process requires a join or game status read before movement. The shipped browser already performs that read on load and periodically during play. Review found no actionable issue after the compatibility fix. Short clustered loopback runs leave production sizing, distributed sources and the long-session workload open.
+## CI style correction
+GitHub CI run 42403815603 rejected the unbraced index guard. Candidate `e62d3dde49829357fc6ea8e98c9c56cf764e3f59` adds braces around that early return. Local Checkstyle for main and test sources, movement and rate-filter tests, and bootJar passed. Confirmed the exact candidate at 127.0.0.1:57278 with MongoDB 127.0.0.1:57276/test. The valid pulse accessed the world once and 102 invalid credentials accessed it zero times. Both listeners closed. Full native and stepped-load evidence above covers the earlier, behaviorally identical 33e8270b build.
 ## Document Status
 complete
 

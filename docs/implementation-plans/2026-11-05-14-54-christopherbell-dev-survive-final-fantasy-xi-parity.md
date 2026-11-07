@@ -662,6 +662,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A personal encounter alone does not prove a party member receives confirmed damage during a shared fight.
 - **Impact:** Candidate 210f4d3a delivered both skill cues and a confirmed 9-to-6 ally health change. Both patrol rewards were collected. Shared recoil frames, player collapse and broader party roles remain open. [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
 
+### 2026-11-07 - Refresh local strike and movement release proof
+
+- **Change:** Revalidated local strike ownership with current fishing and defeat motion. Corrected the movement candidate's Checkstyle failure and repeated the invalid-owner profiler probe.
+- **Reason:** Preserve distinct player action feedback and verify the admission guard on the exact CI correction.
+- **Impact:** Candidate d0959e56 delivered club revision 16 to both browsers. Candidate e62d3dde passed local Checkstyle and again rejected 102 invalid credentials without a world access. Both releases await CI and production. [Strike report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md) · [Movement report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
+
 ## Outcome
 
 Pending.
