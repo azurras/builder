@@ -614,6 +614,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Keep the defeat and fishing cues working together in the same graphics loop.
 - **Impact:** Candidate c672dee1 passed 472 JavaScript tests and the normal hog fall, projected bite, reel and expiry paths in isolated Chrome. Rod, bait, named catch and party defeat review remain open. [Defeat integration report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md) · [Fishing PR](https://github.com/azurras/christopherbell.dev/pull/1592)
 
+### 2026-11-07 - Verify nearby fighter hit reaction
+
+- **Change:** Added a brief torso recoil when a nearby fighter's confirmed combat health decreases. Stance and strike remain independent and reduced motion suppresses recoil.
+- **Reason:** Other players' attacks and their consequences both need to read in the world, including when their own browser is not controlling the observed animation.
+- **Impact:** Candidate 6cebcc6b passed 472 JavaScript tests, targeted Java checks and two Chrome observer captures. Shared-party capture, enemy playback and collapse remain open. The capture also exposes weak facial definition and identical player silhouettes for ART-01. [Child plan](2026-11-06-22-27-christopherbell-dev-survive-remote-hit-recoil.md) · [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
+
 ## Outcome
 
 Pending.
