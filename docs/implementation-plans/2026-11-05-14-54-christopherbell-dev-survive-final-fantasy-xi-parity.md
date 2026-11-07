@@ -554,6 +554,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Confirm released behavior independently of candidate tests and ready the shared strike follow-up.
 - **Impact:** Shared strike delivery and the fresh personal strike check passed. The nearby-payload candidate passed a full Java rerun in its own checkout after the earlier mixed-class run was invalidated. [Strike report](../test-reports/2026-11-06-17-28-christopherbell-dev-survive-remote-strike-playback.md) · [Presence report](../test-reports/2026-11-06-17-55-christopherbell-dev-survive-nearby-presence-payload.md)
 
+### 2026-11-06 - Verify the fishing bank composition
+
+- **Change:** Framed the fishing dock with stone groups, driftwood and bent reeds, extended sand below the ocean plane and darkened the wet edge.
+- **Reason:** The shoreline capture showed an empty bank and a hard sand-to-water boundary.
+- **Impact:** Candidate aa38c563 passed the desktop bank capture and 468 JavaScript tests. ART-02 stays open for stronger water and terrain finish, nighttime and matched route review. The sand transition is subtle from the default camera. [Runtime report](../test-reports/2026-11-06-21-56-christopherbell-dev-survive-fishing-bank-artwork.md)
+
 ## Outcome
 
 Pending.
