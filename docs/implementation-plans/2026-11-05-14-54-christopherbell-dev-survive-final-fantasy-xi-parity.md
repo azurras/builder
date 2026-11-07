@@ -656,6 +656,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Equipment and field combat need to agree on cadence for more than one weapon.
 - **Impact:** Candidate 31563f15 confirmed club 3.2s and axe 3.8s in both Equipment and consecutive strike deadlines. Spear, shared-fight timing and broader balance remain open. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
 
+### 2026-11-07 - Verify confirmed ally damage on North Gate Patrol
+
+- **Change:** Verified remote hit feedback on the shared North Gate Patrol route with two desktop browsers.
+- **Reason:** A personal encounter alone does not prove a party member receives confirmed damage during a shared fight.
+- **Impact:** Candidate 210f4d3a delivered both skill cues and a confirmed 9-to-6 ally health change. Both patrol rewards were collected. Shared recoil frames, player collapse and broader party roles remain open. [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
+
 ## Outcome
 
 Pending.

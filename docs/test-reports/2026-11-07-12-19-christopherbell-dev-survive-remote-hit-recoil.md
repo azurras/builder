@@ -60,6 +60,12 @@ port 59325 listeners: 0
 ## Bugs / Follow-ups
 The observer test uses a personal encounter. Shared-party exchanges, enemy playback and player collapse still need direct coverage. Multiple losses between movement responses can coalesce; an offsetting heal can hide a loss. No sustained browser or server performance claim is made. The desktop frames still show weak facial definition and identical player silhouettes.
 
+## Shared North Gate Patrol on current main
+Candidate `210f4d3a53bd39f4592d1c7d95863000f9f9e838` includes main `e5d948e2`, timed fishing and enemy defeat motion. Targeted Survive and Mongo codec tests, 475 JavaScript tests and bootJar passed. Exact build verified at 127.0.0.1:53950 with MongoDB 127.0.0.1:53949/test.
+
+Two desktop Chrome contexts accepted an invite and North Gate Patrol, entered the same roaming bear encounter, and received each other's Heavy Strike and Crushing Blow cues. An observer saw the ally's combat health decrease from 9 to 6 in consecutive movement responses. Both players received patrol credit and turned in their assignments through the game UI. Both listeners closed and temporary runtime directories were removed.
+
+This run verifies the shared-fight input to the recoil renderer and the full patrol loop. The earlier personal-encounter frames remain the evidence for the normal and reduced-motion poses. The shared run did not capture the recoil frame or require an actual Impact bonus when the closing strike was lethal.
 ## Document Status
 complete
 
