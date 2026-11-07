@@ -1,0 +1,59 @@
+# Survive weapon cadence: Test Report
+
+## Story/Issue
+Give weapons distinct cadence under COM-02 in the [living parity plan](../implementation-plans/2026-11-05-14-54-christopherbell-dev-survive-final-fantasy-xi-parity.md).
+
+## Branch
+`codex/survive-weapon-cadence` at `2c94362cc353c22539a017d2daf4663c16207e89`.
+
+## Pass / Fail
+> [!TIP]
+> **2 of 2 passed** on candidate `2c94362c`.
+
+| # | Test case | Result | Why |
+|---|---|---|---|
+| 1 | Weapon deadlines and breakage | ✅ PASS | Each weapon waits until its deadline; breaking the club switches the next interval to bare hands. |
+| 2 | Desktop club cadence and Equipment | ✅ PASS | Chrome observed 3,200 ms between two confirmed strike deadlines and displayed the delay. |
+
+## Test Cases
+1. Run the Survive weapon and service tests, including timed exchanges and saved-world tests.
+2. Craft a club, approach meadow-hog, Engage and compare the first two server deadlines in Chrome.
+
+## App / Environment
+| Setting | Value |
+|---|---|
+| Runtime | Test profile at http://127.0.0.1:53683 |
+| Database | Disposable MongoDB at 127.0.0.1:53682/test |
+| Browser | Desktop Chrome with software WebGL |
+
+## Local Run Details
+- Verified exact actuator version before Chrome.
+- Closed both ports and removed both temporary directories after the run.
+
+## Data Sent
+```text
+Craft a club through normal gathering and crafting
+Walk to meadow-hog and ENGAGE
+Compare consecutive nextStrikeAt values and inspect Equipment text
+```
+
+## Response Received
+```text
+PASS: Chrome confirmed a 3200 ms club cadence and showed 3.2s delay in Equipment.
+port 53683 listeners: 0
+port 53682 listeners: 0
+```
+
+## Evidence
+- Targeted Survive Java and codec tests, 469 JavaScript tests, changed-script syntax and bootJar passed.
+- Bare hands use 3 seconds, clubs 3.2, axes 3.8 and spears 4.2. These are initial Survive balance values.
+- Existing saved next-strike deadlines retain their time. The following strike uses the current weapon delay.
+
+## Bugs / Follow-ups
+Browser proof covers the club in a personal encounter. Axe, spear, shared-fight cadence, long catch-up, and combat balance need broader playtesting. TP gain still uses the existing per-hit amount.
+
+## Document Status
+complete
+
+## Project
+christopherbell-dev

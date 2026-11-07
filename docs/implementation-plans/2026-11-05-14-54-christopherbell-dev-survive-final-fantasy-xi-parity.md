@@ -560,6 +560,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The shoreline capture showed an empty bank and a hard sand-to-water boundary.
 - **Impact:** Candidate aa38c563 passed the desktop bank capture and 468 JavaScript tests. ART-02 stays open for stronger water and terrain finish, nighttime and matched route review. The sand transition is subtle from the default camera. [Runtime report](../test-reports/2026-11-06-21-56-christopherbell-dev-survive-fishing-bank-artwork.md)
 
+### 2026-11-06 - Verify distinct weapon cadence
+
+- **Change:** Equipped weapons use distinct automatic-attack delays, shown in Equipment and weapon item details. The interval is recomputed after impact so breakage uses bare hands next.
+- **Reason:** COM-02 calls for weapons with distinct combat cadence.
+- **Impact:** Candidate 2c94362c passed the club deadline and Equipment browser check. Club 3.2s, axe 3.8s and spear 4.2s are initial Survive balance values. COM-02 remains open for TP scaling, shared-fight balance, spell timing and recovery. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
+
 ## Outcome
 
 Pending.
