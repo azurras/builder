@@ -53,6 +53,9 @@ port 55865 listeners: 0
 ## Bugs / Follow-ups
 The island cast uses a two-second wait, a five-second reel window and the existing 60% catch chance. Named fish, gear, bait, skill progression, cooking and trade remain open. Controller hardware, reduced motion and full-route performance were outside the browser run.
 
+## Refreshed release candidate
+Integrated the live stance and hit reaction as candidate 01c4a57e4060bd4de09adfef5ebb66ce39d1ed67. Targeted Survive Java, codec and JavaScript tests and bootJar passed. Exact actuator identity was verified at http://127.0.0.1:51834 with disposable MongoDB on 127.0.0.1:51833/test. Chrome repeated the projected bite, focused Reel In, timely reel and untouched-cast expiry checks. Both listeners closed at teardown.
+
 ## Document Status
 complete
 
