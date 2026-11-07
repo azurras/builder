@@ -50,6 +50,9 @@ port 51237 listeners: 0
 ## Bugs / Follow-ups
 The runtime check covers a personal hog victory. Party victory detection is unit-tested. Shared-fight, raider, player collapse and reduced-motion defeat visuals still need direct browser checks or implementation. The defeat cue is local presentation without a new shared event.
 
+## Refreshed release candidate
+Candidate 5cb9e0bde7fa9a1f0b63516fa3a87a1df693cfb3 includes the live main stance and hit reaction. All 470 JavaScript tests, changed-script syntax checks and bootJar passed. Its exact actuator version was checked at http://127.0.0.1:59683 with disposable MongoDB at 127.0.0.1:59682/test. Chrome repeated the standing, falling and cleared meadow-hog case. Both listeners closed at teardown.
+
 ## Document Status
 complete
 
