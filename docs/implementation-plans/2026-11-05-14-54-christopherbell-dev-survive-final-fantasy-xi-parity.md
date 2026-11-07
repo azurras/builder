@@ -668,6 +668,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Preserve distinct player action feedback and verify the admission guard on the exact CI correction.
 - **Impact:** Candidate d0959e56 delivered club revision 16 to both browsers. Candidate e62d3dde passed local Checkstyle and again rejected 102 invalid credentials without a world access. Both releases await CI and production. [Strike report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md) · [Movement report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
 
+### 2026-11-07 - Verify party enmity and guard routing
+
+- **Change:** Shared field fights now store lasting and fading damage enmity and counter the living fighter with the highest combined score. Receiving damage reduces the lasting part, and a defender can guard against an ally-triggered counter.
+- **Reason:** Party roles need durable enemy attention and truthful combat feedback. The child uses initial Survive weights for the two-component design described by Square Enix.
+- **Impact:** The stacked candidate 453f361c passed two-player state proof, including a consumed guard, shared HP and no new defender strike. It depends on the local strike ownership fix. Independent enemy timing, Provoke, healing threat and visual facing remain open. [Child plan](2026-11-07-13-09-christopherbell-dev-survive-party-enmity.md) · [Runtime report](../test-reports/2026-11-07-13-21-christopherbell-dev-survive-shared-party-enmity.md)
+
 ## Outcome
 
 Pending.
