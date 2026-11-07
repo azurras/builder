@@ -58,6 +58,8 @@ Candidate 812ac98ea72a23e8d5b2f154bcc18ed69c40a9cf includes the merged shared-st
 
 Normal motion ran at http://127.0.0.1:59391 with MongoDB on 127.0.0.1:59390/test. Reduced motion ran at http://127.0.0.1:51418 with MongoDB on 127.0.0.1:51417/test. Both Chrome runs defeated the meadow hog and confirmed reward chat. The normal frame shows the hog on its side during the fall. The reduced-motion frame at the same point after victory shows the target already cleared. All four listeners closed at teardown.
 
+## Nearby-presence integration verification
+Candidate d791612d0e16921369f43ba7b0924f51ea5c82d0 includes merged main 012bb295. All 471 JavaScript tests and bootJar passed. Exact actuator identity was verified at http://127.0.0.1:55392 with disposable MongoDB at 127.0.0.1:55391/test. Chrome repeated the standing, falling and cleared meadow-hog sequence and victory chat. Inspected the captured fall: the hog is on its side at the finishing position. Both listeners closed during cleanup. Reduced motion was previously verified on 812ac98 with the same defeat implementation; this integration run repeated normal motion only.
 ## Document Status
 complete
 

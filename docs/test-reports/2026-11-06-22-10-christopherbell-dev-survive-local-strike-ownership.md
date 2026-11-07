@@ -52,6 +52,8 @@ port 61563 listeners: 0
 ## Bugs / Follow-ups
 The ally-hit regression is covered through the mounted-world test. The live browser check covers cue ownership in a personal encounter. A shared-party visual capture and broader motion review remain open.
 
+## Nearby-presence integration verification
+Candidate 14e40a7b46ed635d68c305221054d3833ab11065 includes merged main 012bb295. Targeted Survive and state-codec Java tests, all 470 JavaScript tests and bootJar passed. Exact actuator identity was verified at http://127.0.0.1:56082 with disposable MongoDB at 127.0.0.1:56081/test. Two Chrome contexts received the same owner club strike revision 18 and confirmed cue expiry. Both listeners closed and temporary runtime directories were removed. The earlier full Java suite remains recorded above; this integration run used targeted Java checks.
 ## Document Status
 complete
 

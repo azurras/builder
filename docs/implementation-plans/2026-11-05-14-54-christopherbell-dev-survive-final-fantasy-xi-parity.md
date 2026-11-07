@@ -596,6 +596,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The next gameplay releases must work with the current multiplayer response.
 - **Impact:** Fishing repeated bite, reel and expiry. Weapon cadence repeated the club interval and Equipment label. Both candidates passed targeted Java, JavaScript and build checks. [Fishing report](../test-reports/2026-11-06-17-51-christopherbell-dev-survive-timed-fishing.md) · [Cadence report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
 
+### 2026-11-06 - Verify motion with nearby multiplayer payloads
+
+- **Change:** Integrated defeat motion and local strike ownership with nearby-presence main 012bb295 and repeated their browser checks.
+- **Reason:** Attack and defeat presentation must remain correct after multiplayer payload filtering.
+- **Impact:** Normal hog fall and owner/observer strike revision 18 passed on exact candidates d791612d and 14e40a7b. Shared-party defeat and broader motion/asset parity remain open. [Defeat report](../test-reports/2026-11-06-17-41-christopherbell-dev-survive-enemy-defeat-motion.md) · [Ownership report](../test-reports/2026-11-06-22-10-christopherbell-dev-survive-local-strike-ownership.md)
+
 ## Outcome
 
 Pending.
