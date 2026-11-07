@@ -55,6 +55,12 @@ Browser proof covers the club in a personal encounter. Axe, spear, shared-fight 
 ## Nearby-presence integration
 Candidate 8b3a59e4f09997776fac10f6666ce5a4a1edc2e8 integrates the nearby-pose payload change. Targeted Survive Java and codec tests, JavaScript tests and bootJar passed. Exact actuator identity was checked at http://127.0.0.1:59425 with disposable MongoDB on 127.0.0.1:59424/test. Chrome repeated the 3,200 ms club interval and Equipment-label checks. Both listeners closed at teardown.
 
+## Timed fishing and face integration
+Candidate `31563f153d259e088cfba9eaa4efe3104bfbb5f2` includes main `e5d948e2`. The snapshot retains fishing timing alongside weapon delay. Targeted Survive and Mongo codec tests, 473 JavaScript tests and bootJar passed.
+
+Two isolated desktop Chrome runs verified the exact candidate. The club test at 127.0.0.1:60935 with MongoDB 127.0.0.1:60934/test measured 3,200 ms between confirmed deadlines and showed 3.2s in Equipment. The axe test at 127.0.0.1:64569 with MongoDB 127.0.0.1:64568/test equipped the packed axe from the Main picker, measured 3,800 ms and showed 3.8s in Equipment. Both runs approached and engaged a roaming hog. All four listeners closed.
+
+The first axe harness at 60548/60547 compared raw timestamp strings and treated a differently formatted value at the same parsed millisecond as a new deadline. It stopped with a measured delta of 0. The corrected harness waited for a later parsed instant and passed on the same build. Those two listeners also closed. Spear and shared-fight timing still need direct browser evidence.
 ## Document Status
 complete
 

@@ -650,6 +650,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Unknown and expired credentials should stop before the shared game monitor or Mongo. Movement still verifies the latest owner after admission.
 - **Impact:** Final candidate 33e8270b accepted 888 of 888 pulses and all departures in the short ladder. The positive control accessed the world once, and 102 invalid credentials accessed it zero times. The full native suites and isolated proof passed. Release and longer workloads remain open. [Child plan](2026-11-07-12-34-christopherbell-dev-survive-movement-rate-limit.md) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
 
+### 2026-11-07 - Verify club and axe cadence through Equipment
+
+- **Change:** Integrated distinct weapon delays with timed fishing, enemy defeat and face art. Repeated the club case and equipped the packed stone axe through the Main picker in a second desktop session.
+- **Reason:** Equipment and field combat need to agree on cadence for more than one weapon.
+- **Impact:** Candidate 31563f15 confirmed club 3.2s and axe 3.8s in both Equipment and consecutive strike deadlines. Spear, shared-fight timing and broader balance remain open. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
+
 ## Outcome
 
 Pending.
