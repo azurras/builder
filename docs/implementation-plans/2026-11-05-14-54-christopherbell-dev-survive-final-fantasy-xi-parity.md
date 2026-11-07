@@ -626,6 +626,18 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Front desktop captures exposed an almost featureless face despite the modeled nose and cheeks.
 - **Impact:** Candidate 4ef4f6e5 passed 473 JavaScript tests and repeated the desktop orbit with merged enemy defeat. Eyes and brows are clearer. Mouth definition, head geometry, character variation and matched lighting at all angles remain open. [Child plan](2026-11-07-12-23-christopherbell-dev-survive-adventurer-face.md) · [Runtime report](../test-reports/2026-11-07-12-27-christopherbell-dev-survive-adventurer-face.md)
 
+### 2026-11-07 - Measure shared-network movement and find the first throttle
+
+- **Change:** Measured the fixed 2, 5, 10 and 20 session camp ladder. Two baseline builds reproduced 420 throttles out of 480 attempts at the 20-session stage. The isolated dedicated quota accepted all 2,664 measured pulses across three repetitions.
+- **Reason:** Half-second movement polls share the 300-per-minute mutation quota with commands. The first bottleneck in this loopback test was admission, with 19 of 20 departures also throttled on main bf51abaf.
+- **Impact:** Candidate e0dbaed5 reached 40 accepted movement requests per second in the short 20-session windows. Keep it local pending protection against invalid-owner database lookups under the shared game lock. Longer browser and mixed multiplayer workloads remain open. [Child plan](2026-11-07-12-34-christopherbell-dev-survive-movement-rate-limit.md) · [Runtime report](../test-reports/2026-11-07-12-40-christopherbell-dev-survive-shared-network-movement-quota.md)
+
+### 2026-11-07 - Verify live defeat animation
+
+- **Change:** Verified that the enemy defeat animation from PR #1591 is live at bf51abaf. The adventurer face update passed independent review and entered the release queue.
+- **Reason:** Track production behavior separately from isolated runtime proof.
+- **Impact:** Personal hog defeat is live. Shared-fight and raider defeat capture remain open. [Defeat PR](https://github.com/azurras/christopherbell.dev/pull/1591) · [Face PR](https://github.com/azurras/christopherbell.dev/pull/1598)
+
 ## Outcome
 
 Pending.
