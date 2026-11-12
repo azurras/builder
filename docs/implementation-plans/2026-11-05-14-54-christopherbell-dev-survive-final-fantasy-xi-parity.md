@@ -746,6 +746,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The first narrow-window capture showed that opening Map pushed its contents below the visible menu.
 - **Impact:** Candidate 42702357 passed the narrow Map and Equipment flow and restored focus after simulated gamepad B and keyboard Escape. A physical controller pass remains open. [Runtime report](../test-reports/2026-11-12-15-16-christopherbell-dev-survive-menu-panels.md)
 
+### 2026-11-12 - Browse carried items with the controller D-pad
+
+- **Change:** Browse carried items using vertical D-pad input and move to the next menu control at the end of the list.
+- **Reason:** D-pad Down previously skipped the item rows while the inventory list had focus.
+- **Impact:** Candidate fe481a33 confirmed item selection and detail updates in desktop Chrome with a simulated controller. Physical controller testing remains open. [Runtime report](../test-reports/2026-11-12-15-22-christopherbell-dev-survive-controller-item-browsing.md)
+
 ## Outcome
 
 Pending.
