@@ -39,6 +39,10 @@ Nighttime, the full route and physical GPU comparison remain open.
 Candidate `04158c521c5704e594a857d8675514b60c01ca7f` includes main `0cefdc29` and has the same source tree as the previously verified sky candidate. JavaScript tests and bootJar passed. Exact build readback and a new daylight Chrome capture at 127.0.0.1:64914 confirmed the bright strip remained absent at the default camera distance. Candidate and MongoDB listeners at 64914 and 64913 closed and disposable directories were removed.
 
 
+## Night rendering
+Candidate `04158c521c5704e594a857d8675514b60c01ca7f` passed a desktop Chrome render at the same fishing-bank coordinates and camera distance. The harness supplied a NIGHT snapshot to the browser while leaving the server clock and acknowledged movement untouched. The sea and sky were visibly dark and the bright seam was absent. This verifies the night shader path. A natural day-to-night transition and a route-wide lighting comparison remain open. Both isolated listeners, 58464 and 58463, closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 

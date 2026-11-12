@@ -764,6 +764,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Keyboard arrows previously moved only between top-level rows and left equipment choices to Tab.
 - **Impact:** Candidate 0f189563 verified focus on the packed stone axe and confirmed its equipment change in Chrome. [Runtime report](../test-reports/2026-11-12-15-28-christopherbell-dev-survive-weapon-picker-keys.md)
 
+### 2026-11-12 - Verify the fishing-bank horizon at night
+
+- **Change:** Verified the fishing-bank sky fix with night shading at the default desktop camera.
+- **Reason:** The daylight capture alone did not exercise the darker horizon colors.
+- **Impact:** Candidate 04158c52 showed no bright seam with a browser-supplied night snapshot. Natural phase transition and route-wide lighting remain open. [Runtime report](../test-reports/2026-11-12-15-10-christopherbell-dev-survive-sky-horizon.md)
+
 ## Outcome
 
 Pending.
