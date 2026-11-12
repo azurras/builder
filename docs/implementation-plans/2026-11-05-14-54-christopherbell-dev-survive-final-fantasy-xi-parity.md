@@ -782,6 +782,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** These changes share the same menus and need to work together across both desktop layouts.
 - **Impact:** Candidate 0f189563 passed all three desktop browser flows and the weapon picker check. Use PR #1607 to release the layout and input changes together after #1604. Physical controller playtesting remains open. [Runtime report](../test-reports/2026-11-12-15-28-christopherbell-dev-survive-weapon-picker-keys.md)
 
+### 2026-11-12 - Verify restored party weapon timers
+
+- **Change:** Verify independent weapon timers after a shared fight is saved and restored.
+- **Reason:** A party fight needs to keep each fighter's cadence while sharing enemy HP.
+- **Impact:** Candidate 2514301b passed the shared-fight regression and a desktop Chrome axe check. Browser verification of simultaneous weapon timings remains open. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
+
 ## Outcome
 
 Pending.

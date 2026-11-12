@@ -65,6 +65,10 @@ The first axe harness at 60548/60547 compared raw timestamp strings and treated 
 Candidate `2b1437da3562b91d3b13ad61c8ee7d1215b43cc4` preserves both the weapon interval and confirmed strike cue in the survivor snapshot after merging main `cec581eb`. Survive Java tests, Checkstyle main and test, 474 JavaScript tests and bootJar passed. Desktop Chrome checked the exact candidate for both weapons. At 55659, the club showed 3.2s in Equipment and used 3,200 ms between strike deadlines. At 56013, selecting the packed axe showed 3.8s in Equipment and used 3,800 ms between deadlines. The initial axe browser attempt timed out during movement. The rerun used a longer route observation window on the same build. Both pairs of candidate and database listeners closed, and disposable directories were removed.
 
 
+## Shared party timing integration
+Candidate `2514301bfbd12431bc31a07006815d67bbdeed05` integrates main `0cefdc29`. Survive Java tests, Checkstyle, 475 JavaScript tests and bootJar passed on the integration. The added shared-fight regression and final bootJar also passed. The regression saves and restores a bear fight, then checks that the barehanded fighter attacks at 3,000 ms and the club fighter at 3,200 ms, with independent next deadlines and matching enemy HP. Desktop Chrome on the final exact build measured a 3,800 ms stone axe interval and matching Equipment text. Both listeners at 64789 and 64788 closed and disposable directories were removed. The Chrome case was a solo fight.
+
+
 ## Document Status
 complete
 
