@@ -34,6 +34,10 @@ The mounted test checks that disabled choices are skipped. Chrome tested scripte
 ## Bugs / Follow-ups
 Direct physical key and controller playtesting and additional equipment slots remain open.
 
+## Combined menu verification
+Exact candidate `0f189563af9d63679a192638bdf6c1ecd547ac4a` also passed the desktop side-panel layout, narrow inline Map, category switching, three-level keyboard cancellation, simulated controller B cancellation and D-pad item browsing on one isolated build. Runtime ports 64711 and 64710 closed and disposable directories were removed. Physical controller and direct playtesting remain open.
+
+
 ## Document Status
 complete
 

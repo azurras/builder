@@ -776,6 +776,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Confirm that the dock, reed groups, shoreline rocks and submerged sand made it into the public game build.
 - **Impact:** The public build identity matches the merged shoreline PR. The horizon shader correction is separately verified in desktop Chrome and awaits its own release. [Shoreline PR](https://github.com/azurras/christopherbell.dev/pull/1594) · [Horizon PR](https://github.com/azurras/christopherbell.dev/pull/1603)
 
+### 2026-11-12 - Verify desktop menu layout and input together
+
+- **Change:** Verify the compact layout, keyboard equipment browsing and gamepad inventory controls together on the same release candidate.
+- **Reason:** These changes share the same menus and need to work together across both desktop layouts.
+- **Impact:** Candidate 0f189563 passed all three desktop browser flows and the weapon picker check. Use PR #1607 to release the layout and input changes together after #1604. Physical controller playtesting remains open. [Runtime report](../test-reports/2026-11-12-15-28-christopherbell-dev-survive-weapon-picker-keys.md)
+
 ## Outcome
 
 Pending.
