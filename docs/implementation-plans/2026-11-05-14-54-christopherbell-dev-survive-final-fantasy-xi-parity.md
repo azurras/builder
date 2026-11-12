@@ -770,6 +770,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The daylight capture alone did not exercise the darker horizon colors.
 - **Impact:** Candidate 04158c52 showed no bright seam with a browser-supplied night snapshot. Natural phase transition and route-wide lighting remain open. [Runtime report](../test-reports/2026-11-12-15-10-christopherbell-dev-survive-sky-horizon.md)
 
+### 2026-11-12 - Verify live fishing-bank artwork
+
+- **Change:** Verified the fishing-bank artwork live in production build 0cefdc29.
+- **Reason:** Confirm that the dock, reed groups, shoreline rocks and submerged sand made it into the public game build.
+- **Impact:** The public build identity matches the merged shoreline PR. The horizon shader correction is separately verified in desktop Chrome and awaits its own release. [Shoreline PR](https://github.com/azurras/christopherbell.dev/pull/1594) · [Horizon PR](https://github.com/azurras/christopherbell.dev/pull/1603)
+
 ## Outcome
 
 Pending.
