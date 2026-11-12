@@ -734,6 +734,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** FFXI assigns a dedicated Cancel control, and the previous Survive behavior closed the entire Main Menu from Equipment.
 - **Impact:** Candidate e5d9446a passed the three-step desktop Equipment cancel flow. Compact category navigation, consistent child panels, inventory and equipment browsing, and a physical controller pass remain open. [Runtime report](../test-reports/2026-11-12-15-13-christopherbell-dev-survive-menu-navigation.md)
 
+### 2026-11-12 - Give Main Menu categories separate desktop panels
+
+- **Change:** Give the selected Main Menu category its own framed panel to the left of a compact desktop category list. Only one category opens at a time.
+- **Reason:** Map and Equipment should be easy to switch between while leaving the game visible and preserving the menu hierarchy.
+- **Impact:** Desktop candidate 894546f2 verified panel bounds, Map to Equipment switching and three levels of cancellation. Narrow viewport and physical controller checks remain open. [Runtime report](../test-reports/2026-11-12-15-16-christopherbell-dev-survive-menu-panels.md)
+
 ## Outcome
 
 Pending.
