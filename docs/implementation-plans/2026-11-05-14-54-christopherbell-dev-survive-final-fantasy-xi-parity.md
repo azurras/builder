@@ -788,6 +788,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A party fight needs to keep each fighter's cadence while sharing enemy HP.
 - **Impact:** Candidate 2514301b passed the shared-fight regression and a desktop Chrome axe check. Browser verification of simultaneous weapon timings remains open. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
 
+### 2026-11-12 - Verify combined menu candidate after cancellation merge
+
+- **Change:** Integrated the combined menu candidate with merged menu cancellation.
+- **Reason:** Confirm that layout and input behavior survive integration with main.
+- **Impact:** Candidate 2c7ec5ff passed all four desktop browser flows. CI, production readback and physical controller playtesting remain open. [Runtime report](../test-reports/2026-11-12-15-28-christopherbell-dev-survive-weapon-picker-keys.md)
+
 ## Outcome
 
 Pending.

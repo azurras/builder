@@ -38,6 +38,10 @@ Direct physical key and controller playtesting and additional equipment slots re
 Exact candidate `0f189563af9d63679a192638bdf6c1ecd547ac4a` also passed the desktop side-panel layout, narrow inline Map, category switching, three-level keyboard cancellation, simulated controller B cancellation and D-pad item browsing on one isolated build. Runtime ports 64711 and 64710 closed and disposable directories were removed. Physical controller and direct playtesting remain open.
 
 
+## Merged cancellation integration
+Candidate `2c7ec5ffccde3eb255dcc5d6a79a76b45891bfe5` includes main `98f64390`. Its source tree matches the previously verified combined candidate. All 478 JavaScript tests and bootJar passed. Exact build readback and desktop Chrome at 127.0.0.1:64631 repeated wide and narrow panel switching, keyboard and simulated gamepad cancellation, item selection and the stone axe equip flow. Listeners at 64631 and 64630 closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 
