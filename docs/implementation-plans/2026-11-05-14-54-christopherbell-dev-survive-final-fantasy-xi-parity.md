@@ -716,6 +716,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Party members need to manage which fighter draws the enemy's attention and see how an ally is doing without opening a menu.
 - **Impact:** Production reports build 9fe53463, which contains both changes. The isolated browser runs verified guard consumption and shared enemy HP, and confirmed that ally HP and TP update and clear on departure. Independent enemy attack timing, healing enmity, MP and larger parties remain open. [Enmity PR](https://github.com/azurras/christopherbell.dev/pull/1600) · [Party vitals PR](https://github.com/azurras/christopherbell.dev/pull/1601)
 
+### 2026-11-12 - Review the fishing bank on the party release baseline
+
+- **Change:** Integrated the fishing-bank artwork with the live party combat and HUD baseline.
+- **Reason:** Recheck the shoreline from the default desktop camera before releasing it.
+- **Impact:** Candidate 62360467 passed the daylight capture and 475 JavaScript tests. The reeds and rocks frame the dock. The bright water horizon seam, subtle sand transition and matched nighttime comparison remain open. [Runtime report](../test-reports/2026-11-06-21-56-christopherbell-dev-survive-fishing-bank-artwork.md)
+
 ## Outcome
 
 Pending.
