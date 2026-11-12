@@ -722,6 +722,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Recheck the shoreline from the default desktop camera before releasing it.
 - **Impact:** Candidate 62360467 passed the daylight capture and 475 JavaScript tests. The reeds and rocks frame the dock. The bright water horizon seam, subtle sand transition and matched nighttime comparison remain open. [Runtime report](../test-reports/2026-11-06-21-56-christopherbell-dev-survive-fishing-bank-artwork.md)
 
+### 2026-11-12 - Remove the bright shoreline horizon seam
+
+- **Change:** Give the full sky dome an explicit shader material so its lower hemisphere uses the horizon color.
+- **Reason:** Elevation-based shading sent the visible bottom of the white dome through ground lighting at the waterline.
+- **Impact:** Candidate 55e135b4 removed the bright strip in the default-distance daylight desktop comparison. Night and route-wide comparisons remain open. [Runtime report](../test-reports/2026-11-12-15-10-christopherbell-dev-survive-sky-horizon.md)
+
 ## Outcome
 
 Pending.
