@@ -35,6 +35,10 @@ Inspected the final desktop Map capture. The first capture exposed the view togg
 ## Bugs / Follow-ups
 Items and Equipment still need deeper browsing, and the narrow layout and physical controller need direct playtesting.
 
+## Narrow desktop and gamepad verification
+Candidate `42702357ed429be7e2b7ef0d35780700c355e12c` includes main `0cefdc29`. All 477 JavaScript tests and bootJar passed. At a 674-pixel content width, the first capture exposed inherited section padding that pushed the map out of the visible list. The final capture showed the inline map immediately below its compact row, with the rest reachable through the menu scrollbar. Switching to Equipment closed Map. A simulated standard gamepad B press closed Main weapon selection and restored its focus, followed by Escape back to the world. Physical controller verification remains open. Exact candidate and database listeners at 56292 and 56291 closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 

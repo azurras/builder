@@ -740,6 +740,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Map and Equipment should be easy to switch between while leaving the game visible and preserving the menu hierarchy.
 - **Impact:** Desktop candidate 894546f2 verified panel bounds, Map to Equipment switching and three levels of cancellation. Narrow viewport and physical controller checks remain open. [Runtime report](../test-reports/2026-11-12-15-16-christopherbell-dev-survive-menu-panels.md)
 
+### 2026-11-12 - Verify narrow desktop menu panels and gamepad cancel
+
+- **Change:** Keep category rows compact in the narrow desktop layout by removing inherited section padding.
+- **Reason:** The first narrow-window capture showed that opening Map pushed its contents below the visible menu.
+- **Impact:** Candidate 42702357 passed the narrow Map and Equipment flow and restored focus after simulated gamepad B and keyboard Escape. A physical controller pass remains open. [Runtime report](../test-reports/2026-11-12-15-16-christopherbell-dev-survive-menu-panels.md)
+
 ## Outcome
 
 Pending.
