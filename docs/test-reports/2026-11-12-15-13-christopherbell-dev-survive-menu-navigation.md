@@ -34,6 +34,10 @@ The Chrome test exercised real DOM focus and panel state with scripted keyboard 
 ## Bugs / Follow-ups
 Native form controls keep their own input handling. Broader panel layout, command organization and a physical controller pass remain open.
 
+## Shoreline integration
+Candidate `9b8c494a2e1a6250e981da335b1b89f56a0a0fb4` includes main `0cefdc29`. JavaScript tests and bootJar passed. The exact candidate at 127.0.0.1:49923 repeated the Chrome keyboard sequence and restored focus at all three levels. The application and MongoDB listeners at 49923 and 49922 closed and their disposable directories were removed.
+
+
 ## Document Status
 complete
 

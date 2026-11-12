@@ -752,6 +752,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** D-pad Down previously skipped the item rows while the inventory list had focus.
 - **Impact:** Candidate fe481a33 confirmed item selection and detail updates in desktop Chrome with a simulated controller. Physical controller testing remains open. [Runtime report](../test-reports/2026-11-12-15-22-christopherbell-dev-survive-controller-item-browsing.md)
 
+### 2026-11-12 - Verify menu navigation after shoreline integration
+
+- **Change:** Integrated the menu navigation candidate with the merged fishing bank artwork.
+- **Reason:** Verify the release candidate against the current main branch.
+- **Impact:** Exact candidate 9b8c494a repeated the Equipment cancellation flow in desktop Chrome. CI and production readback are pending. [Runtime report](../test-reports/2026-11-12-15-13-christopherbell-dev-survive-menu-navigation.md)
+
 ## Outcome
 
 Pending.
