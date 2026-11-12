@@ -73,6 +73,10 @@ Candidate `2514301bfbd12431bc31a07006815d67bbdeed05` integrates main `0cefdc29`.
 On candidate `2514301bfbd12431bc31a07006815d67bbdeed05`, both Chrome clients reached and engaged the meadow hog. The second client never observed a later strike deadline within the observation window. This attempt leaves shared browser timing unverified. Both listeners at 55612 and 55611 closed and their disposable directories were removed. A bear scenario with a larger enemy health pool is the next test.
 
 
+## Two desktop clients in a shared bear fight
+Exact candidate `2514301bfbd12431bc31a07006815d67bbdeed05` passed at 127.0.0.1:55325. Two isolated Chrome contexts formed a party, walked to the bear and engaged it through the game UI. The harness retained distinct confirmed strike deadlines from the start of combat and sampled the normal status endpoint. The barehanded fighter advanced from 1794519824083 to 1794519827083 ms and the club fighter from 1794519827491 to 1794519830691 ms, for 3,000 and 3,200 ms intervals. Both listeners at 55325 and 55324 closed and disposable directories were removed. An earlier bear run at 64060/64059 timed out after the club fighter died before the observer captured a second deadline. Its listeners also closed. The successful run verifies one interval per fighter. Longer catch-up and shared spear timing remain open.
+
+
 ## Document Status
 complete
 

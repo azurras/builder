@@ -794,6 +794,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Confirm that layout and input behavior survive integration with main.
 - **Impact:** Candidate 2c7ec5ff passed all four desktop browser flows. CI, production readback and physical controller playtesting remain open. [Runtime report](../test-reports/2026-11-12-15-28-christopherbell-dev-survive-weapon-picker-keys.md)
 
+### 2026-11-12 - Verify separate weapon intervals in a shared browser fight
+
+- **Change:** Verified barehanded and club strike cadence in one shared bear fight through two desktop Chrome sessions.
+- **Reason:** The shared-world regression and solo axe run did not prove two clients could observe independent deadlines during the same encounter.
+- **Impact:** Candidate 2514301b confirmed 3,000 ms and 3,200 ms intervals. Shared spear timing and longer catch-up remain open. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
+
 ## Outcome
 
 Pending.
