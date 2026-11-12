@@ -77,6 +77,10 @@ On candidate `2514301bfbd12431bc31a07006815d67bbdeed05`, both Chrome clients rea
 Exact candidate `2514301bfbd12431bc31a07006815d67bbdeed05` passed at 127.0.0.1:55325. Two isolated Chrome contexts formed a party, walked to the bear and engaged it through the game UI. The harness retained distinct confirmed strike deadlines from the start of combat and sampled the normal status endpoint. The barehanded fighter advanced from 1794519824083 to 1794519827083 ms and the club fighter from 1794519827491 to 1794519830691 ms, for 3,000 and 3,200 ms intervals. Both listeners at 55325 and 55324 closed and disposable directories were removed. An earlier bear run at 64060/64059 timed out after the club fighter died before the observer captured a second deadline. Its listeners also closed. The successful run verifies one interval per fighter. Longer catch-up and shared spear timing remain open.
 
 
+## Menu navigation baseline
+Candidate `307408cd6efd8753bb8a15b48db254b8d748400f` integrates main `98f64390`. The Survive Java suite, Checkstyle main and test, JavaScript tests and bootJar passed. Two desktop Chrome contexts verified the exact build at 127.0.0.1:65507. In the same bear fight, the barehanded and club fighters advanced their deadlines by 3,000 ms and 3,200 ms. Listeners at 65507 and 65506 closed and disposable directories were removed. The integration did not change the observed timing.
+
+
 ## Document Status
 complete
 
