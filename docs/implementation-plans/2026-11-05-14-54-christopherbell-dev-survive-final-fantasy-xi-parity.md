@@ -800,6 +800,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The shared-world regression and solo axe run did not prove two clients could observe independent deadlines during the same encounter.
 - **Impact:** Candidate 2514301b confirmed 3,000 ms and 3,200 ms intervals. Shared spear timing and longer catch-up remain open. [Runtime report](../test-reports/2026-11-06-22-01-christopherbell-dev-survive-weapon-cadence.md)
 
+### 2026-11-12 - Verify live menu cancellation and focus restoration
+
+- **Change:** Verified the one-panel-at-a-time menu cancellation release live in production build 98f64390.
+- **Reason:** Confirm the deployed game includes the focus restoration verified in the Equipment browser flow.
+- **Impact:** The public build matches PR #1604. The combined menu layout, item browsing and equipment navigation remain tracked in #1607. [Cancellation PR](https://github.com/azurras/christopherbell.dev/pull/1604) · [Combined menu PR](https://github.com/azurras/christopherbell.dev/pull/1607)
+
 ## Outcome
 
 Pending.
