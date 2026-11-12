@@ -758,6 +758,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Verify the release candidate against the current main branch.
 - **Impact:** Exact candidate 9b8c494a repeated the Equipment cancellation flow in desktop Chrome. CI and production readback are pending. [Runtime report](../test-reports/2026-11-12-15-13-christopherbell-dev-survive-menu-navigation.md)
 
+### 2026-11-12 - Browse the weapon picker with arrow keys
+
+- **Change:** Use Up and Down to move between available buttons and summaries inside the current menu panel.
+- **Reason:** Keyboard arrows previously moved only between top-level rows and left equipment choices to Tab.
+- **Impact:** Candidate 0f189563 verified focus on the packed stone axe and confirmed its equipment change in Chrome. [Runtime report](../test-reports/2026-11-12-15-28-christopherbell-dev-survive-weapon-picker-keys.md)
+
 ## Outcome
 
 Pending.
