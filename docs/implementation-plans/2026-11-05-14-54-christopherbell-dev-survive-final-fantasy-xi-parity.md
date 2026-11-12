@@ -710,6 +710,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Shared combat must distinguish the attacking survivor from the ally who receives damage.
 - **Impact:** Candidate 2eddf372 repeated confirmed ally damage and two completed patrols. The shared capture did not clearly show the fighters, so shared pose readability stays open. [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
 
+### 2026-11-12 - Verify live party enmity and vitals
+
+- **Change:** Released damage-based enmity and the accepted-party HP and TP panel.
+- **Reason:** Party members need to manage which fighter draws the enemy's attention and see how an ally is doing without opening a menu.
+- **Impact:** Production reports build 9fe53463, which contains both changes. The isolated browser runs verified guard consumption and shared enemy HP, and confirmed that ally HP and TP update and clear on departure. Independent enemy attack timing, healing enmity, MP and larger parties remain open. [Enmity PR](https://github.com/azurras/christopherbell.dev/pull/1600) · [Party vitals PR](https://github.com/azurras/christopherbell.dev/pull/1601)
+
 ## Outcome
 
 Pending.
