@@ -35,6 +35,10 @@ Compared the local images survive-bank-art-shore.png and survive-sky-shore.png. 
 ## Bugs / Follow-ups
 Nighttime, the full route and physical GPU comparison remain open.
 
+## Merged shoreline integration
+Candidate `04158c521c5704e594a857d8675514b60c01ca7f` includes main `0cefdc29` and has the same source tree as the previously verified sky candidate. JavaScript tests and bootJar passed. Exact build readback and a new daylight Chrome capture at 127.0.0.1:64914 confirmed the bright strip remained absent at the default camera distance. Candidate and MongoDB listeners at 64914 and 64913 closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 
