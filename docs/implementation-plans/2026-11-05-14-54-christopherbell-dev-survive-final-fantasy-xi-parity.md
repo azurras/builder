@@ -728,6 +728,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Elevation-based shading sent the visible bottom of the white dome through ground lighting at the waterline.
 - **Impact:** Candidate 55e135b4 removed the bright strip in the default-distance daylight desktop comparison. Night and route-wide comparisons remain open. [Runtime report](../test-reports/2026-11-12-15-10-christopherbell-dev-survive-sky-horizon.md)
 
+### 2026-11-12 - Prioritize FFXI-style menu navigation
+
+- **Change:** Prioritize menu parity under UI-01. Escape closes the focused child panel and restores its opening row. The top-level keyboard list includes the view toggle and skips rows hidden by the map.
+- **Reason:** FFXI assigns a dedicated Cancel control, and the previous Survive behavior closed the entire Main Menu from Equipment.
+- **Impact:** Candidate e5d9446a passed the three-step desktop Equipment cancel flow. Compact category navigation, consistent child panels, inventory and equipment browsing, and a physical controller pass remain open. [Runtime report](../test-reports/2026-11-12-15-13-christopherbell-dev-survive-menu-navigation.md)
+
 ## Outcome
 
 Pending.
