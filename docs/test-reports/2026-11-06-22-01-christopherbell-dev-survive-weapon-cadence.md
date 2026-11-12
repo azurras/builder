@@ -69,6 +69,10 @@ Candidate `2b1437da3562b91d3b13ad61c8ee7d1215b43cc4` preserves both the weapon i
 Candidate `2514301bfbd12431bc31a07006815d67bbdeed05` integrates main `0cefdc29`. Survive Java tests, Checkstyle, 475 JavaScript tests and bootJar passed on the integration. The added shared-fight regression and final bootJar also passed. The regression saves and restores a bear fight, then checks that the barehanded fighter attacks at 3,000 ms and the club fighter at 3,200 ms, with independent next deadlines and matching enemy HP. Desktop Chrome on the final exact build measured a 3,800 ms stone axe interval and matching Equipment text. Both listeners at 64789 and 64788 closed and disposable directories were removed. The Chrome case was a solo fight.
 
 
+## First two-client timing attempt
+On candidate `2514301bfbd12431bc31a07006815d67bbdeed05`, both Chrome clients reached and engaged the meadow hog. The second client never observed a later strike deadline within the observation window. This attempt leaves shared browser timing unverified. Both listeners at 55612 and 55611 closed and their disposable directories were removed. A bear scenario with a larger enemy health pool is the next test.
+
+
 ## Document Status
 complete
 
