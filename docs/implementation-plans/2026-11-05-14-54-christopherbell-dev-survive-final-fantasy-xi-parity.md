@@ -973,3 +973,8 @@ task-contract-v2
 - **Change:** Candidate 2a493bd6 extends the toe and heel near the sole in the baked poses without changing vertical foot contact.
 - **Evidence:** All 476 JavaScript tests and bootJar passed. The regression checks toe extension and existing height through every walk frame. The committed desktop Chrome build rendered the idle scene at 09:34.
 - **Remaining:** The rear idle capture mostly hides the toe. A side view and recorded walk cycle are still needed to assess the boot profile and contact in motion. Visual parity remains open.
+
+### 2026-11-13 - Inspect the adventurer from the side in motion
+
+- **Evidence:** Chrome rendered candidate 2a493bd6 at desktop gameplay distance in daylight. The check orbited to a side view, drove lateral movement, captured four stride frames and confirmed movement on the server. The sole and toe are visible in profile.
+- **Remaining:** The side capture exposes a boxy face, sharp hair silhouette and a thin forefoot. Discrete movement frames show different poses but do not establish continuous foot contact or animation parity. ART-01, ART-03 and AC-2 remain open.
