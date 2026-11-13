@@ -23,10 +23,14 @@ Desktop Chrome at 127.0.0.1:50958 with disposable MongoDB at 127.0.0.1:50957/tes
 Actuator identified the committed candidate. Test supplies were seeded in the disposable database. Both listeners closed and temporary directories were removed.
 
 ## Data Sent
+```text
 Trade Scout offered one wood for one stone from Trade Smith. Trade Smith accepted the exact offer after review.
+```
 
 ## Response Received
+```text
 PASS: confirmed discard, camp pack upgrade, private offer, acceptance, atomic inventory changes, and both chat logs.
+```
 
 ## Evidence
 Actuator matched the branch commit. The confirmed swap and both chat lines were observed in Chrome.
