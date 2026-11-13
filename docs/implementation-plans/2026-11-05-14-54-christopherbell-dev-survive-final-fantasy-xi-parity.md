@@ -860,6 +860,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The previous proximity heading was ambiguous after Disengage, when the enemy was still in the encounter.
 - **Impact:** Commit 328c9d24 passed all 479 JavaScript tests. The HUD regression covers active attacks, idle engagement and encounter exit. Desktop runtime verification and release remain open.
 
+### 2026-11-12 - Verify the enemy panel through Engage and Disengage
+
+- **Change:** Verified Engage and Disengage in desktop Chrome against the merged shared positioning build.
+- **Reason:** The enemy panel must show whether automatic attacks are active while keeping the target readable.
+- **Impact:** Candidate eb44d965 showed In combat while attacking and Ready to engage after Disengage, with hog HP still visible. [Runtime report](../test-reports/2026-11-12-20-46-christopherbell-dev-survive-combat-target-status.md)
+
 ## Outcome
 
 Pending.
