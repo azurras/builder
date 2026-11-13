@@ -889,3 +889,9 @@ christopherbell-dev
 ## Plan Format
 
 task-contract-v2
+
+### 2026-11-13 - Add confirmed player supply trades
+
+- **Change:** Add private, expiring offers through Camp & sharing. Sending an offer confirms the sender's terms. The recipient can accept or decline, and the sender can withdraw.
+- **Reason:** Both players need to see and agree to the same exchange before their inventories change.
+- **Impact:** Candidate 11aa2ebf verified supply exchanges in separate Chrome sessions. The server checks ownership, camp eligibility, stock, and both pack capacities before saving the exchange. The first slice covers one stack per player. Equipment and multi-item trades remain open. [Runtime report](../test-reports/2026-11-13-09-19-christopherbell-dev-survive-player-trade.md)
