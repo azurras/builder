@@ -1024,3 +1024,8 @@ task-contract-v2
 - **Change:** Candidate aa687ef1 skips rolling-ground and ridge terms where their weight is zero and skips the channel outside its maximum reach.
 - **Evidence:** The old and new height functions returned identical values at 410,881 points on a quarter-metre grid. In a local Node benchmark of 500 frames with seven authored walkers, the median of seven measured batches fell from 183.7 ms to 171.7 ms, with identical output checksums. All 480 JavaScript tests and bootJar passed.
 - **Remaining:** The benchmark measures CPU-side actor mesh generation on a camp route. Browser frame times, long-session memory, multiplayer server measurements and the full AC-6 comparison remain open.
+
+### 2026-11-13 - Compare terrain sampling in two-player Chrome
+
+- **Evidence:** Exact baseline 0cdf0219 and candidate aa687ef1 each ran in an isolated application with disposable MongoDB. The same 1366×900 headless Chrome configuration with SwiftShader observed a second player moving back and forth in camp. The ten-second sampling window yielded 47 frame intervals per build. Baseline median/p95/p99 were 215.3/236.1/236.2 ms. Candidate values were 215.2/229.2/236.1 ms.
+- **Decision:** The CPU microbenchmark improvement did not produce a clear browser frame-time improvement in this short software-rendered workload. Keep the height-equivalent optimization. AC-6 still requires hardware-rendered repeated runs, sustained memory measurements and server measurements.
