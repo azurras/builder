@@ -854,6 +854,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The Guide described obsolete per-action hunger and one-step fishing rules.
 - **Impact:** Candidate 0223ef9a passed 480 JavaScript tests and a desktop Main Menu Guide check. [Runtime report](../test-reports/2026-11-12-20-43-christopherbell-dev-survive-real-time-field-guide.md)
 
+### 2026-11-12 - Clarify automatic attack state in the enemy panel
+
+- **Change:** Show Ready to engage in the enemy panel when automatic attacks are idle. Keep the enemy name and HP visible during the encounter.
+- **Reason:** The previous proximity heading was ambiguous after Disengage, when the enemy was still in the encounter.
+- **Impact:** Commit 328c9d24 passed all 479 JavaScript tests. The HUD regression covers active attacks, idle engagement and encounter exit. Desktop runtime verification and release remain open.
+
 ## Outcome
 
 Pending.
