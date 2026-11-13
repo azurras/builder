@@ -848,6 +848,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Confirm shared damage and strike cues still reach the observing client after the party HUD change.
 - **Impact:** Candidate 373405a8 confirmed an ally HP drop from 6 to 3 and both patrol rewards. The frame was obstructed by quarry rock, leaving shared recoil readability open. [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
 
+### 2026-11-12 - Update the in-game guide for real-time play
+
+- **Change:** Update the in-game Guide and fullness warning for current real-time systems.
+- **Reason:** The Guide described obsolete per-action hunger and one-step fishing rules.
+- **Impact:** Candidate 0223ef9a passed 480 JavaScript tests and a desktop Main Menu Guide check. [Runtime report](../test-reports/2026-11-12-20-43-christopherbell-dev-survive-real-time-field-guide.md)
+
 ## Outcome
 
 Pending.
