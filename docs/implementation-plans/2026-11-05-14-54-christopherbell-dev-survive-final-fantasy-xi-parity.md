@@ -1073,3 +1073,8 @@ task-contract-v2
 - **Evidence:** Exact candidate 3cd05a8f handled 12 sessions on one IP. The isolated test database seeded a hog encounter and two food items. All 480 movement pulses, 48 refreshes and three commands returned 200. The hog settled through three timed strikes and yielded one food. A second survivor consumed both of their food items and returned to full health and fullness.
 - **Measurement:** Movement p95 was 28.42 ms and world refresh p95 was 39.13 ms. The three commands took up to 30.54 ms. Mongo recorded 54 findAndModify calls, matching 48 refreshes, three commands and three combat rounds.
 - **Limits:** This is one solo encounter alongside camp traffic. Concurrent shared fights, sustained JVM memory and a mixed-workload baseline comparison remain open under AC-6.
+
+### 2026-11-13 - Match the combat load against the pre-cache baseline
+
+- **Evidence:** Exact baseline 0cdf0219 completed the same isolated 12-session workload as candidate 3cd05a8f. Both completed 480 movement pulses, 48 world refreshes and three commands, resolved the hog in three strikes and consumed the same two food items. Both recorded 54 findAndModify calls. Baseline/candidate p95 was 28.38/28.42 ms for movement and 34.63/39.13 ms for refresh.
+- **Decision:** These runs establish the same gameplay outcomes and durable write counts. Refresh latency varied across runs, so the current evidence does not show a repeatable latency gain. Measure database response bytes and retained JVM heap before assigning a benefit under AC-6.
