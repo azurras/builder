@@ -1012,3 +1012,9 @@ task-contract-v2
 
 - **Evidence:** Exact candidate d8330d0a ran against disposable MongoDB. Two desktop Chrome contexts shared camp. The observer received the scout's server-confirmed positions, rendered the scout mid-stride, and still showed the scout after keyboard input stopped.
 - **Limits:** Still frames and server poses verify the multiplayer render path. They do not establish continuous transition timing, foot contact on slopes, or physical controller behavior. ART-03 and AC-2 remain open.
+
+### 2026-11-13 - Align boot height with sloping terrain
+
+- **Change:** Candidate 0cdf0219 samples terrain under the authored adventurer's boots during idle and walking. The height adjustment fades up the lower leg.
+- **Evidence:** The North Gate slope regression reproduced a planted boot intersecting the ground and passed after the correction. All 480 JavaScript tests and bootJar passed.
+- **Remaining:** The regression checks planted geometry against the terrain height function. Continuous in-game footage on slopes, physical controller play, and performance measurements remain open under ART-03 and AC-2.
