@@ -1067,3 +1067,9 @@ task-contract-v2
 - **Change:** Candidate 3cd05a8f avoids replacing the world when a refresh observes no newer activity and removes no expired guests. It persists guest removal even when the requested guest has expired.
 - **Evidence:** The storage version regression failed before the change and passed afterward. Targeted Survive and Mongo codec tests and Checkstyle passed. Tests also verify that newer activity saves its presence timestamp and five seconds of active fullness.
 - **Limits:** This skips equal or older timestamp refreshes. Ordinary five-second polling still writes newer activity, so this does not address the dominant write cost measured in the 12-player workload. Batching activity or changing the storage representation remains open.
+
+### 2026-11-13 - Add timed combat and inventory use to the camp load check
+
+- **Evidence:** Exact candidate 3cd05a8f handled 12 sessions on one IP. The isolated test database seeded a hog encounter and two food items. All 480 movement pulses, 48 refreshes and three commands returned 200. The hog settled through three timed strikes and yielded one food. A second survivor consumed both of their food items and returned to full health and fullness.
+- **Measurement:** Movement p95 was 28.42 ms and world refresh p95 was 39.13 ms. The three commands took up to 30.54 ms. Mongo recorded 54 findAndModify calls, matching 48 refreshes, three commands and three combat rounds.
+- **Limits:** This is one solo encounter alongside camp traffic. Concurrent shared fights, sustained JVM memory and a mixed-workload baseline comparison remain open under AC-6.
