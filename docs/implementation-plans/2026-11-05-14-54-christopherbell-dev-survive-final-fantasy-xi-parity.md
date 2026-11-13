@@ -1044,3 +1044,8 @@ task-contract-v2
 
 - **Evidence:** Exact baseline 0cdf0219 and candidate d99b0ada each ran two Chrome contexts on an RTX 4070 with an isolated application and MongoDB. The observer remained at camp while the scout repeated four ten-second movement loops. Chrome DevTools collected garbage before each heap sample. Baseline retained heap was 19.565, 19.720, 19.751, 19.733 and 19.724 MB. Candidate retained heap was 19.573, 19.839, 19.801, 19.694 and 19.703 MB.
 - **Decision:** Both builds showed an initial increase followed by a plateau over the 41-second route. The sample supports short-run JavaScript retention only. Multi-minute mixed routes, native browser and GPU memory, and server capacity remain open under AC-6.
+
+### 2026-11-13 - Measure concurrent movement at camp
+
+- **Evidence:** Exact candidate d99b0ada ran against disposable loopback MongoDB. Twelve independent survivor sessions sharing one IP sent two movement pulses per second for 20 seconds, with all other survivors in range. All 480 requests returned 200 with accepted poses. End-to-end p50/p95/p99 were 9.15/31.14/36.11 ms. Mean compact re-encoded response size was 3,444 bytes. Mongo server-wide deltas were 481 queries, 18 commands, zero inserts and zero updates, including measurement and background overhead.
+- **Limits:** This measures a 12-player movement burst at camp. The test did not establish launch capacity, mixed command throughput, JVM heap retention or wire bytes. AC-6 remains open.
