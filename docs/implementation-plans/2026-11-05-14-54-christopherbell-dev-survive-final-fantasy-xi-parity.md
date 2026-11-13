@@ -878,18 +878,6 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Players need to manage pack space before gathering, crafting and exchanging items.
 - **Impact:** Candidate d554c9ca passed the desktop upgrade and cancel flow and verified permanent supply discard through the service. Direct trade remains an explicit ECON-01 deliverable. Require both players to confirm the same offer and atomically check both inventories, capacity and eligibility before transferring either side. [Runtime report](../test-reports/2026-11-13-09-07-christopherbell-dev-survive-pack-management.md)
 
-## Outcome
-
-Pending.
-
-## Project
-
-christopherbell-dev
-
-## Plan Format
-
-task-contract-v2
-
 ### 2026-11-13 - Add confirmed player supply trades
 
 - **Change:** Add private, expiring offers through Camp & sharing. Sending an offer confirms the sender's terms. The recipient can accept or decline, and the sender can withdraw.
@@ -905,19 +893,35 @@ task-contract-v2
 ### 2026-11-13 - Offer packed weapons in player trade
 
 - **Change:** Let a sender offer one packed weapon for supplies. The recipient sees its remaining uses before accepting.
+- **Reason:** A packed weapon needs to retain its individual condition when it changes owners.
 - **Impact:** The Chrome playthrough verified that the same copy and condition transfer together with payment. The service rejects a weapon that was equipped after the offer. Multi-item offers and requests for another survivor's equipment remain open. [Runtime report](../test-reports/2026-11-13-09-28-christopherbell-dev-survive-packed-weapon-trade.md)
 
 ### 2026-11-13 - Let both players set trade terms
 
 - **Change:** The recipient can counter an offer with their own supply stack or packed weapon. Revised terms replace the old offer and require the original sender's acceptance.
+- **Reason:** A counteroffer lets the recipient propose a different exchange before either pack changes.
 - **Impact:** The service rejected acceptance of the superseded offer. Two Chrome sessions reviewed and exchanged two clubs with distinct wear. Multi-item trades remain open. [Runtime report](../test-reports/2026-11-13-09-34-christopherbell-dev-survive-trade-counteroffers.md)
 
 ### 2026-11-13 - Support multi-item trade offers
 
 - **Change:** Players can offer up to eight distinct supply stacks or packed weapons. Counteroffers preserve the exact bundle offered by the other player.
+- **Reason:** A bundle lets both players agree to an exchange involving multiple lots.
 - **Impact:** Chrome verified a revised exchange of two distinct weapons and one wood. The server rejects duplicate lots and validates the entire exchange before moving stock. Initial offers still request one supply stack. [Runtime report](../test-reports/2026-11-13-09-40-christopherbell-dev-survive-trade-bundles.md)
 
 ### 2026-11-13 - Verify proximity for island trades
 
 - **Change:** Require two recent island poses within five metres for offers, counteroffers and acceptance. Text-mode players can trade at their shared camp.
+- **Reason:** Island trade requires the players to be near each other when they agree to an exchange.
 - **Impact:** A committed two-player candidate rejected acceptance at six metres and kept both packs intact. Moving within five metres allowed the same exchange. [Runtime report](../test-reports/2026-11-13-09-45-christopherbell-dev-survive-nearby-trade.md)
+
+## Outcome
+
+Pending.
+
+## Project
+
+christopherbell-dev
+
+## Plan Format
+
+task-contract-v2
