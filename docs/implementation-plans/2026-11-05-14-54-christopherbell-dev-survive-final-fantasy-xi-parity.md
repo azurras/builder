@@ -1061,3 +1061,9 @@ task-contract-v2
 - **Change:** Candidate e59e4b28 reuses the immutable snapshot for world refreshes after a database version check. The versioned save still records presence and active fullness.
 - **Evidence:** The new service regression failed before the change and passed afterward. The Survive and Mongo codec tests, Checkstyle and bootJar passed. The 12-player candidate completed all 528 requests. World refresh p95 was 33.86 ms versus 39.57 and 47.59 ms in the earlier baseline runs. Movement p95 was 28.79 ms. Both candidate and repeated baseline issued 48 findAndModify calls.
 - **Limits:** One candidate run suggests lower refresh latency. A repeated comparison with database bytes and JVM retention measurements is still needed. Durable write reduction remains open.
+
+### 2026-11-13 - Skip unchanged world refresh writes
+
+- **Change:** Candidate 3cd05a8f avoids replacing the world when a refresh observes no newer activity and removes no expired guests. It persists guest removal even when the requested guest has expired.
+- **Evidence:** The storage version regression failed before the change and passed afterward. Targeted Survive and Mongo codec tests and Checkstyle passed. Tests also verify that newer activity saves its presence timestamp and five seconds of active fullness.
+- **Limits:** This skips equal or older timestamp refreshes. Ordinary five-second polling still writes newer activity, so this does not address the dominant write cost measured in the 12-player workload. Batching activity or changing the storage representation remains open.
