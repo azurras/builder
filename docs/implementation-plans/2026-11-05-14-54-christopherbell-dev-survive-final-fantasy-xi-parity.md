@@ -1049,3 +1049,9 @@ task-contract-v2
 
 - **Evidence:** Exact candidate d99b0ada ran against disposable loopback MongoDB. Twelve independent survivor sessions sharing one IP sent two movement pulses per second for 20 seconds, with all other survivors in range. All 480 requests returned 200 with accepted poses. End-to-end p50/p95/p99 were 9.15/31.14/36.11 ms. Mean compact re-encoded response size was 3,444 bytes. Mongo server-wide deltas were 481 queries, 18 commands, zero inserts and zero updates, including measurement and background overhead.
 - **Limits:** This measures a 12-player movement burst at camp. The test did not establish launch capacity, mixed command throughput, JVM heap retention or wire bytes. AC-6 remains open.
+
+### 2026-11-13 - Measure movement alongside world refreshes
+
+- **Evidence:** In two isolated runs of d99b0ada, 12 sessions on one IP each sent 40 movement requests and four world refreshes. All 528 requests succeeded in both runs. Movement p95 was 30.96 and 31.22 ms, with a mean 3,443-byte response body. World refresh p95 was 47.59 and 39.57 ms, with a mean 2,462-byte response body.
+- **Finding:** Mongo reported 48 findAndModify calls in the repeat, matching the 48 refreshes. The generic update counter stayed zero because versioned world replacement uses findAndModify. Use the command-specific counter to assess durable write cost.
+- **Remaining:** AC-6 still needs sustained JVM heap and mixed combat and inventory traffic. Any reduction in refresh writes must preserve active fullness accounting, presence expiry and optimistic concurrency across application instances.
