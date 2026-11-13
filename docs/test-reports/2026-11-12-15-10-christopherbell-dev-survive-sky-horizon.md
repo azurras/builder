@@ -43,6 +43,10 @@ Candidate `04158c521c5704e594a857d8675514b60c01ca7f` includes main `0cefdc29` an
 Candidate `04158c521c5704e594a857d8675514b60c01ca7f` passed a desktop Chrome render at the same fishing-bank coordinates and camera distance. The harness supplied a NIGHT snapshot to the browser while leaving the server clock and acknowledged movement untouched. The sea and sky were visibly dark and the bright seam was absent. This verifies the night shader path. A natural day-to-night transition and a route-wide lighting comparison remain open. Both isolated listeners, 58464 and 58463, closed and disposable directories were removed.
 
 
+## Enemy attention baseline
+Candidate `f5316d7a4f88634c23a7e901b839645d65a655ef` integrates main `2eaff192`. JavaScript tests and bootJar passed. Desktop Chrome at 127.0.0.1:53549 captured the same bank at default camera distance in natural daylight and a browser-supplied night phase. The bright strip was absent in both images. Listeners at 53549 and 53548 closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 
