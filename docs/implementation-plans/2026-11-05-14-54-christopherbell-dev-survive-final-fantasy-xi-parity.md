@@ -911,3 +911,8 @@ task-contract-v2
 
 - **Change:** The recipient can counter an offer with their own supply stack or packed weapon. Revised terms replace the old offer and require the original sender's acceptance.
 - **Impact:** The service rejected acceptance of the superseded offer. Two Chrome sessions reviewed and exchanged two clubs with distinct wear. Multi-item trades remain open. [Runtime report](../test-reports/2026-11-13-09-34-christopherbell-dev-survive-trade-counteroffers.md)
+
+### 2026-11-13 - Support multi-item trade offers
+
+- **Change:** Players can offer up to eight distinct supply stacks or packed weapons. Counteroffers preserve the exact bundle offered by the other player.
+- **Impact:** Chrome verified a revised exchange of two distinct weapons and one wood. The server rejects duplicate lots and validates the entire exchange before moving stock. Initial offers still request one supply stack. [Runtime report](../test-reports/2026-11-13-09-40-christopherbell-dev-survive-trade-bundles.md)
