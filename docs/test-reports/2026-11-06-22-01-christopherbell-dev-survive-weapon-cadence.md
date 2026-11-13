@@ -81,6 +81,10 @@ Exact candidate `2514301bfbd12431bc31a07006815d67bbdeed05` passed at 127.0.0.1:5
 Candidate `307408cd6efd8753bb8a15b48db254b8d748400f` integrates main `98f64390`. The Survive Java suite, Checkstyle main and test, JavaScript tests and bootJar passed. Two desktop Chrome contexts verified the exact build at 127.0.0.1:65507. In the same bear fight, the barehanded and club fighters advanced their deadlines by 3,000 ms and 3,200 ms. Listeners at 65507 and 65506 closed and disposable directories were removed. The integration did not change the observed timing.
 
 
+## Shared positioning baseline
+Candidate `86966d2e0acf5fb64d1a16a947460ba899e374c2` includes main `9a36420f`. The merged snapshot carries both weapon delay and enemy attention. Survive Java tests, Checkstyle, JavaScript tests and bootJar passed. Two desktop Chrome contexts repeated the shared bear fight on the exact build at 127.0.0.1:64288 and confirmed consecutive intervals of 3,000 ms and 3,200 ms. Candidate and MongoDB listeners at 64288 and 64287 closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 
