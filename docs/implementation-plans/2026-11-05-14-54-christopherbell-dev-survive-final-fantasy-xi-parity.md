@@ -1001,3 +1001,9 @@ task-contract-v2
 - **Change:** Candidate 8bfcb1dd blends the local adventurer between idle and the distance-driven walk over 160 ms. Starting increases the walk weight and stopping fades the last phase toward idle.
 - **Evidence:** All 478 JavaScript tests and bootJar passed. Tests cover intermediate model coordinates and start and stop weights. The committed desktop Chrome build completed the keyboard movement route and rendered four moving poses.
 - **Remaining:** The Chrome check used discrete frames. Continuous contact and transition quality on slopes, remote-player transitions and a physical controller review remain open.
+
+### 2026-11-13 - Blend nearby survivors into and out of walking
+
+- **Change:** Candidate d8330d0a carries the 160 ms idle-to-walk blend across movement updates for nearby detailed player models. Combat poses take priority and reduced motion suppresses the walk blend.
+- **Evidence:** The regression failed before the change and passed after it. It verifies the intermediate and settled blend weights as a nearby survivor starts and stops from server pose updates. All 479 JavaScript tests and bootJar passed.
+- **Remaining:** The remote transition check uses a simulated observer. Two-client visual review, physical controller play and continuous foot contact on slopes remain open.
