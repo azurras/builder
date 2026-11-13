@@ -984,3 +984,9 @@ task-contract-v2
 - **Change:** Candidate 08f5d76f narrows the jaw and pulls in protruding hair points across the baked poses.
 - **Evidence:** All 476 JavaScript tests and bootJar passed. Chrome captured the exact candidate from the side at rest and in four moving frames. The rear hair spikes are shorter. The face remains angular at gameplay distance.
 - **Remaining:** ART-01 still needs authored facial topology and texture detail. ART-03 still needs continuous motion review.
+
+### 2026-11-13 - Advance the walk cycle with distance
+
+- **Change:** Candidate aa304835 advances the walk by rendered displacement for the local adventurer and nearby survivors. Full-speed cadence is retained, with slower steps at partial movement speed.
+- **Evidence:** All 476 JavaScript tests and bootJar passed. Desktop Chrome captured four moving poses with server-acknowledged movement on the committed build.
+- **Remaining:** Chrome covered keyboard movement. Analog input and continuous foot contact on slopes still need visual verification.
