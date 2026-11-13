@@ -901,3 +901,8 @@ task-contract-v2
 - **Change:** End pending offers at the two-minute deadline or when one of the survivors leaves the camp roster.
 - **Reason:** The remaining survivor needs to trade again immediately if their partner replaces their character.
 - **Impact:** Chrome verified the released slot, intact stock, and the sender's chat notice. The service test verified both packs at the exact timeout. [Runtime report](../test-reports/2026-11-13-09-24-christopherbell-dev-survive-trade-lifecycle.md)
+
+### 2026-11-13 - Offer packed weapons in player trade
+
+- **Change:** Let a sender offer one packed weapon for supplies. The recipient sees its remaining uses before accepting.
+- **Impact:** The Chrome playthrough verified that the same copy and condition transfer together with payment. The service rejects a weapon that was equipped after the offer. Multi-item offers and requests for another survivor's equipment remain open. [Runtime report](../test-reports/2026-11-13-09-28-christopherbell-dev-survive-packed-weapon-trade.md)
