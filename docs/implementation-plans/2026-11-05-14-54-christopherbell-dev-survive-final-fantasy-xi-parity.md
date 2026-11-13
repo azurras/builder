@@ -990,3 +990,8 @@ task-contract-v2
 - **Change:** Candidate aa304835 advances the walk by rendered displacement for the local adventurer and nearby survivors. Full-speed cadence is retained, with slower steps at partial movement speed.
 - **Evidence:** All 476 JavaScript tests and bootJar passed. Desktop Chrome captured four moving poses with server-acknowledged movement on the committed build.
 - **Remaining:** Chrome covered keyboard movement. Analog input and continuous foot contact on slopes still need visual verification.
+
+### 2026-11-13 - Verify walk phase with partial controller input
+
+- **Evidence:** Candidate 3d964d9d passed all 477 JavaScript tests. The world test drove the normal controller-axis input and checked rendered displacement at half and full input, a stop, and a reversal. Half input advances half as far, stopping holds the walk phase, and reversing advances by distance in the new direction.
+- **Remaining:** The test simulates controller axes. Physical controller play and continuous foot contact on slopes remain open under ART-03 and AC-2.
