@@ -1078,3 +1078,8 @@ task-contract-v2
 
 - **Evidence:** Exact baseline 0cdf0219 completed the same isolated 12-session workload as candidate 3cd05a8f. Both completed 480 movement pulses, 48 world refreshes and three commands, resolved the hog in three strikes and consumed the same two food items. Both recorded 54 findAndModify calls. Baseline/candidate p95 was 28.38/28.42 ms for movement and 34.63/39.13 ms for refresh.
 - **Decision:** These runs establish the same gameplay outcomes and durable write counts. Refresh latency varied across runs, so the current evidence does not show a repeatable latency gain. Measure database response bytes and retained JVM heap before assigning a benefit under AC-6.
+
+### 2026-11-13 - Measure MongoDB transfer on the matched combat workload
+
+- **Evidence:** Exact baseline 0cdf0219 and candidate 3cd05a8f each completed 531 requests, the timed hog fight and two food uses with 54 versioned writes. MongoDB server network counters showed 1,539,023 versus 1,144,600 outbound bytes and 736,756 versus 742,308 inbound bytes. Total bytes fell from 2,275,779 to 1,886,908, about 17.1 percent.
+- **Limits:** The counters include driver and measurement traffic in an isolated MongoDB process. This is one matched pair. It supports lower database transfer on the tested route, while refresh write reduction, sustained JVM heap and release verification remain open under AC-6.
