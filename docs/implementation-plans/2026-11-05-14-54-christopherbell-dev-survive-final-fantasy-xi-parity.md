@@ -812,6 +812,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** A protector needs to see who has drawn the enemy's attention while coordinating guard and attacks.
 - **Impact:** Candidate 1531a119 passed the two-client bear check on the merged desktop menu baseline. Ability-driven and healing enmity, independent enemy attacks and visual facing remain open. [Runtime report](../test-reports/2026-11-12-15-53-christopherbell-dev-survive-enemy-attention.md)
 
+### 2026-11-12 - Verify live desktop menu layout and input
+
+- **Change:** Verified desktop menu layout and input live at production build 2d9f6e91.
+- **Reason:** Confirm the public build includes the compact category list, separate desktop panels, D-pad item browsing and keyboard equipment navigation.
+- **Impact:** The deployed build matches PR #1607. Physical controller playtesting and broader equipment slots remain open. [Menu PR](https://github.com/azurras/christopherbell.dev/pull/1607)
+
 ## Outcome
 
 Pending.
