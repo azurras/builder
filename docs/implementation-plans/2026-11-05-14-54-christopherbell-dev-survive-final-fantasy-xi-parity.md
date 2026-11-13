@@ -961,3 +961,9 @@ task-contract-v2
 - **Change:** Candidate 19c577ae lifts the painted steel on the adventurer chart and adds reflected sky fill after sunset using the existing texture sample.
 - **Evidence:** All 476 JavaScript tests and bootJar passed. The exact desktop Chrome build rendered the camp in daylight at 06:40. Steel, leather and cloth read separately in the rear view. This capture does not verify the sunset fill.
 - **Remaining:** AC-2 is open. The broad pauldrons, boot silhouette, simple masonry and sparse low vegetation still differ from the references. Compare the model in motion and capture matched daylight and night views.
+
+### 2026-11-13 - Refine the adventurer shoulder silhouette
+
+- **Change:** Candidate 96fef650 pulls the outer shoulder plates inward across the baked clips using rest-mesh weights.
+- **Evidence:** All 476 JavaScript tests and bootJar passed. The model test verified a narrower shoulder profile across clip starts with unchanged topology and attachment coverage. The exact committed Chrome build rendered the narrower shoulders in the daylight camp view.
+- **Remaining:** The desktop capture verifies the rear silhouette at rest. The full motion review, boot silhouette and AC-2 comparison remain open.
