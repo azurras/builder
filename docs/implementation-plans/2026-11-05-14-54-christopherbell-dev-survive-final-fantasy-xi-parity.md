@@ -916,3 +916,8 @@ task-contract-v2
 
 - **Change:** Players can offer up to eight distinct supply stacks or packed weapons. Counteroffers preserve the exact bundle offered by the other player.
 - **Impact:** Chrome verified a revised exchange of two distinct weapons and one wood. The server rejects duplicate lots and validates the entire exchange before moving stock. Initial offers still request one supply stack. [Runtime report](../test-reports/2026-11-13-09-40-christopherbell-dev-survive-trade-bundles.md)
+
+### 2026-11-13 - Verify proximity for island trades
+
+- **Change:** Require two recent island poses within five metres for offers, counteroffers and acceptance. Text-mode players can trade at their shared camp.
+- **Impact:** A committed two-player candidate rejected acceptance at six metres and kept both packs intact. Moving within five metres allowed the same exchange. [Runtime report](../test-reports/2026-11-13-09-45-christopherbell-dev-survive-nearby-trade.md)
