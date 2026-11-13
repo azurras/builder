@@ -967,3 +967,9 @@ task-contract-v2
 - **Change:** Candidate 96fef650 pulls the outer shoulder plates inward across the baked clips using rest-mesh weights.
 - **Evidence:** All 476 JavaScript tests and bootJar passed. The model test verified a narrower shoulder profile across clip starts with unchanged topology and attachment coverage. The exact committed Chrome build rendered the narrower shoulders in the daylight camp view.
 - **Remaining:** The desktop capture verifies the rear silhouette at rest. The full motion review, boot silhouette and AC-2 comparison remain open.
+
+### 2026-11-13 - Refine the adventurer boot profile
+
+- **Change:** Candidate 2a493bd6 extends the toe and heel near the sole in the baked poses without changing vertical foot contact.
+- **Evidence:** All 476 JavaScript tests and bootJar passed. The regression checks toe extension and existing height through every walk frame. The committed desktop Chrome build rendered the idle scene at 09:34.
+- **Remaining:** The rear idle capture mostly hides the toe. A side view and recorded walk cycle are still needed to assess the boot profile and contact in motion. Visual parity remains open.
