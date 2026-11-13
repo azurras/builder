@@ -806,6 +806,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Confirm the deployed game includes the focus restoration verified in the Equipment browser flow.
 - **Impact:** The public build matches PR #1604. The combined menu layout, item browsing and equipment navigation remain tracked in #1607. [Cancellation PR](https://github.com/azurras/christopherbell.dev/pull/1604) · [Combined menu PR](https://github.com/azurras/christopherbell.dev/pull/1607)
 
+### 2026-11-12 - Show enemy attention during shared combat
+
+- **Change:** Show the current enmity leader in the viewport vitals panel for both active shared fighters.
+- **Reason:** A protector needs to see who has drawn the enemy's attention while coordinating guard and attacks.
+- **Impact:** Candidate 1531a119 passed the two-client bear check on the merged desktop menu baseline. Ability-driven and healing enmity, independent enemy attacks and visual facing remain open. [Runtime report](../test-reports/2026-11-12-15-53-christopherbell-dev-survive-enemy-attention.md)
+
 ## Outcome
 
 Pending.
