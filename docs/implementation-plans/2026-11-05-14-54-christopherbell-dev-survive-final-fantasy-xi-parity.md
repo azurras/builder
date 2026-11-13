@@ -906,3 +906,8 @@ task-contract-v2
 
 - **Change:** Let a sender offer one packed weapon for supplies. The recipient sees its remaining uses before accepting.
 - **Impact:** The Chrome playthrough verified that the same copy and condition transfer together with payment. The service rejects a weapon that was equipped after the offer. Multi-item offers and requests for another survivor's equipment remain open. [Runtime report](../test-reports/2026-11-13-09-28-christopherbell-dev-survive-packed-weapon-trade.md)
+
+### 2026-11-13 - Let both players set trade terms
+
+- **Change:** The recipient can counter an offer with their own supply stack or packed weapon. Revised terms replace the old offer and require the original sender's acceptance.
+- **Impact:** The service rejected acceptance of the superseded offer. Two Chrome sessions reviewed and exchanged two clubs with distinct wear. Multi-item trades remain open. [Runtime report](../test-reports/2026-11-13-09-34-christopherbell-dev-survive-trade-counteroffers.md)
