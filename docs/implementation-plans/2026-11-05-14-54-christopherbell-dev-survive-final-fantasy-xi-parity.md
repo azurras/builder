@@ -1029,3 +1029,8 @@ task-contract-v2
 
 - **Evidence:** Exact baseline 0cdf0219 and candidate aa687ef1 each ran in an isolated application with disposable MongoDB. The same 1366×900 headless Chrome configuration with SwiftShader observed a second player moving back and forth in camp. The ten-second sampling window yielded 47 frame intervals per build. Baseline median/p95/p99 were 215.3/236.1/236.2 ms. Candidate values were 215.2/229.2/236.1 ms.
 - **Decision:** The CPU microbenchmark improvement did not produce a clear browser frame-time improvement in this short software-rendered workload. Keep the height-equivalent optimization. AC-6 still requires hardware-rendered repeated runs, sustained memory measurements and server measurements.
+
+### 2026-11-13 - Measure sky submission order
+
+- **Evidence:** Exact candidate 0db5c8f1 drew the sky after opaque scenery in the existing static draw. All 480 JavaScript tests and bootJar passed. The two-player SwiftShader workload yielded 47 frame intervals with median/p95/p99 of 215.2/236.1/243.0 ms. The prior order yielded 215.2/229.2/236.1 ms in the same workload.
+- **Decision:** Reverted the ordering experiment because the short run showed no clear benefit. The result does not establish a hardware GPU regression. AC-6 still requires repeated hardware-rendered profiling and sustained memory and server measurements.
