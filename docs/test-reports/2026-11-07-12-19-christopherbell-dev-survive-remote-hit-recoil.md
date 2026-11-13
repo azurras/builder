@@ -70,6 +70,10 @@ This run verifies the shared-fight input to the recoil renderer and the full pat
 Candidate `2eddf372d7c140b7f1fdaacd0b6727746861dc8e` integrates main `cec581eb` and retains the tests for both nearby recoil and confirmed local strike ownership. Survive Java tests, Checkstyle main and test, 476 JavaScript tests and bootJar passed. Two desktop Chrome sessions with exact actuator identity at 127.0.0.1:57253 repeated North Gate Patrol, received each other's weapon-skill cues, saw confirmed ally HP fall from 4 to 1 and turned in both quests. The image captured 324 ms after damage did not show the fighters clearly, so it does not verify shared-fight pose readability. Earlier personal-fight frames and the mounted tests remain the visual evidence. Candidate and MongoDB listeners at 57253 and 57252 closed and both disposable runtime directories were removed.
 
 
+## Enemy attention integration
+Candidate `373405a8497ff0cb6864711bd0833b00b6acc9da` integrates main `2eaff192`. Survive Java tests, Checkstyle, JavaScript tests and bootJar passed. Two desktop Chrome contexts on the exact build at 127.0.0.1:64026 received one another's skill cues, observed ally HP fall from 6 to 3 and turned in both patrol assignments. The captured frame at 192 ms shows a quarry rock covering the encounter. Shared recoil readability remains open. Both listeners at 64026 and 64025 closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 

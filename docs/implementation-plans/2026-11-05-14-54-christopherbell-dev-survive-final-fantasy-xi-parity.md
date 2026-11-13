@@ -842,6 +842,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The ally camera could lose both fighters behind rocks.
 - **Impact:** All 482 JavaScript tests passed, but the ally capture showed an extreme close-up that hid the encounter. Reverted the camera pull-in at f83f90ca. Keep camera framing open and require full fighter and target visibility in the obstructed view before accepting another camera adjustment.
 
+### 2026-11-12 - Verify ally damage on the enemy attention baseline
+
+- **Change:** Verified ally damage feedback and both patrol turn-ins on the enemy attention baseline.
+- **Reason:** Confirm shared damage and strike cues still reach the observing client after the party HUD change.
+- **Impact:** Candidate 373405a8 confirmed an ally HP drop from 6 to 3 and both patrol rewards. The frame was obstructed by quarry rock, leaving shared recoil readability open. [Runtime report](../test-reports/2026-11-07-12-19-christopherbell-dev-survive-remote-hit-recoil.md)
+
 ## Outcome
 
 Pending.
