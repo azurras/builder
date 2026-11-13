@@ -836,6 +836,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The local approach could pull the same bear to different positions and crowd the fighter.
 - **Impact:** Candidate aabc0979 passed the mounted position regression and the two-client bear attention check. The scout capture shows separation. Quarry rocks obscure the ally view, leaving combat camera framing and a clear two-angle check open. [Runtime report](../test-reports/2026-11-12-15-53-christopherbell-dev-survive-enemy-attention.md)
 
+### 2026-11-12 - Reject quarry camera pull-in after desktop capture
+
+- **Change:** Tested a quarry-aware follow camera against the shared bear route on candidate b9b25bb7.
+- **Reason:** The ally camera could lose both fighters behind rocks.
+- **Impact:** All 482 JavaScript tests passed, but the ally capture showed an extreme close-up that hid the encounter. Reverted the camera pull-in at f83f90ca. Keep camera framing open and require full fighter and target visibility in the obstructed view before accepting another camera adjustment.
+
 ## Outcome
 
 Pending.
