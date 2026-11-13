@@ -895,3 +895,9 @@ task-contract-v2
 - **Change:** Add private, expiring offers through Camp & sharing. Sending an offer confirms the sender's terms. The recipient can accept or decline, and the sender can withdraw.
 - **Reason:** Both players need to see and agree to the same exchange before their inventories change.
 - **Impact:** Candidate 11aa2ebf verified supply exchanges in separate Chrome sessions. The server checks ownership, camp eligibility, stock, and both pack capacities before saving the exchange. The first slice covers one stack per player. Equipment and multi-item trades remain open. [Runtime report](../test-reports/2026-11-13-09-19-christopherbell-dev-survive-player-trade.md)
+
+### 2026-11-13 - Release expired and abandoned trades
+
+- **Change:** End pending offers at the two-minute deadline or when one of the survivors leaves the camp roster.
+- **Reason:** The remaining survivor needs to trade again immediately if their partner replaces their character.
+- **Impact:** Chrome verified the released slot, intact stock, and the sender's chat notice. The service test verified both packs at the exact timeout. [Runtime report](../test-reports/2026-11-13-09-24-christopherbell-dev-survive-trade-lifecycle.md)
