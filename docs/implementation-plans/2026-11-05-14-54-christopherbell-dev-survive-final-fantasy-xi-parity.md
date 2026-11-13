@@ -995,3 +995,9 @@ task-contract-v2
 
 - **Evidence:** Candidate 3d964d9d passed all 477 JavaScript tests. The world test drove the normal controller-axis input and checked rendered displacement at half and full input, a stop, and a reversal. Half input advances half as far, stopping holds the walk phase, and reversing advances by distance in the new direction.
 - **Remaining:** The test simulates controller axes. Physical controller play and continuous foot contact on slopes remain open under ART-03 and AC-2.
+
+### 2026-11-13 - Blend walk starts and stops
+
+- **Change:** Candidate 8bfcb1dd blends the local adventurer between idle and the distance-driven walk over 160 ms. Starting increases the walk weight and stopping fades the last phase toward idle.
+- **Evidence:** All 478 JavaScript tests and bootJar passed. Tests cover intermediate model coordinates and start and stop weights. The committed desktop Chrome build completed the keyboard movement route and rendered four moving poses.
+- **Remaining:** The Chrome check used discrete frames. Continuous contact and transition quality on slopes, remote-player transitions and a physical controller review remain open.
