@@ -866,6 +866,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The enemy panel must show whether automatic attacks are active while keeping the target readable.
 - **Impact:** Candidate eb44d965 showed In combat while attacking and Ready to engage after Disengage, with hog HP still visible. [Runtime report](../test-reports/2026-11-12-20-46-christopherbell-dev-survive-combat-target-status.md)
 
+### 2026-11-12 - Keep target Check available during combat
+
+- **Change:** Keep Check available on a selected target during automatic combat.
+- **Reason:** Players previously had to stop automatic attacks to inspect the target again.
+- **Impact:** Candidate 11e0e84a passed 481 JavaScript tests and a desktop hog fight in which Check reported to chat while the strike timer remained active. [Runtime report](../test-reports/2026-11-12-20-53-christopherbell-dev-survive-check-during-combat.md)
+
 ## Outcome
 
 Pending.
