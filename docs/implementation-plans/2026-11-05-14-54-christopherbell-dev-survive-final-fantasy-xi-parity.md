@@ -1083,3 +1083,8 @@ task-contract-v2
 
 - **Evidence:** Exact baseline 0cdf0219 and candidate 3cd05a8f each completed 531 requests, the timed hog fight and two food uses with 54 versioned writes. MongoDB server network counters showed 1,539,023 versus 1,144,600 outbound bytes and 736,756 versus 742,308 inbound bytes. Total bytes fell from 2,275,779 to 1,886,908, about 17.1 percent.
 - **Limits:** The counters include driver and measurement traffic in an isolated MongoDB process. This is one matched pair. It supports lower database transfer on the tested route, while refresh write reduction, sustained JVM heap and release verification remain open under AC-6.
+
+### 2026-11-13 - Sample retained JVM heap under one minute of mixed traffic
+
+- **Evidence:** Exact baseline 0cdf0219 and candidate 3cd05a8f each completed 1,587 measured requests across 12 sessions. HotSpot reported 54,727 to 57,089 KiB baseline and 54,655 to 55,254 KiB candidate after explicit collections before and after the workload. Both resolved the hog encounter and consumed two food items.
+- **Limits:** Two checkpoints over one minute show retained heap at those points. Differences in world time and background work are visible in the response sizes and the one-write difference. This pair does not establish a repeatable memory improvement or long-session retention slope. AC-6 remains open.
