@@ -830,6 +830,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Verify that the remote fighter's confirmed identity resolves to a visible pose in the running game.
 - **Impact:** Candidate 27e5bfa4 delivered the same target identity to both clients. The capture exposed muzzle overlap and an obscured scout, so combat spacing and a clear two-fighter visual comparison remain open. [Runtime report](../test-reports/2026-11-12-15-53-christopherbell-dev-survive-enemy-attention.md)
 
+### 2026-11-12 - Keep shared enemies at their confirmed position
+
+- **Change:** Render shared enemies at their confirmed world location on both clients.
+- **Reason:** The local approach could pull the same bear to different positions and crowd the fighter.
+- **Impact:** Candidate aabc0979 passed the mounted position regression and the two-client bear attention check. The scout capture shows separation. Quarry rocks obscure the ally view, leaving combat camera framing and a clear two-angle check open. [Runtime report](../test-reports/2026-11-12-15-53-christopherbell-dev-survive-enemy-attention.md)
+
 ## Outcome
 
 Pending.

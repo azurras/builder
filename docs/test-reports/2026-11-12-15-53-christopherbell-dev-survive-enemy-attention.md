@@ -42,6 +42,10 @@ Candidate `1531a119c2250eed7c247937e26da657d25629ce` includes main `2d9f6e91`. S
 Candidate `27e5bfa4a080ff276ed39f0cea90db30de4feee1` passed Survive Java tests, Checkstyle, 480 JavaScript tests and bootJar. The heading regression covers the local fighter, an identified remote fighter and a missing remote pose. Two desktop Chrome sessions at 127.0.0.1:53976 agreed on the attention target's survivor ID and confirmed the remote target pose was available. Both screenshots show the bear turning toward the scout's side, but the scout is obscured from the ally camera and overlaps the bear's muzzle in the local view. A clear separated-fighter comparison remains open. Both listeners at 53976 and 53975 closed and disposable directories were removed.
 
 
+## Shared enemy position
+Candidate `aabc097985b19bb06e1896566fed688956dda597` keeps a claimed enemy at its acknowledged location instead of applying a different approach on each client. The mounted regression advances through the former approach and verifies that the rendered position still matches the shared encounter. All 481 JavaScript tests and bootJar passed. Two desktop Chrome sessions at 127.0.0.1:64943 passed the bear attention and visible ally-pose assertions. The scout capture shows a gap between the muzzle and survivor. The guard camera is obstructed by quarry rocks, so a clear two-angle visual check remains open. Both listeners at 64943 and 64942 closed and disposable directories were removed.
+
+
 ## Document Status
 complete
 
