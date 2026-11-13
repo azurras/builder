@@ -1034,3 +1034,8 @@ task-contract-v2
 
 - **Evidence:** Exact candidate 0db5c8f1 drew the sky after opaque scenery in the existing static draw. All 480 JavaScript tests and bootJar passed. The two-player SwiftShader workload yielded 47 frame intervals with median/p95/p99 of 215.2/236.1/243.0 ms. The prior order yielded 215.2/229.2/236.1 ms in the same workload.
 - **Decision:** Reverted the ordering experiment because the short run showed no clear benefit. The result does not establish a hardware GPU regression. AC-6 still requires repeated hardware-rendered profiling and sustained memory and server measurements.
+
+### 2026-11-13 - Measure hardware-rendered two-player camp frames
+
+- **Evidence:** Exact baseline 0cdf0219 and candidate d99b0ada ran separately with disposable MongoDB. Chrome reported ANGLE Direct3D 11 on an RTX 4070. At 1366×900, each 30-second observer run recorded 4,320 intervals with 6.9 ms median, 7.2 ms p95 and 7.2 ms p99. Peak sampled JavaScript heap was 53.68 MB baseline and 53.72 MB candidate.
+- **Decision:** Frame intervals tied at the observed refresh cadence. The first and last heap samples fell at different points in garbage collection cycles, so they do not establish a memory trend. Sustained browser and server memory and the longer mixed route remain open under AC-6.
