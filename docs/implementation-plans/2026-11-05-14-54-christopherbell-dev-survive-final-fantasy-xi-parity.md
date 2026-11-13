@@ -824,6 +824,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Both clients previously rendered the enemy facing their own player, even when the ally drew its attention.
 - **Impact:** Commit 27e5bfa4 passed the Survive Java suite, Checkstyle and 480 JavaScript tests, including local, remote and missing-pose cases. A matched two-player combat capture and release remain open.
 
+### 2026-11-12 - Inspect shared enemy facing in two desktop clients
+
+- **Change:** Ran the shared enemy facing candidate in two desktop Chrome sessions and inspected both captures.
+- **Reason:** Verify that the remote fighter's confirmed identity resolves to a visible pose in the running game.
+- **Impact:** Candidate 27e5bfa4 delivered the same target identity to both clients. The capture exposed muzzle overlap and an obscured scout, so combat spacing and a clear two-fighter visual comparison remain open. [Runtime report](../test-reports/2026-11-12-15-53-christopherbell-dev-survive-enemy-attention.md)
+
 ## Outcome
 
 Pending.
