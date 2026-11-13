@@ -949,3 +949,9 @@ task-contract-v2
 - **Change:** Candidate 63aafae5 groups shrub and grass stands along the banks and varies shrub crown height and tint. Placement preserves the trail and stream.
 - **Evidence:** All 476 JavaScript tests and bootJar passed. The committed desktop Chrome capture shows visible shrub groups beneath the canopy and a clear arch opening.
 - **Remaining:** The capture is at night. Ground cover still reads as separate clumps, and the character and quarry silhouettes need authored asset work. Daylight route and motion comparison remain open.
+
+### 2026-11-13 - Texture quarry outcrops
+
+- **Change:** Candidate 9b6e13da uses angled profiles, weathered footings, textured stone and mineral seams on selected outcrops.
+- **Evidence:** The first mesh exceeded the existing static triangle budget. The revised profiles passed the budget and all 476 JavaScript tests. The committed desktop Chrome capture shows the textured outcrop on the right ridge.
+- **Remaining:** The screenshot is a nighttime camp view. Close daylight quarry review, character assets and visual parity remain open.
