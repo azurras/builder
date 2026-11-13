@@ -1018,3 +1018,9 @@ task-contract-v2
 - **Change:** Candidate 0cdf0219 samples terrain under the authored adventurer's boots during idle and walking. The height adjustment fades up the lower leg.
 - **Evidence:** The North Gate slope regression reproduced a planted boot intersecting the ground and passed after the correction. All 480 JavaScript tests and bootJar passed.
 - **Remaining:** The regression checks planted geometry against the terrain height function. Continuous in-game footage on slopes, physical controller play, and performance measurements remain open under ART-03 and AC-2.
+
+### 2026-11-13 - Avoid inactive terrain work during actor grounding
+
+- **Change:** Candidate aa687ef1 skips rolling-ground and ridge terms where their weight is zero and skips the channel outside its maximum reach.
+- **Evidence:** The old and new height functions returned identical values at 410,881 points on a quarter-metre grid. In a local Node benchmark of 500 frames with seven authored walkers, the median of seven measured batches fell from 183.7 ms to 171.7 ms, with identical output checksums. All 480 JavaScript tests and bootJar passed.
+- **Remaining:** The benchmark measures CPU-side actor mesh generation on a camp route. Browser frame times, long-session memory, multiplayer server measurements and the full AC-6 comparison remain open.
