@@ -937,3 +937,9 @@ christopherbell-dev
 ## Plan Format
 
 task-contract-v2
+
+### 2026-11-13 - Review the North Gate approach at desktop scale
+
+- **Change:** Candidate 10f6bfca gave the North Gate banks different profiles and softened the grass-to-earth transition with the existing texture samples.
+- **Evidence:** JavaScript tests and bootJar passed. Chrome rendered the exact committed build at desktop scale. The nighttime camp capture shows the arch framed by the banks and readable ground texture.
+- **Remaining:** AC-2 stays open. The captured adventurer silhouette, stone silhouette, understory density and tree variation still fall short of the references. Compare a matched daylight route with both references before claiming visual parity.
