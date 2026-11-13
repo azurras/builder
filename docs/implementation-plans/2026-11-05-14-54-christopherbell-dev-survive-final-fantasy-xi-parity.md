@@ -925,3 +925,8 @@ christopherbell-dev
 ## Plan Format
 
 task-contract-v2
+
+### 2026-11-13 - Show nearby partners in the Trade menu
+
+- **Change:** Use the server-confirmed range to filter trade partners and disable acceptance and counteroffers while the other survivor is out of reach.
+- **Impact:** The service test verified the five-metre boundary and Chrome verified a complete nearby exchange. The menu shows a range message while an offer is out of reach. [Runtime report](../test-reports/2026-11-13-09-50-christopherbell-dev-survive-trade-targets.md)
