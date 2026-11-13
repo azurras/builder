@@ -2,7 +2,7 @@
 
 ## Document Status
 
-in-progress
+complete
 
 ## Objective
 
@@ -112,7 +112,14 @@ No entries yet.
 
 ## Outcome
 
-Pending.
+> [!TIP]
+> The public tools hub is live. Production liveness and readiness reported UP, and the homepage served the six public cards and secondary Void link.
+
+| AC | Result | Evidence |
+| --- | --- | --- |
+| AC-1 | Met | Chrome verified six cards at 1440 and 390 pixels wide, and each tool returned HTTP 200. [Runtime report](../test-reports/2026-11-13-09-13-christopherbell-dev-home-tool-hub.md). |
+| AC-2 | Met | The signed-in admin homepage menu listed only public tools. The homepage had a secondary Void link and made no Void feed requests. [Runtime report](../test-reports/2026-11-13-09-13-christopherbell-dev-home-tool-hub.md). |
+| AC-3 | Met | All PR checks passed, and main CI succeeded. Production reported build 9e89eeee746b267a7a06be9d6f9ef44b5ac82be3 and returned the new homepage with HTTP 200. [Pull request](https://github.com/azurras/christopherbell.dev/pull/1613). |
 
 ## Project
 
