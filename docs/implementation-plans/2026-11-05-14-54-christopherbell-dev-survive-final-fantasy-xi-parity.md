@@ -872,6 +872,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Players previously had to stop automatic attacks to inspect the target again.
 - **Impact:** Candidate 11e0e84a passed 481 JavaScript tests and a desktop hog fight in which Check reported to chat while the strike timer remained active. [Runtime report](../test-reports/2026-11-12-20-53-christopherbell-dev-survive-check-during-combat.md)
 
+### 2026-11-13 - Add pack management before player trade
+
+- **Change:** Add confirmed one-item discard and persistent camp pack upgrades from ten to thirty slots.
+- **Reason:** Players need to manage pack space before gathering, crafting and exchanging items.
+- **Impact:** Candidate d554c9ca passed the desktop upgrade and cancel flow and verified permanent supply discard through the service. Direct trade remains an explicit ECON-01 deliverable. Require both players to confirm the same offer and atomically check both inventories, capacity and eligibility before transferring either side. [Runtime report](../test-reports/2026-11-13-09-07-christopherbell-dev-survive-pack-management.md)
+
 ## Outcome
 
 Pending.
