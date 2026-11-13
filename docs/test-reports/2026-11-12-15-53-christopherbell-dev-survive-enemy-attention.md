@@ -46,6 +46,10 @@ Candidate `27e5bfa4a080ff276ed39f0cea90db30de4feee1` passed Survive Java tests, 
 Candidate `aabc097985b19bb06e1896566fed688956dda597` keeps a claimed enemy at its acknowledged location instead of applying a different approach on each client. The mounted regression advances through the former approach and verifies that the rendered position still matches the shared encounter. All 481 JavaScript tests and bootJar passed. Two desktop Chrome sessions at 127.0.0.1:64943 passed the bear attention and visible ally-pose assertions. The scout capture shows a gap between the muzzle and survivor. The guard camera is obstructed by quarry rocks, so a clear two-angle visual check remains open. Both listeners at 64943 and 64942 closed and disposable directories were removed.
 
 
+## Merged enemy attention baseline
+Candidate `f83f90ca54b1c1f0a120861427a3f66dec8dc1ab` includes main `2eaff192` and matches the source of the verified shared-position candidate. Survive Java tests, Checkstyle, 481 JavaScript tests and bootJar passed. Two desktop Chrome sessions repeated the shared bear target and HUD assertions at 127.0.0.1:61434. Both runtime listeners at 61434 and 61433 closed and disposable directories were removed. The camera pull-in experiment is excluded from this build. A clear two-fighter framing comparison remains open.
+
+
 ## Document Status
 complete
 
