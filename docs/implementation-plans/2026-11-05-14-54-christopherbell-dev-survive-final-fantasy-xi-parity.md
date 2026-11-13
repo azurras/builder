@@ -1039,3 +1039,8 @@ task-contract-v2
 
 - **Evidence:** Exact baseline 0cdf0219 and candidate d99b0ada ran separately with disposable MongoDB. Chrome reported ANGLE Direct3D 11 on an RTX 4070. At 1366×900, each 30-second observer run recorded 4,320 intervals with 6.9 ms median, 7.2 ms p95 and 7.2 ms p99. Peak sampled JavaScript heap was 53.68 MB baseline and 53.72 MB candidate.
 - **Decision:** Frame intervals tied at the observed refresh cadence. The first and last heap samples fell at different points in garbage collection cycles, so they do not establish a memory trend. Sustained browser and server memory and the longer mixed route remain open under AC-6.
+
+### 2026-11-13 - Compare post-collection JavaScript heap on the camp route
+
+- **Evidence:** Exact baseline 0cdf0219 and candidate d99b0ada each ran two Chrome contexts on an RTX 4070 with an isolated application and MongoDB. The observer remained at camp while the scout repeated four ten-second movement loops. Chrome DevTools collected garbage before each heap sample. Baseline retained heap was 19.565, 19.720, 19.751, 19.733 and 19.724 MB. Candidate retained heap was 19.573, 19.839, 19.801, 19.694 and 19.703 MB.
+- **Decision:** Both builds showed an initial increase followed by a plateau over the 41-second route. The sample supports short-run JavaScript retention only. Multi-minute mixed routes, native browser and GPU memory, and server capacity remain open under AC-6.
