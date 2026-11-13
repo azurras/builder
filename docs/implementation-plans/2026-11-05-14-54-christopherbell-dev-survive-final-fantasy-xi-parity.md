@@ -1007,3 +1007,8 @@ task-contract-v2
 - **Change:** Candidate d8330d0a carries the 160 ms idle-to-walk blend across movement updates for nearby detailed player models. Combat poses take priority and reduced motion suppresses the walk blend.
 - **Evidence:** The regression failed before the change and passed after it. It verifies the intermediate and settled blend weights as a nearby survivor starts and stops from server pose updates. All 479 JavaScript tests and bootJar passed.
 - **Remaining:** The remote transition check uses a simulated observer. Two-client visual review, physical controller play and continuous foot contact on slopes remain open.
+
+### 2026-11-13 - Observe a nearby survivor moving in a second client
+
+- **Evidence:** Exact candidate d8330d0a ran against disposable MongoDB. Two desktop Chrome contexts shared camp. The observer received the scout's server-confirmed positions, rendered the scout mid-stride, and still showed the scout after keyboard input stopped.
+- **Limits:** Still frames and server poses verify the multiplayer render path. They do not establish continuous transition timing, foot contact on slopes, or physical controller behavior. ART-03 and AC-2 remain open.
