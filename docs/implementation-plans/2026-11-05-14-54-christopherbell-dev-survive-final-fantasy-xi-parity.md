@@ -818,6 +818,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Confirm the public build includes the compact category list, separate desktop panels, D-pad item browsing and keyboard equipment navigation.
 - **Impact:** The deployed build matches PR #1607. Physical controller playtesting and broader equipment slots remain open. [Menu PR](https://github.com/azurras/christopherbell.dev/pull/1607)
 
+### 2026-11-12 - Face shared enemies toward their attention target
+
+- **Change:** Use the confirmed enmity leader's survivor ID to turn shared enemies toward that fighter's position.
+- **Reason:** Both clients previously rendered the enemy facing their own player, even when the ally drew its attention.
+- **Impact:** Commit 27e5bfa4 passed the Survive Java suite, Checkstyle and 480 JavaScript tests, including local, remote and missing-pose cases. A matched two-player combat capture and release remain open.
+
 ## Outcome
 
 Pending.
