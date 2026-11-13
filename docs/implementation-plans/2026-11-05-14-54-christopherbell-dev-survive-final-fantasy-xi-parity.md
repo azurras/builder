@@ -978,3 +978,9 @@ task-contract-v2
 
 - **Evidence:** Chrome rendered candidate 2a493bd6 at desktop gameplay distance in daylight. The check orbited to a side view, drove lateral movement, captured four stride frames and confirmed movement on the server. The sole and toe are visible in profile.
 - **Remaining:** The side capture exposes a boxy face, sharp hair silhouette and a thin forefoot. Discrete movement frames show different poses but do not establish continuous foot contact or animation parity. ART-01, ART-03 and AC-2 remain open.
+
+### 2026-11-13 - Taper the adventurer jaw and hair
+
+- **Change:** Candidate 08f5d76f narrows the jaw and pulls in protruding hair points across the baked poses.
+- **Evidence:** All 476 JavaScript tests and bootJar passed. Chrome captured the exact candidate from the side at rest and in four moving frames. The rear hair spikes are shorter. The face remains angular at gameplay distance.
+- **Remaining:** ART-01 still needs authored facial topology and texture detail. ART-03 still needs continuous motion review.
