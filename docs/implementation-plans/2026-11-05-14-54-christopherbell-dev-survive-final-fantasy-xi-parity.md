@@ -955,3 +955,9 @@ task-contract-v2
 - **Change:** Candidate 9b6e13da uses angled profiles, weathered footings, textured stone and mineral seams on selected outcrops.
 - **Evidence:** The first mesh exceeded the existing static triangle budget. The revised profiles passed the budget and all 476 JavaScript tests. The committed desktop Chrome capture shows the textured outcrop on the right ridge.
 - **Remaining:** The screenshot is a nighttime camp view. Close daylight quarry review, character assets and visual parity remain open.
+
+### 2026-11-13 - Review armor material separation in daylight
+
+- **Change:** Candidate 19c577ae lifts the painted steel on the adventurer chart and adds reflected sky fill after sunset using the existing texture sample.
+- **Evidence:** All 476 JavaScript tests and bootJar passed. The exact desktop Chrome build rendered the camp in daylight at 06:40. Steel, leather and cloth read separately in the rear view. This capture does not verify the sunset fill.
+- **Remaining:** AC-2 is open. The broad pauldrons, boot silhouette, simple masonry and sparse low vegetation still differ from the references. Compare the model in motion and capture matched daylight and night views.
