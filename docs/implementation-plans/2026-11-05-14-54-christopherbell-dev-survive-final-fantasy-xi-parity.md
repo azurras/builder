@@ -943,3 +943,9 @@ task-contract-v2
 - **Change:** Candidate 10f6bfca gave the North Gate banks different profiles and softened the grass-to-earth transition with the existing texture samples.
 - **Evidence:** JavaScript tests and bootJar passed. Chrome rendered the exact committed build at desktop scale. The nighttime camp capture shows the arch framed by the banks and readable ground texture.
 - **Remaining:** AC-2 stays open. The captured adventurer silhouette, stone silhouette, understory density and tree variation still fall short of the references. Compare a matched daylight route with both references before claiming visual parity.
+
+### 2026-11-13 - Add layered understory on the North Gate approach
+
+- **Change:** Candidate 63aafae5 groups shrub and grass stands along the banks and varies shrub crown height and tint. Placement preserves the trail and stream.
+- **Evidence:** All 476 JavaScript tests and bootJar passed. The committed desktop Chrome capture shows visible shrub groups beneath the canopy and a clear arch opening.
+- **Remaining:** The capture is at night. Ground cover still reads as separate clumps, and the character and quarry silhouettes need authored asset work. Daylight route and motion comparison remain open.
