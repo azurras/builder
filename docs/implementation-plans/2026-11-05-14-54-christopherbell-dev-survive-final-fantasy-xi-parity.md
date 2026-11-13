@@ -914,6 +914,18 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Island trade requires the players to be near each other when they agree to an exchange.
 - **Impact:** A committed two-player candidate rejected acceptance at six metres and kept both packs intact. Moving within five metres allowed the same exchange. [Runtime report](../test-reports/2026-11-13-09-45-christopherbell-dev-survive-nearby-trade.md)
 
+### 2026-11-13 - Show nearby partners in the Trade menu
+
+- **Change:** Use the server-confirmed range to filter trade partners and disable acceptance and counteroffers while the other survivor is out of reach.
+- **Reason:** Use the server range decision to guide player actions.
+- **Impact:** The service test verified the five-metre boundary and Chrome verified a complete nearby exchange. The menu shows a range message while an offer is out of reach. [Runtime report](../test-reports/2026-11-13-09-50-christopherbell-dev-survive-trade-targets.md)
+
+### 2026-11-13 - Identify timed shore catches
+
+- **Change:** Timed fishing reports shore herring, reef bream, or night eel. Rare catches depend on the phase at cast and yield up to two food within the pack limit.
+- **Reason:** Identify the catch and reflect the fishing conditions at cast time.
+- **Impact:** Candidate 17ea406d passed the Survive Java suite and Checkstyle. Tests verified a named catch through the movement and reel flow, and verified that a night eel with one free slot awards one food. Desktop runtime, separate fish inventory items, rods, and bait remain open.
+
 ## Outcome
 
 Pending.
@@ -925,13 +937,3 @@ christopherbell-dev
 ## Plan Format
 
 task-contract-v2
-
-### 2026-11-13 - Show nearby partners in the Trade menu
-
-- **Change:** Use the server-confirmed range to filter trade partners and disable acceptance and counteroffers while the other survivor is out of reach.
-- **Impact:** The service test verified the five-metre boundary and Chrome verified a complete nearby exchange. The menu shows a range message while an offer is out of reach. [Runtime report](../test-reports/2026-11-13-09-50-christopherbell-dev-survive-trade-targets.md)
-
-### 2026-11-13 - Identify timed shore catches
-
-- **Change:** Timed fishing reports shore herring, reef bream, or night eel. Rare catches depend on the phase at cast and yield up to two food within the pack limit.
-- **Evidence:** Candidate 17ea406d passed the Survive Java suite and Checkstyle. Tests verified a named catch through the movement and reel flow, and verified that a night eel with one free slot awards one food. Desktop runtime, separate fish inventory items, rods, and bait remain open.
