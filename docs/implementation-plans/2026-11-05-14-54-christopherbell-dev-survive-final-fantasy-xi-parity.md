@@ -1055,3 +1055,9 @@ task-contract-v2
 - **Evidence:** In two isolated runs of d99b0ada, 12 sessions on one IP each sent 40 movement requests and four world refreshes. All 528 requests succeeded in both runs. Movement p95 was 30.96 and 31.22 ms, with a mean 3,443-byte response body. World refresh p95 was 47.59 and 39.57 ms, with a mean 2,462-byte response body.
 - **Finding:** Mongo reported 48 findAndModify calls in the repeat, matching the 48 refreshes. The generic update counter stayed zero because versioned world replacement uses findAndModify. Use the command-specific counter to assess durable write cost.
 - **Remaining:** AC-6 still needs sustained JVM heap and mixed combat and inventory traffic. Any reduction in refresh writes must preserve active fullness accounting, presence expiry and optimistic concurrency across application instances.
+
+### 2026-11-13 - Reuse version-checked snapshots on world refresh
+
+- **Change:** Candidate e59e4b28 reuses the immutable snapshot for world refreshes after a database version check. The versioned save still records presence and active fullness.
+- **Evidence:** The new service regression failed before the change and passed afterward. The Survive and Mongo codec tests, Checkstyle and bootJar passed. The 12-player candidate completed all 528 requests. World refresh p95 was 33.86 ms versus 39.57 and 47.59 ms in the earlier baseline runs. Movement p95 was 28.79 ms. Both candidate and repeated baseline issued 48 findAndModify calls.
+- **Limits:** One candidate run suggests lower refresh latency. A repeated comparison with database bytes and JVM retention measurements is still needed. Durable write reduction remains open.
