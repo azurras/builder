@@ -1093,3 +1093,4 @@ task-contract-v2
 
 - Production 8230085b lacked the Items drop control. PR #1614 was refreshed to cb7816e4. The full website check and committed build passed locally, and isolated Chrome confirmed cancellation preserves supplies and confirmation discards one item. The same run verified pack expansion and player trade.
 - Squash auto-merge is enabled for #1614. Live markup and running build identity still require readback after deployment.
+- PR #1614 merged as 945b76a3. Production readback matched that revision, readiness and liveness were UP, and the served Items menu contained the item picker and Drop and Confirm controls. Item mutation was exercised against the isolated candidate.
