@@ -1088,3 +1088,8 @@ task-contract-v2
 
 - **Evidence:** Exact baseline 0cdf0219 and candidate 3cd05a8f each completed 1,587 measured requests across 12 sessions. HotSpot reported 54,727 to 57,089 KiB baseline and 54,655 to 55,254 KiB candidate after explicit collections before and after the workload. Both resolved the hog encounter and consumed two food items.
 - **Limits:** Two checkpoints over one minute show retained heap at those points. Differences in world time and background work are visible in the response sizes and the one-write difference. This pair does not establish a repeatable memory improvement or long-session retention slope. AC-6 remains open.
+
+### 2026-11-14 - Reverify item discard for release
+
+- Production 8230085b lacked the Items drop control. PR #1614 was refreshed to cb7816e4. The full website check and committed build passed locally, and isolated Chrome confirmed cancellation preserves supplies and confirmation discards one item. The same run verified pack expansion and player trade.
+- Squash auto-merge is enabled for #1614. Live markup and running build identity still require readback after deployment.
