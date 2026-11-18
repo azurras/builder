@@ -964,6 +964,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Impact:** The trunk and canopy changes are combined in PR #1628 on top of the adventurer face merge. All 480 tests passed and desktop Chrome confirmed the forest at day, dusk and while walking. The texture payload fell by 191,516 bytes. The larger resident atlas adds about 0.33 MiB including mipmaps. ART-02 and AC-2 remain open for the full landscape and night review. [Runtime report](../test-reports/2026-11-18-12-43-christopherbell-dev-survive-woodland-canopy.md)
 - **Release:** The live build reported North Gate stream merge `16803491`. The face update passed required CI and merged as `e734f93a`, with production readback pending. [Stream PR](https://github.com/azurras/christopherbell.dev/pull/1624) · [Face PR](https://github.com/azurras/christopherbell.dev/pull/1625)
 
+### 2026-11-18 - Light the waystation at night
+
+- **Change:** Mounted a visible lantern by the door, added warm illumination at the entrance, and tinted the island and stream cooler at night with softer haze near the horizon.
+- **Reason:** Night previously dimmed the entire scene uniformly. The staffed building did not stand out along the route.
+- **Impact:** Matched nighttime views show distinct lighting at the forest, bridge and waystation. The daytime wall and path samples match. The candidate adds 44 static triangles and passed 479 tests. Night review with the combined canopy candidate and the rest of the desktop route remains open. [Runtime report](../test-reports/2026-11-18-12-51-christopherbell-dev-survive-night-lighting.md)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
