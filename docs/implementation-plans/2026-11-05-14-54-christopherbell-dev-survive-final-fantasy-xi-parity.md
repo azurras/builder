@@ -939,6 +939,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The matched desktop profile exposed a nearly straight face silhouette and stray hair on the cheek. The front capture showed limited separation between the mouth and chin.
 - **Impact:** The updated model adds 28 triangles per adventurer. All 477 browser-side tests passed. Matched front and side captures and two walking frames confirm improved readability. Head proportions, ears, gear silhouette and combat playback remain open under ART-01 and AC-2. [Runtime report](../test-reports/2026-11-18-12-05-christopherbell-dev-survive-adventurer-face.md)
 
+### 2026-11-18 - Layer the adventurer shoulder plates and boot soles
+
+- **Change:** Tapered the shoulder shells over shorter plates, painted separate edge materials and reshaped the boot toe around a real outsole band. The baked changes follow all the existing poses and share the existing actor atlas.
+- **Reason:** At the normal desktop scale, the broad shoulder shapes obscured the sleeves and the narrow boots lacked a distinct sole.
+- **Impact:** Desktop front, side and two walking captures show the new silhouette. All 478 browser-side tests passed. The adventurer adds 72 triangles and 36,631 bytes of baked asset data. ART-01 and AC-2 remain open for hands, the chest and cloth treatments, and a continuous movement comparison. [Runtime report](../test-reports/2026-11-18-12-16-christopherbell-dev-survive-adventurer-armor.md)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
