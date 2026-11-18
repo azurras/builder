@@ -931,7 +931,7 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** The stream now shows its stony bed in the shallows, moving sky-colored ripples, and shade under the bridge. The banks meet the water plane, and recessed supports add depth below the planks.
 - **Reason:** The flat water and hard bank edges made the timber crossing look disconnected from the landscape.
 - **Impact:** Matched desktop daylight and dusk captures and server-confirmed keyboard crossings passed. The island uses 54,795 of its 55,000 static triangles. ART-02 and AC-2 remain open for vegetation, night lighting, the broader desktop route and the owner's visual review. [Runtime report](../test-reports/2026-11-18-11-54-christopherbell-dev-survive-north-gate-stream.md)
-- **Release:** Masonry merged to main as `4f95b739`. The stream pull request now targets main and candidate `6671ceab` has repeated local rendering and traversal evidence. [Masonry PR](https://github.com/azurras/christopherbell.dev/pull/1623) · [Stream PR](https://github.com/azurras/christopherbell.dev/pull/1624)
+- **Release:** Production reported the masonry merge `4f95b739`. The stream candidate `6671ceab` passed its repeated local rendering and traversal checks and merged as `16803491`. The stream production readback is pending. [Masonry PR](https://github.com/azurras/christopherbell.dev/pull/1623) · [Stream PR](https://github.com/azurras/christopherbell.dev/pull/1624)
 
 ### 2026-11-18 - Sculpt the adventurer face and hair silhouette
 
@@ -944,6 +944,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** Tapered the shoulder shells over shorter plates, painted separate edge materials and reshaped the boot toe around a real outsole band. The baked changes follow all the existing poses and share the existing actor atlas.
 - **Reason:** At the normal desktop scale, the broad shoulder shapes obscured the sleeves and the narrow boots lacked a distinct sole.
 - **Impact:** Desktop front, side and two walking captures show the new silhouette. All 478 browser-side tests passed. The adventurer adds 72 triangles and 36,631 bytes of baked asset data. ART-01 and AC-2 remain open for hands, the chest and cloth treatments, and a continuous movement comparison. [Runtime report](../test-reports/2026-11-18-12-16-christopherbell-dev-survive-adventurer-armor.md)
+
+### 2026-11-18 - Fit layered chest plates and a belt
+
+- **Change:** Fitted two beveled steel layers and a leather belt with a brass clasp to the adventurer's existing poses. Added materials to the existing atlas.
+- **Reason:** The chest was one dark surface, so the armor lacked the visible layers in the desktop visual reference.
+- **Impact:** Matched front, side and rear captures, walking, and armed Engage and Disengage passed in Chrome. All 479 browser-side tests passed. The new details add 84 triangles and 82,941 raw bytes to the shared asset. ART-01 and AC-2 still require hands, cloth and broader visual review. The refreshed face PR also passed 478 browser-side tests and the desktop replay against the merged stream. [Torso runtime report](../test-reports/2026-11-18-12-25-christopherbell-dev-survive-adventurer-torso.md) · [Face runtime report](../test-reports/2026-11-18-12-05-christopherbell-dev-survive-adventurer-face.md)
 
 ## Verification history
 
