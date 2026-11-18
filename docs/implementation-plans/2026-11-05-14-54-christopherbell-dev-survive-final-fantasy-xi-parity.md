@@ -957,6 +957,13 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Repeated straight trunks and abrupt bases made the grove look uniform in the desktop comparison.
 - **Impact:** Matched daylight and dusk captures and a keyboard walk verified the new grove from the trail. All 477 JavaScript tests passed. The static island mesh dropped by 148 triangles to 54,647, beneath the 55,000 limit. Foliage variation and night lighting remain open under ART-02 and AC-2. [Runtime report](../test-reports/2026-11-18-12-34-christopherbell-dev-survive-woodland-trunks.md)
 
+### 2026-11-18 - Give the woodland pines painted needle canopies
+
+- **Change:** Added an original painted pine bough and shallower, tapered crown tiers. Pines and broadleaf foliage use separate regions of a single atlas.
+- **Reason:** The previous forest used the same leaf silhouettes on pines and broadleaf trees.
+- **Impact:** The trunk and canopy changes are combined in PR #1628 on top of the adventurer face merge. All 480 tests passed and desktop Chrome confirmed the forest at day, dusk and while walking. The texture payload fell by 191,516 bytes. The larger resident atlas adds about 0.33 MiB including mipmaps. ART-02 and AC-2 remain open for the full landscape and night review. [Runtime report](../test-reports/2026-11-18-12-43-christopherbell-dev-survive-woodland-canopy.md)
+- **Release:** The live build reported North Gate stream merge `16803491`. The face update passed required CI and merged as `e734f93a`, with production readback pending. [Stream PR](https://github.com/azurras/christopherbell.dev/pull/1624) · [Face PR](https://github.com/azurras/christopherbell.dev/pull/1625)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
