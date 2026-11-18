@@ -976,6 +976,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The separate checks did not establish how the new canopy reads under night lighting or how the combined renderer behaves at the two busiest viewpoints on this route.
 - **Impact:** The combined candidate passed 481 tests and rendered the nighttime canopy, bridge and illuminated entry in matched desktop views. Two frame timing windows per site held p95 between 7.1 and 7.2 ms in both builds. The shorter test leaves GPU time, sustained memory and the remaining desktop route open. The face update is live at `e734f93a`, and the woodland release merged at `f39bbef5`. [Runtime report](../test-reports/2026-11-18-12-51-christopherbell-dev-survive-night-lighting.md)
 
+### 2026-11-18 - Release the browser copy of uploaded scenery
+
+- **Change:** The renderer now keeps the static GPU buffer and its vertex count after upload. The geometry builder's temporary array leaves scope.
+- **Reason:** The draw closure kept a roughly 14.2 MiB JavaScript array alive to read its length every frame.
+- **Impact:** Chrome's post-collection heap fell from 20,045,980 to 5,163,812 bytes after three matching camera loops. The GPU upload matched byte for byte, and all 481 browser-side tests passed. The woodland release is live at `f39bbef5`. AC-6 still needs total browser RAM and sustained multi-player measurements. [Runtime report](../test-reports/2026-11-18-13-08-christopherbell-dev-survive-scenery-heap.md)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
