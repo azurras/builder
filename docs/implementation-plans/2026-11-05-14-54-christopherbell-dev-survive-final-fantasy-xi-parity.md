@@ -932,6 +932,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The flat water and hard bank edges made the timber crossing look disconnected from the landscape.
 - **Impact:** Matched desktop daylight and dusk captures and server-confirmed keyboard crossings passed. The island uses 54,795 of its 55,000 static triangles. ART-02 and AC-2 remain open for vegetation, night lighting, the broader desktop route and the owner's visual review. [Runtime report](../test-reports/2026-11-18-11-54-christopherbell-dev-survive-north-gate-stream.md)
 
+### 2026-11-18 - Sculpt the adventurer face and hair silhouette
+
+- **Change:** Added facial geometry around the brow, nose, mouth and jaw in each baked clip, tucked front hair toward the scalp, and softened skin shading. Updated the face paint on the shared atlas.
+- **Reason:** The matched desktop profile exposed a nearly straight face silhouette and stray hair on the cheek. The front capture showed limited separation between the mouth and chin.
+- **Impact:** The updated model adds 28 triangles per adventurer. All 477 browser-side tests passed. Matched front and side captures and two walking frames confirm improved readability. Head proportions, ears, gear silhouette and combat playback remain open under ART-01 and AC-2. [Runtime report](../test-reports/2026-11-18-12-05-christopherbell-dev-survive-adventurer-face.md)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
