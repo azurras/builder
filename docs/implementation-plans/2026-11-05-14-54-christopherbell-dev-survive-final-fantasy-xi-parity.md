@@ -951,6 +951,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The chest was one dark surface, so the armor lacked the visible layers in the desktop visual reference.
 - **Impact:** Matched front, side and rear captures, walking, and armed Engage and Disengage passed in Chrome. All 479 browser-side tests passed. The new details add 84 triangles and 82,941 raw bytes to the shared asset. ART-01 and AC-2 still require hands, cloth and broader visual review. The refreshed face PR also passed 478 browser-side tests and the desktop replay against the merged stream. [Torso runtime report](../test-reports/2026-11-18-12-25-christopherbell-dev-survive-adventurer-torso.md) · [Face runtime report](../test-reports/2026-11-18-12-05-christopherbell-dev-survive-adventurer-face.md)
 
+### 2026-11-18 - Root woodland trees into the terrain
+
+- **Change:** Replaced segmented tree trunks with continuous bark and curved silhouettes. Fitted root lobes to the ground, added exposed root ridges to broadleaf trees, and varied branch height and reach.
+- **Reason:** Repeated straight trunks and abrupt bases made the grove look uniform in the desktop comparison.
+- **Impact:** Matched daylight and dusk captures and a keyboard walk verified the new grove from the trail. All 477 JavaScript tests passed. The static island mesh dropped by 148 triangles to 54,647, beneath the 55,000 limit. Foliage variation and night lighting remain open under ART-02 and AC-2. [Runtime report](../test-reports/2026-11-18-12-34-christopherbell-dev-survive-woodland-trunks.md)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
