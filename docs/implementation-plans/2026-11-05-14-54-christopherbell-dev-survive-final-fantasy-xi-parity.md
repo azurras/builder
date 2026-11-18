@@ -926,17 +926,13 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Identify the catch and reflect the fishing conditions at cast time.
 - **Impact:** Candidate 17ea406d passed the Survive Java suite and Checkstyle. Tests verified a named catch through the movement and reel flow, and verified that a night eel with one free slot awards one food. Desktop runtime, separate fish inventory items, rods, and bait remain open.
 
-## Outcome
+### 2026-11-18 - Shade the North Gate stream and crossing
 
-Pending.
+- **Change:** The stream now shows its stony bed in the shallows, moving sky-colored ripples, and shade under the bridge. The banks meet the water plane, and recessed supports add depth below the planks.
+- **Reason:** The flat water and hard bank edges made the timber crossing look disconnected from the landscape.
+- **Impact:** Matched desktop daylight and dusk captures and server-confirmed keyboard crossings passed. The island uses 54,795 of its 55,000 static triangles. ART-02 and AC-2 remain open for vegetation, night lighting, the broader desktop route and the owner's visual review. [Runtime report](../test-reports/2026-11-18-11-54-christopherbell-dev-survive-north-gate-stream.md)
 
-## Project
-
-christopherbell-dev
-
-## Plan Format
-
-task-contract-v2
+## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
 
@@ -1098,3 +1094,15 @@ task-contract-v2
 ### 2026-11-18 - Rework North Gate masonry
 
 The original Survive ruin now uses a continuous stone barrel, a projecting keystone, staggered courses and asymmetrically broken wing walls. The front joints reveal recessed mortar. Both desktop captures used the same server-confirmed position and controlled daylight. The 54,303-triangle island mesh stays under the existing 55,000-triangle budget. All 476 JavaScript tests passed. Gate traversal in motion, night lighting and the broader visual review remain open. [Runtime report](../test-reports/2026-11-18-10-00-christopherbell-dev-survive-north-gate-masonry.md)
+
+## Outcome
+
+Pending.
+
+## Project
+
+christopherbell-dev
+
+## Plan Format
+
+task-contract-v2
