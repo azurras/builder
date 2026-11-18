@@ -931,6 +931,7 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Change:** The stream now shows its stony bed in the shallows, moving sky-colored ripples, and shade under the bridge. The banks meet the water plane, and recessed supports add depth below the planks.
 - **Reason:** The flat water and hard bank edges made the timber crossing look disconnected from the landscape.
 - **Impact:** Matched desktop daylight and dusk captures and server-confirmed keyboard crossings passed. The island uses 54,795 of its 55,000 static triangles. ART-02 and AC-2 remain open for vegetation, night lighting, the broader desktop route and the owner's visual review. [Runtime report](../test-reports/2026-11-18-11-54-christopherbell-dev-survive-north-gate-stream.md)
+- **Release:** Masonry merged to main as `4f95b739`. The stream pull request now targets main and candidate `6671ceab` has repeated local rendering and traversal evidence. [Masonry PR](https://github.com/azurras/christopherbell.dev/pull/1623) · [Stream PR](https://github.com/azurras/christopherbell.dev/pull/1624)
 
 ### 2026-11-18 - Sculpt the adventurer face and hair silhouette
 

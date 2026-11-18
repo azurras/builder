@@ -8,7 +8,7 @@ christopherbell-dev
 Improve the water and timber crossing at North Gate under ART-02.
 
 ## Branch
-codex/survive-north-gate-stream at b823187617abfac0573529cfcf04e923f810387f. Masonry baseline 67cd6e0390535f61cd4dfadb5bb4a334cd2fb01a.
+codex/survive-north-gate-stream at 6671ceab02705569d6d3731e0c4bc84c48bae724. This commit incorporates the masonry merge 4f95b7393b61ad29ca3af47bf03b959b28426b27 with an identical tree to the original candidate b823187617abfac0573529cfcf04e923f810387f. The masonry merge tree matches the tested baseline 67cd6e0390535f61cd4dfadb5bb4a334cd2fb01a.
 
 ## Pass / Fail
 Passed JavaScript syntax checks, 476 browser-side tests, the candidate build, desktop day and dusk rendering, and keyboard traversal of the bridge in both directions.
@@ -17,7 +17,7 @@ Passed JavaScript syntax checks, 476 browser-side tests, the candidate build, de
 Check the water plane and bed depth at the center and edges, deck height and static geometry budget. Compare the same bridge view in day and dusk lighting. Advance the shader clock at the dusk viewpoint and verify that the water pixels change. Walk off the bridge in both directions with the keyboard and verify movement through the server.
 
 ## App / Environment
-Desktop Chrome with a 1366 × 900 window and 1350 × 805 capture area. Hardware WebGL used the NVIDIA GeForce RTX 4070 through ANGLE and D3D11. Baseline http://127.0.0.1:63300/survive and candidate http://127.0.0.1:61401/survive used separate disposable loopback MongoDB test databases.
+Desktop Chrome with a 1366 × 900 window and 1350 × 805 capture area. Hardware WebGL used the NVIDIA GeForce RTX 4070 through ANGLE and D3D11. Baseline http://127.0.0.1:63300/survive, initial candidate http://127.0.0.1:61401/survive and refreshed candidate http://127.0.0.1:54447/survive used separate disposable loopback MongoDB test databases.
 
 ## Local Run Details
 The actuator reported the exact build commit for both runs. The harness put both survivors at the same server-confirmed bridge position, turned the camera the same amount, and controlled the rendered phase and shader time for comparison. Both app and database listeners closed and temporary database and socket directories were removed.
@@ -33,6 +33,7 @@ Move to (0, -26) in range-limited steps. Reset camera with Home, then rotate wit
 54,795 candidate static triangles, up from 54,303. Existing limit 55,000.
 All 299 sampled water pixels changed against the dusk baseline. With time advanced, 287 of the same 299 pixels changed.
 Server-confirmed north exit z = -35.9168 and south exit z = -16.7498.
+Refreshed candidate server-confirmed north exit z = -36.0008 and south exit z = -16.7900.
 ```
 
 ## Evidence
