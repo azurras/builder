@@ -17,7 +17,7 @@ Passed JavaScript syntax checks, 476 browser-side tests, both builds, and the ma
 Verify recessed mortar at a visible face joint, a projecting keystone, and clearance through the passage. Check the static island triangle budget. Compare the ruin from the same desktop camera and lighting.
 
 ## App / Environment
-Desktop Chrome at 1366×900 with candidate app ports 53463 and 56487 and disposable loopback MongoDB test databases.
+Desktop Chrome at 1366×900. Baseline http://127.0.0.1:53463/survive and candidate http://127.0.0.1:56487/survive used disposable loopback MongoDB test databases.
 
 ## Local Run Details
 Actuator matched each build. Each player reached the same server-confirmed position. The capture harness set the browser's displayed world phase to DAY on both runs for comparable lighting. Both application and database listeners closed and disposable directories were removed.
