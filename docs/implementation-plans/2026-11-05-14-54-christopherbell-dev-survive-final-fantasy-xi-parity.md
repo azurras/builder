@@ -970,6 +970,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** Night previously dimmed the entire scene uniformly. The staffed building did not stand out along the route.
 - **Impact:** Matched nighttime views show distinct lighting at the forest, bridge and waystation. The daytime wall and path samples match. The candidate adds 44 static triangles and passed 479 tests. Night review with the combined canopy candidate and the rest of the desktop route remains open. [Runtime report](../test-reports/2026-11-18-12-51-christopherbell-dev-survive-night-lighting.md)
 
+### 2026-11-18 - Check the woodland and waystation together at night
+
+- **Change:** Integrated the lantern and night palette with the merged woodland changes and reran the exact build at the forest, bridge and waystation.
+- **Reason:** The separate checks did not establish how the new canopy reads under night lighting or how the combined renderer behaves at the two busiest viewpoints on this route.
+- **Impact:** The combined candidate passed 481 tests and rendered the nighttime canopy, bridge and illuminated entry in matched desktop views. Two frame timing windows per site held p95 between 7.1 and 7.2 ms in both builds. The shorter test leaves GPU time, sustained memory and the remaining desktop route open. The face update is live at `e734f93a`, and the woodland release merged at `f39bbef5`. [Runtime report](../test-reports/2026-11-18-12-51-christopherbell-dev-survive-night-lighting.md)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
