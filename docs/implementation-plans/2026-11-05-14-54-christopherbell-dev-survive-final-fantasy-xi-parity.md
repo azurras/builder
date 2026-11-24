@@ -982,6 +982,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The draw closure kept a roughly 14.2 MiB JavaScript array alive to read its length every frame.
 - **Impact:** Chrome's post-collection heap fell from 20,045,980 to 5,163,812 bytes after three matching camera loops. The GPU upload matched byte for byte, and all 481 browser-side tests passed. The woodland release is live at `f39bbef5`. AC-6 still needs total browser RAM and sustained multi-player measurements. [Runtime report](../test-reports/2026-11-18-13-08-christopherbell-dev-survive-scenery-heap.md)
 
+### 2026-11-24 - Bring the two-page Main Menu into the island
+
+- **Change:** Up and Down browse the focused window. Left and Right switch Main Menu pages. Each page remembers its selection, including after backing out of Items or Map.
+- **Reason:** The Windows manual specifies two command pages with directional navigation. A single scrolling list made moving between character and island commands feel different.
+- **Impact:** The candidate passed the desktop keyboard and simulated controller playthrough. Physical controller verification and broader active-window switching remain open. [Runtime report](../test-reports/2026-11-24-13-36-christopherbell-dev-survive-main-menu-pages.md)
+
 ## Verification history
 
 ### 2026-11-13 - Review the North Gate approach at desktop scale
