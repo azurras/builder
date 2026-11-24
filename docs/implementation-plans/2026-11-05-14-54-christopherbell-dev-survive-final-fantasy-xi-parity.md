@@ -990,6 +990,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 
 ## Verification history
 
+### 2026-11-24 - Verify menu presentation and item command focus
+
+- **Change:** Each category has a titled window and a Back control. The Items window groups its selected stack, description and commands.
+- **Reason:** The previous menu showed pointers on idle commands and left the open window unnamed.
+- **Impact:** The desktop playthrough verified item selection, drop cancellation, retained quantity and cursor return. [Runtime report](../test-reports/2026-11-24-13-41-christopherbell-dev-survive-menu-presentation.md)
+
 ### 2026-11-13 - Review the North Gate approach at desktop scale
 
 - **Change:** Candidate 10f6bfca gave the North Gate banks different profiles and softened the grass-to-earth transition with the existing texture samples.
