@@ -106,3 +106,9 @@ complete
 ## Project
 
 christopherbell-dev
+
+## November 25 release verification
+
+After the lighting merge, candidate `cd7288af37e712c41ba86b682df15f120b39a918` passed all 487 JavaScript tests, the application build and syntax checks on the three changed JavaScript files. The adventurer asset matched the original torso PR byte for byte.
+
+Desktop Chrome on the RTX 4070 captured eight views at `http://127.0.0.1:59600/survive` against the identity-verified build. The server confirmed a walking step and recorded a club strike against a roaming hog at 14:42:29 UTC. The target menu accepted Disengage. After shutdown, both candidate and test database ports had zero listeners and both disposable directories were removed.
