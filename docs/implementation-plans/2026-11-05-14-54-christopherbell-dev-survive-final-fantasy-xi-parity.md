@@ -988,6 +988,13 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - **Reason:** The Windows manual specifies two command pages with directional navigation. A single scrolling list made moving between character and island commands feel different.
 - **Impact:** The candidate passed the desktop keyboard and simulated controller playthrough. Physical controller verification and broader active-window switching remain open. [Runtime report](../test-reports/2026-11-24-13-36-christopherbell-dev-survive-main-menu-pages.md)
 
+### 2026-11-25 - Release combat commands, nearby trade and island art
+
+- The target menu shows when an enemy is ready to engage and keeps Check available during auto-attack. Guide now explains real-time play and the hunger warning. [Combat commands](https://github.com/azurras/christopherbell.dev/pull/1634) · [Field guide](https://github.com/azurras/christopherbell.dev/pull/1610)
+- Players within five metres can offer item bundles and individual weapons, counter the terms and confirm the exchange. Two desktop browser sessions verified what each player received. [Trade report](../test-reports/2026-11-24-17-59-christopherbell-dev-consolidated-survive-player-trades.md)
+- The island horizon blends into the sky, the waystation is lit at night, and the adventurer wears layered shoulders, chest plates, belt and boots. The renderer releases the CPU copy of uploaded scenery. The integrated armor build passed 487 JavaScript tests and a desktop walking and club-combat check. [Lighting report](../test-reports/2026-11-24-18-01-christopherbell-dev-survive-horizon-lighting.md) · [Armor report](../test-reports/2026-11-24-18-00-christopherbell-dev-survive-layered-armor.md) · [Scenery memory fix](https://github.com/azurras/christopherbell.dev/pull/1630)
+- The release reduced the original 19 open PRs to two. Remote hit recoil still needs a clear second-player view of the hit. The grouped Gradle update still fails Spring Boot plugin verification. [Remote hit recoil](https://github.com/azurras/christopherbell.dev/pull/1597) · [Gradle update](https://github.com/azurras/christopherbell.dev/pull/1602)
+
 ## Verification history
 
 ### 2026-11-24 - Verify menu presentation and item command focus
