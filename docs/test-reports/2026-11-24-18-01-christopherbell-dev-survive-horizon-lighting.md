@@ -61,5 +61,12 @@ The night waystation capture shows amber glass and warm stone around the door, w
 
 ## Bugs / Follow-ups
 
+On November 25, main added the renderer memory regression test. The refreshed
+candidate at 62a09587a92005122800ee608df92fb8a2f17eaf retains that test and
+both lighting material imports. All 485 JavaScript tests and the application
+build passed. Desktop Chrome exercised the night forest, bridge and waystation
+on an RTX 4070 against the identity-verified build at http://127.0.0.1:52290/survive.
+The candidate and disposable database listeners closed after the playthrough.
+
 The test covered fixed day and night views. It did not measure frame timing, exercise a natural clock transition, or verify a production deployment.
 
