@@ -995,6 +995,12 @@ Keep the last proven row state and append corrections when evidence changes. Rev
 - The island horizon blends into the sky, the waystation is lit at night, and the adventurer wears layered shoulders, chest plates, belt and boots. The renderer releases the CPU copy of uploaded scenery. The integrated armor build passed 487 JavaScript tests and a desktop walking and club-combat check. [Lighting report](../test-reports/2026-11-24-18-01-christopherbell-dev-survive-horizon-lighting.md) · [Armor report](../test-reports/2026-11-24-18-00-christopherbell-dev-survive-layered-armor.md) · [Scenery memory fix](https://github.com/azurras/christopherbell.dev/pull/1630)
 - The release reduced the original 19 open PRs to two. Remote hit recoil still needs a clear second-player view of the hit. The grouped Gradle update still fails Spring Boot plugin verification. [Remote hit recoil](https://github.com/azurras/christopherbell.dev/pull/1597) · [Gradle update](https://github.com/azurras/christopherbell.dev/pull/1602)
 
+### 2026-11-25 - Select the animal in the field and keep it through combat
+
+Players can click a creature's body or name and see a ring around their selection. Tab and Shift+Tab wrap through visible field targets. The game snapshot now identifies the claimed animal by route and position, so Hunt, aggro and Engage hand the same model to combat, and Disengage leaves it selected.
+
+Desktop Chrome selected the meadow hog by clicking its body, then engaged and disengaged with its route and selection intact. The full website build and all 490 JavaScript tests passed. Physical controller playtesting remains open. [Targeting release](https://github.com/azurras/christopherbell.dev/pull/1638) · [Test report](../test-reports/2026-11-25-09-26-christopherbell-dev-survive-target-selection.md)
+
 ## Verification history
 
 ### 2026-11-24 - Verify menu presentation and item command focus
