@@ -1001,6 +1001,10 @@ Players can click a creature's body or name and see a ring around their selectio
 
 Desktop Chrome selected the meadow hog by clicking its body, then engaged and disengaged with its route and selection intact. The full website build and all 490 JavaScript tests passed. Physical controller playtesting remains open. [Targeting release](https://github.com/azurras/christopherbell.dev/pull/1638) · [Test report](../test-reports/2026-11-25-09-26-christopherbell-dev-survive-target-selection.md)
 
+### 2026-11-27 - Follow a field target into melee range
+
+F8 selects the closest visible creature or NPC. The player can lock the camera, walk toward that actor, and keep the lock through Engage. Desktop Chrome tracked the meadow hog from 10.9 metres to melee range. All 491 JavaScript tests passed. Physical controller testing remains open. [Test report](../test-reports/2026-11-27-19-23-christopherbell-dev-survive-field-lock.md)
+
 ## Verification history
 
 ### 2026-11-24 - Verify menu presentation and item command focus
